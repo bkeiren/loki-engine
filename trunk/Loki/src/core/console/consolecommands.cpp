@@ -9,6 +9,7 @@
 #include "core/actor/components/moveablecomponent/moveablecomponent.h"
 #include "core/actor/camera/camera.h"
 #include "core/window.h"
+#include "core/actor/pawn/pawn.h"
 
 namespace loki
 {
@@ -307,6 +308,51 @@ CONSOLE_FUNCTION(Console_Terminate)
 {
 	g_Engine->RequestExit();
 	return LkConsole::CommandResult("Requested termination...");
+}
+
+CONSOLE_FUNCTION(Console_PawnSpawn)
+{
+	if (g_Engine->GetGame()->GetLevel()->SpawnPawn(_Command->m_Arguments[0].m_String.c_str()))
+	{
+		return LkConsole::CommandResult("Spawned pawn '%s'", _Command->m_Arguments[0].m_String.c_str());
+	}
+	return LkConsole::CommandResult("Unable to spawn pawn '%s'", _Command->m_Arguments[0].m_String.c_str());
+}
+
+CONSOLE_FUNCTION(Console_PawnDespawn)
+{
+	LkPawn* pawn = g_Engine->GetGame()->GetLevel()->GetPawn(_Command->m_Arguments[0].m_String.c_str());
+	if (!pawn)
+	{
+		return LkConsole::CommandResult("Pawn '%s' does not exist", _Command->m_Arguments[0].m_String.c_str());
+	}
+	g_Engine->GetGame()->GetLevel()->DespawnPawn(pawn);
+	
+	return LkConsole::CommandResult("Despawned pawn '%s'", _Command->m_Arguments[0].m_String.c_str());
+}
+
+CONSOLE_FUNCTION(Console_PawnSetPos)
+{
+	LkPawn* pawn = g_Engine->GetGame()->GetLevel()->GetPawn(_Command->m_Arguments[0].m_String.c_str());
+	if (!pawn)
+	{
+		return LkConsole::CommandResult("Pawn '%s' does not exist", _Command->m_Arguments[0].m_String.c_str());
+	}
+	LkMoveableComponent* comp = pawn->GetComponent<LkMoveableComponent>();
+	comp->SetPosition(glm::vec3(_Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float, _Command->m_Arguments[3].m_Float));
+	return LkConsole::CommandResult("");
+}
+
+CONSOLE_FUNCTION(Console_PawnSetOri)
+{
+	LkPawn* pawn = g_Engine->GetGame()->GetLevel()->GetPawn(_Command->m_Arguments[0].m_String.c_str());
+	if (!pawn)
+	{
+		return LkConsole::CommandResult("Pawn '%s' does not exist", _Command->m_Arguments[0].m_String.c_str());
+	}
+	LkMoveableComponent* comp = pawn->GetComponent<LkMoveableComponent>();
+	comp->SetOrientation(glm::quat(_Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float, _Command->m_Arguments[3].m_Float, _Command->m_Arguments[4].m_Float));
+	return LkConsole::CommandResult("");
 }
 
 }	// Namespace loki.

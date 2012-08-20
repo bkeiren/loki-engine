@@ -123,7 +123,7 @@ bool MyGame::Init()
 			pawn = m_Level->SpawnPawn("StanfordDragon");
 			rendercomp = pawn->GetComponent<LkRenderComponent>();
 			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//stanford_dragon.dae"));
-			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture6.bmp", "resources//textures//texture6_normal.bmp", "resources//textures//texture6_specular.bmp");
+			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
 			mtl->SetShininess(100.0f);
 			rendercomp->GetModel()->SetMaterial(mtl, 0);
 			rendercomp->GetModel()->SetUVScale(glm::vec2(3.0f, 3.0f));
@@ -133,7 +133,7 @@ bool MyGame::Init()
 			pawn = m_Level->SpawnPawn("Pawn1");
 			rendercomp = pawn->GetComponent<LkRenderComponent>();
 			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//cube.dae"));
-			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
+			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture6.bmp", "resources//textures//texture6_normal.bmp", "resources//textures//texture6_specular.bmp");
 			mtl->SetShininess(100.0f);
 			rendercomp->GetModel()->SetMaterial(mtl, 0);
 			rendercomp->GetModel()->SetUVScale(glm::vec2(3.0f, 3.0f));

@@ -126,6 +126,10 @@ void LkConsole::RegisterCommands()
 	m_Commands["win.setpos"] = Command("Sets the window position", &Console_SetWindowPos, Command::AT_INT, Command::AT_INT);
 	m_Commands["win.setsize"] = Command("Sets the window size", &Console_SetWindowSize, Command::AT_INT, Command::AT_INT);
 	m_Commands["terminate"] = Command("Signals for termination of the game and the engine", &Console_Terminate);
+	m_Commands["lvl.spawnpawn"] = Command("Spawns a pawn with the given (Unless the name is already taken) at [0, 0, 0]", &Console_PawnSpawn, Command::AT_STRING);
+	m_Commands["lvl.despawnpawn"] = Command("Despawns a pawn if it exists", &Console_PawnDespawn, Command::AT_STRING);
+	m_Commands["lvl.pawnsetpos"] = Command("Sets the position of a pawn", &Console_PawnSetPos, Command::AT_STRING, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
+	m_Commands["lvl.pawnsetori"] = Command("Sets the orientation of a pawn", &Console_PawnSetOri, Command::AT_STRING, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
 }
 
 std::list<std::string> LkConsole::GetCommandsList()
