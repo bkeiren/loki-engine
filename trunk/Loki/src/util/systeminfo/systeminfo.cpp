@@ -1,0 +1,285 @@
+#include "util/systeminfo/systeminfo.h"
+
+namespace loki
+{
+
+namespace util
+{
+
+LkSystemInfo* g_SystemInfo = NULL;
+
+LkSystemInfo::LkSystemInfo()	:
+	m_VersionOSMajor(0),
+	m_VersionOSMinor(0),
+	m_VersionOSBuild(0),
+	m_VersionOSServicePackMajor(0),
+	m_VersionOSServicePackMinor(0),
+	m_VersionOS64Bit(false),
+	m_VersionOSString("Unknown"),
+	m_VersionOSServicePackString("Unknown"),
+	m_ProductType(0),
+	m_NumProcessors(1),
+	m_ProcessorType(0),
+	m_ProcessorArchitecture(0),
+	m_MemoryAmountTotalPhysical(0),
+	m_MemoryAmountTotalVirtual(0),
+	m_CPUFrequency(0),
+	m_ComputerName("Unknown"),
+	m_UserName("Unknown")
+{
+	Collect();
+}
+
+LkSystemInfo::~LkSystemInfo()
+{
+
+}
+
+bool LkSystemInfo::Collect()
+{
+	OSVERSIONINFOEXA OSVersionInfo;
+	OSVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXA);
+	if (!GetVersionExA((OSVERSIONINFOA*)(&OSVersionInfo)))
+	{
+		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain OS version info (with error code %i)", (int)GetLastError());
+		return false;
+	}
+	else
+	{
+		m_VersionOSMajor = OSVersionInfo.dwMajorVersion;
+		m_VersionOSMinor = OSVersionInfo.dwMinorVersion;
+		m_VersionOSBuild = OSVersionInfo.dwBuildNumber;
+		m_VersionOSServicePackMajor = OSVersionInfo.wServicePackMajor;
+		m_VersionOSServicePackMinor = OSVersionInfo.wServicePackMinor;
+		m_VersionOSServicePackString = OSVersionInfo.szCSDVersion;
+
+		switch (m_VersionOSMajor)
+		{
+		case 6:
+			{
+				switch (m_VersionOSMinor)
+				{
+				case 0:
+					if (OSVersionInfo.wProductType == VER_NT_WORKSTATION)
+					{
+						m_VersionOSString = "Windows Vista";
+					}
+					else
+					{
+						m_VersionOSString = "Windows Server 2008";
+					}
+					break;
+				case 1:
+					if (OSVersionInfo.wProductType == VER_NT_WORKSTATION)
+					{
+						m_VersionOSString = "Windows 7";
+					}
+					else
+					{
+						m_VersionOSString = "Windows Server 2008 R2";
+					}
+					break;
+				default:
+					m_VersionOSString = "Windows (Major Version 6 - Unknown Minor Version)";
+					break;
+				}
+				break;
+			}
+		case 5:
+			{
+				switch (m_VersionOSMinor)
+				{
+				case 0:
+					m_VersionOSString = "Windows 20000";
+					break;
+				case 1:
+					m_VersionOSString = "Windows XP";
+					break;
+				case 2:
+					if (GetSystemMetrics(SM_SERVERR2) == 0)
+					{
+						m_VersionOSString = "Windows Server 2003";
+					}
+					else
+					{
+						m_VersionOSString = "Windows Server 2003 R2";
+					}
+					break;
+				default:
+					m_VersionOSString = "Windows (Major Version 5 - Unknown Minor Version)";
+					break;
+				}
+				break;
+			}
+		default:
+			m_VersionOSString = "Windows (Unknown Major Version)";
+		}
+	}
+
+	// Store whether the program is running on 64 bits or not.
+	IsWow64Process(GetCurrentProcess(), (int*)&m_VersionOS64Bit);
+
+	MEMORYSTATUSEX MemoryInfo;
+	MemoryInfo.dwLength = sizeof(MemoryInfo);
+	if (!GlobalMemoryStatusEx(&MemoryInfo))
+	{
+		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain memory information (with error code %i)", (int)GetLastError());
+		return false;
+	}
+	else
+	{
+		m_MemoryAmountTotalPhysical = MemoryInfo.ullTotalPhys;
+		m_MemoryAmountTotalVirtual = MemoryInfo.ullTotalVirtual;
+	}
+
+	LARGE_INTEGER CPUFrequency;
+	if (!QueryPerformanceFrequency(&CPUFrequency))
+	{
+		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain CPU frequency information (with error code %i)", (int)GetLastError());
+		return false;
+	}
+	else
+	{
+		m_CPUFrequency = (unsigned int)CPUFrequency.QuadPart;
+	}
+
+
+	unsigned long UserNameLength = UNLEN + 1;
+	char UserName[UNLEN + 1];
+	if (!GetUserNameA(UserName, &UserNameLength))
+	{
+		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain user name (with error code %i)", (int)GetLastError());
+		return false;
+	}
+	else
+	{
+		m_UserName = UserName;
+	}
+
+	unsigned long ComputerNameLength = MAX_COMPUTERNAME_LENGTH + 1;
+	char ComputerName[MAX_COMPUTERNAME_LENGTH + 1];
+	if (!GetComputerNameA(ComputerName, &ComputerNameLength))
+	{
+		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain computer name (with error code %i)", (int)GetLastError());
+		return false;
+	}
+	else
+	{
+		m_ComputerName = ComputerName;
+	}
+
+	SYSTEM_INFO sysInfo;
+	GetSystemInfo(&sysInfo);
+
+	m_NumProcessors = sysInfo.dwNumberOfProcessors;
+	m_ProcessorType = sysInfo.dwProcessorType;
+	m_ProcessorArchitecture = sysInfo.wProcessorArchitecture;
+
+	return true;
+}
+
+void LkSystemInfo::LogSystemInformation()
+{
+	LOG(VL_ALWAYS, "System Information:\n\tOS: %u.%u.%u %s SP%u.%u (%s %s)\n\tCPU: %u cores @ %.2f GHz\n\tRAM: %I64d MB Physical\t%I64d MB Virtual", 
+				   m_VersionOSMajor, 
+				   m_VersionOSMinor, 
+				   m_VersionOSBuild,
+				   ((m_VersionOS64Bit) ? ("x64") : ("x86")),
+				   m_VersionOSServicePackMajor, 
+				   m_VersionOSServicePackMinor, 
+				   m_VersionOSString.c_str(), 
+				   m_VersionOSServicePackString.c_str(), 
+				   m_NumProcessors,
+				   GetCPUFrequencyGHz(),
+				   BYTE_TO_MB(m_MemoryAmountTotalPhysical),
+				   BYTE_TO_MB(m_MemoryAmountTotalVirtual));
+}
+
+const unsigned long LkSystemInfo::GetVersionOSMajor()
+{
+	return m_VersionOSMajor;
+}
+
+const unsigned long LkSystemInfo::GetVersionOSMinor()
+{
+	return m_VersionOSMinor;
+}
+
+const unsigned long LkSystemInfo::GetVersionOSBuild()
+{
+	return m_VersionOSBuild;
+}
+
+const unsigned long LkSystemInfo::GetVersionOSServicePackMajor()
+{
+	return m_VersionOSServicePackMajor;
+}
+
+const unsigned long LkSystemInfo::GetVersionOSServicePackMinor()
+{
+	return m_VersionOSServicePackMinor;
+}
+
+const bool LkSystemInfo::GetVersionOS64Bit()
+{
+	return m_VersionOS64Bit;
+}
+
+const std::string& LkSystemInfo::GetVersionOSString()
+{
+	return m_VersionOSString;
+}
+
+const std::string& LkSystemInfo::GetVersionOSServicePackString()
+{
+	return m_VersionOSServicePackString;
+}
+
+const unsigned long LkSystemInfo::GetNumProcessors()
+{
+	return m_NumProcessors;
+}
+
+const unsigned long LkSystemInfo::GetProcessorType()
+{
+	return m_ProcessorType;
+}
+
+const unsigned short LkSystemInfo::GetProcessorArchitecture()
+{
+	return m_ProcessorArchitecture;
+}
+
+const unsigned __int64 LkSystemInfo::GetMemoryAmountTotalPhysical()
+{
+	return m_MemoryAmountTotalPhysical;
+}
+
+const unsigned __int64 LkSystemInfo::GetMemoryAmountTotalVirtual()
+{
+	return m_MemoryAmountTotalVirtual;
+}
+
+const unsigned int LkSystemInfo::GetCPUFrequencyHz()
+{
+	return m_CPUFrequency;
+}
+
+const float LkSystemInfo::GetCPUFrequencyGHz()
+{
+	return ((float)m_CPUFrequency) / 1000000;
+}
+
+const std::string& LkSystemInfo::GetComputerName()
+{
+	return m_ComputerName;
+}
+
+const std::string& LkSystemInfo::GetUserName()
+{
+	return m_UserName;
+}
+
+}	// Namespace util.
+
+}	// Namespace loki.

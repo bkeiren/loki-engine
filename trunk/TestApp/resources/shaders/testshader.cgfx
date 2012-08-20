@@ -1,0 +1,116 @@
+// Strucure for input data as sent by the application.
+struct VertexInput
+{
+	in float3 Position 	: ATTR0;
+	in float3 Normal	: ATTR2;
+	in float2 Tex		: ATTR8;
+	in float3 Tangent	: ATTR14;
+	in float3 BiNormal	: ATTR15;
+};
+
+// Structure for data transferred from the vertex to the fragment program.
+struct VertexOutput
+{
+	float4 PosH		: HPOS;
+	float4 PosS		: TEXCOORD0;
+	float3 Normal	: TEXCOORD1;
+	float2 Tex		: TEXCOORD2;
+	float3 Tangent	: TEXCOORD3;
+	float3 BiNormal	: TEXCOORD4;
+	float Depth		: TEXCOORD5;
+};
+
+// Structure for data output from the fragment program.
+struct FragmentOutput
+{
+	float4 Color0	: COLOR0;
+	float4 Color1	: COLOR1;
+	float4 Color2	: COLOR2;
+	float4 Color3	: COLOR3;
+	float Depth		: DEPTH;
+	// NOTE: COLOR* semantics go from 0 through 7, according to http://http.developer.nvidia.com/Cg/glslf.html
+};
+
+// Additional input data that we don't want to have in the VertexInput struct.
+sampler2D DiffuseSampler		: LKDIFFUSETEX;
+sampler2D NormalSampler			: LKNORMALTEX;
+sampler2D SpecularSampler		: LKSPECULARTEX;
+sampler2D EmissiveSampler		: LKEMISSIVETEX;
+samplerCUBE EnvSampler			: LKENVTEX;
+float4 GlobalAmbient			: LKGLOBALAMBIENT;
+float4x4 ModelViewProjection	: LKMODELVIEWPROJ;
+float4x4 ModelMatrix			: LKMODELMATRIX;
+float3x3 ModelMatrixIT			: LKMODELMATRIXIT;
+float4x4 ViewMatrix				: LKVIEWMATRIX;
+float4 EyePosition				: LKEYEPOSITION;
+float Scale						: LKMODELSCALE;
+float2 UVScale					: LKUVSCALE = float2(1.0, 1.0);
+float zFar						: LKZFAR;
+float zNear						: LKZNEAR;
+float MaterialShininess			: LKMATERIALSHININESS;
+
+// Vertex program entry point.
+VertexOutput mainVP( VertexInput IN )
+{
+	VertexOutput OUT;
+	
+	OUT.PosH = mul(ModelViewProjection, float4(IN.Position * Scale, 1.0));
+	OUT.PosS = mul(mul(ViewMatrix, ModelMatrix), float4(IN.Position * Scale, 1));
+	OUT.Tex = IN.Tex * UVScale;
+	OUT.Normal = IN.Normal;
+	OUT.Tangent = IN.Tangent;
+	OUT.BiNormal = IN.BiNormal;
+	OUT.Depth = OUT.PosH.z;
+
+	return OUT;
+}
+
+float LinearizeDepth( float _NonLinearDepth )
+{
+	return (2.0 * zFar * zNear / (zFar + zNear - (zFar - zNear) * (2 * _NonLinearDepth - 1.0))) / zFar;
+}
+
+// Fragment program entry point.
+FragmentOutput mainFP( VertexOutput IN )
+{
+	FragmentOutput OUT;
+
+	float3x3 TBN = float3x3(normalize(IN.Tangent), normalize(IN.BiNormal), normalize(IN.Normal));
+	
+	//OUT.Depth = IN.Depth;
+	OUT.Color0 = float4(tex2D(DiffuseSampler, IN.Tex).rgb, tex2D(SpecularSampler, IN.Tex).r);
+	OUT.Color1 = float4(IN.PosS.xyz, MaterialShininess);
+	float3 normalpixel = float3(tex2D(NormalSampler, IN.Tex).rgb);
+	if (normalpixel.r == 0.0 && normalpixel.g == 0.0 && normalpixel.b == 0.0)
+	{
+		OUT.Color2 = mul(ViewMatrix, float4(IN.Normal.xyz, 0.0));
+	}
+	else
+	{
+		float4 normalpixel_vs = mul(ViewMatrix, float4(normalize(mul(TBN, (normalpixel * 2) - 1.0)), 0.0));
+		OUT.Color2 = normalpixel_vs;
+	}
+	//OUT.Color2 = mul(ViewMatrix, float4(IN.Normal, 0.0));
+	
+	OUT.Color3 = float4(tex2D(EmissiveSampler, IN.Tex).rgb, 1.0);
+
+	return OUT;
+}
+
+technique t0
+{
+	pass p0
+	{
+		CullFaceEnable = true;
+		CullFace = Back;
+		DepthTestEnable = true;
+		DepthFunc = LEqual;
+		DepthMask = true;
+		BlendEnable = false;
+		ColorMask = bool4(true, true, true, true);
+		StencilEnable = false;
+
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = compile latest mainFP();
+	}
+}

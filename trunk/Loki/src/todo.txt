@@ -1,0 +1,15 @@
+////////////////////////////////////////////////////////////////////////////////////
+// This file is at no point in time complete!
+////////////////////////////////////////////////////////////////////////////////////
+
+ScriptManager
+MemoryManager
+ThreadManager
+Renderer
+Postprocessing system (Maybe like OGRE-Compositor framework)
+
+Tonemapping shader (?)
+"Recast" Navigation SubMesh Pathfinding library
+
+---- ACTIVE
+	Implement models (can be simple) with shader loading as is done in the DeferredRenderingTutorial code.

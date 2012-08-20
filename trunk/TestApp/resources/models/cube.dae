@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.0">
+  <asset>
+    <contributor>
+      <author></author>
+      <authoring_tool>FBX COLLADA exporter</authoring_tool>
+      <comments></comments>
+    </contributor>
+    <created>2012-06-24T14:19:45Z</created>
+    <modified>2012-06-24T14:19:45Z</modified>
+    <revision></revision>
+    <title></title>
+    <subject></subject>
+    <keywords></keywords>
+    <unit meter="0.010000"/>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  <library_materials>
+    <material id="lambert1" name="lambert1">
+      <instance_effect url="#lambert1-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="lambert1-fx" name="lambert1">
+      <profile_COMMON>
+        <technique sid="standard">
+          <lambert>
+            <emission>
+              <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.400000  0.400000 0.400000 1.000000</color>
+            </diffuse>
+            <transparent>
+              <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
+            </transparent>
+            <transparency>
+              <float sid="transparency">1.000000</float>
+            </transparency>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="pCube3-lib" name="pCube3Mesh">
+      <mesh>
+        <source id="pCube3-lib-Position">
+          <float_array id="pCube3-lib-Position-array" count="24">
+-33.000000 -33.000000 33.000000
+33.000000 -33.000000 33.000000
+-33.000000 33.000000 33.000000
+33.000000 33.000000 33.000000
+-33.000000 33.000000 -33.000000
+33.000000 33.000000 -33.000000
+-33.000000 -33.000000 -33.000000
+33.000000 -33.000000 -33.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCube3-lib-Position-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCube3-lib-Normal0">
+          <float_array id="pCube3-lib-Normal0-array" count="108">
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCube3-lib-Normal0-array" count="36" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCube3-lib-UV0">
+          <float_array id="pCube3-lib-UV0-array" count="48">
+0.000000 1.000000
+0.000000 0.000000
+1.000000 1.000000
+1.000000 0.000000
+0.000000 1.000000
+0.000000 0.000000
+1.000000 1.000000
+1.000000 0.000000
+0.000000 1.000000
+0.000000 0.000000
+1.000000 1.000000
+1.000000 0.000000
+0.000000 1.000000
+0.000000 0.000000
+1.000000 1.000000
+1.000000 0.000000
+1.000000 0.000000
+1.000000 1.000000
+0.000000 0.000000
+0.000000 1.000000
+1.000000 0.000000
+1.000000 1.000000
+0.000000 0.000000
+0.000000 1.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCube3-lib-UV0-array" count="24" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="pCube3-lib-Vertex">
+          <input semantic="POSITION" source="#pCube3-lib-Position"/>
+        </vertices>
+        <polygons material="lambert1" count="12">
+          <input semantic="VERTEX" offset="0" source="#pCube3-lib-Vertex"/>
+          <input semantic="NORMAL" offset="1" source="#pCube3-lib-Normal0"/>
+          <input semantic="TEXCOORD" offset="2" set="0" source="#pCube3-lib-UV0"/>
+          <p>0 0 0 2 1 1 1 2 2</p>
+          <p>2 3 1 3 4 3 1 5 2</p>
+          <p>2 6 4 4 7 5 3 8 6</p>
+          <p>4 9 5 5 10 7 3 11 6</p>
+          <p>4 12 8 6 13 9 5 14 10</p>
+          <p>6 15 9 7 16 11 5 17 10</p>
+          <p>6 18 12 0 19 13 7 20 14</p>
+          <p>0 21 13 1 22 15 7 23 14</p>
+          <p>1 24 16 3 25 17 7 26 18</p>
+          <p>3 27 17 5 28 19 7 29 18</p>
+          <p>6 30 20 4 31 21 0 32 22</p>
+          <p>4 33 21 2 34 23 0 35 22</p>
+        </polygons>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="RootNode" name="RootNode">
+      <node id="pCube3" name="pCube3">
+        <matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 33.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix>
+        <instance_geometry url="#pCube3-lib">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="lambert1" target="#lambert1"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#RootNode"/>
+  </scene>
+</COLLADA>
+
