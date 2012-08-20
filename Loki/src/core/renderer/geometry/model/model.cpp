@@ -254,31 +254,19 @@ void LkModel::_Render( const glm::mat4& _ModelMatrix, const glm::mat4& _ViewMatr
 
 		// Set the diffuse texture.
 		tex = material->GetDiffuse();
-		if (tex)
-		{
-			SETCGPARAM("LKDIFFUSETEX", tex->m_OpenGLTextureID);
-		}
+		SETCGPARAM("LKDIFFUSETEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
 
 		// Set the normal texture.
 		tex = material->GetNormal();
-		if (tex)
-		{
-			SETCGPARAM("LKNORMALTEX", tex->m_OpenGLTextureID);
-		}
+		SETCGPARAM("LKNORMALTEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
 
 		// Set the specular texture.
 		tex = material->GetSpecular();
-		if (tex)
-		{
-			SETCGPARAM("LKSPECULARTEX", tex->m_OpenGLTextureID);
-		}
+		SETCGPARAM("LKSPECULARTEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
 
 		// Set the emissive texture.
 		tex = material->GetEmissive();
-		if (tex)
-		{
-			SETCGPARAM("LKEMISSIVETEX", tex->m_OpenGLTextureID);
-		}
+		SETCGPARAM("LKEMISSIVETEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
 
 		// Set the environment texture.
 		// 			tex = material->GetEmissive();
