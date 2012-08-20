@@ -1,0 +1,195 @@
+// Strucure for input data as sent by the application.
+struct VertexInput
+{
+	in float3 Position 	: ATTR0;
+};
+
+// Structure for data transferred from the vertex to the fragment program.
+struct VertexOutput
+{
+	float4 PosH		: HPOS;
+	float4 PosW		: TEXCOORD0;
+	float4 PosHCustom	: TEXCOORD1;	// Because we can't acces HPOS semantic in fragment.
+	float3 LightPositionSS : TEXCOORD2;
+};
+
+// Structure for data output from the fragment program.
+struct FragmentOutput
+{
+	float4 Color0	: COLOR0;
+};
+
+// Additional input data that we don't want to have in the VertexInput struct.
+float4x4 ModelViewProjection	: LKMODELVIEWPROJ;
+float4x4 ModelMatrix			: LKMODELMATRIX;
+float3x3 ModelMatrixIT			: LKMODELMATRIXIT;
+float4x4 ViewMatrix				: LKVIEWMATRIX;
+float4 EyePosition				: LKEYEPOSITION;
+sampler2D RT0Sampler			: LKRT0;
+sampler2D RT1Sampler			: LKRT1;
+sampler2D RT2Sampler			: LKRT2;
+sampler2D RT3Sampler			: LKRT3;
+
+float3 LightPosition				: LKLIGHTPOSITION;
+float LightRadius					: LKLIGHTRADIUS;
+float3 LightVector					: LKLIGHTVECTOR;	// Direction in the case of a directional light or a spotlight.
+float3 LightColor					: LKLIGHTCOLOR;
+float3 LightSpecular				: LKLIGHTSPECULAR;
+float LightConstantAttenuation		: LKLIGHTCONSTANTATTENUATION;
+float LightLinearAttenuation		: LKLIGHTLINEARATTENUATION;
+float LightQuadraticAttenuation		: LKLIGHTQUADRATICATTENUATION;
+// TODO: Light type?
+
+// Vertex program entry point.
+VertexOutput mainVP( VertexInput IN )
+{
+	VertexOutput OUT;
+	
+	OUT.PosH = mul(ModelViewProjection, float4(IN.Position, 1));
+	OUT.PosW = mul(ModelMatrix, float4(IN.Position, 1));
+	OUT.PosHCustom = OUT.PosH;
+	
+	OUT.LightPositionSS = mul(mul(ViewMatrix, ModelMatrix), float4(LightPosition, 1.0)).xyz;
+
+	return OUT;
+}
+
+float LinearizeDepth( float _NonLinearDepth )
+{
+	return (2.0 * zFar * zNear / (zFar + zNear - (zFar - zNear) * (2 * _NonLinearDepth - 1.0))) / zFar;
+}
+
+float Attenuation( float3 _SurfacePosition, float3 _LightPosition )
+{
+	float d = distance(_SurfacePosition, _LightPosition) / LightRadius;
+	return max((1.0 - (LightConstantAttenuation + LightLinearAttenuation * d + LightQuadraticAttenuation * d * d)), 0.0);
+}
+
+// Fragment program entry point.
+FragmentOutput mainFP( VertexOutput IN )
+{
+	FragmentOutput OUT;
+
+	float2 TexCoord = ((IN.PosHCustom.xy / IN.PosHCustom.w) * 0.5 + float2(0.5, 0.5));	// This calculation here was the result
+																						// of a little bit of experimenting and testing.	
+	
+	float4 RT1SampleValue = tex2D(RT1Sampler, TexCoord);
+	float Shininess = RT1SampleValue.w;
+	
+	// Sample surface position at fragment.
+	float3 SurfacePosition = RT1SampleValue.rgb;
+	
+	// Sample surface normal at fragment.
+	float3 SurfaceNormal = tex2D(RT2Sampler, TexCoord).xyz;
+	
+	// Calculate direction vector from light origin to fragment position.
+	float3 LightDir = IN.LightPositionSS - SurfacePosition;
+	
+	// Calculate (linear) light attenuation.
+	float distanceAtt = Attenuation(SurfacePosition, IN.LightPositionSS);
+	
+	// Variable to hold the final fragment color.
+	float4 final_color = vec4(0.0, 0.0, 0.0, 1.0);
+	
+	//SurfaceNormal = normalize(SurfaceNormal);	// TODO: Is this normalization actually necessary?
+	LightDir = normalize(LightDir);
+	
+	float LambertTerm = dot(SurfaceNormal, LightDir);
+	
+	if(LambertTerm > 0.0)
+	{
+		float4 diffCol = tex2D(RT0Sampler, TexCoord);
+		final_color += float4(diffCol.rgb, 1.0) * float4(LightColor.rgb, 1.0) * LambertTerm;
+		
+		float4 matSpecular = vec4(diffCol.a, diffCol.a, diffCol.a, 1.0);
+		float3 EyeVec = normalize(SurfacePosition);
+		//vec3 R = reflect(-LightDir, SurfaceNormal);
+		float3 R = reflect(LightDir, SurfaceNormal);
+		float specular = pow( max(dot(R, EyeVec), 0.0), Shininess );
+		final_color += float4(LightSpecular, 1.0) * matSpecular * specular;
+	}
+
+	OUT.Color0 = final_color * distanceAtt;
+	//OUT.Color0 = float4((SurfaceNormal + 1.0) * 0.5, 1.0);
+
+	return OUT;
+}
+
+technique t0
+{
+	// Back pass.
+	pass pass_back
+	{
+		CullFaceEnable = true;
+		CullFace = Front;
+		DepthTestEnable = true;
+		DepthFunc = Greater;
+		DepthMask = false;
+		ColorMask = bool4(false, false, false, false);
+		StencilEnable = true;
+		StencilOp = int3(Keep, Keep, Incr);
+		StencilFunc = int3(Always, 0, 0);
+		StencilMask = true;
+	
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = NULL;
+	}
+	
+	// Front pass when camera is outside the volume (Inside-pass doesn't exist).
+	pass pass_front_camoutside
+	{
+		CullFaceEnable = true;
+		CullFace = Back;
+		DepthTestEnable = true;
+		DepthFunc = Less;
+		DepthMask = false;
+		ColorMask = bool4(false, false, false, false);
+		StencilEnable = true;
+		StencilOp = int3(Keep, Keep, Incr);
+		StencilFunc = int3(Always, 0, 0);
+		StencilMask = true;
+
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = NULL;
+	}
+
+	// Shade pass when camera is inside the volume.
+	pass pass_shade_caminside
+	{
+		CullFaceEnable = true;
+		CullFace = Front;
+		DepthTestEnable = false;
+		DepthMask = false;
+		StencilEnable = true;
+		StencilOp = int3(Zero, Zero, Zero);	// This will clear the stencil buffer back to 0 at each fragment that was involved in this technique.
+											// This means that we don't have to clear the entire stencil buffer after each light. Yay =D
+		StencilFunc = int3(Always, 1, 1);	// ( CameraInsideVolume ) ? ( 1 ) : ( 2 );
+		StencilMask = true;
+		ColorMask = bool4(true, true, true, true);
+		BlendEnable = true;
+		BlendFunc = int2(One, One);
+
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = compile latest mainFP();
+	}
+	
+	// Shade pass when camera is outside the volume.
+	pass pass_shade_camoutside
+	{
+		CullFaceEnable = true;
+		CullFace = Back;
+		DepthTestEnable = false;
+		DepthMask = false;
+		StencilEnable = true;
+		StencilOp = int3(Zero, Zero, Zero);	// This will clear the stencil buffer back to 0 at each fragment that was involved in this technique.
+											// This means that we don't have to clear the entire stencil buffer after each light. Yay =D
+		StencilFunc = int3(Equal, 2, 2);	// ( CameraInsideVolume ) ? ( 1 ) : ( 2 );
+		StencilMask = true;
+		ColorMask = bool4(true, true, true, true);
+		BlendEnable = true;
+		BlendFunc = int2(One, One);
+
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = compile latest mainFP();
+	}
+}

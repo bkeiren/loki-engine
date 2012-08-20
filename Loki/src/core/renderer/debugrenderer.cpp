@@ -1,0 +1,480 @@
+#include "core/renderer/debugrenderer.h"
+#include <vector>
+#include <GLEW\\glew.h>
+#include <GL\\glut.h>
+
+namespace loki
+{
+
+namespace renderer
+{
+
+namespace debug
+{
+
+namespace
+{
+	
+struct DbgDrawItem 
+{
+
+#define _DBGDRAW_TYPE_NONE				-1	// Will not be drawn. Only for internal use.
+
+#define DBGDRAW_TYPE_LINE3D				0
+#define DBGDRAW_TYPE_LINE2D				1
+#define DBGDRAW_TYPE_SPHERE_WIRE		2
+#define DBGDRAW_TYPE_SPHERE_SOLID		3
+#define DBGDRAW_TYPE_CUBE_WIRE			4
+#define DBGDRAW_TYPE_CUBE_SOLID			5
+#define DBGDRAW_TYPE_ICOSAHEDRON_WIRE	6
+#define DBGDRAW_TYPE_ICOSAHEDRON_SOLID	7
+#define DBGDRAW_TYPE_CONE_WIRE			8
+#define DBGDRAW_TYPE_CONE_SOLID			9
+#define DBGDRAW_TYPE_CYLINDER_WIRE		10
+#define DBGDRAW_TYPE_CYLINDER_SOLID		11
+#define DBGDRAW_TYPE_DISK				12
+#define DBGDRAW_TYPE_DISK_PARTIAL		13
+
+	int m_Type;
+	glm::vec3 m_Vec0;
+	glm::vec3 m_Vec1;
+	float m_Val0;
+	float m_Val1;
+	glm::vec3 m_Color;
+	bool m_DepthTest;
+};
+
+//////////////////////////////////////////////////////////////////////////
+// The 2D and 3D debug draw items are separated to avoid having to make
+// unnecessary matrix mode switches.
+//////////////////////////////////////////////////////////////////////////
+#ifdef _DEBUG
+const unsigned int DbgDrawItemsMaxCount = 2048;
+#else
+const unsigned int DbgDrawItemsMaxCount = 2048;
+#endif
+typedef std::vector<DbgDrawItem>		DbgDrawItems;
+typedef DbgDrawItems::iterator			DbgDrawItemsIter;
+typedef DbgDrawItems::const_iterator	DbgDrawItemsConstIter;
+
+DbgDrawItems DbgDrawItems3D = DbgDrawItems(DbgDrawItemsMaxCount);
+DbgDrawItems DbgDrawItems2D = DbgDrawItems(DbgDrawItemsMaxCount);
+
+unsigned int DbgDrawItems3DCounter = 0;
+unsigned int DbgDrawItems2DCounter = 0;
+
+}
+
+void DrawItems( const glm::mat4& _ViewMatrix )
+{
+#ifdef _DEBUG
+	glDepthMask(false);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadMatrixf(glm::value_ptr(_ViewMatrix));
+	glPushMatrix();
+	for (DbgDrawItemsIter it = DbgDrawItems3D.begin(); it != DbgDrawItems3D.end(); ++it)
+	{
+		DbgDrawItem* item = &(*it);
+
+		if (item->m_DepthTest)
+		{
+			glEnable(GL_DEPTH_TEST);
+		}
+		else
+		{
+			glDisable(GL_DEPTH_TEST);
+		}
+		glColor3f(item->m_Color.r, item->m_Color.g, item->m_Color.b);
+
+		switch (item->m_Type)
+		{
+		case DBGDRAW_TYPE_LINE3D:
+			{
+				glBegin(GL_LINE_STRIP);
+				glVertex3f(item->m_Vec0.x, item->m_Vec0.y, item->m_Vec0.z);
+				glVertex3f(item->m_Vec1.x, item->m_Vec1.y, item->m_Vec1.z);
+				glEnd();
+
+				break;
+			}
+		case DBGDRAW_TYPE_SPHERE_WIRE:
+		case DBGDRAW_TYPE_SPHERE_SOLID:
+			{
+				glPushMatrix();
+				glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+				glTranslatef(item->m_Vec0.x, item->m_Vec0.y, item->m_Vec0.z);
+				(item->m_Type == DBGDRAW_TYPE_SPHERE_WIRE)?
+					(glutWireSphere(item->m_Val0, 15, 15)):
+					(glutSolidSphere(item->m_Val0, 15, 15));
+				glPopMatrix();
+				break;
+			}
+		case DBGDRAW_TYPE_CUBE_WIRE:
+		case DBGDRAW_TYPE_CUBE_SOLID:
+			{
+				glPushMatrix();
+				glTranslatef(item->m_Vec0.x, item->m_Vec0.y, item->m_Vec0.z);
+				(item->m_Type == DBGDRAW_TYPE_CUBE_WIRE)?
+					(glutWireCube(item->m_Val0)):
+					(glutSolidCube(item->m_Val0));
+				glPopMatrix();
+				break;
+			}
+		case DBGDRAW_TYPE_ICOSAHEDRON_WIRE:
+		case DBGDRAW_TYPE_ICOSAHEDRON_SOLID:
+			{
+				glPushMatrix();
+				glScalef(item->m_Val0, item->m_Val0, item->m_Val0);
+				glTranslatef(item->m_Vec0.x, item->m_Vec0.y, item->m_Vec0.z);
+				(item->m_Type == DBGDRAW_TYPE_ICOSAHEDRON_WIRE)?
+					(glutWireIcosahedron()):
+					(glutSolidIcosahedron());
+				glPopMatrix();
+				break;
+			}
+		case DBGDRAW_TYPE_CONE_WIRE:
+		case DBGDRAW_TYPE_CONE_SOLID:
+			{
+				glm::mat4 m = glm::inverse(glm::gtc::matrix_transform::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), -item->m_Vec1, UNIT_Y));
+
+				glPushMatrix();
+				m[0] = -m[0];
+				m[1] = -m[1];
+				m[2] = -m[2];
+				m[3] = glm::vec4(glm::vec3(m[2]) * -item->m_Val1, 1.0f);
+				glTranslatef(item->m_Vec0.x, item->m_Vec0.y, item->m_Vec0.z);
+				glMultMatrixf((GLfloat*)&m);
+				(item->m_Type == DBGDRAW_TYPE_CONE_WIRE)?
+					(glutWireCone(item->m_Val0, item->m_Val1, 15, 1)):
+					(glutSolidCone(item->m_Val0, item->m_Val1, 15, 1));
+				glPopMatrix();
+				break;
+			}
+		case DBGDRAW_TYPE_CYLINDER_WIRE:
+		case DBGDRAW_TYPE_CYLINDER_SOLID:
+			{
+				(item->m_Type == DBGDRAW_TYPE_CYLINDER_WIRE)?
+					(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)):
+					(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+				glDisable(GL_CULL_FACE);
+
+				glPushMatrix();
+				glTranslatef(item->m_Vec0.x, item->m_Vec0.y, item->m_Vec0.z);
+				static GLUquadric* q = gluNewQuadric();
+				gluCylinder(q, item->m_Val0, item->m_Val0, item->m_Val1, 15, 1);
+				glPopMatrix();
+
+				glEnable(GL_CULL_FACE);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+				break;
+			}
+		case DBGDRAW_TYPE_DISK:
+		case DBGDRAW_TYPE_DISK_PARTIAL:
+			{
+				glDisable(GL_CULL_FACE);
+
+				glPushMatrix();
+				glTranslatef(item->m_Vec0.x, item->m_Vec0.y, item->m_Vec0.z);
+				static GLUquadric* q = gluNewQuadric();
+				(item->m_Type == DBGDRAW_TYPE_DISK)?
+					(gluDisk(q, 0, item->m_Val0, 50, 1)):
+					(gluPartialDisk(q, 0, item->m_Val0, max((int)((item->m_Vec1.y / 360) * 50), 5), 1, item->m_Vec1.x, item->m_Vec1.y));
+				glPopMatrix();
+
+				glEnable(GL_CULL_FACE);
+				break;
+			}
+		}
+
+		item->m_Type = _DBGDRAW_TYPE_NONE;
+	}
+	glPopMatrix();
+	glPopMatrix();
+
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0.0f, 1.0f, 1.0f, 0.0f, 0, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	for (DbgDrawItemsIter it = DbgDrawItems2D.begin(); it != DbgDrawItems2D.end(); ++it)
+	{
+		DbgDrawItem* item = &(*it);
+
+		if (item->m_DepthTest)
+		{
+			glEnable(GL_DEPTH_TEST);
+		}
+		else
+		{
+			glDisable(GL_DEPTH_TEST);
+		}
+		glColor3f(item->m_Color.r, item->m_Color.g, item->m_Color.b);
+
+		switch (item->m_Type)
+		{
+		case DBGDRAW_TYPE_LINE2D:
+			{
+				glBegin(GL_LINE_STRIP);
+				glVertex2f(item->m_Vec0.x, item->m_Vec0.y);
+				glVertex2f(item->m_Vec1.x, item->m_Vec1.y);
+				glEnd();
+
+				break;
+			}
+		case DBGDRAW_TYPE_DISK:
+		case DBGDRAW_TYPE_DISK_PARTIAL:
+			{
+				glDisable(GL_CULL_FACE);
+
+				glPushMatrix();
+				glTranslatef(item->m_Vec0.x, item->m_Vec0.y, item->m_Vec0.z);
+				glScalef(1.0f, -1.0f, 1.0f);
+				static GLUquadric* q = gluNewQuadric();
+				(item->m_Type == DBGDRAW_TYPE_DISK)?
+					(gluDisk(q, 0, item->m_Val0, 50, 1)):
+					(gluPartialDisk(q, 0, item->m_Val0, max((int)((item->m_Vec1.y / 360) * 50), 5), 1, item->m_Vec1.x, item->m_Vec1.y));
+				glPopMatrix();
+
+				glEnable(GL_CULL_FACE);
+				break;
+			}
+		}
+
+		item->m_Type = _DBGDRAW_TYPE_NONE;
+	}
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+
+	glDepthMask(true);
+
+	glColor3f(1.0f, 1.0f, 1.0f);	// Here because otherwise the sky isn't drawn for some reason... x)
+
+#endif
+
+	DbgDrawItems3DCounter = 0;
+	DbgDrawItems2DCounter = 0;
+}
+
+
+void DrawLine3D(const glm::vec3& _From, const glm::vec3& _To, bool _DepthTest /*= true*/, const glm::vec3& _Color /* = glm::vec3 */)
+{
+#ifdef _DEBUG
+	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
+	{
+		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
+		item->m_Type = DBGDRAW_TYPE_LINE3D;
+		item->m_Vec0 = _From;
+		item->m_Vec1 = _To;
+		item->m_Color = _Color;
+		item->m_DepthTest = _DepthTest;
+		++DbgDrawItems3DCounter;
+	}
+#endif
+}
+
+void DrawLine2D(const glm::vec2& _From, const glm::vec2& _To, bool _DepthTest /*= true*/, const glm::vec3& _Color /* = glm::vec3 */)
+{
+#ifdef _DEBUG
+	if (DbgDrawItems2DCounter < DbgDrawItemsMaxCount)
+	{
+		DbgDrawItem* item = &DbgDrawItems2D[DbgDrawItems2DCounter];
+		item->m_Type = DBGDRAW_TYPE_LINE2D;
+		item->m_Vec0 = glm::vec3(_From.x, _From.y, 0.0f);
+		item->m_Vec1 = glm::vec3(_To.x, _To.y, 0.0f);
+		item->m_Color = _Color;
+		item->m_DepthTest = _DepthTest;
+		++DbgDrawItems2DCounter;
+	}
+#endif
+}
+
+void DrawSphere(const glm::vec3& _Pos, float _Radius, bool _DepthTest /*= true*/, const glm::vec3& _Color /* = glm::vec3 */, bool _Wire /*= true*/ )
+{
+#ifdef _DEBUG
+	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
+	{
+		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
+		item->m_Type = (_Wire)?(DBGDRAW_TYPE_SPHERE_WIRE):(DBGDRAW_TYPE_SPHERE_SOLID);
+		item->m_Vec0 = _Pos;
+		item->m_Val0 = _Radius;
+		item->m_Color = _Color;
+		item->m_DepthTest = _DepthTest;
+		++DbgDrawItems3DCounter;
+	}
+#endif
+}
+
+void DrawCube(const glm::vec3& _Pos, float _Size, bool _DepthTest /*= true*/, const glm::vec3& _Color /* = glm::vec3 */, bool _Wire /*= true*/ )
+{
+#ifdef _DEBUG
+	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
+	{
+		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
+		item->m_Type = (_Wire)?(DBGDRAW_TYPE_CUBE_WIRE):(DBGDRAW_TYPE_CUBE_SOLID);
+		item->m_Vec0 = _Pos;
+		item->m_Val0 = _Size;
+		item->m_Color = _Color;
+		item->m_DepthTest = _DepthTest;
+		++DbgDrawItems3DCounter;
+	}
+#endif
+}
+
+void DrawIcosahedron(const glm::vec3& _Pos, float _Size, bool _DepthTest /* = true */, const glm::vec3& _Color /* = glm::vec3 */, bool _Wire /*= true*/ )
+{
+#ifdef _DEBUG
+	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
+	{
+		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
+		item->m_Type = (_Wire)?(DBGDRAW_TYPE_ICOSAHEDRON_WIRE):(DBGDRAW_TYPE_ICOSAHEDRON_SOLID);
+		item->m_Vec0 = _Pos;
+		item->m_Val0 = _Size;
+		item->m_Color = _Color;
+		item->m_DepthTest = _DepthTest;
+		++DbgDrawItems3DCounter;
+	}
+#endif
+}
+
+void DrawCone(const glm::vec3& _Pos, float _Base, float _Height, glm::vec3& _Direction, bool _DepthTest /* = true */, const glm::vec3& _Color /* = glm::vec3 */, bool _Wire /*= true*/ )
+{
+#ifdef _DEBUG
+	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
+	{
+		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
+		item->m_Type = (_Wire)?(DBGDRAW_TYPE_CONE_WIRE):(DBGDRAW_TYPE_CONE_SOLID);
+		item->m_Vec0 = _Pos;
+		item->m_Vec1 = glm::normalize(_Direction);
+		item->m_Val0 = _Base;
+		item->m_Val1 = _Height;
+		item->m_Color = _Color;
+		item->m_DepthTest = _DepthTest;
+		++DbgDrawItems3DCounter;
+	}
+#endif
+}
+
+void DrawCylinder(const glm::vec3& _Pos, float _Radius, float _Height, bool _DepthTest /* = true */, const glm::vec3& _Color /* = glm::vec3 */, bool _Wire /*= true*/ )
+{
+#ifdef _DEBUG
+	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
+	{
+		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
+		item->m_Type = (_Wire)?(DBGDRAW_TYPE_CYLINDER_WIRE):(DBGDRAW_TYPE_CYLINDER_SOLID);
+		item->m_Vec0 = _Pos;
+		item->m_Val0 = _Radius;
+		item->m_Val1 = _Height;
+		item->m_Color = _Color;
+		item->m_DepthTest = _DepthTest;
+		++DbgDrawItems3DCounter;
+	}
+#endif
+}
+
+void DrawDisk3D( const glm::vec3& _Pos, float _Radius, bool _DepthTest /*= true*/, const glm::vec3& _Color /*= glm::vec3(1.0f, 1.0f, 1.0f)*/ )
+{
+#ifdef _DEBUG
+	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
+	{
+		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
+		item->m_Type = DBGDRAW_TYPE_DISK;
+		item->m_Vec0 = _Pos;
+		item->m_Val0 = _Radius;
+		item->m_Color = _Color;
+		item->m_DepthTest = _DepthTest;
+		++DbgDrawItems3DCounter;
+	}
+#endif
+}
+
+void DrawDisk2D( const glm::vec3& _Pos, float _Radius, const glm::vec3& _Color /*= glm::vec3(1.0f, 1.0f, 1.0f)*/ )
+{
+#ifdef _DEBUG
+	if (DbgDrawItems2DCounter < DbgDrawItemsMaxCount)
+	{
+		DbgDrawItem* item = &DbgDrawItems2D[DbgDrawItems2DCounter];
+		item->m_Type = DBGDRAW_TYPE_DISK;
+		item->m_Vec0 = _Pos;
+		item->m_Val0 = _Radius;
+		item->m_Color = _Color;
+		item->m_DepthTest = false;
+		++DbgDrawItems2DCounter;
+	}
+#endif
+}
+
+void DrawPartialDisk3D( const glm::vec3& _Pos, float _Radius, float _StartAngle, float _Angle, bool _DepthTest /*= true*/, const glm::vec3& _Color /*= glm::vec3(1.0f, 1.0f, 1.0f)*/ )
+{
+#ifdef _DEBUG
+	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
+	{
+		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
+		item->m_Type = DBGDRAW_TYPE_DISK_PARTIAL;
+		item->m_Vec0 = _Pos;
+		item->m_Val0 = _Radius;
+		item->m_Vec1 = glm::vec3(_StartAngle, _Angle, 0.0f);
+		item->m_Color = _Color;
+		item->m_DepthTest = _DepthTest;
+		++DbgDrawItems3DCounter;
+	}
+#endif
+}
+
+void DrawPartialDisk2D( const glm::vec3& _Pos, float _Radius, float _StartAngle, float _Angle, const glm::vec3& _Color /*= glm::vec3(1.0f, 1.0f, 1.0f)*/ )
+{
+#ifdef _DEBUG
+	if (DbgDrawItems2DCounter < DbgDrawItemsMaxCount)
+	{
+		DbgDrawItem* item = &DbgDrawItems2D[DbgDrawItems2DCounter];
+		item->m_Type = DBGDRAW_TYPE_DISK_PARTIAL;
+		item->m_Vec0 = _Pos;
+		item->m_Val0 = _Radius;
+		item->m_Vec1 = glm::vec3(_StartAngle, _Angle, 0.0f);
+		item->m_Color = _Color;
+		item->m_DepthTest = false;
+		++DbgDrawItems2DCounter;
+	}
+#endif
+}
+
+void DrawAxes( const glm::vec3& _Pos, const glm::mat3& _Axes, float _Scale /* = 1.0f */, bool _DepthTest /* = true */, bool _Wire /* = true*/ )
+{
+	float cone_base = 0.085f;
+	float cone_height = 0.25f;
+	glm::vec3 forward = _Axes[0];
+	glm::vec3 up = _Axes[1];
+	glm::vec3 side = _Axes[2];
+	
+	//////////////////////////////////////////////////////////////////////////
+	// X-axis
+	DrawLine3D(_Pos, _Pos + (forward * _Scale), _DepthTest, FORWARD);
+	DrawCone(_Pos + (forward * _Scale), cone_base * _Scale, cone_height * _Scale, -forward, _DepthTest, FORWARD, _Wire);
+
+	//////////////////////////////////////////////////////////////////////////
+	// Y-axis
+	DrawLine3D(_Pos, _Pos + (up * _Scale), _DepthTest, UP);
+	DrawCone(_Pos + (up * _Scale), cone_base * _Scale, cone_height * _Scale, -up, _DepthTest, UP, _Wire);
+
+	//////////////////////////////////////////////////////////////////////////
+	// Z-axis
+	DrawLine3D(_Pos, _Pos + (side * _Scale), _DepthTest, SIDE);
+	DrawCone(_Pos + (side * _Scale), cone_base * _Scale, cone_height * _Scale, -side, _DepthTest, SIDE, _Wire);
+}
+
+void DrawAxes( const glm::vec3& _Pos, const glm::quat& _LocalForwardOrientation, float _Scale /* = 1.0f*/, bool _DepthTest /* = true*/, bool _Wire /* = true*/ )
+{
+	DrawAxes(_Pos, glm::gtc::quaternion::mat3_cast(_LocalForwardOrientation), _Scale, _DepthTest, _Wire);
+}
+
+}
+
+}
+
+}

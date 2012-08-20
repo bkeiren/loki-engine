@@ -1,0 +1,49 @@
+// Strucure for input data as sent by the application.
+struct VertexInput
+{
+	in float3 Position 	: ATTR0;
+	in float2 Tex		: ATTR8;
+};
+
+// Structure for data transferred from the vertex to the fragment program.
+struct VertexOutput
+{
+	float4 PosH		: HPOS;
+	float2 Tex		: TEXCOORD2;
+};
+
+// Additional input data that we don't want to have in the VertexInput struct.
+sampler2D DiffuseSampler		: LKDIFFUSETEX;
+float4x4 ModelViewProjection	: LKMODELVIEWPROJ;
+
+VertexOutput mainVP( VertexInput IN )
+{
+	VertexOutput OUT;
+	
+	OUT.PosH = mul(ModelViewProjection, float4(IN.Position, 1.0));
+	//OUT.PosH = float4(IN.Position, 1.0);
+	OUT.Tex = IN.Tex;
+
+	return OUT;
+}
+
+float4 mainFP( VertexOutput IN )	: COLOR0
+{
+	return tex2D(DiffuseSampler, IN.Tex);
+}
+
+technique t0
+{
+	pass p0
+	{
+		CullFaceEnable = false;
+		DepthTestEnable = false;
+		DepthMask = false;
+		BlendEnable = true;
+		BlendFunc = int2(SrcAlpha, OneMinusSrcAlpha);	// This is what enabled correct alpha support.
+		ColorMask = bool4(true, true, true, true);
+
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = compile latest mainFP();
+	}
+}

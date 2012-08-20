@@ -1,0 +1,42 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+This file contains development notes that are of importance in any way to people using the application.
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Format:_________________________Example:_______________________________________________________________
+<newline>						
+Date							01-02-0304
+Author							Jane Doe
+Note							Today, I had cake.
+<newline>						
+-------------------------------------------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+09-11-2011
+Bryan
+The sfml-window lib files (debug AND release) HAVE TO BE linked statically (as opposed to dynamically),
+because there is apparently a known issue with SFML (atleast in version 1.6) with ATI cards.
+This issue causes the render window to not be properly created and the entire app to freeze at
+sf::Window's c-tor. Linking just the sfml-window lib files statically (by linking sfml-window-s-d.lib and
+sfml-window-s.lib for debug and release respectively), avoids this issue. The DLL files for this library
+might be able to be removed from the application folder. This has not been done yet.
+This solution was found at http://www.sfml-dev.org/forum/viewtopic.php?t=6050.
+
+10-11-2011
+Bryan
+The sfml-graphics lib files also have to be linked statically, because otherwise a linker error will occur
+telling you that sf::Font::ourDefaultCharSet is an unresolved external symbol. In order to still keep the
+dynamic versions of the rest of our libraries, the following preprocessor macros have currently
+been defined: 
+SFML_DYNAMIC	- Keeps all libraries dynamically linked, unless states otherwise for a specific one.
+SFML_STATIC_WINDOW - Statically links the sfml-window lib files.
+SFML_STATIC_GRAPHICS - Statically links the sfml-graphics lib files.
+
+12-01-2012
+Bryan
+The entire SFML library has been removed from the engine because it did not provide sufficient control
+over the OpenGL pipeline in order to be able to have deferred rendering.
+The windowing process has been replaced by a standard Windows-specific windowing process.
+
+

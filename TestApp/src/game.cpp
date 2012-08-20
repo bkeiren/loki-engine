@@ -1,0 +1,311 @@
+#include "game.h"
+#include "core/actor/camera/camera.h"
+#include "core/game/level/level.h"
+#include "core/actor/light/point/pointlight.h"
+#include "core/actor/light/spot/spotlight.h"
+#include "core/actor/light/directional/directionallight.h"
+#include "core/actor/handle/handle.h"
+#include "core/game/localization/localization.h"
+#include "core/renderer/renderer.h"
+#include "core/renderer/geometry/model/model.h"
+#include "core/actor/components/rendercomponent/rendercomponent.h"
+#include "core/actor/pawn/pawn.h"
+#include "mycontroller.h"
+#include "core/renderer/material/material.h"
+#include "core/script/squirrel/squirrel.h"
+#include "core/renderer/effect/effectmanager.h"
+
+#include "core/ui/overlay.h"
+#include "core/ui/elements/button.h"
+#include "core/ui/elements/checkbox.h"
+#include "core/ui/elements/slider.h"
+
+#include "core/engine.h"
+
+#include "core/physics/physics.h"
+
+using namespace loki;
+
+physics::LkRigidBody* body = NULL;
+
+MyGame::MyGame()
+{
+
+}
+
+MyGame::~MyGame()
+{
+
+}
+
+void MyGame::PreInit()
+{
+
+}
+
+void testcallback1( const loki::ui::LkOverlayElement* _button )
+{
+	//LOG(VL_NORMAL, "MOVING");
+	loki::g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->SetFoVY( (((loki::ui::LkOverlaySlider*)_button)->GetSliderValue() * 130) + 30 );
+}
+
+void testcallback2( const loki::ui::LkOverlayElement* _button )
+{
+	LOG(VL_NORMAL, "RELEASED");
+}
+
+bool MyGame::Init()
+{
+	// Load a localization table.
+	if (!game::g_Localization->LoadLocalizationTable("resources//localization//strings.loc"))
+	{
+		LOG(VL_ERROR, "Failed to load localization table");
+	}
+	//std::string str = game::g_Localization->GetLocalizedString("TestString");
+	//game::g_Localization->SetLocale(game::LOCALE_NL);
+	//std::string str2 = game::g_Localization->GetLocalizedString("p1wins");
+
+
+	m_Level = new loki::game::LkLevel();
+	m_Level->SetCurrentCamera(m_Level->SpawnCamera("Cam0", CAM_FREE));
+
+	loki::LkCamera* cam = m_Level->GetCurrentCamera();
+	loki::LkMoveableComponent* cam_movcomp = cam->GetComponent<LkMoveableComponent>();
+
+	//cam_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, -40.0f));
+	cam_movcomp->RotateY(180.0f);
+
+	{
+		// TODO: Remove this.
+
+		LkPointLight* pointlight1 = m_Level->SpawnPointLight("PointLight1");
+		pointlight1->SetRadius(20.0f);
+		//pointlight1->SetPosition(glm::vec3(-3.5f, -3.0f, -12.0f));
+		LkMoveableComponent* light_movcomp = pointlight1->GetComponent<LkMoveableComponent>();
+		light_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+		pointlight1->SetColor(Color(0.2f, 0.2f, 1.0f));
+		pointlight1->Disable();
+
+		LkHandle<LkPointLight> handle = LkHandle<LkPointLight>(pointlight1);
+
+		pointlight1 = m_Level->SpawnPointLight("PointLight2");
+		light_movcomp = pointlight1->GetComponent<LkMoveableComponent>();
+		pointlight1->SetRadius(15.0f);
+		light_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
+		pointlight1->SetColor(Color(1.0f, 0.2f, 0.2f));
+		//pointlight1->Disable();
+		
+
+		pointlight1 = m_Level->SpawnPointLight("MassivePointLight");
+		light_movcomp = pointlight1->GetComponent<LkMoveableComponent>();
+		pointlight1->SetRadius(50.0f);
+		light_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+		pointlight1->SetColor(Color(1.0f, 1.0f, 1.0f));
+		//pointlight1->Disable();
+
+		pointlight1 = m_Level->SpawnPointLight("PointLight3");
+		light_movcomp = pointlight1->GetComponent<LkMoveableComponent>();
+		pointlight1->SetRadius(15.0f);
+		light_movcomp->SetPosition(glm::vec3(5.0f, 0.0f, 0.0f));
+		pointlight1->SetColor(Color(0.0f, 1.0f, 0.2f));
+		//pointlight1->Disable();
+	}
+
+	// Load an effect.
+	loki::renderer::g_EffectManager->CreateEffectFromFile("resources//shaders//testshader.cgfx", "TestEffect");
+	{
+		LkPawn* pawn = NULL;
+		LkMoveableComponent* movcomp = NULL;
+		LkRenderComponent* rendercomp = NULL;
+		loki::renderer::LkMaterial* mtl = NULL;
+
+		{
+			pawn = m_Level->SpawnPawn("StanfordDragon");
+			rendercomp = pawn->GetComponent<LkRenderComponent>();
+			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//stanford_dragon.dae"));
+			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture6.bmp", "resources//textures//texture6_normal.bmp", "resources//textures//texture6_specular.bmp");
+			mtl->SetShininess(100.0f);
+			rendercomp->GetModel()->SetMaterial(mtl, 0);
+			rendercomp->GetModel()->SetUVScale(glm::vec2(3.0f, 3.0f));
+		}
+
+		{
+			pawn = m_Level->SpawnPawn("Pawn1");
+			rendercomp = pawn->GetComponent<LkRenderComponent>();
+			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//cube.dae"));
+			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
+			mtl->SetShininess(100.0f);
+			rendercomp->GetModel()->SetMaterial(mtl, 0);
+			rendercomp->GetModel()->SetUVScale(glm::vec2(3.0f, 3.0f));
+		}
+	}
+
+	{
+		//DirectionalLight* directionallight1 = m_Level->SpawnDirectionalLight("DirectionalLight1");
+		//directionallight1->SetDirection(glm::normalize(glm::vec3(1.0f, -1.0f, 0.0f)));
+	}
+
+	//ui::Overlay* overlay = ui::g_OverlayManager->CreateOverlay("Overlay0");
+	//ui::OverlayElement* element = overlay->CreateElement("Button0", "button");
+
+	/*physics::RigidBodyInfo info;
+	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+	info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(m_Level->GetPawn("StanfordDragon")->GetComponent<LkRenderComponent>()->GetModel()->GetMesh());
+	info.m_Restitution = 0.75f;
+	info.m_Mass = 0.01f;
+	body = physics::g_Physics->AddRigidBody(info);
+
+	for (int i = 0; i < 10; ++i)
+	{
+		info.m_InitialTransform = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
+											0.0f, 1.0f, 0.0f, 0.0f,
+											0.0f, 0.0f, 1.0f, 0.0f,
+											0.0f, 10.0f * (i + 1), 0.0f, 1.0f);
+		physics::g_Physics->AddRigidBody(info);
+	}*/
+
+	/*
+	if (!loki::ui::g_OverlayManager->LoadOverlayStyle("Style0", "resources//ui//style0.sty"))
+	{
+		return false;
+	}
+	loki::ui::LkOverlay* overlay = loki::ui::g_OverlayManager->CreateOverlay("Overlay0", "Style0");
+
+	if (overlay)
+	{
+		// Set the default button size before creating any.
+		//loki::ui::LkOverlayButton::SetDefaultSize(glm::vec2(0.428f, 0.116f));
+
+		loki::ui::LkOverlayButton* button = (loki::ui::LkOverlayButton*)overlay->CreateElement("Button0", "button");
+		if (button)
+		{
+			button->SetRelativePosition(glm::vec2(0.1f, 0.1f));
+// 			button->RegisterCallback(loki::ui::OCB_MOUSE_ENTER, testcallback);
+// 			button->RegisterCallback(loki::ui::OCB_MOUSE_LEFT_PRESSED, testcallback1);
+// 			button->RegisterCallback(loki::ui::OCB_MOUSE_LEFT_RELEASED, testcallback2);
+		}
+
+		loki::ui::LkOverlayCheckBox* checkbox = (loki::ui::LkOverlayCheckBox*)overlay->CreateElement("Checkbox0", "checkbox");
+		if (checkbox)
+		{
+			checkbox->SetRelativePosition(glm::vec2(0.1f, 0.4f));
+			//checkbox->SetRelativeSize(glm::vec2(0.08f, 0.08f));
+		}
+
+		loki::ui::LkOverlaySlider* slider = (loki::ui::LkOverlaySlider*)overlay->CreateElement("Slider0", "slider");
+		if (slider)
+		{
+			slider->SetRelativePosition(glm::vec2(0.1f, 0.6f));	
+ 			slider->RegisterCallback(OCB_SLIDER_VALUE_MOVE, testcallback1);
+// 			slider->RegisterCallback(OCB_SLIDER_VALUE_RELEASE, testcallback2);
+		}
+	}*/
+
+	return true;
+}
+
+void MyGame::PostInit()
+{
+
+}
+
+void MyGame::PostInitFail()
+{
+
+}
+
+void MyGame::PreUpdate()
+{
+
+}
+
+void MyGame::Update()
+{
+// 	if (KEY_RELEASED(KEY_H))
+// 	{
+// 		g_Squirrel->RunScript("resources//scripts//squirrelscript2.nut");
+// 	}
+// 
+// 	if (KEY_RELEASED(KEY_P))
+// 	{
+// 		loki::renderer::g_Renderer->ToggleWireframe();
+// 	}
+
+// 	LkPawn* p = m_Level->GetPawn("StanfordDragon");
+// 	LkMoveableComponent* c = p->GetComponent<LkMoveableComponent>();
+// 	if (c && body)
+// 	{
+// 		c->SetPosition(body->GetPosition());
+// 	}
+
+// 	if (KEY_RELEASED(KEY_R))
+// 	{
+// 		body->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+// 	}
+// 
+// 	if (KEY_RELEASED(KEY_G))
+// 	{
+// 		physics::RigidBodyInfo info;
+// 		info.m_Shape = physics::CS_SPHERE;
+// 		info.m_Mass = 10.0f;
+// 		info.m_SphereData.m_Radius = 0.5f;
+// 		info.m_InitialTransform = m_Level->GetCurrentCamera()->GetComponent<LkMoveableComponent>()->GetTransformation();
+// 		physics::LkRigidBody* b = physics::g_Physics->AddRigidBody(info);
+// 		glm::vec3 force = glm::vec3(-info.m_InitialTransform[2]) * 200.0f;
+// 		b->ApplyCentralImpulse(force);
+// 	}
+
+
+	/*
+	static glm::vec3 p0 = glm::vec3(0.0f, 0.0f, 0.0f);
+	static glm::vec3 p1 = glm::vec3(5.0f, 5.0f, 0.0f);
+	static glm::vec3 p2 = glm::vec3(10.0f, 0.0f, 0.0f);
+	static glm::vec3 p3 = glm::vec3(15.0f, -5.0f, 0.0f);
+	
+	float d = 0.01f;
+	for (float f = 0.0f; f < 1.0f; f += d)
+	{
+		glm::vec3 pos0 = glm::gtx::spline::catmullRom(p0, p1, p2, p3, f);
+		glm::vec3 pos1 = glm::gtx::spline::catmullRom(p0, p1, p2, p3, f + d);
+
+		renderer::debug::DrawLine3D(pos0, pos1, false, glm::vec3(0.0f, 1.0f, 0.0f));
+	}
+	*/
+
+	//loki::MoveableComponent* movcomp = m_Level->GetPawn("StanfordDragon")->GetComponent<loki::MoveableComponent>();
+	//glm::vec3 forward = movcomp->GetOrientationVector();
+	//renderer::debug::DrawLine3D(movcomp->GetPosition(), movcomp->GetPosition() + forward * 10.0f, true, UNIT_X);
+	//renderer::debug::DrawCone(movcomp->GetPosition() + forward * 10.0f, 0.5f, 2.0f, movcomp->GetOrientation() * -FORWARD, true, UNIT_X);
+
+	//renderer::debug::DrawAxes(movcomp->GetPosition(), movcomp->GetOrientation(), 1.0f, true);
+}
+
+void MyGame::PostUpdate()
+{
+	
+}
+
+void MyGame::PreShutdown()
+{
+
+}
+
+void MyGame::Shutdown()
+{
+
+}
+
+void MyGame::PostShutdown()
+{
+
+}
+
+void MyGame::PreLevelLoad()
+{
+
+}
+
+void MyGame::PostLevelLoad()
+{
+
+}
