@@ -23,6 +23,7 @@
 #include "core/actor/handle/handle.h"
 
 #include "core/game/level/level.h"
+#include "core/game/level/skybox/skybox.h"
 
 using namespace loki;
 using namespace loki::renderer;
@@ -258,9 +259,14 @@ void LkRenderer::Render( game::LkLevel* _Level )
 
 	//m_MRTObject->StartGBuffer();
 	m_GBuffer->Bind();
-	static EAttachment DrawBuffersP0[] = { RBA_COLOR_ATTACHMENT0, RBA_COLOR_ATTACHMENT1, RBA_COLOR_ATTACHMENT2, RBA_COLOR_ATTACHMENT3 }; 
-	m_GBuffer->SetDrawBuffers(DrawBuffersP0, 4);
 	m_GBuffer->ClearBuffers(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	static EAttachment DrawBuffersP0[] = { RBA_COLOR_ATTACHMENT3 };
+	m_GBuffer->SetDrawBuffers(DrawBuffersP0, 1);
+	_RenderSky();
+
+	static EAttachment DrawBuffersP1[] = { RBA_COLOR_ATTACHMENT0, RBA_COLOR_ATTACHMENT1, RBA_COLOR_ATTACHMENT2, RBA_COLOR_ATTACHMENT3 }; 
+	m_GBuffer->SetDrawBuffers(DrawBuffersP1, 4);
 	glViewport(0, 0, m_Window->GetWidth(), m_Window->GetHeight());
 	
 		_RenderOpaqueGeometry();
@@ -523,42 +529,127 @@ void LkRenderer::_RenderSky()
 	glLoadMatrixf((GLfloat*)&(m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix()));
 
 	glMatrixMode(GL_MODELVIEW);
-	glm::mat4 mat = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
-	LkMoveableComponent* movcomp = m_CurrentLevelToRender->GetCurrentCamera()->GetComponent<LkMoveableComponent>();
-	mat = glm::gtc::matrix_transform::translate(mat, movcomp->GetPosition());
-	glLoadMatrixf((GLfloat*)&(mat));
+	glPushMatrix();
+	glm::mat4 m = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
+	m[3] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	glLoadMatrixf(glm::value_ptr(m));
 
-	// Skydome.
+	glDisable(GL_CULL_FACE);
+	glDepthMask( GL_FALSE );  // Don't write to the depth buffer
+	glEnable(GL_TEXTURE_2D);
+	
+	const game::LkSkyBox* skybox = m_CurrentLevelToRender->GetSkyBox();
+	//glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); // Don't do any blending on the cube map textures
+
 	{
-		//glUseProgramObjectARB(shader.GetProgramHandle());
-		glEnable(GL_TEXTURE_2D);
-		glCullFace(GL_FRONT);	// Skydome is seen from inside.
-		glDepthMask(false);
-		glPushMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		//glLoadIdentity();
-		glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_WEST)->m_OpenGLTextureID );
+		glBegin( GL_QUADS );
+		// +X
+		glTexCoord2f(  0.0f, 0.0f );
+		glVertex3f(    1.0f, -1.0f, -1.0f );
 
-		glMatrixMode(GL_TEXTURE);
-		glTranslatef(0.0f, -0.4f, 0.0f);
+		glTexCoord2f(  0.0f,  1.0f );
+		glVertex3f(    1.0f,  1.0f, -1.0f );
 
-		glActiveTextureARB(GL_TEXTURE0_ARB);
-		//				glBindTexture(GL_TEXTURE_2D, Tex_Sky->m_OpenGLTextureID);
+		glTexCoord2f(  1.0f,  1.0f );
+		glVertex3f(    1.0f,  1.0f,  1.0f );
 
-		static GLUquadric* quadric = gluNewQuadric();
-		gluQuadricTexture(quadric, true);
-		gluSphere(quadric, 1.0f, 20, 20);
-		glBindTexture(GL_TEXTURE_2D, 0);
+		glTexCoord2f(  1.0f, 0.0f );
+		glVertex3f(    1.0f, -1.0f,  1.0f );
 
-		glLoadIdentity();
-		glMatrixMode(GL_MODELVIEW);
+		glEnd();
+		
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_EAST)->m_OpenGLTextureID );
+		glBegin( GL_QUADS );
+		// -X
+		glTexCoord2f(  1.0f, 0.0f );
+		glVertex3f(   -1.0f, -1.0f, -1.0f );
 
-		glPopMatrix();
-		glDepthMask(true);
-		glCullFace(GL_BACK);
-		glDisable(GL_TEXTURE_2D);
-		//glUseProgramObjectARB(0);
+		glTexCoord2f(  1.0f,  1.0f );
+		glVertex3f(   -1.0f,  1.0f, -1.0f );
+
+		glTexCoord2f(  0.0f,  1.0f );
+		glVertex3f(   -1.0f,  1.0f,  1.0f );
+
+		glTexCoord2f(  0.0f, 0.0f );
+		glVertex3f(   -1.0f, -1.0f,  1.0f );
+
+		glEnd();
+		
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_UP)->m_OpenGLTextureID );
+		glBegin( GL_QUADS );
+		// +Y
+		glTexCoord2f(  0.0f, 0.0f );
+		glVertex3f(   -1.0f,  1.0f, -1.0f );
+
+		glTexCoord2f(  1.0f, 0.0f );
+		glVertex3f(    1.0f,  1.0f, -1.0f );
+
+		glTexCoord2f(  1.0f,  1.0f );
+		glVertex3f(    1.0f,  1.0f,  1.0f );
+
+		glTexCoord2f(  0.0f,  1.0f );
+		glVertex3f(   -1.0f, 1.0f,  1.0f );
+
+		glEnd();
+		
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_DOWN)->m_OpenGLTextureID );
+		glBegin( GL_QUADS );
+		// -Y
+		glTexCoord2f(  0.0f,  1.0f );
+		glVertex3f(   -1.0f, -1.0f, -1.0f );
+
+		glTexCoord2f(  1.0f,  1.0f );
+		glVertex3f(    1.0f, -1.0f, -1.0f );
+
+		glTexCoord2f(  1.0f, 0.0f );
+		glVertex3f(    1.0f, -1.0f,  1.0f );
+
+		glTexCoord2f(  0.0f, 0.0f );
+		glVertex3f(   -1.0f, -1.0f,  1.0f );
+
+		glEnd();
+		
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_NORTH)->m_OpenGLTextureID );
+		glBegin( GL_QUADS );
+		// +Z
+		glTexCoord2f(  1.0f, 0.0f );
+		glVertex3f(   -1.0f, -1.0f,  1.0f );
+
+		glTexCoord2f(  0.0f, 0.0f );
+		glVertex3f(    1.0f, -1.0f,  1.0f );
+
+		glTexCoord2f(  0.0f,  1.0f );
+		glVertex3f(    1.0f,  1.0f,  1.0f );
+
+		glTexCoord2f(  1.0f,  1.0f );
+		glVertex3f(   -1.0f,  1.0f,  1.0f );
+
+		glEnd();
+		
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_SOUTH)->m_OpenGLTextureID );
+		glBegin( GL_QUADS );
+		// -Z
+		glTexCoord2f(  0.0f, 0.0f );
+		glVertex3f(   -1.0f, -1.0f, -1.0f );
+
+		glTexCoord2f(  1.0f, 0.0f );
+		glVertex3f(    1.0f, -1.0f, -1.0f );
+
+		glTexCoord2f(  1.0f,  1.0f );
+		glVertex3f(    1.0f,  1.0f, -1.0f );
+
+		glTexCoord2f(  0.0f,  1.0f );
+		glVertex3f(   -1.0f,  1.0f, -1.0f );
+
+		glEnd();
 	}
+
+	glBindTexture( GL_TEXTURE_2D, 0 );
+	glDepthMask( GL_TRUE );
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
 }
 
 void LkRenderer::_RenderOpaqueGeometry()
