@@ -47,7 +47,8 @@ LkRenderer::LkRenderer( LkWindow* _Window )	:
 	m_LightEffect(0),
 	m_GBuffer(0),
 #ifdef _DEBUG
-	m_VisualizeGBufferTargets(false),
+	m_DBG_VisualizeGBufferTargets(false),
+	m_DBG_VisualizeLightVolumes(false),
 #endif
 	m_Window(_Window)
 {
@@ -283,7 +284,7 @@ void LkRenderer::Render( game::LkLevel* _Level )
 	_RenderLightAccumulationToBackBuffer();
 
 #ifdef _DEBUG
-	if (m_VisualizeGBufferTargets)
+	if (m_DBG_VisualizeGBufferTargets)
 	{
 		_RenderGBufferTargets();
 	}
@@ -488,7 +489,12 @@ void LkRenderer::CheckGLError()
 #ifdef _DEBUG
 void LkRenderer::ToggleVisualizeRenderTargets()
 {
-	m_VisualizeGBufferTargets = !m_VisualizeGBufferTargets;
+	m_DBG_VisualizeGBufferTargets = !m_DBG_VisualizeGBufferTargets;
+}
+
+void LkRenderer::ToggleVisualizeLightVolumes()
+{
+	m_DBG_VisualizeLightVolumes = !m_DBG_VisualizeLightVolumes;
 }
 #endif
 
@@ -841,21 +847,21 @@ void LkRenderer::_RenderLightingPointLights()
 		int PassID = 0;
 		while (m_LightEffect->HasNextPass())
 		{
-			// Passes 1 and 3 are only meant for when the camera is outside of the light volume.
-			// Hence, these passes must be skipped. NOTE: Cg does still set it's states for these
-			// passes, which incurs a certain overhead. Maybe a better solution is required.
-// 			if 
-// 			{
-// 				++PassID;
-// 				continue;
-// 			}
+#ifndef _DEBUG
+			if (PassID == 4)
+			{
+				continue;
+			}
+#else
+			if (!m_DBG_VisualizeLightVolumes && PassID == 4)
+			{
+				continue;				
+			}
+#endif
 
 			// Awesomely condensed code...
-			(!(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2)))?(gluSphere(quadric, pointlight->GetRadius(), 20, 15)):(0);
+			(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(gluSphere(quadric, pointlight->GetRadius(), 20, 15));
 			++PassID;
-
-// 			gluSphere(quadric, pointlight->GetRadius(), 20, 15);	// Render a sphere.				
-// 			++PassID;
 		}
 
 		//glClear(GL_STENCIL_BUFFER_BIT);

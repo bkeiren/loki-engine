@@ -53,6 +53,7 @@ public:
 
 #ifdef _DEBUG
 	void ToggleVisualizeRenderTargets();
+	void ToggleVisualizeLightVolumes();
 #endif
 
 	//////////////////////////////////////////////////////////////////////////
@@ -125,7 +126,8 @@ private:
 	LkFramebufferObject* m_GBuffer;
 
 #ifdef _DEBUG
-	bool m_VisualizeGBufferTargets;
+	bool m_DBG_VisualizeGBufferTargets;
+	bool m_DBG_VisualizeLightVolumes;
 #endif
 };
 
