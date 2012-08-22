@@ -366,4 +366,14 @@ CONSOLE_FUNCTION(Console_GBufferTargets)
 #endif
 }
 
+CONSOLE_FUNCTION(Console_LightVolumes)
+{
+#ifdef _DEBUG
+	renderer::g_Renderer->ToggleVisualizeLightVolumes();
+	return LkConsole::CommandResult("");
+#else
+	return LkConsole::CommandResult("This command is only available in a debug build");
+#endif
+}
+
 }	// Namespace loki.

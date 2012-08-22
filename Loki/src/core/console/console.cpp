@@ -130,7 +130,8 @@ void LkConsole::RegisterCommands()
 	m_Commands["lvl.despawnpawn"] = Command("Despawns a pawn if it exists", &Console_PawnDespawn, Command::AT_STRING);
 	m_Commands["lvl.pawnsetpos"] = Command("Sets the position of a pawn", &Console_PawnSetPos, Command::AT_STRING, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
 	m_Commands["lvl.pawnsetori"] = Command("Sets the orientation of a pawn", &Console_PawnSetOri, Command::AT_STRING, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
-	m_Commands["renderer.togglegbuffer"] = Command("Toggles the visualization of the GBuffer", &Console_GBufferTargets);
+	m_Commands["renderer.tgbuffer"] = Command("Toggles the visualization of the GBuffer", &Console_GBufferTargets);
+	m_Commands["renderer.tlightvol"] = Command("Toggles the visualization of light volumes", &Console_LightVolumes);
 }
 
 std::list<std::string> LkConsole::GetCommandsList()
