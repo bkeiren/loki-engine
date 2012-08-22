@@ -45,6 +45,9 @@ LkRenderer::LkRenderer( LkWindow* _Window )	:
 	m_CurrentLevelToRender(NULL),
 	m_LightEffect(0),
 	m_GBuffer(0),
+#ifdef _DEBUG
+	m_VisualizeGBufferTargets(false),
+#endif
 	m_Window(_Window)
 {
 	assert(_Window != 0);
@@ -110,11 +113,11 @@ bool LkRenderer::_Init( LkWindow* _Window )
 	{
 		// Depth + Stencil buffer.
 		LkRenderBufferInfo info;
-		info.m_GenerateTexture = false;
-		info.m_Attachment = /*RBA_DEPTH_ATTACHMENT*/RBA_DEPTH_STENCIL_ATTACHMENT;
-		info.m_InternalFormat = /*RBIF_DEPTH_COMPONENT24*/RBIF_DEPTH24_STENCIL8;
-		//info.m_TextureFormat = RBF_DEPTH_STENCIL;
-		//info.m_Type = RBT_UNSIGNED_INT_24_8;
+		//info.m_GenerateTexture = false;
+		info.m_Attachment = RBA_DEPTH_STENCIL_ATTACHMENT;
+		info.m_InternalFormat = RBIF_DEPTH24_STENCIL8;
+		info.m_TextureFormat = RBF_DEPTH_STENCIL;
+		info.m_TextureType = RBT_UNSIGNED_INT_24_8;
 		RenderBuffersInfo.push_back(info);
 	}
 
@@ -156,6 +159,18 @@ bool LkRenderer::_Init( LkWindow* _Window )
 	m_LightAccumulationToBackBufferEffect = g_EffectManager->CreateEffectFromMemory(
 	#include "core/renderer/lightaccumtobackbuffer_cgeffect.inl"
 	, "LightAccumulationToBackBuffer");
+
+	m_GBufferTargets_General = g_EffectManager->CreateEffectFromMemory(
+	#include "core/renderer/gbuffertargets_general_cgeffect.inl"
+		, "GBufferTargets_General");
+
+	m_GBufferTargets_Normals = g_EffectManager->CreateEffectFromMemory(
+	#include "core/renderer/gbuffertargets_normals_cgeffect.inl"
+		, "GBufferTargets_Normals");
+
+	m_GBufferTargets_Depth = g_EffectManager->CreateEffectFromMemory(
+	#include "core/renderer/gbuffertargets_depth_cgeffect.inl"
+		, "GBufferTargets_Depth");
 
 	// Ensure the window is sized properly after Init().
 	//ResizeViewport(m_WindowWidth, m_WindowHeight);
@@ -260,6 +275,13 @@ void LkRenderer::Render( game::LkLevel* _Level )
 
 	//m_MRTObject->RenderLightAccumulationToBackBuffer();
 	_RenderLightAccumulationToBackBuffer();
+
+#ifdef _DEBUG
+	if (m_VisualizeGBufferTargets)
+	{
+		_RenderGBufferTargets();
+	}
+#endif
 
 	// Draw debug stuff.
 	debug::DrawItems(m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix());
@@ -457,10 +479,12 @@ void LkRenderer::CheckGLError()
 	} while (error != GL_NO_ERROR);
 }
 
+#ifdef _DEBUG
 void LkRenderer::ToggleVisualizeRenderTargets()
 {
-	//m_DRObject->ToggleVisualizeRenderTargets();
+	m_VisualizeGBufferTargets = !m_VisualizeGBufferTargets;
 }
+#endif
 
 void LkRenderer::DrawPixels( int _Width, int _Height, EInternalFormat _Format, const void* _Buffer )
 {
@@ -866,4 +890,45 @@ void LkRenderer::_RenderLightAccumulationToBackBuffer()
 		glEnd();
 	}
 
+#undef SETCGPARAM
+}
+
+void LkRenderer::_RenderGBufferTargets()
+{
+#ifdef SETCGPARAM
+#undef SETCGPARAM
+#endif
+
+#define SETCGPARAM(paramname, value)	{LkEffectParameter* param = effect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
+
+	for (int i = 0; i < 4; ++i)
+	{
+		float x = -1.0f + (0.5f * i);
+
+		LkEffect* effect = (i == 2)?(m_GBufferTargets_Normals):((i == 3)?(m_GBufferTargets_Depth):(m_GBufferTargets_General));
+		SETCGPARAM("LKGBUFFERTEX", m_GBuffer->GetRenderbufferTexture(i));
+
+		if (i == 3)
+		{
+			SETCGPARAM("LKZFAR", m_CurrentLevelToRender->GetCurrentCamera()->GetZFar());
+			SETCGPARAM("LKZNEAR", m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
+		}
+
+		while (effect->HasNextPass())
+		{
+			// TODO: Remove immediate mode. Make a displaylist or something?
+			glBegin(GL_QUADS);
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex2f(x, -1.0f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex2f(x, -0.5f);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex2f(x + 0.5f, -0.5f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex2f(x + 0.5f, -1.0f);
+			glEnd();
+		}
+	}
+
+#undef SETCGPARAM
 }

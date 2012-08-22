@@ -10,6 +10,7 @@
 #include "core/actor/camera/camera.h"
 #include "core/window.h"
 #include "core/actor/pawn/pawn.h"
+#include "core/renderer/renderer.h"
 
 namespace loki
 {
@@ -353,6 +354,16 @@ CONSOLE_FUNCTION(Console_PawnSetOri)
 	LkMoveableComponent* comp = pawn->GetComponent<LkMoveableComponent>();
 	comp->SetOrientation(glm::quat(_Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float, _Command->m_Arguments[3].m_Float, _Command->m_Arguments[4].m_Float));
 	return LkConsole::CommandResult("");
+}
+
+CONSOLE_FUNCTION(Console_GBufferTargets)
+{
+#ifdef _DEBUG
+	renderer::g_Renderer->ToggleVisualizeRenderTargets();
+	return LkConsole::CommandResult("");
+#else
+	return LkConsole::CommandResult("This command is only available in a debug build");
+#endif
 }
 
 }	// Namespace loki.
