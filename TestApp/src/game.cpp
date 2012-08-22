@@ -122,7 +122,7 @@ bool MyGame::Init()
 		{
 			pawn = m_Level->SpawnPawn("StanfordDragon");
 			rendercomp = pawn->GetComponent<LkRenderComponent>();
-			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//stanford_dragon.dae"));
+			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//torus.dae"));
 			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
 			mtl->SetShininess(100.0f);
 			rendercomp->GetModel()->SetMaterial(mtl, 0);

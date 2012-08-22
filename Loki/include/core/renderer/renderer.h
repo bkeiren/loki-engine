@@ -51,7 +51,9 @@ public:
 
 	void CheckGLError();
 
+#ifdef _DEBUG
 	void ToggleVisualizeRenderTargets();
+#endif
 
 	//////////////////////////////////////////////////////////////////////////
 	// Draws a buffer of pixel data to the screen.
@@ -86,6 +88,8 @@ private:
 
 	void _RenderLightAccumulationToBackBuffer();
 
+	void _RenderGBufferTargets();
+
 	GLint m_PointLightShaderColorID;
 	GLint m_PointLightShaderPositionID;
 	GLint m_PointLightShaderRadiusID;
@@ -113,7 +117,16 @@ private:
 	LkEffect* m_LightEffect;
 	LkEffect* m_LightAccumulationToBackBufferEffect;
 
+	// Visualization of Gbuffer targets for debug purposes.
+	LkEffect* m_GBufferTargets_General;
+	LkEffect* m_GBufferTargets_Normals;
+	LkEffect* m_GBufferTargets_Depth;
+
 	LkFramebufferObject* m_GBuffer;
+
+#ifdef _DEBUG
+	bool m_VisualizeGBufferTargets;
+#endif
 };
 
 extern LkRenderer* g_Renderer;

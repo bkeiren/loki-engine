@@ -48,6 +48,7 @@ CONSOLE_FUNCTION(Console_PawnSpawn);
 CONSOLE_FUNCTION(Console_PawnDespawn);
 CONSOLE_FUNCTION(Console_PawnSetPos);
 CONSOLE_FUNCTION(Console_PawnSetOri);
+CONSOLE_FUNCTION(Console_GBufferTargets);
 
 }	// Namespace loki.
 
