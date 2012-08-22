@@ -34,6 +34,8 @@ class LkCamera;
 namespace game
 {
 
+class LkSkyBox;
+
 class LkLevel
 {
 public:
@@ -108,6 +110,8 @@ public:
 	// to SpawnCamera().
 	//////////////////////////////////////////////////////////////////////////
 	static void RegisterCameraFactory( const char* _Type, CameraFactory _Factory );
+
+	const LkSkyBox* GetSkyBox() const;
 private:
 	GameRules* m_GameRules;
 
@@ -121,6 +125,8 @@ private:
 	LkCamera* m_CurrentCamera;
 
 	static CameraFactories m_CameraFactories;
+
+	LkSkyBox* m_Skybox;
 };
 
 }

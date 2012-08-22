@@ -10,6 +10,8 @@
 #include "core/actor/camera/trackballcam/trackballcam.h"
 #include "core/actor/camera/pathcam/pathcam.h"
 
+#include "core/game/level/skybox/skybox.h"
+
 #define INSERT_ACTOR(a)	m_Actors.insert(ActorsPair(a->GetID(), a));
 #define ERASE_ACTOR(a)	m_Actors.erase(a->GetID());
 
@@ -24,7 +26,8 @@ namespace game
 LkLevel::CameraFactories LkLevel::m_CameraFactories;
 
 LkLevel::LkLevel()	:
-	m_CurrentCamera(NULL)
+	m_CurrentCamera(NULL),
+	m_Skybox(new LkSkyBox("resources//textures//mountain_.bmp"))
 {
 	// Register built-in camera types.
 	RegisterCameraFactory(CAM_FREE, &CameraFactoryFreeCam);
@@ -41,7 +44,7 @@ LkLevel::LkLevel()	:
 
 LkLevel::~LkLevel()
 {
-
+	delete m_Skybox;
 }
 
 LkActor* LkLevel::ActorExists( const char* _Name )
@@ -258,6 +261,11 @@ void LkLevel::RegisterCameraFactory( const char* _Type, CameraFactory _Factory )
 	{
 		LOG(VL_WARN, "Level::RegisterCameraFactory: Factory for camera type '%s' has already been registered", _Type);
 	}
+}
+
+const LkSkyBox* LkLevel::GetSkyBox() const
+{
+	return m_Skybox;
 }
 
 }
