@@ -26,7 +26,7 @@
 "{\n"	\
 "	float4 c = tex2D(Sampler, IN.Tex);\n"	\
 "	float a = c.a;\n"	\
-"	c = ((c + 1.0) * 0.5);\n"	\
+"	//c = ((c + 1.0) * 0.5);\n"	\
 "	c.a = a;\n"	\
 "	return c;\n"	\
 "}\n"	\

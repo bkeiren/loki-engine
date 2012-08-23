@@ -106,7 +106,7 @@ bool MyGame::Init()
 
 		pointlight1 = m_Level->SpawnPointLight("PointLight3");
 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-		pointlight1->SetRadius(15.0f);
+		pointlight1->SetRadius(30.0f);
 		light_movcomp->SetPosition(glm::vec3(5.0f, 0.0f, 0.0f));
 		pointlight1->SetColor(Color(0.0f, 1.0f, 0.2f));
 		//pointlight1->Disable();
@@ -282,6 +282,12 @@ void MyGame::Update()
 		b->ApplyCentralImpulse(force);
 	}
 
+	
+	LkPointLight* p = m_Level->GetPointLight("PointLight3");
+	LkMovableComponent* comp = p->GetComponent<LkMovableComponent>();
+	static float f = 0.0f;
+	f += 0.01f;
+	comp->SetPosition( glm::vec3(cos(f) * 5, 0, sin(f) * 5) );
 
 	/*
 	static glm::vec3 p0 = glm::vec3(0.0f, 0.0f, 0.0f);
