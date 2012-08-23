@@ -9,6 +9,7 @@
 #include "core/renderer/renderer.h"
 #include "core/renderer/geometry/model/model.h"
 #include "core/actor/components/rendercomponent/rendercomponent.h"
+#include "core/actor/components/physicscomponent/physicscomponent.h"
 #include "core/actor/pawn/pawn.h"
 #include "mycontroller.h"
 #include "core/renderer/material/material.h"
@@ -70,7 +71,7 @@ bool MyGame::Init()
 	m_Level->SetCurrentCamera(m_Level->SpawnCamera("Cam0", CAM_FREE));
 
 	loki::LkCamera* cam = m_Level->GetCurrentCamera();
-	loki::LkMoveableComponent* cam_movcomp = cam->GetComponent<LkMoveableComponent>();
+	loki::LkMovableComponent* cam_movcomp = cam->GetComponent<LkMovableComponent>();
 
 	//cam_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, -40.0f));
 	cam_movcomp->RotateY(180.0f);
@@ -81,7 +82,7 @@ bool MyGame::Init()
 		LkPointLight* pointlight1 = m_Level->SpawnPointLight("PointLight1");
 		pointlight1->SetRadius(20.0f);
 		//pointlight1->SetPosition(glm::vec3(-3.5f, -3.0f, -12.0f));
-		LkMoveableComponent* light_movcomp = pointlight1->GetComponent<LkMoveableComponent>();
+		LkMovableComponent* light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
 		light_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 		pointlight1->SetColor(Color(0.2f, 0.2f, 1.0f));
 		pointlight1->Disable();
@@ -89,7 +90,7 @@ bool MyGame::Init()
 		LkHandle<LkPointLight> handle = LkHandle<LkPointLight>(pointlight1);
 
 		pointlight1 = m_Level->SpawnPointLight("PointLight2");
-		light_movcomp = pointlight1->GetComponent<LkMoveableComponent>();
+		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
 		pointlight1->SetRadius(15.0f);
 		light_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
 		pointlight1->SetColor(Color(1.0f, 0.2f, 0.2f));
@@ -97,14 +98,14 @@ bool MyGame::Init()
 		
 
 		pointlight1 = m_Level->SpawnPointLight("MassivePointLight");
-		light_movcomp = pointlight1->GetComponent<LkMoveableComponent>();
+		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
 		pointlight1->SetRadius(50.0f);
 		light_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 		pointlight1->SetColor(Color(1.0f, 1.0f, 1.0f));
 		//pointlight1->Disable();
 
 		pointlight1 = m_Level->SpawnPointLight("PointLight3");
-		light_movcomp = pointlight1->GetComponent<LkMoveableComponent>();
+		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
 		pointlight1->SetRadius(15.0f);
 		light_movcomp->SetPosition(glm::vec3(5.0f, 0.0f, 0.0f));
 		pointlight1->SetColor(Color(0.0f, 1.0f, 0.2f));
@@ -115,7 +116,7 @@ bool MyGame::Init()
 	loki::renderer::g_EffectManager->CreateEffectFromFile("resources//shaders//testshader.cgfx", "TestEffect");
 	{
 		LkPawn* pawn = NULL;
-		LkMoveableComponent* movcomp = NULL;
+		LkMovableComponent* movcomp = NULL;
 		LkRenderComponent* rendercomp = NULL;
 		loki::renderer::LkMaterial* mtl = NULL;
 
@@ -127,10 +128,42 @@ bool MyGame::Init()
 			mtl->SetShininess(100.0f);
 			rendercomp->GetModel()->SetMaterial(mtl, 0);
 			rendercomp->GetModel()->SetUVScale(glm::vec2(3.0f, 3.0f));
+			LkPhysicsComponent* phycomp = pawn->GetComponent<LkPhysicsComponent>();
+			physics::RigidBodyInfo info;
+			info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+			info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
+			info.m_Restitution = 0.75f;
+			info.m_Mass = 100.0f;
+			phycomp->CreateBodyFromInfo(info);
+		}
+		for (int i = 0; i < 10; ++i)
+		{
+			{
+				std::string name = "StanfordDragon";
+				char buff[8];
+				name += itoa(i, buff, 2);
+				pawn = m_Level->SpawnPawn(name.c_str());
+				LkMovableComponent* movcomp = pawn->GetComponent<LkMovableComponent>();
+				movcomp->SetPosition(glm::vec3(i * 0.01f, 5 + i * 2, 0.0f));
+				rendercomp = pawn->GetComponent<LkRenderComponent>();
+				rendercomp->SetModel(new loki::renderer::LkModel("resources//models//torus.dae"));
+				mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
+				mtl->SetShininess(100.0f);
+				rendercomp->GetModel()->SetMaterial(mtl, 0);
+				rendercomp->GetModel()->SetUVScale(glm::vec2(3.0f, 3.0f));			
+				LkPhysicsComponent* phycomp = pawn->GetComponent<LkPhysicsComponent>();
+				physics::RigidBodyInfo info;
+				info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+				info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
+				info.m_Restitution = 0.75f;
+				info.m_Mass = 100.0f;
+				phycomp->CreateBodyFromInfo(info);
+			}
 		}
 
 		{
 			pawn = m_Level->SpawnPawn("Pawn1");
+			pawn->RemoveComponent<LkPhysicsComponent>();
 			rendercomp = pawn->GetComponent<LkRenderComponent>();
 			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//cube.dae"));
 			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture6.bmp", "resources//textures//texture6_normal.bmp", "resources//textures//texture6_specular.bmp");
@@ -148,6 +181,7 @@ bool MyGame::Init()
 	//ui::Overlay* overlay = ui::g_OverlayManager->CreateOverlay("Overlay0");
 	//ui::OverlayElement* element = overlay->CreateElement("Button0", "button");
 
+	/*
 	physics::RigidBodyInfo info;
 	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
 	info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(m_Level->GetPawn("StanfordDragon")->GetComponent<LkRenderComponent>()->GetModel()->GetMesh());
@@ -162,7 +196,7 @@ bool MyGame::Init()
 											0.0f, 0.0f, 1.0f, 0.0f,
 											0.0f, 10.0f * (i + 1), 0.0f, 1.0f);
 		physics::g_Physics->AddRigidBody(info);
-	}
+	}*/
 
 	/*
 	if (!loki::ui::g_OverlayManager->LoadOverlayStyle("Style0", "resources//ui//style0.sty"))
@@ -231,17 +265,9 @@ void MyGame::Update()
 // 		loki::renderer::g_Renderer->ToggleWireframe();
 // 	}
 
-	LkPawn* p = m_Level->GetPawn("StanfordDragon");
-	LkMoveableComponent* c = p->GetComponent<LkMoveableComponent>();
-	if (c && body)
-	{
-		c->SetPosition(body->GetPosition());
-		c->SetOrientation(body->GetOrientation());
-	}
-
 	if (KEY_RELEASED(KEY_R))
 	{
-		body->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+		m_Level->GetPawn("StanfordDragon")->GetComponent<LkMovableComponent>()->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	}
 	
 	if (KEY_RELEASED(KEY_G))
@@ -250,7 +276,7 @@ void MyGame::Update()
 		info.m_Shape = physics::CS_SPHERE;
 		info.m_Mass = 10.0f;
 		info.m_SphereData.m_Radius = 0.5f;
-		info.m_InitialTransform = m_Level->GetCurrentCamera()->GetComponent<LkMoveableComponent>()->GetTransformation();
+		info.m_InitialTransform = m_Level->GetCurrentCamera()->GetComponent<LkMovableComponent>()->GetTransformation();
 		physics::LkRigidBody* b = physics::g_Physics->AddRigidBody(info);
 		glm::vec3 force = glm::vec3(-info.m_InitialTransform[2]) * 200.0f;
 		b->ApplyCentralImpulse(force);
@@ -273,7 +299,7 @@ void MyGame::Update()
 	}
 	*/
 
-	loki::LkMoveableComponent* movcomp = m_Level->GetPawn("StanfordDragon")->GetComponent<loki::LkMoveableComponent>();
+	loki::LkMovableComponent* movcomp = m_Level->GetPawn("StanfordDragon")->GetComponent<loki::LkMovableComponent>();
 	renderer::debug::DrawAxes(movcomp->GetPosition(), movcomp->GetOrientation(), 1.0f, true);
 }
 

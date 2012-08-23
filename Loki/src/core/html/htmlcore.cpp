@@ -203,7 +203,7 @@ void LkHTMLCore::_OnEvent( const LkEvent& _Event )
 
 						// Calculate the world-space position of the mouse cursor (On the near plane).
 						LkCamera* cam = g_Engine->GetGame()->GetLevel()->GetCurrentCamera();
-						LkMoveableComponent* comp = cam->GetComponent<LkMoveableComponent>();
+						LkMovableComponent* comp = cam->GetComponent<LkMovableComponent>();
 
 						// Normalized vector indicating the direction from the camera origin to the cursor's position on the near-plane.
 						glm::vec3 r = cam->GetCameraToViewportVector(mousepos);

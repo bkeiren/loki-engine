@@ -45,7 +45,7 @@ void LkPathCam::_OnEvent( const LkEvent& _Event )
 	{
 	case EVENT_ONUPDATE:
 		{
-			LkMoveableComponent* comp = GetComponent<LkMoveableComponent>();
+			LkMovableComponent* comp = GetComponent<LkMovableComponent>();
 
 			m_PathPosition += 0.01f;
 			if (m_PathPosition >= 1.0f)

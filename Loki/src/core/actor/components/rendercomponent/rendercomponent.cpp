@@ -16,11 +16,6 @@ LkRenderComponent::~LkRenderComponent()
 	m_RenderComponents.remove(this);
 }
 
-void LkRenderComponent::Update()
-{
-
-}
-
 void LkRenderComponent::SetModel( renderer::LkModel* _Model )
 {
 	m_Model = _Model;
@@ -29,6 +24,11 @@ void LkRenderComponent::SetModel( renderer::LkModel* _Model )
 renderer::LkModel* LkRenderComponent::GetModel()
 {
 	return m_Model;
+}
+
+void LkRenderComponent::_Init()
+{
+
 }
 
 }

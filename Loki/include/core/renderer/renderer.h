@@ -7,6 +7,8 @@
 
 #pragma once
 
+#define DBG_VISUALIZATIONS
+
 #ifndef RENDERBASE_H
 #define RENDERBASE_H
 
@@ -51,7 +53,7 @@ public:
 
 	void CheckGLError();
 
-#ifdef _DEBUG
+#ifdef DBG_VISUALIZATIONS
 	void ToggleVisualizeRenderTargets();
 	void ToggleVisualizeLightVolumes();
 #endif
@@ -125,7 +127,7 @@ private:
 
 	LkFramebufferObject* m_GBuffer;
 
-#ifdef _DEBUG
+#ifdef DBG_VISUALIZATIONS
 	bool m_DBG_VisualizeGBufferTargets;
 	bool m_DBG_VisualizeLightVolumes;
 #endif

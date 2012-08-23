@@ -43,7 +43,7 @@ void LkFreeCam::_OnEvent( const LkEvent& _Event )
 					LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
 				}
 
-				loki::LkMoveableComponent* movcomp = GetComponent<LkMoveableComponent>();
+				loki::LkMovableComponent* movcomp = GetComponent<LkMovableComponent>();
 
 	// 			LkHTMLView* tab = g_HTMLCore->GetWebTabInFocus();
 	// 			if (g_Input->Get(BUTTON_MOUSELEFT) == KEYSTATE_DOWN && (tab && tab->GetAlphaAtCursor() == 0.0f))

@@ -212,8 +212,11 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 		}
 	}
 
+	btVector3 inertia;
+	shape->calculateLocalInertia(_Info.m_Mass, inertia);
+
 	btMotionState* motionstate = new btDefaultMotionState(BTTransform(_Info.m_InitialTransform), BTTransform(_Info.m_CenterOfMassOffset));
-	btRigidBody::btRigidBodyConstructionInfo info = btRigidBody::btRigidBodyConstructionInfo(_Info.m_Mass, motionstate, shape, BTVec3(_Info.m_LocalInertia));
+	btRigidBody::btRigidBodyConstructionInfo info = btRigidBody::btRigidBodyConstructionInfo(_Info.m_Mass, motionstate, shape, inertia);
 	info.m_friction								= _Info.m_Friction;
 	info.m_restitution							= _Info.m_Restitution;
 	info.m_linearDamping						= _Info.m_LinearDamping;
@@ -257,6 +260,32 @@ void LkRigidBody::SetPosition( const glm::vec3& _Position, bool _PreserveForces 
 glm::vec3 LkRigidBody::GetPosition() const
 {
 	return GLMVec3(m_RigidBody->getCenterOfMassPosition());
+}
+
+void LkRigidBody::SetOrientation( const glm::quat& _Orientation, bool _PreserveForces /*= false*/ )
+{
+	glm::mat4 m = glm::gtc::quaternion::mat4_cast(_Orientation);
+	m[3] = glm::vec4(GLMVec3(m_RigidBody->getCenterOfMassPosition()), 1.0f);
+	m_RigidBody->setCenterOfMassTransform(BTTransform(m));
+
+	if (!_PreserveForces)
+	{
+		m_RigidBody->clearForces();
+	}
+
+	m_RigidBody->activate(true);
+}
+
+void LkRigidBody::SetTransformation( const glm::mat4& _Transformation, bool _PreserveForces /*= false*/ )
+{
+	m_RigidBody->setCenterOfMassTransform(BTTransform(_Transformation));
+
+	if (!_PreserveForces)
+	{
+		m_RigidBody->clearForces();
+	}
+
+	m_RigidBody->activate(true);
 }
 
 void LkRigidBody::ApplyCentralForce( const glm::vec3& _Force )
@@ -395,6 +424,13 @@ bool LkRigidBody::IsActive() const
 void LkRigidBody::Activate( bool _ForceActivation /*= false*/ )
 {
 	m_RigidBody->activate(_ForceActivation);
+}
+
+void LkRigidBody::SetMass( float _Mass )
+{
+	btVector3 inertia;
+	m_RigidBody->getCollisionShape()->calculateLocalInertia(_Mass, inertia);
+	m_RigidBody->setMassProps(_Mass, inertia);
 }
 
 }

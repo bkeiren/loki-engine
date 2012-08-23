@@ -1,6 +1,6 @@
 #include "mycontroller.h"
 #include "core/actor/pawn/controller/controller.h"
-#include "core/actor/components/moveablecomponent/moveablecomponent.h"
+#include "core/actor/components/movablecomponent/movablecomponent.h"
 #include "core/input/input.h"
 
 using namespace loki;
@@ -23,7 +23,7 @@ void MyController::_OnEvent( const loki::LkEvent& _Event )
 		{
 			if (m_Pawn)
 			{
-				loki::LkMoveableComponent* movcomp = m_Pawn->GetComponent<loki::LkMoveableComponent>();
+				loki::LkMovableComponent* movcomp = m_Pawn->GetComponent<loki::LkMovableComponent>();
 				
 				/*
 				switch (GetID()%3)

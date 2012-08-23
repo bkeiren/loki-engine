@@ -25,9 +25,9 @@ public:
 	void SetModel( renderer::LkModel* _Model );
 	renderer::LkModel* GetModel();
 protected:
-	void Update();
-
 private:
+	void _Init();
+
 	renderer::LkModel* m_Model;
 
 	//////////////////////////////////////////////////////////////////////////

@@ -20,6 +20,10 @@ public:
 	void SetPosition( const glm::vec3& _Position, bool _PreserveForces = false );
 	glm::vec3 GetPosition() const;
 
+	void SetOrientation( const glm::quat& _Orientation, bool _PreserveForces = false );
+
+	void SetTransformation( const glm::mat4& _Transformation, bool _PreserveForces = false );
+
 	void ApplyCentralForce( const glm::vec3& _Force );
 	void ApplyCentralImpulse( const glm::vec3& _Impulse );
 	void ApplyDamping( float _TimeStep );
@@ -49,6 +53,8 @@ public:
 	void Translate( const glm::vec3& _Translation );
 	bool IsActive() const;
 	void Activate( bool _ForceActivation = false );
+
+	void SetMass( float _Mass );
 private:
 	LkRigidBody( const RigidBodyInfo& _Info );
 	LkRigidBody();
