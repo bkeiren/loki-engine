@@ -61,7 +61,9 @@ float LinearizeDepth( float _NonLinearDepth )
 
 float Attenuation( float3 _SurfacePosition, float3 _LightPosition )
 {
-	float d = distance(_SurfacePosition, _LightPosition) / LightRadius;
+	float3 v = _SurfacePosition - _LightPosition;
+	float d = dot(v, v) / (LightRadius * LightRadius);
+	//float d = distance(_SurfacePosition, _LightPosition) / LightRadius;
 	return max((1.0 - (LightConstantAttenuation + LightLinearAttenuation * d + LightQuadraticAttenuation * d * d)), 0.0);
 }
 

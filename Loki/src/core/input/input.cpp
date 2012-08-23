@@ -97,6 +97,11 @@ void LkInput::_CaptureKeyState( int _Key )
 
 void LkInput::Capture()
 {
+	if (!g_Engine->GetWindow()->HasFocus())
+	{
+		return;
+	}
+
 	if (!g_Console->IsVisible())
 	{
 		for (int i = 0; i < KEY_LAST; ++i)

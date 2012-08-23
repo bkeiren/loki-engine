@@ -49,6 +49,8 @@ public:
 	HWND GetHWND() const;
 
 	bool IsFullscreen() const;
+
+	bool HasFocus() const;
 private:
 	LkWindow();
 
