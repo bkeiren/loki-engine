@@ -272,6 +272,9 @@ void LkRenderer::Render( game::LkLevel* _Level )
 	
 		_RenderOpaqueGeometry();
 
+		// Draw debug stuff.
+		debug::DrawItems(m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix(), m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix());
+
 		//m_MRTObject->StartLightAccumulation();
 		m_GBuffer->SetDrawBuffer(RBA_COLOR_ATTACHMENT3);
 		
@@ -283,15 +286,13 @@ void LkRenderer::Render( game::LkLevel* _Level )
 	//m_MRTObject->RenderLightAccumulationToBackBuffer();
 	_RenderLightAccumulationToBackBuffer();
 
+	
 #ifdef _DEBUG
 	if (m_DBG_VisualizeGBufferTargets)
 	{
 		_RenderGBufferTargets();
 	}
 #endif
-
-	// Draw debug stuff.
-	debug::DrawItems(m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix());
 
 	// Draw UI.
 	_RenderUI();
@@ -542,6 +543,7 @@ void LkRenderer::_RenderSky()
 
 	glDisable(GL_CULL_FACE);
 	glDepthMask( GL_FALSE );  // Don't write to the depth buffer
+	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
 	
 	const game::LkSkyBox* skybox = m_CurrentLevelToRender->GetSkyBox();

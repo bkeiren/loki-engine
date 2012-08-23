@@ -6,7 +6,7 @@
 #include "Bullet/btBulletDynamicsCommon.h"
 #include "Bullet/btBulletCollisionCommon.h"
 
-#ifdef _DEBUG
+#ifdef PHY_DEBUG_DRAW
 #include "core/physics/physicsdebugdrawer.h"
 #endif
 
@@ -54,7 +54,7 @@ bool LkPhysics::_Init()
 	m_WorldZPlane = AddRigidBody(info);
 	m_WorldZPlane->SetPosition(glm::vec3(0.0f, -10.0f, 0.0f));
 
-#ifdef _DEBUG
+#ifdef PHY_DEBUG_DRAW
 	m_DebugDrawer = new LkDebugDrawer();
 	m_DynamiscWorld->setDebugDrawer(m_DebugDrawer);
 #endif
@@ -65,7 +65,7 @@ bool LkPhysics::_Init()
 
 void LkPhysics::_Shutdown()
 {
-#ifdef _DEBUG
+#ifdef PHY_DEBUG_DRAW
 	delete m_DebugDrawer;
 #endif
 	delete m_DynamiscWorld;
@@ -82,7 +82,7 @@ void LkPhysics::Update()
 	m_DynamiscWorld->stepSimulation(g_Engine->GetFrameTime(), 10, m_FixedTimeStep);
 }
 
-#ifdef _DEBUG
+#ifdef PHY_DEBUG_DRAW
 void LkPhysics::DebugDraw()
 {
 	m_DynamiscWorld->debugDrawWorld();

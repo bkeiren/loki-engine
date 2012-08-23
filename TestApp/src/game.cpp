@@ -148,7 +148,7 @@ bool MyGame::Init()
 	//ui::Overlay* overlay = ui::g_OverlayManager->CreateOverlay("Overlay0");
 	//ui::OverlayElement* element = overlay->CreateElement("Button0", "button");
 
-	/*physics::RigidBodyInfo info;
+	physics::RigidBodyInfo info;
 	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
 	info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(m_Level->GetPawn("StanfordDragon")->GetComponent<LkRenderComponent>()->GetModel()->GetMesh());
 	info.m_Restitution = 0.75f;
@@ -162,7 +162,7 @@ bool MyGame::Init()
 											0.0f, 0.0f, 1.0f, 0.0f,
 											0.0f, 10.0f * (i + 1), 0.0f, 1.0f);
 		physics::g_Physics->AddRigidBody(info);
-	}*/
+	}
 
 	/*
 	if (!loki::ui::g_OverlayManager->LoadOverlayStyle("Style0", "resources//ui//style0.sty"))
@@ -231,29 +231,30 @@ void MyGame::Update()
 // 		loki::renderer::g_Renderer->ToggleWireframe();
 // 	}
 
-// 	LkPawn* p = m_Level->GetPawn("StanfordDragon");
-// 	LkMoveableComponent* c = p->GetComponent<LkMoveableComponent>();
-// 	if (c && body)
-// 	{
-// 		c->SetPosition(body->GetPosition());
-// 	}
+	LkPawn* p = m_Level->GetPawn("StanfordDragon");
+	LkMoveableComponent* c = p->GetComponent<LkMoveableComponent>();
+	if (c && body)
+	{
+		c->SetPosition(body->GetPosition());
+		c->SetOrientation(body->GetOrientation());
+	}
 
-// 	if (KEY_RELEASED(KEY_R))
-// 	{
-// 		body->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-// 	}
-// 
-// 	if (KEY_RELEASED(KEY_G))
-// 	{
-// 		physics::RigidBodyInfo info;
-// 		info.m_Shape = physics::CS_SPHERE;
-// 		info.m_Mass = 10.0f;
-// 		info.m_SphereData.m_Radius = 0.5f;
-// 		info.m_InitialTransform = m_Level->GetCurrentCamera()->GetComponent<LkMoveableComponent>()->GetTransformation();
-// 		physics::LkRigidBody* b = physics::g_Physics->AddRigidBody(info);
-// 		glm::vec3 force = glm::vec3(-info.m_InitialTransform[2]) * 200.0f;
-// 		b->ApplyCentralImpulse(force);
-// 	}
+	if (KEY_RELEASED(KEY_R))
+	{
+		body->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	}
+
+	if (KEY_RELEASED(KEY_G))
+	{
+		physics::RigidBodyInfo info;
+		info.m_Shape = physics::CS_SPHERE;
+		info.m_Mass = 10.0f;
+		info.m_SphereData.m_Radius = 0.5f;
+		info.m_InitialTransform = m_Level->GetCurrentCamera()->GetComponent<LkMoveableComponent>()->GetTransformation();
+		physics::LkRigidBody* b = physics::g_Physics->AddRigidBody(info);
+		glm::vec3 force = glm::vec3(-info.m_InitialTransform[2]) * 200.0f;
+		b->ApplyCentralImpulse(force);
+	}
 
 
 	/*
@@ -272,12 +273,8 @@ void MyGame::Update()
 	}
 	*/
 
-	//loki::MoveableComponent* movcomp = m_Level->GetPawn("StanfordDragon")->GetComponent<loki::MoveableComponent>();
-	//glm::vec3 forward = movcomp->GetOrientationVector();
-	//renderer::debug::DrawLine3D(movcomp->GetPosition(), movcomp->GetPosition() + forward * 10.0f, true, UNIT_X);
-	//renderer::debug::DrawCone(movcomp->GetPosition() + forward * 10.0f, 0.5f, 2.0f, movcomp->GetOrientation() * -FORWARD, true, UNIT_X);
-
-	//renderer::debug::DrawAxes(movcomp->GetPosition(), movcomp->GetOrientation(), 1.0f, true);
+	loki::LkMoveableComponent* movcomp = m_Level->GetPawn("StanfordDragon")->GetComponent<loki::LkMoveableComponent>();
+	renderer::debug::DrawAxes(movcomp->GetPosition(), movcomp->GetOrientation(), 1.0f, true);
 }
 
 void MyGame::PostUpdate()

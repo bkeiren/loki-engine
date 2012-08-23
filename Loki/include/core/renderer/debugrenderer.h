@@ -12,7 +12,7 @@ namespace renderer
 namespace debug
 {
 
-void DrawItems( const glm::mat4& _ViewMatrix );
+void DrawItems( const glm::mat4& _ProjectionMatrix, const glm::mat4& _ViewMatrix );
 
 //////////////////////////////////////////////////////////////////////////
 // Draw a line in 3D.
