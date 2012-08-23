@@ -3,6 +3,8 @@
 #include <GLEW\\glew.h>
 #include <GL\\glut.h>
 
+#define DBG_DRAW_ENABLED
+
 namespace loki
 {
 
@@ -48,7 +50,7 @@ struct DbgDrawItem
 // The 2D and 3D debug draw items are separated to avoid having to make
 // unnecessary matrix mode switches.
 //////////////////////////////////////////////////////////////////////////
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 const unsigned int DbgDrawItemsMaxCount = 2048;
 #else
 const unsigned int DbgDrawItemsMaxCount = 2048;
@@ -65,10 +67,13 @@ unsigned int DbgDrawItems2DCounter = 0;
 
 }
 
-void DrawItems( const glm::mat4& _ViewMatrix )
+void DrawItems( const glm::mat4& _ProjectionMatrix, const glm::mat4& _ViewMatrix )
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	glDepthMask(false);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(glm::value_ptr(_ProjectionMatrix));
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
@@ -194,7 +199,6 @@ void DrawItems( const glm::mat4& _ViewMatrix )
 	glPopMatrix();
 	glPopMatrix();
 
-
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -252,6 +256,7 @@ void DrawItems( const glm::mat4& _ViewMatrix )
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 
+	glDisable(GL_DEPTH_TEST);
 	glDepthMask(true);
 
 	glColor3f(1.0f, 1.0f, 1.0f);	// Here because otherwise the sky isn't drawn for some reason... x)
@@ -265,7 +270,7 @@ void DrawItems( const glm::mat4& _ViewMatrix )
 
 void DrawLine3D(const glm::vec3& _From, const glm::vec3& _To, bool _DepthTest /*= true*/, const glm::vec3& _Color /* = glm::vec3 */)
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
 	{
 		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
@@ -281,7 +286,7 @@ void DrawLine3D(const glm::vec3& _From, const glm::vec3& _To, bool _DepthTest /*
 
 void DrawLine2D(const glm::vec2& _From, const glm::vec2& _To, bool _DepthTest /*= true*/, const glm::vec3& _Color /* = glm::vec3 */)
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems2DCounter < DbgDrawItemsMaxCount)
 	{
 		DbgDrawItem* item = &DbgDrawItems2D[DbgDrawItems2DCounter];
@@ -297,7 +302,7 @@ void DrawLine2D(const glm::vec2& _From, const glm::vec2& _To, bool _DepthTest /*
 
 void DrawSphere(const glm::vec3& _Pos, float _Radius, bool _DepthTest /*= true*/, const glm::vec3& _Color /* = glm::vec3 */, bool _Wire /*= true*/ )
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
 	{
 		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
@@ -313,7 +318,7 @@ void DrawSphere(const glm::vec3& _Pos, float _Radius, bool _DepthTest /*= true*/
 
 void DrawCube(const glm::vec3& _Pos, float _Size, bool _DepthTest /*= true*/, const glm::vec3& _Color /* = glm::vec3 */, bool _Wire /*= true*/ )
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
 	{
 		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
@@ -329,7 +334,7 @@ void DrawCube(const glm::vec3& _Pos, float _Size, bool _DepthTest /*= true*/, co
 
 void DrawIcosahedron(const glm::vec3& _Pos, float _Size, bool _DepthTest /* = true */, const glm::vec3& _Color /* = glm::vec3 */, bool _Wire /*= true*/ )
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
 	{
 		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
@@ -345,7 +350,7 @@ void DrawIcosahedron(const glm::vec3& _Pos, float _Size, bool _DepthTest /* = tr
 
 void DrawCone(const glm::vec3& _Pos, float _Base, float _Height, glm::vec3& _Direction, bool _DepthTest /* = true */, const glm::vec3& _Color /* = glm::vec3 */, bool _Wire /*= true*/ )
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
 	{
 		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
@@ -363,7 +368,7 @@ void DrawCone(const glm::vec3& _Pos, float _Base, float _Height, glm::vec3& _Dir
 
 void DrawCylinder(const glm::vec3& _Pos, float _Radius, float _Height, bool _DepthTest /* = true */, const glm::vec3& _Color /* = glm::vec3 */, bool _Wire /*= true*/ )
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
 	{
 		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
@@ -380,7 +385,7 @@ void DrawCylinder(const glm::vec3& _Pos, float _Radius, float _Height, bool _Dep
 
 void DrawDisk3D( const glm::vec3& _Pos, float _Radius, bool _DepthTest /*= true*/, const glm::vec3& _Color /*= glm::vec3(1.0f, 1.0f, 1.0f)*/ )
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
 	{
 		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
@@ -396,7 +401,7 @@ void DrawDisk3D( const glm::vec3& _Pos, float _Radius, bool _DepthTest /*= true*
 
 void DrawDisk2D( const glm::vec3& _Pos, float _Radius, const glm::vec3& _Color /*= glm::vec3(1.0f, 1.0f, 1.0f)*/ )
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems2DCounter < DbgDrawItemsMaxCount)
 	{
 		DbgDrawItem* item = &DbgDrawItems2D[DbgDrawItems2DCounter];
@@ -412,7 +417,7 @@ void DrawDisk2D( const glm::vec3& _Pos, float _Radius, const glm::vec3& _Color /
 
 void DrawPartialDisk3D( const glm::vec3& _Pos, float _Radius, float _StartAngle, float _Angle, bool _DepthTest /*= true*/, const glm::vec3& _Color /*= glm::vec3(1.0f, 1.0f, 1.0f)*/ )
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
 	{
 		DbgDrawItem* item = &DbgDrawItems3D[DbgDrawItems3DCounter];
@@ -429,7 +434,7 @@ void DrawPartialDisk3D( const glm::vec3& _Pos, float _Radius, float _StartAngle,
 
 void DrawPartialDisk2D( const glm::vec3& _Pos, float _Radius, float _StartAngle, float _Angle, const glm::vec3& _Color /*= glm::vec3(1.0f, 1.0f, 1.0f)*/ )
 {
-#ifdef _DEBUG
+#ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems2DCounter < DbgDrawItemsMaxCount)
 	{
 		DbgDrawItem* item = &DbgDrawItems2D[DbgDrawItems2DCounter];

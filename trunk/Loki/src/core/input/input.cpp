@@ -2,6 +2,7 @@
 #include "core/engine.h"
 #include "core/renderer/renderer.h"
 #include "core/window.h"
+#include "core/console/console.h"
 
 namespace loki
 {
@@ -59,41 +60,66 @@ void LkInput::_PerformMouseAcceleration()
 	m_MouseMoved = (m_MousePrevious != m_Mouse);
 }
 
-void LkInput::Capture()
+void LkInput::_CaptureKeyState( int _Key )
 {
-	for (int i = 0; i < KEY_LAST; ++i)
+	short state = GetAsyncKeyState(_Key) >> 8;	// Shifted by 8 because the most significant bit is used to indicate the
+	// state of the key.
+	// If key is down...
+	if (state)
 	{
-		short state = GetAsyncKeyState(i) >> 8;	// Shifted by 8 because the most significant bit is used to indicate the
-												// state of the key.
-		// If key is down...
-		if (state)
+		// If key was not down last frame...
+		if (m_Keys[_Key] == KEYSTATE_UP || m_Keys[_Key] == KEYSTATE_RELEASED)
 		{
-			// If key was not down last frame...
-			if (m_Keys[i] == KEYSTATE_UP || m_Keys[i] == KEYSTATE_RELEASED)
-			{
-				// Key has just been pressed.
-				m_Keys[i] = KEYSTATE_PRESSED;
-			}
-			// Else, key was down or being pressed last frame...
-			else
-			{
-				m_Keys[i] = KEYSTATE_DOWN;
-			}
+			// Key has just been pressed.
+			m_Keys[_Key] = KEYSTATE_PRESSED;
 		}
-		// Else if key is not down...
+		// Else, key was down or being pressed last frame...
 		else
 		{
-			// If key was down last frame...
-			if (m_Keys[i] == KEYSTATE_DOWN || m_Keys[i] == KEYSTATE_PRESSED)
-			{
-				m_Keys[i] = KEYSTATE_RELEASED;
-			}
-			// Else, key was up or being released last frame...
-			else
-			{
-				m_Keys[i] = KEYSTATE_UP;
-			}
+			m_Keys[_Key] = KEYSTATE_DOWN;
 		}
+	}
+	// Else if key is not down...
+	else
+	{
+		// If key was down last frame...
+		if (m_Keys[_Key] == KEYSTATE_DOWN || m_Keys[_Key] == KEYSTATE_PRESSED)
+		{
+			m_Keys[_Key] = KEYSTATE_RELEASED;
+		}
+		// Else, key was up or being released last frame...
+		else
+		{
+			m_Keys[_Key] = KEYSTATE_UP;
+		}
+	}
+}
+
+void LkInput::Capture()
+{
+	if (!g_Console->IsVisible())
+	{
+		for (int i = 0; i < KEY_LAST; ++i)
+		{
+			_CaptureKeyState(i);
+		}
+	}
+	else
+	{
+		EKeyState states[2] = { m_Keys[KEY_TILDE], m_Keys[KEY_ESCAPE] };
+
+		for (int i = 0; i < KEY_LAST; ++i)
+		{
+			m_Keys[i] = KEYSTATE_UP;
+		}
+
+		// Restore previous state for tilde and escape.
+		m_Keys[KEY_TILDE] = states[0];
+		m_Keys[KEY_ESCAPE] = states[1];
+
+		// These must be passed to the console in C++ so we check these.
+		_CaptureKeyState(KEY_TILDE);
+		_CaptureKeyState(KEY_ESCAPE);
 	}
 
 	POINT pos;

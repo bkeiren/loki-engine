@@ -8,6 +8,8 @@
 
 #include "core/physics/rigidbody.h"
 
+#define PHY_DEBUG_DRAW
+
 class btBroadphaseInterface;
 class btDefaultCollisionConfiguration;
 class btCollisionDispatcher;
@@ -20,7 +22,7 @@ namespace loki
 namespace physics
 {
 
-#ifdef _DEBUG
+#ifdef PHY_DEBUG_DRAW
 class LkDebugDrawer;
 #endif
 
@@ -32,7 +34,7 @@ class LkPhysics
 public:
 	void Update();
 
-#ifdef _DEBUG
+#ifdef PHY_DEBUG_DRAW
 	void DebugDraw();
 #endif
 
@@ -62,7 +64,7 @@ private:
 
 	LkRigidBody* m_WorldZPlane;
 
-#ifdef _DEBUG
+#ifdef PHY_DEBUG_DRAW
 	LkDebugDrawer* m_DebugDrawer;
 #endif
 };

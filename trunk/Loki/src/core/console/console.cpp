@@ -173,6 +173,30 @@ void LkConsole::Print( const char* _Message )
 		std::string msg = _Message;
 		util::StringReplaceAll(msg, "\"", "&#34;");
 
+		// Remove characters that the javascript engine can't handle.
+		util::StringReplaceAll(msg, "á", "a");
+		util::StringReplaceAll(msg, "Á", "A");
+		util::StringReplaceAll(msg, "à", "a");
+		util::StringReplaceAll(msg, "À", "A");
+		util::StringReplaceAll(msg, "ã", "a");
+		util::StringReplaceAll(msg, "Ã", "A");
+		util::StringReplaceAll(msg, "é", "e");
+		util::StringReplaceAll(msg, "É", "E");
+		util::StringReplaceAll(msg, "è", "e");
+		util::StringReplaceAll(msg, "È", "E");
+		util::StringReplaceAll(msg, "ó", "o");
+		util::StringReplaceAll(msg, "Ó", "O");
+		util::StringReplaceAll(msg, "ò", "o");
+		util::StringReplaceAll(msg, "Ò", "O");
+		util::StringReplaceAll(msg, "õ", "o");
+		util::StringReplaceAll(msg, "Õ", "O");
+		util::StringReplaceAll(msg, "ñ", "n");
+		util::StringReplaceAll(msg, "Ñ", "N");
+
+		// This is a strange character that sometimes occurs (For example, when typing à, it will be inserted).
+		char minus96[] = { (char)-96, '\0' };
+		util::StringReplaceAll(msg, std::string(minus96), " ");
+
 		std::string js = "var c = jQuery(\"#console_textarea\");c.append(\">";
 		js += msg;
 		js += "\\n\");c.animate({scrollTop:c[0].scrollHeight - c.height()}, 200, null);";
@@ -323,6 +347,11 @@ void LkConsole::onFinishLoading(Awesomium::WebView* caller)
 	}
 	str += "]);";
 	m_ConsoleUI->ExecuteJavascript(str);*/
+}
+
+bool LkConsole::IsVisible() const
+{
+	return m_IsVisible;
 }
 
 LkConsole::Command::Command( const std::string& _Description, ConsoleCommandFunction _Function, ... )	:

@@ -157,6 +157,8 @@ private:
 
 	void _PerformMouseAcceleration();
 
+	inline void _CaptureKeyState( int _Key );
+
 	EKeyState m_Keys[KEY_LAST];
 	glm::int2 m_Mouse;
 	glm::int2 m_MousePrevious;

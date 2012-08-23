@@ -97,6 +97,8 @@ public:
 
 	void onFinishLoading(Awesomium::WebView* caller);
 
+	bool IsVisible() const;
+
 	struct Value
 	{
 		union
