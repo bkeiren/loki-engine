@@ -43,7 +43,7 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 		{
 			if (_Info.m_MeshData.m_Mesh == NULL)
 			{
-				LOG(VL_WARN, "RigidBody::RigidBody: Missing geometric data required to build a triangle mesh, using a normalized box hull instead");
+				LOG(VL_WARN, "RigidBody::RigidBody: Geometric data required to build a triangle mesh is missing, using a normalized box hull instead");
 				// We don't break here because we want to roll over into the CS_BOX case because our triangle mesh is missing an actual
 				// mesh, so we don't have any geometric data.
 			}
@@ -69,8 +69,8 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 					meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
 				}
 
+				// Is this static?
 				shape = new btBvhTriangleMeshShape(meshinterface, true, true);
-				//shape = new btGImpactMeshShape(meshinterface);
 				break;
 			}
 		}
@@ -126,6 +126,7 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 			}
 
 			shape = new btConvexTriangleMeshShape(meshinterface, true);
+			//shape = new btGImpactMeshShape(meshinterface);
 			break;
 		}
 	case CS_BOX:
@@ -224,7 +225,6 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 	info.m_additionalLinearDampingThresholdSqr	= _Info.m_AdditionalLinearDampingThresholdSqr;
 	info.m_additionalAngularDampingThresholdSqr = _Info.m_AdditionalAngularDampingThresholdSqr;
 	info.m_additionalAngularDampingFactor		= _Info.m_AdditionalAngularDampingFactor;
-
 
 	m_RigidBody = new btRigidBody(info);
 }

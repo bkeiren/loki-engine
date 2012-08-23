@@ -36,18 +36,14 @@ LkDebugDrawer::~LkDebugDrawer()
 
 void LkDebugDrawer::drawLine( const btVector3& from, const btVector3& to, const btVector3& color )
 {
-#ifdef _DEBUG
 	renderer::debug::DrawLine3D(GLMVec3(from), GLMVec3(to), true, GLMVec3(color));
-#endif
 }
 
 void LkDebugDrawer::drawContactPoint(const btVector3& PointOnB,const btVector3& normalOnB,btScalar distance,int lifeTime,const btVector3& color)
 {
-#ifdef _DEBUG
 	glm::vec3 col = GLMVec3(color);
 	renderer::debug::DrawSphere(GLMVec3(PointOnB), 0.1f, true, col);
 	renderer::debug::DrawLine3D(GLMVec3(PointOnB), GLMVec3(PointOnB) + (GLMVec3(normalOnB) * distance), true, col);
-#endif
 }
 
 void LkDebugDrawer::reportErrorWarning(const char* warningString)

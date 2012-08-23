@@ -371,7 +371,7 @@ void LkEngine::Loop()
 		g_EventManager->Post(LkEvent(EVENT_PRERENDER));
 
 		// Render.
-#ifdef _DEBUG
+#ifndef _DEBUG
 		physics::g_Physics->DebugDraw();
 #endif
 		Render();
