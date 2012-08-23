@@ -8,13 +8,14 @@
 namespace loki
 {
 
-enum EComponentType
-{
-	CT_RENDERCOMPONENT = 0,
-	CT_MOVEABLECOMPONENT,
-
-	CT_COUNT
-};
+// enum EComponentType
+// {
+// 	CT_RENDERCOMPONENT = 0,
+// 	CT_MOVEABLECOMPONENT,
+// 	CT_PHYSICSCOMPONENT,
+// 
+// 	CT_COUNT
+// };
 
 //////////////////////////////////////////////////////////////////////////
 // The ActorComponent class is the base class for any components that 
@@ -30,16 +31,16 @@ protected:
 	LkActorComponent();
 	virtual ~LkActorComponent() = 0;
 
-	//////////////////////////////////////////////////////////////////////////
-	// Called on each tick.
-	//////////////////////////////////////////////////////////////////////////
-	virtual void Update() = 0;
-
 	LkActor* GetActor();
 private:
 	void SetActor( LkActor* _Actor );
 
 	virtual void _OnEvent( const LkEvent& _Event );
+
+	//////////////////////////////////////////////////////////////////////////
+	// Called after data such as m_Actor is set.
+	//////////////////////////////////////////////////////////////////////////
+	virtual void _Init() = 0;
 
 	//////////////////////////////////////////////////////////////////////////
 	// The actor to which this component belongs.

@@ -46,7 +46,7 @@ LkRenderer::LkRenderer( LkWindow* _Window )	:
 	m_CurrentLevelToRender(NULL),
 	m_LightEffect(0),
 	m_GBuffer(0),
-#ifdef _DEBUG
+#ifdef DBG_VISUALIZATIONS
 	m_DBG_VisualizeGBufferTargets(false),
 	m_DBG_VisualizeLightVolumes(false),
 #endif
@@ -162,6 +162,7 @@ bool LkRenderer::_Init( LkWindow* _Window )
 	#include "core/renderer/lightaccumtobackbuffer_cgeffect.inl"
 	, "LightAccumulationToBackBuffer");
 
+#ifdef DBG_VISUALIZATIONS
 	m_GBufferTargets_General = g_EffectManager->CreateEffectFromMemory(
 	#include "core/renderer/gbuffertargets_general_cgeffect.inl"
 		, "GBufferTargets_General");
@@ -173,6 +174,7 @@ bool LkRenderer::_Init( LkWindow* _Window )
 	m_GBufferTargets_Depth = g_EffectManager->CreateEffectFromMemory(
 	#include "core/renderer/gbuffertargets_depth_cgeffect.inl"
 		, "GBufferTargets_Depth");
+#endif
 
 	// Ensure the window is sized properly after Init().
 	//ResizeViewport(m_WindowWidth, m_WindowHeight);
@@ -259,14 +261,16 @@ void LkRenderer::Render( game::LkLevel* _Level )
 	*/
 
 	//m_MRTObject->StartGBuffer();
+	static EAttachment DrawBuffersP0[] = { RBA_COLOR_ATTACHMENT3 };
+	static EAttachment DrawBuffersP1[] = { RBA_COLOR_ATTACHMENT0, RBA_COLOR_ATTACHMENT1, RBA_COLOR_ATTACHMENT2, RBA_COLOR_ATTACHMENT3 }; 
+
 	m_GBuffer->Bind();
+	m_GBuffer->SetDrawBuffers(DrawBuffersP1, 4);
 	m_GBuffer->ClearBuffers(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	static EAttachment DrawBuffersP0[] = { RBA_COLOR_ATTACHMENT3 };
 	m_GBuffer->SetDrawBuffers(DrawBuffersP0, 1);
 	_RenderSky();
 
-	static EAttachment DrawBuffersP1[] = { RBA_COLOR_ATTACHMENT0, RBA_COLOR_ATTACHMENT1, RBA_COLOR_ATTACHMENT2, RBA_COLOR_ATTACHMENT3 }; 
 	m_GBuffer->SetDrawBuffers(DrawBuffersP1, 4);
 	glViewport(0, 0, m_Window->GetWidth(), m_Window->GetHeight());
 	
@@ -287,7 +291,7 @@ void LkRenderer::Render( game::LkLevel* _Level )
 	_RenderLightAccumulationToBackBuffer();
 
 	
-#ifdef _DEBUG
+#ifdef DBG_VISUALIZATIONS
 	if (m_DBG_VisualizeGBufferTargets)
 	{
 		_RenderGBufferTargets();
@@ -487,7 +491,7 @@ void LkRenderer::CheckGLError()
 	} while (error != GL_NO_ERROR);
 }
 
-#ifdef _DEBUG
+#ifdef DBG_VISUALIZATIONS
 void LkRenderer::ToggleVisualizeRenderTargets()
 {
 	m_DBG_VisualizeGBufferTargets = !m_DBG_VisualizeGBufferTargets;
@@ -672,7 +676,7 @@ void LkRenderer::_RenderOpaqueGeometry()
 
 	for (std::list<LkRenderComponent*>::iterator it = LkRenderComponent::m_RenderComponents.begin(); it != LkRenderComponent::m_RenderComponents.end(); ++it)
 	{
-		LkMoveableComponent* movcomp = (*it)->GetActor()->GetComponent<LkMoveableComponent>();
+		LkMovableComponent* movcomp = (*it)->GetActor()->GetComponent<LkMovableComponent>();
 
 		if ((*it)->m_Model)	// TODO: Replace this check with a default model to indicate missing models.
 		{
@@ -828,7 +832,7 @@ void LkRenderer::_RenderLightingPointLights()
 			continue;
 		}
 
-		LkMoveableComponent* comp = pointlight->GetComponent<LkMoveableComponent>();
+		LkMovableComponent* comp = pointlight->GetComponent<LkMovableComponent>();
 		glm::mat4 _ModelMatrix = comp->GetTransformation();
 		bool CameraInsideVolume = glm::length(_EyePosition - comp->GetPosition()) < pointlight->GetRadius();
 
@@ -849,7 +853,7 @@ void LkRenderer::_RenderLightingPointLights()
 		int PassID = 0;
 		while (m_LightEffect->HasNextPass())
 		{
-#ifndef _DEBUG
+#ifndef DBG_VISUALIZATIONS
 			if (PassID == 4)
 			{
 				continue;

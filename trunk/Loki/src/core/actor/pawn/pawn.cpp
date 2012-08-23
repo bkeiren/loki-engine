@@ -2,8 +2,9 @@
 #include "core/actor/actor.h"
 #include "core/actor/pawn/pawn.h"
 #include "core/actor/pawn/controller/controller.h"
-#include "core/actor/components/moveablecomponent/moveablecomponent.h"
+#include "core/actor/components/movablecomponent/movablecomponent.h"
 #include "core/actor/components/rendercomponent/rendercomponent.h"
+#include "core/actor/components/physicscomponent/physicscomponent.h"
 
 using namespace loki;
 
@@ -11,9 +12,9 @@ loki::LkPawn::LkPawn( const char* _Name, game::LkLevel* _Level )	:
 	LkActor(_Name, _Level),
 	m_Controller(NULL)
 {
-	AddComponent<LkMoveableComponent>();
+	AddComponent<LkMovableComponent>();
 	AddComponent<LkRenderComponent>();
-	//AddComponent<PhysicsComponent>();
+	AddComponent<LkPhysicsComponent>();
 }
 
 LkPawn::LkPawn()

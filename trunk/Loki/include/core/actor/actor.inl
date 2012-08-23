@@ -14,6 +14,7 @@ void LkActor::AddComponent()
 	LkActorComponent* comp = (LkActorComponent*)new _ComponentType();
 	m_Components.insert(ComponentPair(util::TypeInfo(typeid(_ComponentType)), comp));
 	comp->SetActor(this);
+	comp->_Init();
 }
 
 template< typename _ComponentType >
@@ -40,9 +41,8 @@ _ComponentType* LkActor::GetComponent() const
 		return (_ComponentType*)((*it).second);
 	}
 	std::string t = typeid(_ComponentType).name();
-	LOG(VL_ERROR, "Actor::GetComponent: Actor does not have a component of type %s", t.c_str());
-	//assert("Check log" && 0);
-	return NULL;
+	LOG(VL_ERROR, "Actor::GetComponent: Actor does not have a component of type %s. Creating component...", t.c_str());
+	return 0;
 }
 
 

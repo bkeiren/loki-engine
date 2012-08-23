@@ -54,7 +54,7 @@ void LkTrackBallCam::_OnEvent( const LkEvent& _Event )
 	{
 	case EVENT_ONUPDATE:
 		{
-			loki::LkMoveableComponent* movcomp = GetComponent<LkMoveableComponent>();
+			loki::LkMovableComponent* movcomp = GetComponent<LkMovableComponent>();
 
 			movcomp->SetPosition(m_Center);
 

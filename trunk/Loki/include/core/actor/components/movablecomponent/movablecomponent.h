@@ -8,11 +8,11 @@
 namespace loki
 {
 
-class LkMoveableComponent	: public LkActorComponent
+class LkMovableComponent	: public LkActorComponent
 {
 public:
-	LkMoveableComponent();
-	~LkMoveableComponent();
+	LkMovableComponent();
+	~LkMovableComponent();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the actor's position.
@@ -89,6 +89,8 @@ protected:
 
 private:
 	void _CalculateTransformationMatrix();
+
+	void _Init();
 
 	glm::vec3 m_Position;
 	glm::quat m_Orientation;

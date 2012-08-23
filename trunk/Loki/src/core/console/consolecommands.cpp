@@ -6,7 +6,7 @@
 #include "core/script/squirrel/squirrel.h"
 #include "core/script/lua/lua.h"
 #include "core/game/level/level.h"
-#include "core/actor/components/moveablecomponent/moveablecomponent.h"
+#include "core/actor/components/movablecomponent/movablecomponent.h"
 #include "core/actor/camera/camera.h"
 #include "core/window.h"
 #include "core/actor/pawn/pawn.h"
@@ -220,13 +220,13 @@ CONSOLE_FUNCTION(Console_CamSetPos)
 	float x = _Command->m_Arguments[0].m_Float;
 	float y = _Command->m_Arguments[1].m_Float;
 	float z = _Command->m_Arguments[2].m_Float;
-	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMoveableComponent>()->SetPosition(glm::vec3(x, y, z));
+	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->SetPosition(glm::vec3(x, y, z));
 	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_CamGetPos)
 {
-	glm::vec3 p = g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMoveableComponent>()->GetPosition();
+	glm::vec3 p = g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->GetPosition();
 	return LkConsole::CommandResult("CamPos: [%f, %f, %f]", p.x, p.y, p.z);
 }
 
@@ -236,13 +236,13 @@ CONSOLE_FUNCTION(Console_CamSetOrientation)
 	float y = _Command->m_Arguments[1].m_Float;
 	float z = _Command->m_Arguments[2].m_Float;
 	float w = _Command->m_Arguments[3].m_Float;
-	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMoveableComponent>()->SetOrientation(glm::quat(x, y, z, w));
+	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->SetOrientation(glm::quat(x, y, z, w));
 	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_CamGetOrientation)
 {
-	glm::quat o = g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMoveableComponent>()->GetOrientation();
+	glm::quat o = g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->GetOrientation();
 	return LkConsole::CommandResult("CamOrientation: [%f, %f, %f, %f]", o.x, o.y, o.z, o.w);	
 }
 
@@ -339,7 +339,7 @@ CONSOLE_FUNCTION(Console_PawnSetPos)
 	{
 		return LkConsole::CommandResult("Pawn '%s' does not exist", _Command->m_Arguments[0].m_String.c_str());
 	}
-	LkMoveableComponent* comp = pawn->GetComponent<LkMoveableComponent>();
+	LkMovableComponent* comp = pawn->GetComponent<LkMovableComponent>();
 	comp->SetPosition(glm::vec3(_Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float, _Command->m_Arguments[3].m_Float));
 	return LkConsole::CommandResult("");
 }
@@ -351,28 +351,28 @@ CONSOLE_FUNCTION(Console_PawnSetOri)
 	{
 		return LkConsole::CommandResult("Pawn '%s' does not exist", _Command->m_Arguments[0].m_String.c_str());
 	}
-	LkMoveableComponent* comp = pawn->GetComponent<LkMoveableComponent>();
+	LkMovableComponent* comp = pawn->GetComponent<LkMovableComponent>();
 	comp->SetOrientation(glm::quat(_Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float, _Command->m_Arguments[3].m_Float, _Command->m_Arguments[4].m_Float));
 	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_GBufferTargets)
 {
-#ifdef _DEBUG
+#ifdef DBG_VISUALIZATIONS
 	renderer::g_Renderer->ToggleVisualizeRenderTargets();
 	return LkConsole::CommandResult("");
 #else
-	return LkConsole::CommandResult("This command is only available in a debug build");
+	return LkConsole::CommandResult("This command is only available in a build with DBG_VISUALIZATIONS defined");
 #endif
 }
 
 CONSOLE_FUNCTION(Console_LightVolumes)
 {
-#ifdef _DEBUG
+#ifdef DBG_VISUALIZATIONS
 	renderer::g_Renderer->ToggleVisualizeLightVolumes();
 	return LkConsole::CommandResult("");
 #else
-	return LkConsole::CommandResult("This command is only available in a debug build");
+	return LkConsole::CommandResult("This command is only available in a build with DBG_VISUALIZATIONS defined");
 #endif
 }
 

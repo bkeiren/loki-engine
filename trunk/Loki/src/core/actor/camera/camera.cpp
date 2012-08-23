@@ -14,7 +14,7 @@ LkCamera::LkCamera( const char* _Name, game::LkLevel* _Level )	:
 	m_ProjectionType(PROJECTION_PERSPECTIVE),
 	m_ProjectionMatrixIsDirty(true)
 {
-	AddComponent<LkMoveableComponent>();
+	AddComponent<LkMovableComponent>();
 
 	// By default, the viewport settings of a camera are copied from the renderer.
 	m_Viewport.x = renderer::g_Renderer->GetRenderWidth();
@@ -33,7 +33,7 @@ LkCamera::~LkCamera()
 
 void LkCamera::LookAt( const glm::vec3& _Target )
 {
-	LkMoveableComponent* movcomp = GetComponent<LkMoveableComponent>();
+	LkMovableComponent* movcomp = GetComponent<LkMovableComponent>();
 
 	glm::mat4x4 mat = glm::gtc::matrix_transform::lookAt(-movcomp->GetPosition(), -_Target, math::GlobalY);
 	movcomp->SetTransformation(mat);
@@ -59,7 +59,7 @@ void LkCamera::ApplyViewTransformation()
 {
 	glMatrixMode(GL_MODELVIEW);	// Deprecated.
 
-	LkMoveableComponent* comp = GetComponent<LkMoveableComponent>();
+	LkMovableComponent* comp = GetComponent<LkMovableComponent>();
 	glm::mat4x4 mat = glm::inverse(comp->GetTransformation());
 	glLoadMatrixf((float*)&mat);	// Load the camera matrix.
 }
@@ -78,7 +78,7 @@ const glm::mat4& LkCamera::GetProjectionMatrix()
 
 glm::mat4 LkCamera::GetViewMatrix()
 {
-	LkMoveableComponent* comp = GetComponent<LkMoveableComponent>();
+	LkMovableComponent* comp = GetComponent<LkMovableComponent>();
 	glm::mat4 mat = glm::inverse(comp->GetTransformation());
 	return mat;
 }

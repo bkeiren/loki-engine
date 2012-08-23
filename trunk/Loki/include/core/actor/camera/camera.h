@@ -5,7 +5,7 @@
 
 #include "core/actor/actor.h"
 
-#include "core/actor/components/moveablecomponent/moveablecomponent.h"
+#include "core/actor/components/movablecomponent/movablecomponent.h"
 
 #define PROJECTION_PERSPECTIVE	false
 #define PROJECTION_ORTHOGONAL	true

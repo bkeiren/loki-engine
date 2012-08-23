@@ -552,7 +552,9 @@ void LkEngine::Update()
 
 	m_Game->Update();
 
+	g_EventManager->Post(EVENT_PREPHYSICSUPDATE);
 	physics::g_Physics->Update();
+	g_EventManager->Post(EVENT_POSTPHYSICSUPDATE);
 
 	m_Game->PostUpdate();
 

@@ -5,7 +5,7 @@
 
 #include "core/actor/actor.h"
 #include "util/color/color.h"
-#include "core/actor/components/moveablecomponent/moveablecomponent.h"
+#include "core/actor/components/movablecomponent/movablecomponent.h"
 
 namespace loki
 {
