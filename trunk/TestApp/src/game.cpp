@@ -91,7 +91,7 @@ bool MyGame::Init()
 
 		pointlight1 = m_Level->SpawnPointLight("PointLight2");
 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-		pointlight1->SetRadius(15.0f);
+		pointlight1->SetRadius(50.0f);
 		light_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
 		pointlight1->SetColor(Color(1.0f, 0.2f, 0.2f));
 		//pointlight1->Disable();
@@ -99,14 +99,14 @@ bool MyGame::Init()
 
 		pointlight1 = m_Level->SpawnPointLight("MassivePointLight");
 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-		pointlight1->SetRadius(50.0f);
+		pointlight1->SetRadius(60.0f);
 		light_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 		pointlight1->SetColor(Color(1.0f, 1.0f, 1.0f));
 		//pointlight1->Disable();
 
 		pointlight1 = m_Level->SpawnPointLight("PointLight3");
 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-		pointlight1->SetRadius(30.0f);
+		pointlight1->SetRadius(50.0f);
 		light_movcomp->SetPosition(glm::vec3(5.0f, 0.0f, 0.0f));
 		pointlight1->SetColor(Color(0.0f, 1.0f, 0.2f));
 		//pointlight1->Disable();
@@ -283,11 +283,16 @@ void MyGame::Update()
 	}
 
 	
-	LkPointLight* p = m_Level->GetPointLight("PointLight3");
-	LkMovableComponent* comp = p->GetComponent<LkMovableComponent>();
-	static float f = 0.0f;
-	f += 0.01f;
-	comp->SetPosition( glm::vec3(cos(f) * 5, 0, sin(f) * 5) );
+	{
+		LkPointLight* p0 = m_Level->GetPointLight("PointLight3");
+		LkMovableComponent* comp0 = p0->GetComponent<LkMovableComponent>();
+		LkPointLight* p1 = m_Level->GetPointLight("PointLight2");
+		LkMovableComponent* comp1 = p1->GetComponent<LkMovableComponent>();
+		static float f = 0.0f;
+		f += 0.01f;
+		comp0->SetPosition( glm::vec3(cos(f) * 10, cos(f) * 10, sin(f) * 10) );
+		comp1->SetPosition( glm::vec3(cos(-f) * 10, sin(f) * 10, sin(-f) * 10) );
+	}
 
 	/*
 	static glm::vec3 p0 = glm::vec3(0.0f, 0.0f, 0.0f);

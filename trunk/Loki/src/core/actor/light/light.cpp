@@ -12,7 +12,7 @@ LkLight::LkLight( const char* _Name, game::LkLevel* _Level, ELightType _LightTyp
 	m_Enabled(true),
 	m_ConstantAttenuation(0.0f),
 	m_LinearAttenuation(1.0f),
-	m_QuadraticAttenuation(0.0f)
+	m_QuadraticAttenuation(0.5f)
 {
 	// Lights need a movable component.
 	AddComponent<LkMovableComponent>();

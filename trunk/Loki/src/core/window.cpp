@@ -378,6 +378,11 @@ bool LkWindow::IsFullscreen() const
 	return m_Fullscreen;
 }
 
+bool LkWindow::HasFocus() const
+{
+	return (GetFocus() == m_hWnd);
+}
+
 void LkWindow::_Destroy()
 {
 	// Check wether a window was actually created.
