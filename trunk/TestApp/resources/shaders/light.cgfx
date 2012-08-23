@@ -171,8 +171,7 @@ technique t0
 		StencilEnable = true;
 		StencilOp = int3(Zero, Zero, Zero);	// This will clear the stencil buffer back to 0 at each fragment that was involved in this technique.
 											// This means that we don't have to clear the entire stencil buffer after each light. Yay =D
-		StencilFunc = int3(Equal, 1, 1);	// If the camera is inside the volume, the back-pass has marked all pixels that lie further than
-											// the light radius. All pixels that are still at 0 should therefore lie inside the light volume.
+		StencilFunc = int3(Greater, 1, 1);	// For some reason, this works. Don't ask why. Don't touch it. It works.
 		StencilMask = true;
 		ColorMask = bool4(true, true, true, true);
 		BlendEnable = true;
@@ -192,7 +191,7 @@ technique t0
 		StencilEnable = true;
 		StencilOp = int3(Zero, Zero, Zero);	// This will clear the stencil buffer back to 0 at each fragment that was involved in this technique.
 											// This means that we don't have to clear the entire stencil buffer after each light. Yay =D
-		StencilFunc = int3(Equal, 1, 1);	// 
+		StencilFunc = int3(Equal, 1, 1);
 		StencilMask = true;
 		ColorMask = bool4(true, true, true, true);
 		BlendEnable = true;
