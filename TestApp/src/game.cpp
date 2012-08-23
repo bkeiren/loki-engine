@@ -152,7 +152,7 @@ bool MyGame::Init()
 	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
 	info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(m_Level->GetPawn("StanfordDragon")->GetComponent<LkRenderComponent>()->GetModel()->GetMesh());
 	info.m_Restitution = 0.75f;
-	info.m_Mass = 0.01f;
+	info.m_Mass = 100.0f;
 	body = physics::g_Physics->AddRigidBody(info);
 
 	for (int i = 0; i < 10; ++i)
@@ -243,7 +243,7 @@ void MyGame::Update()
 	{
 		body->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	}
-
+	
 	if (KEY_RELEASED(KEY_G))
 	{
 		physics::RigidBodyInfo info;
