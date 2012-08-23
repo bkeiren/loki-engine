@@ -864,7 +864,7 @@ void LkRenderer::_RenderLightingPointLights()
 				continue;				
 			}
 #endif
-
+			
 			// Awesomely condensed code...
 			(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(gluSphere(quadric, pointlight->GetRadius(), 20, 15));
 			++PassID;
