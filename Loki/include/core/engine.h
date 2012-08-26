@@ -29,6 +29,7 @@ extern const int VersionMajor;
 extern const int VersionMinor;
 extern const int VersionBuild;
 extern const char* VersionName;
+extern const char* VersionType;
 
 namespace game
 {

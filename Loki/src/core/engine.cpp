@@ -73,6 +73,11 @@ const int VersionMajor = 0;
 const int VersionMinor = 0;
 const int VersionBuild = 1;
 const char* VersionName = "Loki";
+#ifdef _DEBUG
+const char* VersionType = "Debug";
+#else
+const char* VersionType = "Release";
+#endif
 
 LkEngine* g_Engine = NULL;
 

@@ -59,7 +59,7 @@ bool ScanValueForBoolean( LkConsole::Value _V )
 
 CONSOLE_FUNCTION(Console_GetEngineVersion)
 {
-	LkConsole::CommandResult res("Engine version: v%i.%i.%i ('%s')", loki::VersionMajor, loki::VersionMinor, loki::VersionBuild, loki::VersionName);
+	LkConsole::CommandResult res("Engine version: v%i.%i.%i ('%s') (%s build)", loki::VersionMajor, loki::VersionMinor, loki::VersionBuild, loki::VersionName, loki::VersionType);
 	return res;
 }
 
