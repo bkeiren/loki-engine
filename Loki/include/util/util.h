@@ -117,6 +117,12 @@ void GetTimeStamp( std::string& _Output );
 bool StringReplace( std::string& _String, const std::string& _From, const std::string& _To, int _Index = 0 );
 void StringReplaceAll( std::string& _String, const std::string& _From, const std::string& _To );
 
+//////////////////////////////////////////////////////////////////////////
+// Function provides functionality similar to boost::lexical_cast.
+//////////////////////////////////////////////////////////////////////////
+template< typename _T >
+std::string LexicalCast( _T _Argument );
+
 }	// Namespace util.
 
 }	// Namespace loki.

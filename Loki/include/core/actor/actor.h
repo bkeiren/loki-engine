@@ -44,6 +44,7 @@ public:
 	friend class LkLight;
 	friend class LkCamera;
 	friend class game::LkLevel;
+	friend class LkParticleSystem;
 
 	//////////////////////////////////////////////////////////////////////////
 	// This function hashes an actor name and returns the hashed value.
