@@ -307,11 +307,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\commandlineparsing.h"
+			RelativePath=".\include\commandlineparsing.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\commandlineparsing.h"
+			RelativePath=".\include\core\commandlineparsing.h"
 			>
 		</File>
 		<File
@@ -339,11 +339,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\console\console.h"
+			RelativePath=".\include\console\console.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\console\console.h"
+			RelativePath=".\include\core\console\console.h"
 			>
 		</File>
 		<File
@@ -391,11 +391,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\dev_notes.txt"
+			RelativePath=".\src\dev_notes.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\src\dev_notes.txt"
+			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -875,11 +875,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\baseclass\istate.h"
+			RelativePath=".\include\states\baseclass\istate.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\baseclass\istate.h"
+			RelativePath=".\include\core\states\baseclass\istate.h"
 			>
 		</File>
 		<File
@@ -1199,6 +1199,38 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\actor\psystem\particle.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\actor\psystem\particle.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\actor\psystem\particlesource.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\actor\psystem\particlesource.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\actor\psystem\particlesystem.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\actor\psystem\particlesystem.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\actor\psystem\particlesystemdescriptor.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\actor\psystem\particlesystemdescriptor.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\core\actor\camera\pathcam\pathcam.cpp"
 			>
 		</File>
@@ -1295,11 +1327,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
 			>
 		</File>
 		<File
@@ -1479,11 +1511,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\SplashState.h"
+			RelativePath=".\include\core\states\SplashState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\SplashState.h"
+			RelativePath=".\include\states\SplashState.h"
 			>
 		</File>
 		<File
@@ -1523,11 +1555,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\statemanager.h"
+			RelativePath=".\include\statemanager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\statemanager.h"
+			RelativePath=".\include\core\statemanager.h"
 			>
 		</File>
 		<File
@@ -1603,11 +1635,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\TestState.h"
+			RelativePath=".\include\core\states\TestState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\TestState.h"
+			RelativePath=".\include\states\TestState.h"
 			>
 		</File>
 		<File

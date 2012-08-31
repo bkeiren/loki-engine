@@ -5,6 +5,7 @@
 
 #include <list>
 #include <Windows.h>
+#include <sstream>
 
 /*
 	This file is included in util.h to provide the implementation details of templated functions.
@@ -62,6 +63,14 @@ inline void Sleep( unsigned int _ms )
 #else
 #error "util::Sleep has no implementation for non-WIN32 platforms"
 #endif
+}
+
+template< typename _T >
+std::string LexicalCast( _T _Argument )
+{
+	std::stringstream ss;
+	ss << _Argument;
+	return ss.str();
 }
 
 }
