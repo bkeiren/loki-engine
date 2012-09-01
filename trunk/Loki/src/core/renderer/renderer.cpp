@@ -25,6 +25,8 @@
 #include "core/game/level/level.h"
 #include "core/game/level/skybox/skybox.h"
 
+#include "core/actor/psystem/particlesystem.h"
+
 using namespace loki;
 using namespace loki::renderer;
 
@@ -275,6 +277,8 @@ void LkRenderer::Render( game::LkLevel* _Level )
 	glViewport(0, 0, m_Window->GetWidth(), m_Window->GetHeight());
 	
 		_RenderOpaqueGeometry();
+
+		_RenderParticles();
 
 		// Draw debug stuff.
 		debug::DrawItems(m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix(), m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix());
@@ -812,7 +816,7 @@ void LkRenderer::_RenderParticles()
 	const game::LkLevel::ParticleSystems* systems = m_CurrentLevelToRender->GetParticleSystems();
 	for (game::LkLevel::ParticleSystems::const_iterator it = systems->begin(); it != systems->end(); ++it)
 	{
-		(*it).
+		(*it).second->Render(m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix(), m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix());
 	}
 }
 

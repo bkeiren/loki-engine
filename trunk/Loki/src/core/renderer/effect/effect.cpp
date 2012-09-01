@@ -90,7 +90,7 @@ LkEffectParameter* LkEffect::GetParameterBySemantic( const std::string& _Semanti
 		return effectparameter;
 	}
 
-	LOG(VL_ERROR, "Effect::GetParameterBySemantic: Parameter with semantic '%s' does not exists", _Semantic);
+	LOG(VL_ERROR, "Effect::GetParameterBySemantic: Parameter with semantic '%s' does not exists", _Semantic.c_str());
 	return 0;
 }
 

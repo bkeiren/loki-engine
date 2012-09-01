@@ -1,0 +1,81 @@
+// Strucure for input data as sent by the application.
+struct VertexInput
+{
+	in float3 Position 	: ATTR0;
+	in float2 Tex		: ATTR8;
+};
+
+// Structure for data transferred from the vertex to the fragment program.
+struct VertexOutput
+{
+	float4 PosH		: HPOS;
+	float4 PosS		: TEXCOORD0;
+	float2 Tex		: TEXCOORD2;
+	float Depth		: TEXCOORD5;
+};
+
+// Structure for data output from the fragment program.
+struct FragmentOutput
+{
+	float4 Color0	: COLOR0;
+	float4 Color1	: COLOR1;
+	float4 Color2	: COLOR2;
+	float4 Color3	: COLOR3;
+	float Depth		: DEPTH;
+	// NOTE: COLOR* semantics go from 0 through 7, according to http://http.developer.nvidia.com/Cg/glslf.html
+};
+
+// Additional input data that we don't want to have in the VertexInput struct.
+sampler2D DiffuseSampler		: LKDIFFUSETEX;
+sampler2D EmissiveSampler		: LKEMISSIVETEX;
+float4x4 ModelViewProjection	: LKMODELVIEWPROJ;
+float4x4 ModelMatrix			: LKMODELMATRIX;
+float4x4 ViewMatrix				: LKVIEWMATRIX;
+float Scale						: LKMODELSCALE;
+
+// Vertex program entry point.
+VertexOutput mainVP( VertexInput IN )
+{
+	VertexOutput OUT;
+	
+	OUT.PosH = mul(ModelViewProjection, float4(IN.Position * Scale, 1.0));
+	OUT.PosS = mul(mul(ViewMatrix, ModelMatrix), float4(IN.Position * Scale, 1));
+	OUT.Tex = IN.Tex;
+	OUT.Depth = OUT.PosH.z;
+
+	return OUT;
+}
+
+float LinearizeDepth( float _NonLinearDepth )
+{
+	return (2.0 * zFar * zNear / (zFar + zNear - (zFar - zNear) * (2 * _NonLinearDepth - 1.0))) / zFar;
+}
+
+// Fragment program entry point.
+FragmentOutput mainFP( VertexOutput IN )
+{
+	FragmentOutput OUT;
+	
+	//OUT.Depth = IN.Depth;
+	OUT.Color0 = float4(tex2D(DiffuseSampler, IN.Tex).rgb, 1.0);
+	OUT.Color3 = float4(tex2D(EmissiveSampler, IN.Tex).rgb, 1.0);
+
+	return OUT;
+}
+
+technique t0
+{
+	pass p0
+	{
+		CullFaceEnable = false;
+		DepthTestEnable = true;
+		DepthFunc = LEqual;
+		DepthMask = false;
+		BlendEnable = false;
+		ColorMask = bool4(true, true, true, true);
+		StencilEnable = false;
+
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = compile latest mainFP();
+	}
+}
