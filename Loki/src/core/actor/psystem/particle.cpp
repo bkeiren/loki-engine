@@ -18,7 +18,8 @@ LkParticle::LkParticle()	:
 	m_Age(0.0f),
 	m_Lifetime(1.0f),
 	m_Color(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)),
-	m_Callback(&DummyParticleCallback)
+	m_Callback(&DummyParticleCallback),
+	m_Size(1.0f)
 {
 	memset(m_UserData, 0, 8 * sizeof(void*));
 }
@@ -49,6 +50,7 @@ void LkParticle::Reset()
 	m_IsAlive = false;
 	m_Age = 0.0f;
 	m_Color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	m_Size = 1.0f;
 	SetCallback(0);
 	SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetOrientation(glm::quat());

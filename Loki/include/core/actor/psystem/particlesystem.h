@@ -15,6 +15,11 @@ namespace game
 	class LkLevel;
 }
 
+namespace renderer
+{
+	class LkEffect;
+}
+
 class LkParticleSource;
 
 class LkParticleSystem	: public LkActor
@@ -32,7 +37,7 @@ public:
 	const glm::vec3& GetPosition() const;
 	void SetPosition( const glm::vec3& _Position );
 
-	void Render();
+	void Render( const glm::mat4& _ViewMatrix, const glm::mat4& _ProjectionMatrix );
 private:
 	LkParticleSystem( LkParticleSystemDescriptor& _Descriptor, const char* _Name, game::LkLevel* _Level );
 	LkParticleSystem();
@@ -42,6 +47,8 @@ private:
 
 	LkParticleSystemDescriptor m_Descriptor;
 	ParticleSources m_Sources;
+
+	static renderer::LkEffect* m_CGEffect;
 };
 
 }
