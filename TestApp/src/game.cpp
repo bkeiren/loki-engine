@@ -29,6 +29,11 @@ using namespace loki;
 
 physics::LkRigidBody* body = NULL;
 
+void testcb( LkParticle* _Particle )
+{
+	LOG(VL_NORMAL, "LOL");
+}
+
 MyGame::MyGame()
 {
 
@@ -234,6 +239,16 @@ bool MyGame::Init()
 // 			slider->RegisterCallback(OCB_SLIDER_VALUE_RELEASE, testcallback2);
 		}
 	}*/
+
+	LkParticleSystemDescriptor descr;
+	LkParticleSourceDescriptor& srcdescr = descr.AddSource();
+	
+	srcdescr.m_Lifetime = 2.0f;
+	srcdescr.m_Quota = 256;
+	srcdescr.m_SpawnRate = 128;
+	srcdescr.m_Callback = &testcb;
+
+	LkParticleSystem* ps = m_Level->SpawnParticleSystem(descr);
 
 	return true;
 }

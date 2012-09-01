@@ -5,15 +5,12 @@
 namespace loki
 {
 
-LkParticleSource::LkParticleSource( int _Quota /* = 1 */ )	:
-	m_SpawnRate(1.0f),
+LkParticleSource::LkParticleSource( const LkParticleSourceDescriptor& _Descriptor )	:
+	m_Descriptor(_Descriptor),
 	m_Age(0.0f),
-	m_Lifetime(0.0f),
-	m_Birth(0.0f),
-	m_AgeSinceLastSpawn(0.0f),
-	m_SpawnQuota(1)
+	m_AgeSinceLastSpawn(0.0f)
 {
-	SetQuota(_Quota);
+	SetQuota(m_Descriptor.m_Quota);
 }
 
 LkParticleSource::~LkParticleSource()
@@ -23,6 +20,11 @@ LkParticleSource::~LkParticleSource()
 
 void LkParticleSource::SetQuota( int _Quota )
 {
+	if (_Quota < 0)
+	{
+		return;
+	}
+
 	int PreviousQuota = GetQuota();
 
 	// If _Quota is greater than the current quota, more storage space is allocated.
@@ -34,7 +36,7 @@ void LkParticleSource::SetQuota( int _Quota )
 
 	if (CurrentQuota > PreviousQuota)
 	{
-		for (int i = PreviousQuota - 1; i < CurrentQuota; ++i)
+		for (int i = PreviousQuota; i < CurrentQuota; ++i)
 		{
 			m_Particles[i] = new LkParticle();
 		}
@@ -43,23 +45,23 @@ void LkParticleSource::SetQuota( int _Quota )
 
 int LkParticleSource::GetQuota() const
 {
-	return m_Particles.max_size();
+	return m_Particles.capacity();
 }
 
 void LkParticleSource::_Update()
 {
 	m_Age += g_Engine->GetFrameTime();
 
-	if (m_Age < m_Birth)
+	if (m_Age < m_Descriptor.m_Birth)
 	{
 		return;
 	}
 
 	m_AgeSinceLastSpawn += g_Engine->GetFrameTime();
 
-	if (m_AgeSinceLastSpawn >= (1.0f / m_SpawnRate))
+	if (m_AgeSinceLastSpawn >= (1.0f / m_Descriptor.m_SpawnRate))
 	{
-		_Spawn(m_SpawnQuota);
+		_Spawn();
 		m_AgeSinceLastSpawn = 0.0f;
 	}
 
@@ -69,17 +71,21 @@ void LkParticleSource::_Update()
 	}
 }
 
-void LkParticleSource::_Spawn( int _Quota )
+void LkParticleSource::_Spawn()
 {
+	int sq = m_Descriptor.m_SpawnQuota;
+
 	for (ParticlesIter it = m_Particles.begin(); it != m_Particles.end(); ++it)
 	{
 		if (!((*it)->IsAlive()))
 		{
 			(*it)->Resurrect();
+			(*it)->SetCallback(m_Descriptor.m_Callback);
+			memcpy_s((*it)->m_UserData, 8 * sizeof(void*), m_Descriptor.m_DefaultUserData, 8 * sizeof(void*));
 
-			--_Quota;
+			--sq;
 
-			if (_Quota <= 0)
+			if (sq <= 0)
 			{
 				return;
 			}

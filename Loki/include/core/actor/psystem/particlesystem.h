@@ -27,10 +27,14 @@ class LkParticleSystem	: public LkActor
 	typedef ParticleSources::reverse_iterator			ParticleSourcesRIter;
 	typedef ParticleSources::const_reverse_iterator		ParticleSourcesConstRIter;
 public:
-
 	const LkParticleSystemDescriptor& GetDescriptor() const;
+
+	const glm::vec3& GetPosition() const;
+	void SetPosition( const glm::vec3& _Position );
+
+	void Render();
 private:
-	LkParticleSystem( LkParticleSystemDescriptor& _Descriptor, game::LkLevel* _Level );
+	LkParticleSystem( LkParticleSystemDescriptor& _Descriptor, const char* _Name, game::LkLevel* _Level );
 	LkParticleSystem();
 	~LkParticleSystem();
 
@@ -38,9 +42,6 @@ private:
 
 	LkParticleSystemDescriptor m_Descriptor;
 	ParticleSources m_Sources;
-	static volatile unsigned int m_SystemCounter;	// Volatile because we might just access it on multiple threads when particle systems
-													// are constructed. Don't want multiple particle systems try to construct themselves
-													// with the same actor name, that wouldn't work out well.
 };
 
 }

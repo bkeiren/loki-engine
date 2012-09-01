@@ -20,6 +20,8 @@
 #define CAM_TRACKBALL	"TrackBallCam"
 #define CAM_PATH		"PathCam"
 
+#include "core/actor/psystem/particlesystemdescriptor.h"
+
 namespace loki
 {
 
@@ -30,6 +32,7 @@ class LkPointLight;
 class LkSpotLight;
 class LkDirectionalLight;
 class LkCamera;
+class LkParticleSystem;
 
 namespace game
 {
@@ -39,22 +42,22 @@ class LkSkyBox;
 class LkLevel
 {
 public:
-	typedef MAP_TYPE<ActorID, LkActor*>				Actors;
+	typedef MAP_TYPE<ActorID, LkActor*>					Actors;
 	typedef std::pair<ActorID, LkActor*>				ActorsPair;
 
-	typedef MAP_TYPE<ActorID, LkPawn*>				Pawns;
-	typedef std::pair<ActorID, LkPawn*>				PawnsPair;
+	typedef MAP_TYPE<ActorID, LkPawn*>					Pawns;
+	typedef std::pair<ActorID, LkPawn*>					PawnsPair;
 
-	typedef MAP_TYPE<ActorID, LkLight*>				Lights;
+	typedef MAP_TYPE<ActorID, LkLight*>					Lights;
 	typedef std::pair<ActorID, LkLight*>				LightsPair;
 
 	typedef MAP_TYPE<ActorID, LkPointLight*>			PointLights;
 	typedef std::pair<ActorID, LkPointLight*>			PointLightsPair;
 
-	typedef MAP_TYPE<ActorID, LkDirectionalLight*>	DirectionalLights;
-	typedef std::pair<ActorID, LkDirectionalLight*>	DirectionalLightsPair;
+	typedef MAP_TYPE<ActorID, LkDirectionalLight*>		DirectionalLights;
+	typedef std::pair<ActorID, LkDirectionalLight*>		DirectionalLightsPair;
 
-	typedef MAP_TYPE<ActorID, LkSpotLight*>			SpotLights;
+	typedef MAP_TYPE<ActorID, LkSpotLight*>				SpotLights;
 	typedef std::pair<ActorID, LkSpotLight*>			SpotLightsPair;
 
 	typedef MAP_TYPE<ActorID, LkCamera*>				Cameras;
@@ -63,6 +66,9 @@ public:
 	typedef LkCamera*(*CameraFactory)(const char*, LkLevel*);	// Camera factory function prototype.
 	typedef MAP_TYPE<const char*, CameraFactory>	CameraFactories;
 	typedef std::pair<const char*, CameraFactory>	CameraFactoriesPair;
+
+	typedef MAP_TYPE<ActorID, LkParticleSystem*>		ParticleSystems;
+	typedef std::pair<ActorID, LkParticleSystem*>		ParticleSystemsPair;
 
 	class GameRules
 	{
@@ -104,6 +110,11 @@ public:
 	void SetCurrentCamera( LkCamera* _Camera );
 	void DespawnCamera( LkCamera* _Camera );
 
+	LkParticleSystem* SpawnParticleSystem( LkParticleSystemDescriptor& _SystemDescriptor );
+	LkParticleSystem* GetParticleSystem( const char* _Name );
+	const ParticleSystems* GetParticleSystems();
+	void DespawnParticleSystem( LkParticleSystem* _ParticleSystem );
+
 	//////////////////////////////////////////////////////////////////////////
 	// Registers a factory function for a given type (Indicated by _Type).
 	// Registered types can be used to spawn cameras by passing the type
@@ -122,6 +133,7 @@ private:
 	SpotLights m_SpotLights;
 	DirectionalLights m_DirectionalLights;
 	Cameras m_Cameras;
+	ParticleSystems m_ParticleSystems;
 	LkCamera* m_CurrentCamera;
 
 	static CameraFactories m_CameraFactories;

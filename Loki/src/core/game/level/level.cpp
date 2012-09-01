@@ -4,6 +4,7 @@
 #include "core/actor/light/spot/spotlight.h"
 #include "core/actor/light/directional/directionallight.h"
 #include "core/actor/pawn/pawn.h"
+#include "core/actor/psystem/particlesystem.h"
 
 #include "core/actor/camera/camera.h"
 #include "core/actor/camera/freecam/freecam.h"
@@ -253,6 +254,44 @@ void LkLevel::DespawnCamera( LkCamera* _Camera )
 {
 	m_Cameras.erase(_Camera->GetID());
 	ERASE_ACTOR(_Camera)
+}
+
+LkParticleSystem* LkLevel::SpawnParticleSystem( LkParticleSystemDescriptor& _SystemDescriptor )
+{
+	static int cntr = 0;
+	const char* _Name = (std::string("ParticleSystem") + util::LexicalCast(cntr++)).c_str();
+
+	CHECK_IF_EXISTS("SpawnParticleSystem");
+
+	LkParticleSystem* ps = new LkParticleSystem(_SystemDescriptor, _Name, this);
+	m_ParticleSystems.insert(ParticleSystemsPair(ps->GetID(), ps));
+	INSERT_ACTOR(ps)
+
+	return ps;
+}
+
+LkParticleSystem* LkLevel::GetParticleSystem( const char* _Name )
+{
+	unsigned int hash = LkActor::GetHashForName(_Name);
+	ParticleSystems::iterator it = m_ParticleSystems.find(hash);
+	if (it == m_ParticleSystems.end())
+	{
+		return NULL;
+	}
+	return (*it).second;
+}
+
+const LkLevel::ParticleSystems* LkLevel::GetParticleSystems()
+{
+	return &m_ParticleSystems;
+}
+
+void LkLevel::DespawnParticleSystem( LkParticleSystem* _ParticleSystem )
+{
+	m_ParticleSystems.erase(_ParticleSystem->GetID());
+	ERASE_ACTOR(_ParticleSystem)
+
+	delete _ParticleSystem;
 }
 
 void LkLevel::RegisterCameraFactory( const char* _Type, CameraFactory _Factory )
