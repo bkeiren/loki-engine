@@ -84,6 +84,7 @@ private:
 	//static void RenderPreUIPostProcess();		// Renders pre-ui post processing.
 	void _RenderUIObjects();				// Renders UI objects that are not part of the standard UI.
 	void _RenderUI();						// Renders the standard UI.
+	void _RenderParticles();
 
 	void _RenderLightingPointLights();
 	void _RenderLightingDirectionalLights();

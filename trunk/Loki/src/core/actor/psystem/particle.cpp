@@ -4,11 +4,23 @@
 namespace loki
 {
 
-LkParticle::LkParticle()	:
-	m_Age(0.0f),
-	m_Lifetime(1.0f)
+namespace
 {
 
+void DummyParticleCallback( LkParticle* _Particle )
+{
+	// Do nothing.
+}
+
+}
+
+LkParticle::LkParticle()	:
+	m_Age(0.0f),
+	m_Lifetime(1.0f),
+	m_Color(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)),
+	m_Callback(&DummyParticleCallback)
+{
+	memset(m_UserData, 0, 8 * sizeof(void*));
 }
 
 LkParticle::~LkParticle()
@@ -36,8 +48,15 @@ void LkParticle::Reset()
 {
 	m_IsAlive = false;
 	m_Age = 0.0f;
+	m_Color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	SetCallback(0);
 	SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetOrientation(glm::quat());
+}
+
+void LkParticle::SetCallback( ParticleCallback _Callback )
+{
+	m_Callback = (_Callback == 0)?(&DummyParticleCallback):(_Callback);
 }
 
 void LkParticle::_Update()
@@ -53,6 +72,10 @@ void LkParticle::_Update()
 		Kill();
 		return;
 	}
+
+	// Call the callback. We don't have to check for a NULL callback because the callback will always be either valid or 
+	// pointing to the DummyParticleCallback function.
+	m_Callback(this);
 }
 
 }

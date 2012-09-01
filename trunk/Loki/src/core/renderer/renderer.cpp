@@ -289,7 +289,6 @@ void LkRenderer::Render( game::LkLevel* _Level )
 
 	//m_MRTObject->RenderLightAccumulationToBackBuffer();
 	_RenderLightAccumulationToBackBuffer();
-
 	
 #ifdef DBG_VISUALIZATIONS
 	if (m_DBG_VisualizeGBufferTargets)
@@ -806,6 +805,15 @@ void LkRenderer::_RenderUIObjects()
 void LkRenderer::_RenderUI()
 {
 	
+}
+
+void LkRenderer::_RenderParticles()
+{
+	const game::LkLevel::ParticleSystems* systems = m_CurrentLevelToRender->GetParticleSystems();
+	for (game::LkLevel::ParticleSystems::const_iterator it = systems->begin(); it != systems->end(); ++it)
+	{
+		(*it).
+	}
 }
 
 void LkRenderer::_RenderLightingPointLights()

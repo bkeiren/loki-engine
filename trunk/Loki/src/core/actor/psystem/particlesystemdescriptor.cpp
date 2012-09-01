@@ -3,7 +3,8 @@
 namespace loki
 {
 
-LkParticleSystemDescriptor::LkParticleSystemDescriptor()
+LkParticleSystemDescriptor::LkParticleSystemDescriptor()	:
+	m_Position(glm::vec3(0.0f, 0.0f, 0.0f))
 {
 
 }
@@ -11,6 +12,12 @@ LkParticleSystemDescriptor::LkParticleSystemDescriptor()
 LkParticleSystemDescriptor::~LkParticleSystemDescriptor()
 {
 
+}
+
+LkParticleSourceDescriptor& LkParticleSystemDescriptor::AddSource()
+{
+	m_SourceDescriptors.push_back(LkParticleSourceDescriptor());
+	return m_SourceDescriptors.back();
 }
 
 }
