@@ -4,6 +4,8 @@
 #define UTIL_H
 
 #include <list>
+#include <hash_map>
+#include <vector>
 #include <string>
 
 #define BYTE_TO_KB(b)	(b / 1024)
@@ -45,6 +47,25 @@
 #define CONSOLETEXTCOLOR_PINK		13
 #define CONSOLETEXTCOLOR_YELLOW		14
 #define CONSOLETEXTCOLOR_WHITE		15
+
+#define CONTAINER_MACRO_HASH_MAP( _KeyType, _ValueType, name )		 typedef stdext::hash_map<_KeyType, _ValueType>		name;				\
+																	 typedef std::pair<_KeyType, _ValueType>			name ## Pair;		\
+																	 typedef name::iterator								name ## Iter;		\
+																	 typedef name::const_iterator						name ## ConstIter;	\
+																	 typedef name::reverse_iterator						name ## RIter;		\
+																	 typedef name::const_reverse_iterator				name ## ConstRIter;
+
+#define CONTAINER_MACRO_LIST( _ValueType, name )					 typedef std::list<_ValueType>						name;				\
+																	 typedef name::iterator								name ## Iter;		\
+																	 typedef name::const_iterator						name ## ConstIter;	\
+																	 typedef name::reverse_iterator						name ## RIter;		\
+																	 typedef name::const_reverse_iterator				name ## ConstRIter;
+
+#define CONTAINER_MACRO_VECTOR( _ValueType, name )					 typedef std::vector<_ValueType>					name;				\
+																	 typedef name::iterator								name ## Iter;		\
+																	 typedef name::const_iterator						name ## ConstIter;	\
+																	 typedef name::reverse_iterator						name ## RIter;		\
+																	 typedef name::const_reverse_iterator				name ## ConstRIter;
 
 namespace loki
 {
