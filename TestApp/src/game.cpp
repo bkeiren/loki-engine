@@ -31,7 +31,7 @@ physics::LkRigidBody* body = NULL;
 
 void testcb( LkParticle* _Particle )
 {
-	LOG(VL_NORMAL, "LOL");
+	//LOG(VL_NORMAL, "LOL");
 }
 
 MyGame::MyGame()

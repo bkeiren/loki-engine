@@ -307,11 +307,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\commandlineparsing.h"
+			RelativePath=".\include\core\commandlineparsing.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\commandlineparsing.h"
+			RelativePath=".\include\commandlineparsing.h"
 			>
 		</File>
 		<File
@@ -339,11 +339,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\console\console.h"
+			RelativePath=".\include\core\console\console.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\console\console.h"
+			RelativePath=".\include\console\console.h"
 			>
 		</File>
 		<File
@@ -439,11 +439,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\engine.h"
+			RelativePath=".\include\core\engine.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\engine.h"
+			RelativePath=".\include\engine.h"
 			>
 		</File>
 		<File
@@ -875,11 +875,19 @@
 			>
 		</File>
 		<File
+			RelativePath=".\include\core\states\baseclass\istate.h"
+			>
+		</File>
+		<File
 			RelativePath=".\include\states\baseclass\istate.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\baseclass\istate.h"
+			RelativePath=".\include\core\viewsystem\IView.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\viewsystem\IViewSystem.h"
 			>
 		</File>
 		<File
@@ -1335,19 +1343,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
-			>
-		</File>
-		<File
 			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtx\quaternion.inl"
+			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
 			>
 		</File>
 		<File
 			RelativePath=".\include\math\glm\gtc\quaternion.inl"
+			>
+		</File>
+		<File
+			RelativePath=".\include\math\glm\gtx\quaternion.inl"
 			>
 		</File>
 		<File
@@ -1479,11 +1487,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\singleton.h"
+			RelativePath=".\include\core\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
+			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
@@ -1563,11 +1571,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\statemanager.h"
+			RelativePath=".\include\core\statemanager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\statemanager.h"
+			RelativePath=".\include\statemanager.h"
 			>
 		</File>
 		<File
@@ -1919,11 +1927,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.inline.h"
+			RelativePath=".\include\util.inline.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.inline.h"
+			RelativePath=".\include\util\util.inline.h"
 			>
 		</File>
 		<File
@@ -1968,6 +1976,22 @@
 		</File>
 		<File
 			RelativePath=".\include\core\renderer\geometry\vertex\vertex.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\viewsystem\View.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\viewsystem\View.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\viewsystem\ViewSystem.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\viewsystem\ViewSystem.h"
 			>
 		</File>
 		<File
