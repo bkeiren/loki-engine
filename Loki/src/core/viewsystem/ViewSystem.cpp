@@ -63,7 +63,9 @@ bool ViewSystem::SetActiveView( const char* _ViewName )
 	if (view)
 	{
 		SetActiveView(view);
+		return true;
 	}
+	return false;
 }
 
 IView* ViewSystem::GetActiveView() const
