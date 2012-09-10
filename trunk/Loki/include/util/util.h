@@ -5,6 +5,7 @@
 
 #include <list>
 #include <hash_map>
+#include <map>
 #include <vector>
 #include <string>
 
@@ -49,6 +50,13 @@
 #define CONSOLETEXTCOLOR_WHITE		15
 
 #define CONTAINER_MACRO_HASH_MAP( _KeyType, _ValueType, name )		 typedef stdext::hash_map<_KeyType, _ValueType>		name;				\
+																	 typedef std::pair<_KeyType, _ValueType>			name ## Pair;		\
+																	 typedef name::iterator								name ## Iter;		\
+																	 typedef name::const_iterator						name ## ConstIter;	\
+																	 typedef name::reverse_iterator						name ## RIter;		\
+																	 typedef name::const_reverse_iterator				name ## ConstRIter;
+
+#define CONTAINER_MACRO_MAP( _KeyType, _ValueType, name )			 typedef std::map<_KeyType, _ValueType>		name;				\
 																	 typedef std::pair<_KeyType, _ValueType>			name ## Pair;		\
 																	 typedef name::iterator								name ## Iter;		\
 																	 typedef name::const_iterator						name ## ConstIter;	\

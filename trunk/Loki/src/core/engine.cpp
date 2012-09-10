@@ -43,6 +43,8 @@
 #include "core/renderer/image/image.h"
 #include "core/renderer/image/animatedimage.h"
 
+#include "core/entitysystem/IEntitySystem.h"
+
 #ifdef _DEBUG
 // Debug defines.
 	#define WINDOW_WIDTH			1280
@@ -285,6 +287,9 @@ bool LkEngine::Init()
 	// Finalize console UI.
 	g_Console->FinalizeInitialization();
 
+	// Create entity system.
+	g_EntitySystem = CreateEntitySystem();
+
 	// Webbrowser tab creation and page loading + rendering.
 	if (true)
 	{
@@ -406,6 +411,9 @@ void LkEngine::Shutdown()
 
 	delete g_StateManager;
 	g_StateManager = NULL;
+
+	delete g_EntitySystem;
+	g_EntitySystem = NULL;
 
 	// Same kind of story as with LkConsole::FinalizeInitialization.
 	g_Console->Deinitialize();

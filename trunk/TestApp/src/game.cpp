@@ -25,6 +25,8 @@
 
 #include "core/physics/physics.h"
 
+#include "core/entitysystem/IEntitySystem.h"
+
 using namespace loki;
 
 physics::LkRigidBody* body = NULL;
@@ -249,6 +251,11 @@ bool MyGame::Init()
 	srcdescr.m_Callback = &testcb;
 
 	LkParticleSystem* ps = m_Level->SpawnParticleSystem(descr);
+
+
+
+	IEntity* entity = g_EntitySystem->SpawnEntity("TestEntity");
+	
 
 	return true;
 }
