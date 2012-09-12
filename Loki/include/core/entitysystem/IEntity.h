@@ -19,12 +19,14 @@ struct EntityID
 	
 	glm::uint32 m_ID;
 
-	bool operator == ( EntityID _ID ) const;
-	bool operator != ( EntityID _ID ) const;
-	bool operator < ( EntityID _ID ) const;
-	bool operator > ( EntityID _ID ) const;
-	bool operator <= ( EntityID _ID ) const;
-	bool operator >= ( EntityID _ID ) const;
+	bool operator == ( const EntityID& _ID ) const;
+	bool operator != ( const EntityID& _ID ) const;
+
+	// These <, >, <= and >= operators are implemented so that EntityID can be used as a key for maps.
+	bool operator < ( const EntityID& _ID ) const;
+	bool operator > ( const EntityID& _ID ) const;
+	bool operator <= ( const EntityID& _ID ) const;
+	bool operator >= ( const EntityID& _ID ) const;
 };
 
 class IEntity
@@ -46,7 +48,7 @@ public:
 
 	virtual const std::string& GetName() const = 0;
 
-	virtual const Transform& GetTransform() const = 0;
+	virtual Transform& GetTransform() = 0;
 protected:
 	IEntity();
 	virtual ~IEntity() = 0;

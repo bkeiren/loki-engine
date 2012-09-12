@@ -9,32 +9,32 @@ EntityID::EntityID()	:
 
 }
 
-bool EntityID::operator == ( EntityID _ID ) const
+bool EntityID::operator == ( const EntityID& _ID ) const
 {
 	return (m_ID == _ID.m_ID);
 }
 
-bool EntityID::operator != ( EntityID _ID ) const
+bool EntityID::operator != ( const EntityID& _ID ) const
 {
 	return (m_ID != _ID.m_ID);
 }
 
-bool EntityID::operator < ( EntityID _ID ) const
+bool EntityID::operator < ( const EntityID& _ID ) const
 {
 	return (m_ID < _ID.m_ID);
 }
 
-bool EntityID::operator > ( EntityID _ID ) const
+bool EntityID::operator > ( const EntityID& _ID ) const
 {
 	return (m_ID > _ID.m_ID);
 }
 
-bool EntityID::operator <= ( EntityID _ID ) const
+bool EntityID::operator <= ( const EntityID& _ID ) const
 {
 	return (m_ID <= _ID.m_ID);
 }
 
-bool EntityID::operator >= ( EntityID _ID ) const
+bool EntityID::operator >= ( const EntityID& _ID ) const
 {
 	return (m_ID >= _ID.m_ID);
 }

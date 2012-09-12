@@ -67,7 +67,7 @@ const std::string& Entity::GetName() const
 	return m_Name;
 }
 
-const Transform& Entity::GetTransform() const
+Transform& Entity::GetTransform()
 {
 	return m_Transform;
 }
