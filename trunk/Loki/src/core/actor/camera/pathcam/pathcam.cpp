@@ -17,14 +17,14 @@ LkPathCam::LkPathCam( const char* _Name, game::LkLevel* _Level )	:
 
 	m_PathSegment = 0;
 	m_PathPosition = 0.0f;
-	m_PathControlPoints.push_back(glm::vec3(0.0f, -10.0f, -10.0f));
-	m_PathControlPoints.push_back(glm::vec3(-10.0f, -20.0f, 0.0f));
-	m_PathControlPoints.push_back(glm::vec3(-10.0f, -10.0f, 10.0f));
-	m_PathControlPoints.push_back(glm::vec3(-5.0f, 0.0f, 0.0f));
+	m_PathControlPoints.push_back(vec3(0.0f, -10.0f, -10.0f));
+	m_PathControlPoints.push_back(vec3(-10.0f, -20.0f, 0.0f));
+	m_PathControlPoints.push_back(vec3(-10.0f, -10.0f, 10.0f));
+	m_PathControlPoints.push_back(vec3(-5.0f, 0.0f, 0.0f));
 
-	m_PathControlPoints.push_back(glm::vec3(0.0f, 0.0f, 5.0f));
-	m_PathControlPoints.push_back(glm::vec3(5.0f, 0.0f, 5.0f));
-	m_PathControlPoints.push_back(glm::vec3(-5.0f, 0.0f, 0.0f));
+	m_PathControlPoints.push_back(vec3(0.0f, 0.0f, 5.0f));
+	m_PathControlPoints.push_back(vec3(5.0f, 0.0f, 5.0f));
+	m_PathControlPoints.push_back(vec3(-5.0f, 0.0f, 0.0f));
 }
 
 LkPathCam::LkPathCam()
@@ -56,7 +56,7 @@ void LkPathCam::_OnEvent( const LkEvent& _Event )
 
 			if (m_PathSegment < m_PathControlPoints.size() - 3)
 			{
-				comp->SetPosition(glm::gtx::spline::catmullRom(m_PathControlPoints[m_PathSegment], 
+				comp->SetPosition(math::gtx::spline::catmullRom(m_PathControlPoints[m_PathSegment], 
 															   m_PathControlPoints[m_PathSegment + 1],
 															   m_PathControlPoints[m_PathSegment + 2],
 															   m_PathControlPoints[m_PathSegment + 3],
@@ -68,7 +68,7 @@ void LkPathCam::_OnEvent( const LkEvent& _Event )
 				m_PathPosition = 0.0f;
 			}
 
-			LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+			LookAt(vec3(0.0f, 0.0f, 0.0f));
 
 			if (m_PathSegment == 0)
 			{

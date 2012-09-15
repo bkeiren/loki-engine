@@ -7,7 +7,7 @@ namespace loki
 namespace renderer
 {
 
-LkAnimatedImage::LkAnimatedImage( float _Duration, int _Frames, const char* _Texture, const glm::vec2& _Position, const glm::vec2& _Size, bool _PositionIsAbsolute /* = false */, bool _SizeIsAbsolute /* = false */ )	:
+LkAnimatedImage::LkAnimatedImage( float _Duration, int _Frames, const char* _Texture, const vec2& _Position, const vec2& _Size, bool _PositionIsAbsolute /* = false */, bool _SizeIsAbsolute /* = false */ )	:
 	LkImage(_Texture, _Position, _Size, _PositionIsAbsolute, _SizeIsAbsolute),
 	m_Duration(_Duration),
 	m_Frames(_Frames),
@@ -18,7 +18,7 @@ LkAnimatedImage::LkAnimatedImage( float _Duration, int _Frames, const char* _Tex
 	SubscribeToEvent(EVENT_ONUPDATE);
 }
 
-LkAnimatedImage::LkAnimatedImage( float _Duration, int _Frames, const char* _Texture, const glm::vec3& _Position, const glm::vec2& _Size, bool _PositionIsAbsolute /* = false */, bool _SizeIsAbsolute /* = false */ )	:
+LkAnimatedImage::LkAnimatedImage( float _Duration, int _Frames, const char* _Texture, const vec3& _Position, const vec2& _Size, bool _PositionIsAbsolute /* = false */, bool _SizeIsAbsolute /* = false */ )	:
 	LkImage(_Texture, _Position, _Size, _PositionIsAbsolute, _SizeIsAbsolute),
 	m_Duration(_Duration),
 	m_Frames(_Frames),
@@ -68,8 +68,8 @@ void LkAnimatedImage::_OnEvent( const LkEvent& _Event )
 			// Set the LkImage class' UV values for rendering.
 			float t = (1.0f / m_Frames);
 			float t2 = t * m_CurrentFrame;
-			m_UVTopLeft = glm::vec2(t2, 0.0f);
-			m_UVBottomRight = glm::vec2(t2 + t, 1.0f);
+			m_UVTopLeft = vec2(t2, 0.0f);
+			m_UVBottomRight = vec2(t2 + t, 1.0f);
 
 			break;
 		}

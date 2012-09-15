@@ -40,8 +40,8 @@ class LkImage
 	typedef Textures::iterator								TexturesIter;
 	typedef Textures::const_iterator						TexturesConstIter;
 public:
-	LkImage( const char* _Texture, const glm::vec3& _Position, const glm::vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
-	LkImage( const char* _Texture, const glm::vec2& _Position, const glm::vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
+	LkImage( const char* _Texture, const vec3& _Position, const vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
+	LkImage( const char* _Texture, const vec2& _Position, const vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
 	virtual ~LkImage();
 
 	bool AddTexture( const char* _Texture );
@@ -79,36 +79,36 @@ public:
 
 	void Render();
 
-	glm::vec3 GetAbsolutePosition() const;
-	const glm::vec3& GetRelativePosition() const;
-	glm::vec2 GetAbsoluteSize() const;
-	const glm::vec2& GetRelativeSize() const;
-	glm::vec2 GetAbsoluteAnchorOffset() const;
-	const glm::vec2& GetRelativeAnchorOffset() const;
+	vec3 GetAbsolutePosition() const;
+	const vec3& GetRelativePosition() const;
+	vec2 GetAbsoluteSize() const;
+	const vec2& GetRelativeSize() const;
+	vec2 GetAbsoluteAnchorOffset() const;
+	const vec2& GetRelativeAnchorOffset() const;
 
 	bool Is3D() const;
 	void Set3D( bool _State );
 
-	void SetAbsolutePosition( const glm::vec3& _Position );	// Z-coordinate is ignored.
-	void SetAbsolutePosition( const glm::vec2& _Position );
-	void SetRelativePosition( const glm::vec3& _Position );
-	void SetRelativePosition( const glm::vec2& _Position );
-	void SetAbsoluteSize( const glm::vec2& _Size );
-	void SetRelativeSize( const glm::vec2& _Size );
+	void SetAbsolutePosition( const vec3& _Position );	// Z-coordinate is ignored.
+	void SetAbsolutePosition( const vec2& _Position );
+	void SetRelativePosition( const vec3& _Position );
+	void SetRelativePosition( const vec2& _Position );
+	void SetAbsoluteSize( const vec2& _Size );
+	void SetRelativeSize( const vec2& _Size );
 	//void SetTexture( const char* _Texture );
 	void SetAnchorPoint( EAnchorPoint _AnchorPoint );
 
 	int GetWidth() const;
 	int GetHeight() const;
 
-	glm::mat4 GetModelMatrix() const;
-	glm::mat4 Get3DModelViewProjectionMatrix() const;			// Projection * View * Model
-	glm::mat4 Get3DModelViewProjectionMatrixInverse() const;	// inverse(Model) * inverse(View) * inverse(Projection)
-	glm::mat4 GetProjectionMatrix() const;
-	glm::mat4 GetViewMatrix() const;
-	const glm::quat& GetOrientation() const;
+	mat4 GetModelMatrix() const;
+	mat4 Get3DModelViewProjectionMatrix() const;			// Projection * View * Model
+	mat4 Get3DModelViewProjectionMatrixInverse() const;	// inverse(Model) * inverse(View) * inverse(Projection)
+	mat4 GetProjectionMatrix() const;
+	mat4 GetViewMatrix() const;
+	const quat& GetOrientation() const;
 
-	void SetOrientation( const glm::quat& _Orientation );
+	void SetOrientation( const quat& _Orientation );
 
 	// Utility function if a value is required that represents the full
 	// width of the screen (For example, when setting the size of an image).
@@ -120,27 +120,27 @@ protected:
 	// These two members are just here to convenience the implementation of
 	// the AnimatedImage class.
 	//////////////////////////////////////////////////////////////////////////
-	glm::vec2 m_UVTopLeft;
-	glm::vec2 m_UVBottomRight;
+	vec2 m_UVTopLeft;
+	vec2 m_UVBottomRight;
 
 private:
 	LkImage();
 
 	// Implemented to avoid duplicate code.
-	void _Init( const char* _Texture, const glm::vec3& _Position, const glm::vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
+	void _Init( const char* _Texture, const vec3& _Position, const vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
 
 	Textures m_Textures;
 	unsigned int m_TextureIndex;
 
-	glm::vec3 m_Position;
-	glm::quat m_Orientation;
-	glm::vec2 m_Size;
+	vec3 m_Position;
+	quat m_Orientation;
+	vec2 m_Size;
 	bool m_Is3D;	// Whether the image is to be drawn in 3D.
 	EAnchorPoint m_AnchorPoint;	// Where the image's [0, 0] coordinate is located 
 						// (Top left, top middle, top right, 
 						//  left middle, center, right middle, 
 						//  bottom left, bottom middle, bottom right).
-	glm::vec2 m_AnchorPointVector;
+	vec2 m_AnchorPointVector;
 	bool m_FlipX;
 	bool m_FlipY;
 

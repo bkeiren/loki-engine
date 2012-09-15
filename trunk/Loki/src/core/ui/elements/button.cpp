@@ -1,5 +1,7 @@
 #include "core/ui/elements/button.h"
 
+#include "core/input/input.h"
+
 namespace loki
 {
 
@@ -14,7 +16,7 @@ LkOverlayElement* OverlayElementFactory_Button()
 }
 
 LkOverlayButton::LkOverlayButton()	:
-	renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(0.2f, 0.1f)),
+	renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(0.2f, 0.1f)),
 	m_ButtonState(BS_UP),
 	m_PreviousButtonState(m_ButtonState),
 	m_MouseIsOver(false),
@@ -118,7 +120,7 @@ void LkOverlayButton::_Init()
 		x = (float)atof(output.c_str());
 		y = (float)atof(output2.c_str());
 
-		LkImage::SetRelativeSize(glm::vec2(x, y));
+		LkImage::SetRelativeSize(vec2(x, y));
 	}
 }
 
@@ -196,10 +198,10 @@ void LkOverlayButton::_OnEvent( const LkEvent& _Event )
 
 bool LkOverlayButton::_MouseIsWithin() const
 {
-	glm::vec3 abspos = LkImage::GetAbsolutePosition();
-	glm::vec2 abssize = LkImage::GetAbsoluteSize();
+	vec3 abspos = LkImage::GetAbsolutePosition();
+	vec2 abssize = LkImage::GetAbsoluteSize();
 
-	glm::int2 mousepos = g_Input->GetMousePosition() /*- glm::int2(LkImage::GetAbsoluteAnchorOffset())*/;
+	int2 mousepos = g_Input->GetMousePosition() /*- int2(LkImage::GetAbsoluteAnchorOffset())*/;
 
 	return (mousepos.x >= abspos.x && mousepos.x <= abspos.x + abssize.x &&
 			mousepos.y >= abspos.y && mousepos.y <= abspos.y + abssize.y);

@@ -220,13 +220,13 @@ CONSOLE_FUNCTION(Console_CamSetPos)
 	float x = _Command->m_Arguments[0].m_Float;
 	float y = _Command->m_Arguments[1].m_Float;
 	float z = _Command->m_Arguments[2].m_Float;
-	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->SetPosition(glm::vec3(x, y, z));
+	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->SetPosition(vec3(x, y, z));
 	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_CamGetPos)
 {
-	glm::vec3 p = g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->GetPosition();
+	vec3 p = g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->GetPosition();
 	return LkConsole::CommandResult("CamPos: [%f, %f, %f]", p.x, p.y, p.z);
 }
 
@@ -236,13 +236,13 @@ CONSOLE_FUNCTION(Console_CamSetOrientation)
 	float y = _Command->m_Arguments[1].m_Float;
 	float z = _Command->m_Arguments[2].m_Float;
 	float w = _Command->m_Arguments[3].m_Float;
-	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->SetOrientation(glm::quat(x, y, z, w));
+	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->SetOrientation(quat(x, y, z, w));
 	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_CamGetOrientation)
 {
-	glm::quat o = g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->GetOrientation();
+	quat o = g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->GetOrientation();
 	return LkConsole::CommandResult("CamOrientation: [%f, %f, %f, %f]", o.x, o.y, o.z, o.w);	
 }
 
@@ -340,7 +340,7 @@ CONSOLE_FUNCTION(Console_PawnSetPos)
 		return LkConsole::CommandResult("Pawn '%s' does not exist", _Command->m_Arguments[0].m_String.c_str());
 	}
 	LkMovableComponent* comp = pawn->GetComponent<LkMovableComponent>();
-	comp->SetPosition(glm::vec3(_Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float, _Command->m_Arguments[3].m_Float));
+	comp->SetPosition(vec3(_Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float, _Command->m_Arguments[3].m_Float));
 	return LkConsole::CommandResult("");
 }
 
@@ -352,7 +352,7 @@ CONSOLE_FUNCTION(Console_PawnSetOri)
 		return LkConsole::CommandResult("Pawn '%s' does not exist", _Command->m_Arguments[0].m_String.c_str());
 	}
 	LkMovableComponent* comp = pawn->GetComponent<LkMovableComponent>();
-	comp->SetOrientation(glm::quat(_Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float, _Command->m_Arguments[3].m_Float, _Command->m_Arguments[4].m_Float));
+	comp->SetOrientation(quat(_Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float, _Command->m_Arguments[3].m_Float, _Command->m_Arguments[4].m_Float));
 	return LkConsole::CommandResult("");
 }
 

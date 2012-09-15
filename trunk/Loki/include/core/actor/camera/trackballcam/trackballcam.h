@@ -22,8 +22,8 @@ public:
 	void SetTrackBallDistance( float _Distance );
 	float GetTrackBallDistance() const;
 
-	void SetTrackBallCenter( const glm::vec3& _Center );
-	const glm::vec3& GetTrackBallCenter() const;
+	void SetTrackBallCenter( const vec3& _Center );
+	const vec3& GetTrackBallCenter() const;
 private:
 	LkTrackBallCam( const char* _Name, game::LkLevel* _Level );
 	LkTrackBallCam();
@@ -32,7 +32,7 @@ private:
 	void _OnEvent( const LkEvent& _Event );
 
 	float m_Distance;
-	glm::vec3 m_Center;
+	vec3 m_Center;
 };
 
 }

@@ -22,30 +22,30 @@ namespace renderer
 
 LkEffect* LkImage::m_CgEffect = NULL;
 
-LkImage::LkImage( const char* _Texture, const glm::vec3& _Position, const glm::vec2& _Size, bool _PositionIsAbsolute /*= false*/, bool _SizeIsAbsolute /*= false*/ )	:
+LkImage::LkImage( const char* _Texture, const vec3& _Position, const vec2& _Size, bool _PositionIsAbsolute /*= false*/, bool _SizeIsAbsolute /*= false*/ )	:
 	m_Position(_Position),
 	m_Size(_Size),
 	m_Is3D(false),
 	m_TextureIndex(0),
-	m_UVTopLeft(glm::vec2(0.0f, 0.0f)),
-	m_UVBottomRight(glm::vec2(1.0f, 1.0f)),
+	m_UVTopLeft(vec2(0.0f, 0.0f)),
+	m_UVBottomRight(vec2(1.0f, 1.0f)),
 	m_FlipX(false),
 	m_FlipY(false)
 {
 	_Init(_Texture, _Position, _Size, _PositionIsAbsolute, _SizeIsAbsolute);
 }
 
-LkImage::LkImage( const char* _Texture, const glm::vec2& _Position, const glm::vec2& _Size, bool _PositionIsAbsolute /*= false*/, bool _SizeIsAbsolute /*= false*/ )	:
-	m_Position(glm::vec3(_Position, 0.0f)),
+LkImage::LkImage( const char* _Texture, const vec2& _Position, const vec2& _Size, bool _PositionIsAbsolute /*= false*/, bool _SizeIsAbsolute /*= false*/ )	:
+	m_Position(vec3(_Position, 0.0f)),
 	m_Size(_Size),
 	m_Is3D(false),
 	m_TextureIndex(0),
-	m_UVTopLeft(glm::vec2(0.0f, 0.0f)),
-	m_UVBottomRight(glm::vec2(1.0f, 1.0f)),
+	m_UVTopLeft(vec2(0.0f, 0.0f)),
+	m_UVBottomRight(vec2(1.0f, 1.0f)),
 	m_FlipX(false),
 	m_FlipY(false)
 {
-	_Init(_Texture, glm::vec3(_Position, 0.0f), _Size, _PositionIsAbsolute, _SizeIsAbsolute);
+	_Init(_Texture, vec3(_Position, 0.0f), _Size, _PositionIsAbsolute, _SizeIsAbsolute);
 }
 
 LkImage::LkImage()
@@ -74,7 +74,7 @@ LkImage::~LkImage()
 #endif
 }
 
-void LkImage::_Init( const char* _Texture, const glm::vec3& _Position, const glm::vec2& _Size, bool _PositionIsAbsolute /*= false*/, bool _SizeIsAbsolute /*= false*/ )
+void LkImage::_Init( const char* _Texture, const vec3& _Position, const vec2& _Size, bool _PositionIsAbsolute /*= false*/, bool _SizeIsAbsolute /*= false*/ )
 {
 #ifdef USE_PBO
 	m_PBO = new LkPixelBufferObject(PBO_UNPACK, PBO_DYNAMIC_DRAW, 1);
@@ -272,16 +272,16 @@ void LkImage::Render()
 	while (m_CgEffect->HasNextPass())
 	{
 		// Need to convert the size to actual coordinates.
-		glm::vec2 size;
+		vec2 size;
 		if (Is3D())
 		{
 			size = m_Size * 2.0f;
 		}
 		else
 		{
-			size = glm::vec2(((m_Size.x * g_Renderer->GetRenderHeight()) / g_Renderer->GetRenderWidth()), m_Size.y) * 2.0f;
+			size = vec2(((m_Size.x * g_Renderer->GetRenderHeight()) / g_Renderer->GetRenderWidth()), m_Size.y) * 2.0f;
 		}
-		glm::vec3 pos = ((glm::vec3(m_Position.x, 1.0f - m_Position.y, m_Position.z) + glm::vec3(m_AnchorPointVector, 0.0f)) * 2.0f) - 1.0f;
+		vec3 pos = ((vec3(m_Position.x, 1.0f - m_Position.y, m_Position.z) + vec3(m_AnchorPointVector, 0.0f)) * 2.0f) - 1.0f;
 
 		float uv_x_left = 0.0f;
 		float uv_x_right = 0.0f;
@@ -323,33 +323,33 @@ void LkImage::Render()
 	}
 }
 
-glm::vec3 LkImage::GetAbsolutePosition() const
+vec3 LkImage::GetAbsolutePosition() const
 {
-	return glm::vec3(m_Position.x * g_Renderer->GetRenderWidth(), m_Position.y * g_Renderer->GetRenderHeight(), m_Position.z);
+	return vec3(m_Position.x * g_Renderer->GetRenderWidth(), m_Position.y * g_Renderer->GetRenderHeight(), m_Position.z);
 }
 
-const glm::vec3& LkImage::GetRelativePosition() const
+const vec3& LkImage::GetRelativePosition() const
 {
 	return m_Position;
 }
 
-glm::vec2 LkImage::GetAbsoluteSize() const
+vec2 LkImage::GetAbsoluteSize() const
 {
 	// Size values are always relative to the window HEIGHT (Not the width, not both).
-	return glm::vec2(m_Size.x * g_Renderer->GetRenderHeight(), m_Size.y * g_Renderer->GetRenderHeight());
+	return vec2(m_Size.x * g_Renderer->GetRenderHeight(), m_Size.y * g_Renderer->GetRenderHeight());
 }
 
-const glm::vec2& LkImage::GetRelativeSize() const
+const vec2& LkImage::GetRelativeSize() const
 {
 	return m_Size;
 }
 
-glm::vec2 LkImage::GetAbsoluteAnchorOffset() const
+vec2 LkImage::GetAbsoluteAnchorOffset() const
 {
-	return glm::vec2(m_AnchorPointVector.x * g_Renderer->GetRenderHeight(), m_AnchorPointVector.y * g_Renderer->GetRenderHeight());
+	return vec2(m_AnchorPointVector.x * g_Renderer->GetRenderHeight(), m_AnchorPointVector.y * g_Renderer->GetRenderHeight());
 }
 
-const glm::vec2& LkImage::GetRelativeAnchorOffset() const
+const vec2& LkImage::GetRelativeAnchorOffset() const
 {
 	return m_AnchorPointVector;
 }
@@ -364,38 +364,38 @@ void LkImage::Set3D( bool _State )
 	m_Is3D = _State;
 }
 
-void LkImage::SetAbsolutePosition( const glm::vec3& _Position )
+void LkImage::SetAbsolutePosition( const vec3& _Position )
 {
 	m_Position.x = _Position.x / g_Renderer->GetRenderWidth();
 	m_Position.y = _Position.y / g_Renderer->GetRenderHeight();
 }
 
-void LkImage::SetAbsolutePosition( const glm::vec2& _Position )
+void LkImage::SetAbsolutePosition( const vec2& _Position )
 {
 	m_Position.x = _Position.x / g_Renderer->GetRenderWidth();
 	m_Position.y = _Position.y / g_Renderer->GetRenderHeight();
 }
 
-void LkImage::SetRelativePosition( const glm::vec3& _Position )
+void LkImage::SetRelativePosition( const vec3& _Position )
 {
 	m_Position = _Position;
 }
 
-void LkImage::SetRelativePosition( const glm::vec2& _Position )
+void LkImage::SetRelativePosition( const vec2& _Position )
 {
 	m_Position.x = _Position.x;
 	m_Position.y = _Position.y;
 }
 
-void LkImage::SetAbsoluteSize( const glm::vec2& _Size )
+void LkImage::SetAbsoluteSize( const vec2& _Size )
 {
-	m_Size = glm::vec2(_Size.x / g_Renderer->GetRenderHeight(), _Size.y / g_Renderer->GetRenderHeight());
+	m_Size = vec2(_Size.x / g_Renderer->GetRenderHeight(), _Size.y / g_Renderer->GetRenderHeight());
 
 	// Recalculate anchor point vector.
 	SetAnchorPoint(m_AnchorPoint);
 }
 
-void LkImage::SetRelativeSize( const glm::vec2& _Size )
+void LkImage::SetRelativeSize( const vec2& _Size )
 {
 	m_Size = _Size;
 
@@ -420,31 +420,31 @@ void LkImage::SetAnchorPoint( EAnchorPoint _AnchorPoint )
 	switch (m_AnchorPoint)
 	{
 	case AP_TOPLEFT:
-		m_AnchorPointVector = glm::vec2(0.0f, -m_Size.y);
+		m_AnchorPointVector = vec2(0.0f, -m_Size.y);
 		break;
 	case AP_TOPMIDDLE:
-		m_AnchorPointVector = glm::vec2(-size_x * 0.5f, -m_Size.y);
+		m_AnchorPointVector = vec2(-size_x * 0.5f, -m_Size.y);
 		break;
 	case AP_TOPRIGHT:
-		m_AnchorPointVector = glm::vec2(-size_x, -m_Size.y);
+		m_AnchorPointVector = vec2(-size_x, -m_Size.y);
 		break;
 	case AP_MIDDLELEFT:
-		m_AnchorPointVector = glm::vec2(0.0f, -m_Size.y * 0.5f);
+		m_AnchorPointVector = vec2(0.0f, -m_Size.y * 0.5f);
 		break;
 	case AP_CENTER:
-		m_AnchorPointVector = glm::vec2(-size_x * 0.5f, -m_Size.y * 0.5f);
+		m_AnchorPointVector = vec2(-size_x * 0.5f, -m_Size.y * 0.5f);
 		break;
 	case AP_MIDDLERIGHT:
-		m_AnchorPointVector = glm::vec2(-size_x, -m_Size.y * 0.5f);
+		m_AnchorPointVector = vec2(-size_x, -m_Size.y * 0.5f);
 		break;
 	case AP_BOTTOMLEFT:
-		m_AnchorPointVector = glm::vec2(0.0f, 0.0f);
+		m_AnchorPointVector = vec2(0.0f, 0.0f);
 		break;
 	case AP_BOTTOMMIDDLE:
-		m_AnchorPointVector = glm::vec2(-size_x * 0.5f, 0.0f);
+		m_AnchorPointVector = vec2(-size_x * 0.5f, 0.0f);
 		break;
 	case AP_BOTTOMRIGHT:
-		m_AnchorPointVector = glm::vec2(-size_x, 0.0f);
+		m_AnchorPointVector = vec2(-size_x, 0.0f);
 		break;
 	}
 }
@@ -467,61 +467,61 @@ int LkImage::GetHeight() const
 	return 0;
 }
 
-glm::mat4 LkImage::GetModelMatrix() const
+mat4 LkImage::GetModelMatrix() const
 {
-	glm::mat4 m = glm::gtc::quaternion::mat4_cast(m_Orientation);
-	m = glm::gtc::matrix_transform::translate(m, m_Position);
+	mat4 m = math::gtc::quaternion::mat4_cast(m_Orientation);
+	m = math::gtc::matrix_transform::translate(m, m_Position);
 	return m;
 }
 
-glm::mat4 LkImage::Get3DModelViewProjectionMatrix() const
+mat4 LkImage::Get3DModelViewProjectionMatrix() const
 {
 	if (Is3D())
 	{
 		LkCamera* cam = g_Engine->GetGame()->GetLevel()->GetCurrentCamera();
 
-		glm::mat4 proj = cam->GetProjectionMatrix();
-		//proj = glm::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, 0.1f, 100.0f);
-		glm::mat4 view = cam->GetViewMatrix();
-		glm::mat4 model = GetModelMatrix();
+		mat4 proj = cam->GetProjectionMatrix();
+		//proj = math::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, 0.1f, 100.0f);
+		mat4 view = cam->GetViewMatrix();
+		mat4 model = GetModelMatrix();
 
 		return (proj * view * model);
 	}
-	return glm::mat4();
+	return mat4();
 }
 
-glm::mat4 LkImage::Get3DModelViewProjectionMatrixInverse() const
+mat4 LkImage::Get3DModelViewProjectionMatrixInverse() const
 {
 	if (Is3D())
 	{
 		LkCamera* cam = g_Engine->GetGame()->GetLevel()->GetCurrentCamera();
 
-		glm::mat4 proj = cam->GetProjectionMatrix();
-		//proj = glm::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, 0.1f, 100.0f);
-		glm::mat4 view = cam->GetViewMatrix();
-		glm::mat4 model = GetModelMatrix();
+		mat4 proj = cam->GetProjectionMatrix();
+		//proj = math::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, 0.1f, 100.0f);
+		mat4 view = cam->GetViewMatrix();
+		mat4 model = GetModelMatrix();
 
-		return (glm::inverse(model) * glm::inverse(view) * glm::inverse(proj));
+		return (math::inverse(model) * math::inverse(view) * math::inverse(proj));
 	}
-	return glm::mat4();
+	return mat4();
 }
 
-glm::mat4 LkImage::GetProjectionMatrix() const
+mat4 LkImage::GetProjectionMatrix() const
 {
 	return g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetProjectionMatrix();
 }
 
-glm::mat4 LkImage::GetViewMatrix() const
+mat4 LkImage::GetViewMatrix() const
 {
 	return g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetViewMatrix();
 }
 
-const glm::quat& LkImage::GetOrientation() const
+const quat& LkImage::GetOrientation() const
 {
 	return m_Orientation;
 }
 
-void LkImage::SetOrientation( const glm::quat& _Orientation )
+void LkImage::SetOrientation( const quat& _Orientation )
 {
 	m_Orientation = _Orientation;
 }

@@ -13,7 +13,7 @@ LkOverlayElement* OverlayElementFactory_ProgressBar()
 }
 
 LkOverlayProgressBar::LkOverlayProgressBar()	:
-	renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f)),
+	renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(0.0f, 0.0f)),
 	m_Progress(0.0f)
 {
 	SubscribeToEvent(EVENT_POSTUPDATE);
@@ -44,9 +44,9 @@ LkOverlayProgressBar::~LkOverlayProgressBar()
 
 void LkOverlayProgressBar::SetProgress( float _Progress )
 {
-	m_Progress = glm::clamp(_Progress, 0.0f, 1.0f);
+	m_Progress = math::clamp(_Progress, 0.0f, 1.0f);
 
-	glm::vec2 v = LkImage::GetRelativeSize();
+	vec2 v = LkImage::GetRelativeSize();
 	v.x *= m_Progress;
 
 	m_BarCenterFilled->SetRelativeSize(v);
@@ -78,12 +78,12 @@ void LkOverlayProgressBar::Render()
 
 void LkOverlayProgressBar::_Init()
 {
-	m_BarStartEmpty = new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f));
-	m_BarCenterEmpty = new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f));
-	m_BarEndEmpty = new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f));
-	m_BarStartFilled = new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f));
-	m_BarCenterFilled = new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f));
-	m_BarEndFilled = new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f));
+	m_BarStartEmpty = new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(1.0f, 1.0f));
+	m_BarCenterEmpty = new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(1.0f, 1.0f));
+	m_BarEndEmpty = new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(1.0f, 1.0f));
+	m_BarStartFilled = new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(1.0f, 1.0f));
+	m_BarCenterFilled = new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(1.0f, 1.0f));
+	m_BarEndFilled = new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(1.0f, 1.0f));
 
 	const LkOverlayStyle* style = GetParentOverlay()->GetOverlayStyle();
 	std::string output;
@@ -155,7 +155,7 @@ void LkOverlayProgressBar::_Init()
 		x = (float)atof(output.c_str());
 		y = (float)atof(output2.c_str());
 
-		LkImage::SetRelativeSize(glm::vec2(x, y));
+		LkImage::SetRelativeSize(vec2(x, y));
 	}
 
 	if (!style->GetData(GetOverlayElementType(), "BarStartSizeX", output) || !style->GetData(GetOverlayElementType(), "BarStartSizeY", output2))
@@ -170,8 +170,8 @@ void LkOverlayProgressBar::_Init()
 		x = (float)atof(output.c_str());
 		y = (float)atof(output2.c_str());
 
-		m_BarStartEmpty->SetRelativeSize(glm::vec2(x, y));
-		m_BarStartFilled->SetRelativeSize(glm::vec2(x, y));
+		m_BarStartEmpty->SetRelativeSize(vec2(x, y));
+		m_BarStartFilled->SetRelativeSize(vec2(x, y));
 	}
 
 	if (!style->GetData(GetOverlayElementType(), "BarEndSizeX", output) || !style->GetData(GetOverlayElementType(), "BarEndSizeY", output2))
@@ -186,8 +186,8 @@ void LkOverlayProgressBar::_Init()
 		x = (float)atof(output.c_str());
 		y = (float)atof(output2.c_str());
 
-		m_BarEndEmpty->SetRelativeSize(glm::vec2(x, y));
-		m_BarEndFilled->SetRelativeSize(glm::vec2(x, y));
+		m_BarEndEmpty->SetRelativeSize(vec2(x, y));
+		m_BarEndFilled->SetRelativeSize(vec2(x, y));
 	}
 }
 
@@ -197,9 +197,9 @@ void LkOverlayProgressBar::_OnEvent( const LkEvent& _Event )
 	{
 	case EVENT_POSTUPDATE:
 		{
-			glm::vec3 barstartpos = LkImage::GetRelativePosition() - glm::vec3(m_BarStartEmpty->GetRelativeSize().x, 0.0f, 0.0f);
-			glm::vec3 barcenterpos = LkImage::GetRelativePosition();
-			glm::vec3 barendpos = LkImage::GetRelativePosition() + glm::vec3(LkImage::GetRelativeSize().x, 0.0f, 0.0f);
+			vec3 barstartpos = LkImage::GetRelativePosition() - vec3(m_BarStartEmpty->GetRelativeSize().x, 0.0f, 0.0f);
+			vec3 barcenterpos = LkImage::GetRelativePosition();
+			vec3 barendpos = LkImage::GetRelativePosition() + vec3(LkImage::GetRelativeSize().x, 0.0f, 0.0f);
 
 			m_BarCenterEmpty->SetRelativeSize(LkImage::GetRelativeSize());
 

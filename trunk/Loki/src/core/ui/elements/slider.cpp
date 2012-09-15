@@ -1,5 +1,6 @@
 #include "core/ui/elements/slider.h"
 #include "core/renderer/image/image.h"
+#include "core/input/input.h"
 
 namespace loki
 {
@@ -78,10 +79,10 @@ void LkOverlaySlider::Render()
 
 void LkOverlaySlider::_Init()
 {
-	m_SliderBarStart = new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f));
-	m_SliderBarCenter = new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f));
-	m_SliderBarEnd = new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f));
-	m_SliderButton = new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f));
+	m_SliderBarStart = new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(1.0f, 1.0f));
+	m_SliderBarCenter = new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(1.0f, 1.0f));
+	m_SliderBarEnd = new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(1.0f, 1.0f));
+	m_SliderButton = new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(1.0f, 1.0f));
 
 	const LkOverlayStyle* style = GetParentOverlay()->GetOverlayStyle();
 	std::string output;
@@ -157,8 +158,8 @@ void LkOverlaySlider::_Init()
 			x = (float)atof(output.c_str());
 			y = (float)atof(output2.c_str());
 
-			LkImage::SetRelativeSize(glm::vec2(x, y));
-			m_SliderBarCenter->SetRelativeSize(glm::vec2(x, y));
+			LkImage::SetRelativeSize(vec2(x, y));
+			m_SliderBarCenter->SetRelativeSize(vec2(x, y));
 		}
 
 		if (!style->GetData(GetOverlayElementType(), "BarStartSizeXHor", output) || !style->GetData(GetOverlayElementType(), "BarStartSizeYHor", output2))
@@ -173,7 +174,7 @@ void LkOverlaySlider::_Init()
 			x = (float)atof(output.c_str());
 			y = (float)atof(output2.c_str());
 
-			m_SliderBarStart->SetRelativeSize(glm::vec2(x, y));
+			m_SliderBarStart->SetRelativeSize(vec2(x, y));
 		}
 
 		if (!style->GetData(GetOverlayElementType(), "BarEndSizeXHor", output) || !style->GetData(GetOverlayElementType(), "BarEndSizeYHor", output2))
@@ -188,7 +189,7 @@ void LkOverlaySlider::_Init()
 			x = (float)atof(output.c_str());
 			y = (float)atof(output2.c_str());
 
-			m_SliderBarEnd->SetRelativeSize(glm::vec2(x, y));
+			m_SliderBarEnd->SetRelativeSize(vec2(x, y));
 		}
 
 		if (!style->GetData(GetOverlayElementType(), "ButtonSizeXHor", output) || !style->GetData(GetOverlayElementType(), "ButtonSizeYHor", output2))
@@ -203,7 +204,7 @@ void LkOverlaySlider::_Init()
 			x = (float)atof(output.c_str());
 			y = (float)atof(output2.c_str());
 
-			m_SliderButton->SetRelativeSize(glm::vec2(x, y));
+			m_SliderButton->SetRelativeSize(vec2(x, y));
 		}
 	}
 	else if (m_Orientation == SO_VERTICAL)
@@ -276,8 +277,8 @@ void LkOverlaySlider::_Init()
 			x = (float)atof(output.c_str());
 			y = (float)atof(output2.c_str());
 
-			LkImage::SetRelativeSize(glm::vec2(x, y));
-			m_SliderBarCenter->SetRelativeSize(glm::vec2(x, y));
+			LkImage::SetRelativeSize(vec2(x, y));
+			m_SliderBarCenter->SetRelativeSize(vec2(x, y));
 		}
 
 		if (!style->GetData(GetOverlayElementType(), "BarStartSizeXVer", output) || !style->GetData(GetOverlayElementType(), "BarStartSizeYVer", output2))
@@ -292,7 +293,7 @@ void LkOverlaySlider::_Init()
 			x = (float)atof(output.c_str());
 			y = (float)atof(output2.c_str());
 
-			m_SliderBarStart->SetRelativeSize(glm::vec2(x, y));
+			m_SliderBarStart->SetRelativeSize(vec2(x, y));
 		}
 
 		if (!style->GetData(GetOverlayElementType(), "BarEndSizeXVer", output) || !style->GetData(GetOverlayElementType(), "BarEndSizeYVer", output2))
@@ -307,7 +308,7 @@ void LkOverlaySlider::_Init()
 			x = (float)atof(output.c_str());
 			y = (float)atof(output2.c_str());
 
-			m_SliderBarEnd->SetRelativeSize(glm::vec2(x, y));
+			m_SliderBarEnd->SetRelativeSize(vec2(x, y));
 		}
 
 		if (!style->GetData(GetOverlayElementType(), "ButtonSizeXVer", output) || !style->GetData(GetOverlayElementType(), "ButtonSizeYVer", output2))
@@ -322,7 +323,7 @@ void LkOverlaySlider::_Init()
 			x = (float)atof(output.c_str());
 			y = (float)atof(output2.c_str());
 
-			m_SliderButton->SetRelativeSize(glm::vec2(x, y));
+			m_SliderButton->SetRelativeSize(vec2(x, y));
 		}
 	}
 }
@@ -371,12 +372,12 @@ void LkOverlaySlider::_OnEvent( const LkEvent& _Event )
 		}
 	case EVENT_POSTUPDATE:
 		{
-			glm::vec3 SliderCenterPos = LkImage::GetRelativePosition();
+			vec3 SliderCenterPos = LkImage::GetRelativePosition();
 			m_SliderBarCenter->SetRelativePosition(SliderCenterPos);
 
-			glm::vec2 SliderBarStartPos;
-			glm::vec2 SliderBarEndPos;
-			glm::vec2 SliderButtonPos;
+			vec2 SliderBarStartPos;
+			vec2 SliderBarEndPos;
+			vec2 SliderButtonPos;
 
 			switch (m_Orientation)
 			{
@@ -384,9 +385,9 @@ void LkOverlaySlider::_OnEvent( const LkEvent& _Event )
 				{
 					float offset = m_Position * LkImage::GetRelativeSize().x * 0.5f;
 
-					SliderBarStartPos = glm::vec2(SliderCenterPos.x - m_SliderBarStart->GetRelativeSize().x * 0.5f, SliderCenterPos.y);
-					SliderBarEndPos = glm::vec2(SliderCenterPos.x + LkImage::GetRelativeSize().x * 0.5f, SliderCenterPos.y);
-					SliderButtonPos = glm::vec2(SliderCenterPos.x + offset, SliderCenterPos.y);
+					SliderBarStartPos = vec2(SliderCenterPos.x - m_SliderBarStart->GetRelativeSize().x * 0.5f, SliderCenterPos.y);
+					SliderBarEndPos = vec2(SliderCenterPos.x + LkImage::GetRelativeSize().x * 0.5f, SliderCenterPos.y);
+					SliderButtonPos = vec2(SliderCenterPos.x + offset, SliderCenterPos.y);
 
 					break;
 				}
@@ -394,9 +395,9 @@ void LkOverlaySlider::_OnEvent( const LkEvent& _Event )
 				{
 					float offset = m_Position * LkImage::GetRelativeSize().y * 0.5f;
 
-					SliderBarStartPos = glm::vec2(SliderCenterPos.x, SliderCenterPos.y - m_SliderBarStart->GetRelativeSize().y * 0.5f);
-					SliderBarEndPos = glm::vec2(SliderCenterPos.x, SliderCenterPos.y + LkImage::GetRelativeSize().y * 0.5f);
-					SliderButtonPos = glm::vec2(SliderCenterPos.x, SliderCenterPos.y + offset);
+					SliderBarStartPos = vec2(SliderCenterPos.x, SliderCenterPos.y - m_SliderBarStart->GetRelativeSize().y * 0.5f);
+					SliderBarEndPos = vec2(SliderCenterPos.x, SliderCenterPos.y + LkImage::GetRelativeSize().y * 0.5f);
+					SliderButtonPos = vec2(SliderCenterPos.x, SliderCenterPos.y + offset);
 
 					break;
 				}
@@ -428,7 +429,7 @@ void LkOverlaySlider::_OnEvent( const LkEvent& _Event )
 void LkOverlaySlider::_SetPosition( float _Position )
 {
 	m_Position = _Position;
-	m_Position = glm::clamp(m_Position, 0.0f, 1.0f);
+	m_Position = math::clamp(m_Position, 0.0f, 1.0f);
 
 	// Clamp to nearest step if required.
 	_ResolveStep();

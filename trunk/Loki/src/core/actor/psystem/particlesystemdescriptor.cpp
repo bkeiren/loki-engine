@@ -4,7 +4,7 @@ namespace loki
 {
 
 LkParticleSystemDescriptor::LkParticleSystemDescriptor()	:
-	m_Position(glm::vec3(0.0f, 0.0f, 0.0f))
+	m_Position(vec3(0.0f, 0.0f, 0.0f))
 {
 
 }

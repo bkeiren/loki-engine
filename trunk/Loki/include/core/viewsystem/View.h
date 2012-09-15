@@ -17,8 +17,8 @@ public:
 	IEntity* GetLinkedEntity() const;
 	void LinkTo( IEntity* _Link );
 
-	const glm::mat4& GetProjectionMatrix();
-	glm::mat4 GetViewMatrix();
+	const mat4& GetProjectionMatrix();
+	mat4 GetViewMatrix();
 
 	void SetFoV( float _FoV );
 	float GetFoV() const;
@@ -29,9 +29,9 @@ public:
 	void SetZNear( float _ZNear );
 	float GetZNear() const;
 
-	const glm::int2& GetViewport() const;	
+	const int2& GetViewport() const;	
 
-	const glm::vec4& GetOrthoViewport() const;
+	const vec4& GetOrthoViewport() const;
 
 	float GetAspectRatio() const;
 
@@ -45,9 +45,9 @@ private:
 	std::string m_Name;
 	IEntity* m_LinkedEntity;
 
-	glm::mat4 m_ProjectionMatrix;
-	glm::int2 m_Viewport;
-	glm::vec4 m_OrthoViewport;
+	mat4 m_ProjectionMatrix;
+	int2 m_Viewport;
+	vec4 m_OrthoViewport;
 	EProjectionType m_ProjectionType;
 	float m_FoV;
 	float m_ZFar;

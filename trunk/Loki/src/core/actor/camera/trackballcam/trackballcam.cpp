@@ -1,4 +1,5 @@
 #include "core/actor/camera/trackballcam/trackballcam.h"
+#include "core/input/input.h"
 
 namespace loki
 {
@@ -11,7 +12,7 @@ LkCamera* CameraFactoryTrackBallCam( const char* _Name, game::LkLevel* _Level )
 LkTrackBallCam::LkTrackBallCam( const char* _Name, game::LkLevel* _Level )	:
 	LkCamera(_Name, _Level),
 	m_Distance(5.0f),
-	m_Center(glm::vec3(0.0f, 0.0f, 0.0f))
+	m_Center(vec3(0.0f, 0.0f, 0.0f))
 {
 	SubscribeToEvent(EVENT_ONUPDATE);
 }
@@ -36,12 +37,12 @@ float LkTrackBallCam::GetTrackBallDistance() const
 	return m_Distance;
 }
 
-void LkTrackBallCam::SetTrackBallCenter( const glm::vec3& _Center )
+void LkTrackBallCam::SetTrackBallCenter( const vec3& _Center )
 {
 	m_Center = _Center;
 }
 
-const glm::vec3& LkTrackBallCam::GetTrackBallCenter() const
+const vec3& LkTrackBallCam::GetTrackBallCenter() const
 {
 	return m_Center;
 }
@@ -60,7 +61,7 @@ void LkTrackBallCam::_OnEvent( const LkEvent& _Event )
 
 			if (g_Input->Get(BUTTON_MOUSELEFT) == KEYSTATE_DOWN)
 			{
-				glm::int2 mouseDelta = -g_Input->GetMouseDelta();
+				int2 mouseDelta = -g_Input->GetMouseDelta();
 				movcomp->RotateX((float)mouseDelta.y / 3);
 				movcomp->RotateLocalY((float)mouseDelta.x / 3);
 			}

@@ -10,7 +10,7 @@ LkCamera::LkCamera( const char* _Name, game::LkLevel* _Level )	:
 	m_FoVY(45.0f),
 	m_ZFar(500.0f),
 	m_ZNear(0.1f),
-	m_Viewport(glm::int2(64, 64)),
+	m_Viewport(int2(64, 64)),
 	m_ProjectionType(PROJECTION_PERSPECTIVE),
 	m_ProjectionMatrixIsDirty(true)
 {
@@ -31,13 +31,13 @@ LkCamera::~LkCamera()
 	
 }
 
-void LkCamera::LookAt( const glm::vec3& _Target )
+void LkCamera::LookAt( const vec3& _Target )
 {
 	LkMovableComponent* movcomp = GetComponent<LkMovableComponent>();
 
-	glm::mat4x4 mat = glm::gtc::matrix_transform::lookAt(-movcomp->GetPosition(), -_Target, math::GlobalY);
+	mat4x4 mat = math::gtc::matrix_transform::lookAt(-movcomp->GetPosition(), -_Target,	GlobalY);
 	movcomp->SetTransformation(mat);
-	movcomp->SetOrientation(glm::gtc::quaternion::quat_cast(mat));
+	movcomp->SetOrientation(math::gtc::quaternion::quat_cast(mat));
 }
 
 void LkCamera::ApplyViewport()
@@ -50,8 +50,8 @@ void LkCamera::ApplyProjectionMatrix()
 	glMatrixMode(GL_PROJECTION);	// Deprecated.
 
 	(m_ProjectionType == PROJECTION_PERSPECTIVE)?
-		(m_ProjectionMatrix = glm::gtc::matrix_transform::perspective(m_FoVY, GetAspectRatio(), m_ZNear, m_ZFar)):
-		(m_ProjectionMatrix = glm::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, m_ZNear, m_ZFar));
+		(m_ProjectionMatrix = math::gtc::matrix_transform::perspective(m_FoVY, GetAspectRatio(), m_ZNear, m_ZFar)):
+		(m_ProjectionMatrix = math::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, m_ZNear, m_ZFar));
 	glLoadMatrixf((GLfloat*)&m_ProjectionMatrix);
 }
 
@@ -60,26 +60,26 @@ void LkCamera::ApplyViewTransformation()
 	glMatrixMode(GL_MODELVIEW);	// Deprecated.
 
 	LkMovableComponent* comp = GetComponent<LkMovableComponent>();
-	glm::mat4x4 mat = glm::inverse(comp->GetTransformation());
+	mat4x4 mat = math::inverse(comp->GetTransformation());
 	glLoadMatrixf((float*)&mat);	// Load the camera matrix.
 }
 
-const glm::mat4& LkCamera::GetProjectionMatrix()
+const mat4& LkCamera::GetProjectionMatrix()
 {
 	if (m_ProjectionMatrixIsDirty)
 	{
 		(m_ProjectionType == PROJECTION_PERSPECTIVE)?
-			(m_ProjectionMatrix = glm::gtc::matrix_transform::perspective(m_FoVY, GetAspectRatio(), m_ZNear, m_ZFar)):
-			(m_ProjectionMatrix = glm::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, m_ZNear, m_ZFar));
+			(m_ProjectionMatrix = math::gtc::matrix_transform::perspective(m_FoVY, GetAspectRatio(), m_ZNear, m_ZFar)):
+			(m_ProjectionMatrix = math::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, m_ZNear, m_ZFar));
 		m_ProjectionMatrixIsDirty = false;
 	}
 	return m_ProjectionMatrix;
 }
 
-glm::mat4 LkCamera::GetViewMatrix()
+mat4 LkCamera::GetViewMatrix()
 {
 	LkMovableComponent* comp = GetComponent<LkMovableComponent>();
-	glm::mat4 mat = glm::inverse(comp->GetTransformation());
+	mat4 mat = math::inverse(comp->GetTransformation());
 	return mat;
 }
 
@@ -116,7 +116,7 @@ float LkCamera::GetZNear() const
 	return m_ZNear;
 }
 
-void LkCamera::SetViewport( const glm::int2& _Viewport )
+void LkCamera::SetViewport( const int2& _Viewport )
 {
 	m_Viewport = _Viewport;
 
@@ -128,7 +128,7 @@ void LkCamera::SetViewport( const glm::int2& _Viewport )
 	m_ProjectionMatrixIsDirty = true;
 }
 
-const glm::int2& LkCamera::GetViewport() const
+const int2& LkCamera::GetViewport() const
 {
 	return m_Viewport;
 }
@@ -144,22 +144,22 @@ void LkCamera::SetProjectionType( bool _Projection )
 	m_ProjectionMatrixIsDirty = true;
 }
 
-glm::vec3 LkCamera::GetCameraToViewportVector( const glm::int2& _ViewportCoordinates )
+vec3 LkCamera::GetCameraToViewportVector( const int2& _ViewportCoordinates )
 {
-	glm::int2 c = glm::int2(_ViewportCoordinates.x, _ViewportCoordinates.y);
+	int2 c = int2(_ViewportCoordinates.x, _ViewportCoordinates.y);
 
-	glm::mat4 viewmat = GetViewMatrix();
-	glm::mat4 projmat = GetProjectionMatrix();
-	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, m_Viewport.x, m_Viewport.y);
-	glm::vec3 a = glm::gtc::matrix_transform::unProject(glm::vec3((float)c.x, (float)c.y, 0.0f), 
+	mat4 viewmat = GetViewMatrix();
+	mat4 projmat = GetProjectionMatrix();
+	vec4 viewport = vec4(0.0f, 0.0f, m_Viewport.x, m_Viewport.y);
+	vec3 a = math::gtc::matrix_transform::unProject(vec3((float)c.x, (float)c.y, 0.0f), 
 														viewmat, 
 														projmat, 
 														viewport);
-	glm::vec3 b = glm::gtc::matrix_transform::unProject(glm::vec3((float)c.x, (float)c.y, 1.0f),
+	vec3 b = math::gtc::matrix_transform::unProject(vec3((float)c.x, (float)c.y, 1.0f),
 														viewmat,
 														projmat,
 														viewport);
-	return glm::normalize(b - a);
+	return math::normalize(b - a);
 }
 
 std::string LkCamera::ToString()

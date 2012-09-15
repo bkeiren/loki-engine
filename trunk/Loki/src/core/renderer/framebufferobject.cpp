@@ -10,7 +10,7 @@ namespace renderer
 LkFramebufferObject::LkFramebufferObject( unsigned int _Width, unsigned int _Height, const std::vector<LkRenderBufferInfo>& _RenderBuffersInfo )	:
 	m_Width(_Width),
 	m_Height(_Height),
-	m_ClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)),
+	m_ClearColor(vec4(0.0f, 0.0f, 0.0f, 1.0f)),
 	m_ClearDepth(1.0f),
 	m_ClearStencil(0),
 	m_FBO(0)
@@ -207,7 +207,7 @@ void LkFramebufferObject::SetDrawBuffer( EAttachment _Buffer )
 	glDrawBuffer(_Buffer);
 }
 
-void LkFramebufferObject::SetClearColor( const glm::vec4& _Color )
+void LkFramebufferObject::SetClearColor( const vec4& _Color )
 {
 	m_ClearColor = _Color;
 }

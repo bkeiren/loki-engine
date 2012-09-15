@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include "core/html/htmlcore.h"
 #include "core/renderer/renderer.h"
+#include "core/input/input.h"
 
 using namespace loki;
 

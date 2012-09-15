@@ -37,7 +37,7 @@ public:
 	bool IsDown() const;
 	bool IsMouseOver() const;
 
-	//static void SetDefaultSize( const glm::vec2& _DefaultSize );
+	//static void SetDefaultSize( const vec2& _DefaultSize );
 protected:
 	LkOverlayButton();
 	virtual ~LkOverlayButton();

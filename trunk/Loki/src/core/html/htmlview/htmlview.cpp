@@ -5,6 +5,8 @@
 #include "core/renderer/renderer.h"
 #include "core/renderer/image/image.h"
 #include "util/clock/clock.h"
+#include "core/input/input.h"
+
 namespace loki
 {
 
@@ -13,7 +15,7 @@ LkHTMLView::LkHTMLView( Awesomium::WebView* _WebView, LkHTMLCore* _ParentBrowser
 	m_ParentCore(NULL),
 	m_Width(_Width),
 	m_Height(_Height),
-	m_RenderImage(new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(_Width, _Height), false, true)),
+	m_RenderImage(new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(_Width, _Height), false, true)),
 	m_LastRenderbuffer(0),
 	m_Active(true),
 	m_Layer(0),
@@ -241,13 +243,13 @@ float LkHTMLView::GetAlphaAt( int _X, int _Y ) const
 
 float LkHTMLView::GetAlphaAtCursor()	const
 {
-	glm::int2 m = TranslateGlobalMousePositionToLocal(g_Input->GetMousePosition());
+	int2 m = TranslateGlobalMousePositionToLocal(g_Input->GetMousePosition());
 	return GetAlphaAt(m.x, m.y);
 }
 
-glm::int2 LkHTMLView::TranslateGlobalMousePositionToLocal( const glm::int2& _GlobalPosition ) const
+int2 LkHTMLView::TranslateGlobalMousePositionToLocal( const int2& _GlobalPosition ) const
 {
-	return (g_Input->GetMousePosition() - glm::int2(m_RenderImage->GetAbsolutePosition()));
+	return (g_Input->GetMousePosition() - int2(m_RenderImage->GetAbsolutePosition()));
 }
 
 void LkHTMLView::Resize( int _Width, int _Height, bool _WaitForRepaint /*= true*/, int _RepaintTimeoutMs /*= 300*/ )
@@ -256,7 +258,7 @@ void LkHTMLView::Resize( int _Width, int _Height, bool _WaitForRepaint /*= true*
 	m_Width = _Width;
 	m_Height = _Height;
 
-	m_RenderImage->SetAbsoluteSize(glm::vec2(m_Width, m_Height));
+	m_RenderImage->SetAbsoluteSize(vec2(m_Width, m_Height));
 }
 
 int LkHTMLView::GetWidth() const

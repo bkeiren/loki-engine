@@ -23,7 +23,7 @@ public:
 	int			m_Quota;		// Maximum number of particles that can be alive at any one time.
 	int			m_SpawnQuota;	// Number of particles to spawn per spawning-moment.
 	void*		m_DefaultUserData[8];	// Default user data.
-	glm::vec3	m_Position;		// Source position, relative to system position.
+	vec3	m_Position;		// Source position, relative to system position.
 	LkParticle::ParticleCallback m_Callback;	// Particle callback function which is called every frame.
 private:
 	LkParticleSourceDescriptor();

@@ -24,7 +24,7 @@ public:
 
 	LkParticleSourceDescriptor& AddSource();
 
-	glm::vec3 m_Position;	// Particle system origin.
+	vec3 m_Position;	// Particle system origin.
 private:
 	ParticleSources m_SourceDescriptors;
 };

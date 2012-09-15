@@ -101,6 +101,13 @@
 #include "math/glm/gtx/verbose_operator.hpp"
 #include "math/glm/gtx/wrap.hpp"
 
+namespace loki
+{
+
+// Use 'math' as an alias for GLM.
+namespace math = glm;
+
+}
 
 // Common math.
 #include "math/math_common.h"

@@ -41,8 +41,8 @@ public:
 	float GetFixedTimeStep() const;
 	void SetFixedTimeStep( float _TimeStep );
 
-	void SetGravity( const glm::vec3& _Gravity );
-	glm::vec3 GetGravity() const;
+	void SetGravity( const vec3& _Gravity );
+	vec3 GetGravity() const;
 
 	LkRigidBody* AddRigidBody( const RigidBodyInfo& _Info );
 	void RemoveRigidBody( LkRigidBody* _Body );

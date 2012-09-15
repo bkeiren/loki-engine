@@ -1,5 +1,6 @@
 #include "core/actor/camera/freecam/freecam.h"
 #include "core/html/htmlcore.h"
+#include "core/input/input.h"
 
 namespace loki
 {
@@ -40,7 +41,7 @@ void LkFreeCam::_OnEvent( const LkEvent& _Event )
 			{
 				if (g_Input->Get(KEY_T) == KEYSTATE_DOWN)
 				{
-					LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+					LookAt(vec3(0.0f, 0.0f, 0.0f));
 				}
 
 				loki::LkMovableComponent* movcomp = GetComponent<LkMovableComponent>();
@@ -48,14 +49,14 @@ void LkFreeCam::_OnEvent( const LkEvent& _Event )
 	// 			LkHTMLView* tab = g_HTMLCore->GetWebTabInFocus();
 	// 			if (g_Input->Get(BUTTON_MOUSELEFT) == KEYSTATE_DOWN && (tab && tab->GetAlphaAtCursor() == 0.0f))
 	// 			{
-	// 				glm::int2 mouseDelta = -g_Input->GetMouseDelta();
+	// 				int2 mouseDelta = -g_Input->GetMouseDelta();
 	// 				movcomp->RotateX((float)mouseDelta.y / 3);
 	// 				movcomp->RotateLocalY((float)mouseDelta.x / 3);
 	// 			}
 
 				if (g_Input->Get(BUTTON_MOUSELEFT))
 				{
-					glm::int2 mouseDelta = -g_Input->GetMouseDelta();
+					int2 mouseDelta = -g_Input->GetMouseDelta();
 					movcomp->RotateX((float)mouseDelta.y / 3);
 					movcomp->RotateLocalY((float)mouseDelta.x / 3);
 				}

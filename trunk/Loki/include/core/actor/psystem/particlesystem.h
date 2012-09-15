@@ -34,10 +34,10 @@ class LkParticleSystem	: public LkActor
 public:
 	const LkParticleSystemDescriptor& GetDescriptor() const;
 
-	const glm::vec3& GetPosition() const;
-	void SetPosition( const glm::vec3& _Position );
+	const vec3& GetPosition() const;
+	void SetPosition( const vec3& _Position );
 
-	void Render( const glm::mat4& _ViewMatrix, const glm::mat4& _ProjectionMatrix );
+	void Render( const mat4& _ViewMatrix, const mat4& _ProjectionMatrix );
 private:
 	LkParticleSystem( LkParticleSystemDescriptor& _Descriptor, const char* _Name, game::LkLevel* _Level );
 	LkParticleSystem();

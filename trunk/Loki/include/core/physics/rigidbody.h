@@ -17,40 +17,40 @@ class LkRigidBody
 {
 	friend class LkPhysics;
 public:
-	void SetPosition( const glm::vec3& _Position, bool _PreserveForces = false );
-	glm::vec3 GetPosition() const;
+	void SetPosition( const vec3& _Position, bool _PreserveForces = false );
+	vec3 GetPosition() const;
 
-	void SetOrientation( const glm::quat& _Orientation, bool _PreserveForces = false );
+	void SetOrientation( const quat& _Orientation, bool _PreserveForces = false );
 
-	void SetTransformation( const glm::mat4& _Transformation, bool _PreserveForces = false );
+	void SetTransformation( const mat4& _Transformation, bool _PreserveForces = false );
 
-	void ApplyCentralForce( const glm::vec3& _Force );
-	void ApplyCentralImpulse( const glm::vec3& _Impulse );
+	void ApplyCentralForce( const vec3& _Force );
+	void ApplyCentralImpulse( const vec3& _Impulse );
 	void ApplyDamping( float _TimeStep );
-	void ApplyForce( const glm::vec3& _Force, const glm::vec3& _Point );
+	void ApplyForce( const vec3& _Force, const vec3& _Point );
 	void ApplyGravity();
-	void ApplyImpulse( const glm::vec3& _Impulse, const glm::vec3& _Point );
-	void ApplyTorque( const glm::vec3& _Torque );
-	void ApplyTorqueImpulse( const glm::vec3& _Torque );
+	void ApplyImpulse( const vec3& _Impulse, const vec3& _Point );
+	void ApplyTorque( const vec3& _Torque );
+	void ApplyTorqueImpulse( const vec3& _Torque );
 
 	void ClearForces();
 
-	void GetAABB( glm::vec3& _AABBMin, glm::vec3& _AABBMax ) const;
-	glm::vec3 GetCenterOfMass() const;
-	glm::vec3 GetDeltaAngularVelocity() const;
-	glm::vec3 GetDeltaLinearVelocity() const;
+	void GetAABB( vec3& _AABBMin, vec3& _AABBMax ) const;
+	vec3 GetCenterOfMass() const;
+	vec3 GetDeltaAngularVelocity() const;
+	vec3 GetDeltaLinearVelocity() const;
 	float GetFriction() const;
-	glm::vec3 GetGravity() const;
+	vec3 GetGravity() const;
 	float GetLinearDamping() const;
-	glm::vec3  GetLinearFactor() const;
-	glm::vec3 GetLinearVelocity() const;
-	glm::quat GetOrientation() const;
+	vec3  GetLinearFactor() const;
+	vec3 GetLinearVelocity() const;
+	quat GetOrientation() const;
 	float GetRestitution() const;
-	glm::vec3 GetTotalForce() const;
-	glm::vec3 GetTotalTorque() const;
-	glm::vec3 GetVelocityInLocalPoint( const glm::vec3& _Point ) const;
-	glm::mat4 GetWorldTransform() const;
-	void Translate( const glm::vec3& _Translation );
+	vec3 GetTotalForce() const;
+	vec3 GetTotalTorque() const;
+	vec3 GetVelocityInLocalPoint( const vec3& _Point ) const;
+	mat4 GetWorldTransform() const;
+	void Translate( const vec3& _Translation );
 	bool IsActive() const;
 	void Activate( bool _ForceActivation = false );
 

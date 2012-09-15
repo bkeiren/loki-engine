@@ -39,34 +39,34 @@ void LkEffectParameter::Set( int _P )
 	cgSetParameter1i((CGparameter)m_CGParameter, _P);
 }
 
-void LkEffectParameter::Set( const glm::vec2& _P )
+void LkEffectParameter::Set( const vec2& _P )
 {
-	cgSetParameter2fv((CGparameter)m_CGParameter, glm::value_ptr(_P));
+	cgSetParameter2fv((CGparameter)m_CGParameter, math::value_ptr(_P));
 }
 
-void LkEffectParameter::Set( const glm::vec3& _P )
+void LkEffectParameter::Set( const vec3& _P )
 {
-	cgSetParameter3fv((CGparameter)m_CGParameter, glm::value_ptr(_P));
+	cgSetParameter3fv((CGparameter)m_CGParameter, math::value_ptr(_P));
 }
 
-void LkEffectParameter::Set( const glm::vec4& _P )
+void LkEffectParameter::Set( const vec4& _P )
 {
-	cgSetParameter4fv((CGparameter)m_CGParameter, glm::value_ptr(_P));
+	cgSetParameter4fv((CGparameter)m_CGParameter, math::value_ptr(_P));
 }
 
-void LkEffectParameter::Set( const glm::mat2& _P )
+void LkEffectParameter::Set( const mat2& _P )
 {
-	cgSetParameterValuefc((CGparameter)m_CGParameter, 4, glm::value_ptr(_P));
+	cgSetParameterValuefc((CGparameter)m_CGParameter, 4, math::value_ptr(_P));
 }
 
-void LkEffectParameter::Set( const glm::mat3& _P )
+void LkEffectParameter::Set( const mat3& _P )
 {
-	cgSetParameterValuefc((CGparameter)m_CGParameter, 9, glm::value_ptr(_P));
+	cgSetParameterValuefc((CGparameter)m_CGParameter, 9, math::value_ptr(_P));
 }
 
-void LkEffectParameter::Set( const glm::mat4& _P )
+void LkEffectParameter::Set( const mat4& _P )
 {
-	cgSetParameterValuefc((CGparameter)m_CGParameter, 16, glm::value_ptr(_P));
+	cgSetParameterValuefc((CGparameter)m_CGParameter, 16, math::value_ptr(_P));
 }
 
 void LkEffectParameter::Set( const GLuint _P )
@@ -84,32 +84,32 @@ void LkEffectParameter::Get( int* _V )
 	cgGetParameterValueic((CGparameter)m_CGParameter, 1, _V);
 }
 
-void LkEffectParameter::Get( glm::vec2* _P )
+void LkEffectParameter::Get( vec2* _P )
 {
 	cgGetParameterValuefc((CGparameter)m_CGParameter, 2, (float*)_P);
 }
 
-void LkEffectParameter::Get( glm::vec3* _P )
+void LkEffectParameter::Get( vec3* _P )
 {
 	cgGetParameterValuefc((CGparameter)m_CGParameter, 3, (float*)_P);
 }
 
-void LkEffectParameter::Get( glm::vec4* _P )
+void LkEffectParameter::Get( vec4* _P )
 {
 	cgGetParameterValuefc((CGparameter)m_CGParameter, 4,(float*) _P);
 }
 
-void LkEffectParameter::Get( glm::mat2* _P )
+void LkEffectParameter::Get( mat2* _P )
 {
 	cgGetParameterValuefc((CGparameter)m_CGParameter, 4,(float*) _P);
 }
 
-void LkEffectParameter::Get( glm::mat3* _P )
+void LkEffectParameter::Get( mat3* _P )
 {
 	cgGetParameterValuefc((CGparameter)m_CGParameter, 9, (float*)_P);
 }
 
-void LkEffectParameter::Get( glm::mat4* _P )
+void LkEffectParameter::Get( mat4* _P )
 {
 	cgGetParameterValuefc((CGparameter)m_CGParameter, 16, (float*)_P);
 }

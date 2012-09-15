@@ -52,7 +52,7 @@ bool LkPhysics::_Init()
 	info.m_Shape = CS_STATICPLANE;
 	info.m_StaticPlaneData.m_Constant;
 	m_WorldZPlane = AddRigidBody(info);
-	m_WorldZPlane->SetPosition(glm::vec3(0.0f, -10.0f, 0.0f));
+	m_WorldZPlane->SetPosition(vec3(0.0f, -10.0f, 0.0f));
 
 #ifdef PHY_DEBUG_DRAW
 	m_DebugDrawer = new LkDebugDrawer();
@@ -99,12 +99,12 @@ void LkPhysics::SetFixedTimeStep( float _TimeStep )
 	m_FixedTimeStep = _TimeStep;
 }
 
-void LkPhysics::SetGravity( const glm::vec3& _Gravity )
+void LkPhysics::SetGravity( const vec3& _Gravity )
 {
 	m_DynamiscWorld->setGravity(BTVec3(_Gravity));
 }
 
-glm::vec3 LkPhysics::GetGravity() const
+vec3 LkPhysics::GetGravity() const
 {
 	return GLMVec3(m_DynamiscWorld->getGravity());
 }

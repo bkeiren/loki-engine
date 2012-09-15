@@ -47,7 +47,7 @@ public:
 	void SetDrawBuffers( EAttachment* _Buffers, unsigned int _NumBuffers );
 	void SetDrawBuffer( EAttachment _Buffer );
 	
-	void SetClearColor( const glm::vec4& _Color );
+	void SetClearColor( const vec4& _Color );
 	
 	void SetClearDepth( float _Depth );
 	
@@ -68,7 +68,7 @@ private:
 																				// defines a render buffer handle or a texture handle.
 	unsigned int m_Width;
 	unsigned int m_Height;
-	glm::vec4 m_ClearColor;
+	vec4 m_ClearColor;
 	float m_ClearDepth;
 	int m_ClearStencil;
 };

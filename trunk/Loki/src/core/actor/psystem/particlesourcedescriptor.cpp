@@ -12,7 +12,7 @@ LkParticleSourceDescriptor::LkParticleSourceDescriptor()	:
 	m_Quota(PARTICLESOURCE_DEFAULT_QUOTA),
 	m_SpawnQuota(1),
 	m_Callback(0),
-	m_Position(glm::vec3(0.0f, 0.0f, 0.0f))
+	m_Position(vec3(0.0f, 0.0f, 0.0f))
 {
 	memset(m_DefaultUserData, 0, 8 * sizeof(void*));
 }

@@ -29,13 +29,13 @@ public:
 	LkModel( const char* _File );
 	virtual ~LkModel();
 
-	void SetUVScale( const glm::vec2& _Scale );
-	const glm::vec2& GetUVScale() const;
-	void SetScale( const glm::vec3& _Scale );
+	void SetUVScale( const vec2& _Scale );
+	const vec2& GetUVScale() const;
+	void SetScale( const vec3& _Scale );
 	void SetScaleX( float _ScaleX );
 	void SetScaleY( float _ScaleY );
 	void SetScaleZ( float _ScaleZ );
-	const glm::vec3& GetScale() const;
+	const vec3& GetScale() const;
 	float GetScaleX() const;
 	float GetScaleY() const;
 	float GetScaleZ() const;
@@ -47,7 +47,7 @@ private:
 	void _Load();
 	void _LoadMesh( const aiScene* _aiScene );
 	void _LoadMaterials( const aiScene* _aiScene );
-	void _Render( const glm::mat4& _ModelMatrix, const glm::mat4& _ViewMatrix, const glm::mat4& _ProjectionMatrix, float _ZFar, float _ZNear );
+	void _Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat4& _ProjectionMatrix, float _ZFar, float _ZNear );
 
 	std::string m_Filename;
 
@@ -56,8 +56,8 @@ private:
 
 	LkMesh* m_Mesh;
 
-	glm::vec2 m_UVScale;
-	glm::vec3 m_Scale;
+	vec2 m_UVScale;
+	vec3 m_Scale;
 };
 
 }

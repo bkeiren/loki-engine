@@ -1,5 +1,6 @@
 #include "core/window.h"
 #include <GLEW//glew.h>
+#include "core/input/input.h"
 
 namespace loki
 {
@@ -205,7 +206,7 @@ void LkWindow::UpdateCursorImage()
 {
 	// Update the cursor image if the cursor has left the window and re-entered it.
 	static bool MouseHasLeft = false;
-	glm::int2 MousePos = g_Input->GetMousePosition();
+	int2 MousePos = g_Input->GetMousePosition();
 	if (MousePos.x < 0 || MousePos.x > GetWidth() || MousePos.y < 0 || MousePos.y > GetHeight())
 	{
 		MouseHasLeft = true;

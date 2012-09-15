@@ -168,7 +168,7 @@ public:
 	float GetAlphaAt( int _X, int _Y ) const;
 	float GetAlphaAtCursor() const;
 
-	glm::int2 TranslateGlobalMousePositionToLocal( const glm::int2& _GlobalPosition ) const;
+	int2 TranslateGlobalMousePositionToLocal( const int2& _GlobalPosition ) const;
 
 	void Resize( int _Width, int _Height, bool _WaitForRepaint = true, int _RepaintTimeoutMs = 300 );
 

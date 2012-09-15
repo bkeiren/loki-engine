@@ -45,6 +45,8 @@
 
 #include "core/entitysystem/IEntitySystem.h"
 
+#include "core/input/input.h"
+
 #ifdef _DEBUG
 // Debug defines.
 	#define WINDOW_WIDTH			1280
@@ -601,9 +603,9 @@ void LkEngine::Render()
 // 		g_HTMLCore->SetFocus(webtab);
 // 	}
 
-	static renderer::LkImage* img = new renderer::LkImage("resources//textures//default.bmp", glm::vec2(0.0f, 0.0f), glm::vec2(0.1f, 0.1f));
-	glm::int2 m = g_Input->GetMousePosition();
-	img->SetAbsolutePosition(glm::vec2(m.x, m.y));
+	static renderer::LkImage* img = new renderer::LkImage("resources//textures//default.bmp", vec2(0.0f, 0.0f), vec2(0.1f, 0.1f));
+	int2 m = g_Input->GetMousePosition();
+	img->SetAbsolutePosition(vec2(m.x, m.y));
 	img->Render();
 
 	g_Console->Render();
