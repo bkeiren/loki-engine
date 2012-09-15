@@ -22,8 +22,8 @@ public:
 	virtual IEntity* GetLinkedEntity() const = 0;
 	virtual void LinkTo( IEntity* _Link ) = 0;
 
-	virtual const glm::mat4& GetProjectionMatrix() = 0;
-	virtual glm::mat4 GetViewMatrix() = 0;
+	virtual const mat4& GetProjectionMatrix() = 0;
+	virtual mat4 GetViewMatrix() = 0;
 
 	virtual void SetFoV( float _FoV ) = 0;
 	virtual float GetFoV() const = 0;
@@ -34,9 +34,9 @@ public:
 	virtual void SetZNear( float _ZNear ) = 0;
 	virtual float GetZNear() const = 0;
 
-	virtual const glm::int2& GetViewport() const = 0;	
+	virtual const int2& GetViewport() const = 0;	
 
-	virtual const glm::vec4& GetOrthoViewport() const = 0;
+	virtual const vec4& GetOrthoViewport() const = 0;
 
 	virtual float GetAspectRatio() const = 0;
 

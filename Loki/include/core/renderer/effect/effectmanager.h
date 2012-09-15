@@ -36,9 +36,9 @@ public:
 	// Find an already created effect by name.
 	LkEffect* GetEffect( const std::string& _EffectName ) const;
 
-// 	void SetViewMatrix( const glm::mat4& _M );
-// 	void SetModelMatrix( const glm::mat4& _M );
-// 	void SetProjectionMatrix( const glm::mat4& _M );
+// 	void SetViewMatrix( const mat4& _M );
+// 	void SetModelMatrix( const mat4& _M );
+// 	void SetProjectionMatrix( const mat4& _M );
 private:
 	LkEffectManager();
 	~LkEffectManager();

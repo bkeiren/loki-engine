@@ -8,7 +8,7 @@
 #include "core/engine.h"
 #include "core/game/game.h"
 #include "core/game/level/level.h"
-
+#include "core/input/input.h"
 #include "core/renderer/debugrenderer.h"
 
 namespace loki
@@ -186,57 +186,57 @@ void LkHTMLCore::_OnEvent( const LkEvent& _Event )
 					// NOTE: EXPERIMENTAL!
 					if (!view->m_RenderImage->Is3D())
 					{
-						glm::int2 mousepos = view->TranslateGlobalMousePositionToLocal(g_Input->GetMousePosition());
+						int2 mousepos = view->TranslateGlobalMousePositionToLocal(g_Input->GetMousePosition());
 
 						view->m_WebView->injectMouseMove(mousepos.x, mousepos.y);
 					}
 					else
 					{
-						glm::int2 mousepos = g_Input->GetMousePosition();
+						int2 mousepos = g_Input->GetMousePosition();
 
 						// NOTE: injectMouseMove expects x and y coordinates relative to the webtab.
 
-						glm::vec3 pos = view->m_RenderImage->GetRelativePosition();
-						pos = ((glm::vec3(pos.x, 1.0f - pos.y, pos.z) + glm::vec3(view->m_RenderImage->GetRelativeAnchorOffset(), 0.0f)) * 2.0f) - 1.0f;
+						vec3 pos = view->m_RenderImage->GetRelativePosition();
+						pos = ((vec3(pos.x, 1.0f - pos.y, pos.z) + vec3(view->m_RenderImage->GetRelativeAnchorOffset(), 0.0f)) * 2.0f) - 1.0f;
 
-						glm::vec2 size = view->m_RenderImage->GetRelativeSize() * 2.0f;			
+						vec2 size = view->m_RenderImage->GetRelativeSize() * 2.0f;			
 
 						// Calculate the world-space position of the mouse cursor (On the near plane).
 						LkCamera* cam = g_Engine->GetGame()->GetLevel()->GetCurrentCamera();
 						LkMovableComponent* comp = cam->GetComponent<LkMovableComponent>();
 
 						// Normalized vector indicating the direction from the camera origin to the cursor's position on the near-plane.
-						glm::vec3 r = cam->GetCameraToViewportVector(mousepos);
-						glm::vec3 r_origin = comp->GetPosition();
+						vec3 r = cam->GetCameraToViewportVector(mousepos);
+						vec3 r_origin = comp->GetPosition();
 
 						// 3 corner points in model space of the quad.
-						glm::vec3 PA = glm::vec3(pos.x, pos.y + size.y, pos.z);
-						glm::vec3 PC = glm::vec3(pos.x + size.x, pos.y, pos.z);
-						glm::vec3 PD = glm::vec3(pos.x, pos.y, pos.z);
+						vec3 PA = vec3(pos.x, pos.y + size.y, pos.z);
+						vec3 PC = vec3(pos.x + size.x, pos.y, pos.z);
+						vec3 PD = vec3(pos.x, pos.y, pos.z);
 
 						// The quad's normal and position in world-space.
-						glm::vec3 planenormal = glm::vec3(view->m_RenderImage->GetModelMatrix() * glm::vec4(glm::cross(PC - PD, PA - PD), 1.0f));
-						glm::vec3 planepos = glm::vec3(view->m_RenderImage->GetModelMatrix() * glm::vec4(pos, 1.0f));
+						vec3 planenormal = vec3(view->m_RenderImage->GetModelMatrix() * vec4(math::cross(PC - PD, PA - PD), 1.0f));
+						vec3 planepos = vec3(view->m_RenderImage->GetModelMatrix() * vec4(pos, 1.0f));
 
 						// Intersect the ray with the quad to find the intersection distance.
-						float rayDirDotNormal = glm::dot(r, planenormal);
+						float rayDirDotNormal = math::dot(r, planenormal);
 						if (rayDirDotNormal != 0) 
 						{
 							// Intersection.
-							float dist = glm::dot(planepos - r_origin, planenormal) / rayDirDotNormal;
+							float dist = math::dot(planepos - r_origin, planenormal) / rayDirDotNormal;
 
-							glm::vec3 intersectpos = r_origin + (r * dist);
+							vec3 intersectpos = r_origin + (r * dist);
 
-							//renderer::debug::DrawAxes(point3D, glm::quat(), 1.0f, false);
-							renderer::debug::DrawLine3D(r_origin, r_origin + (r * dist), false, glm::vec3(1.0f, 0.0f, 0.0f));
+							//renderer::debug::DrawAxes(point3D, quat(), 1.0f, false);
+							renderer::debug::DrawLine3D(r_origin, r_origin + (r * dist), false, vec3(1.0f, 0.0f, 0.0f));
 
 							// Now transform intersectpos to model space by multiplying the inverse model matrix with intersectpos.
-							glm::vec3 modelspacepos = glm::vec3(glm::inverse(view->m_RenderImage->GetModelMatrix()) * glm::vec4(intersectpos, 1.0f));
+							vec3 modelspacepos = vec3(math::inverse(view->m_RenderImage->GetModelMatrix()) * vec4(intersectpos, 1.0f));
 
 							// Yay.
 
-							int x = int(glm::clamp(modelspacepos.x / size.x, 0.0f, 1.0f) * view->m_RenderImage->GetWidth());
-							int y = int(glm::clamp(modelspacepos.y / size.y, 0.0f, 1.0f) * view->m_RenderImage->GetHeight());
+							int x = int(math::clamp(modelspacepos.x / size.x, 0.0f, 1.0f) * view->m_RenderImage->GetWidth());
+							int y = int(math::clamp(modelspacepos.y / size.y, 0.0f, 1.0f) * view->m_RenderImage->GetHeight());
 							view->m_WebView->injectMouseMove(x, y);
 							LOG(VL_NORMAL, "x: %i\ty: %i", x, y);
 						}
@@ -343,13 +343,13 @@ LkHTMLView* LkHTMLCore::_GetTopMostViewUnderMouse( bool _ConsiderTransparency /*
 	{
 		if ((*it)->IsActive())
 		{
-			glm::vec3 p = (*it)->m_RenderImage->GetAbsolutePosition();
-			glm::vec2 s = (*it)->m_RenderImage->GetAbsoluteSize();
-			glm::int2 m = g_Input->GetMousePosition();
+			vec3 p = (*it)->m_RenderImage->GetAbsolutePosition();
+			vec2 s = (*it)->m_RenderImage->GetAbsoluteSize();
+			int2 m = g_Input->GetMousePosition();
 
 			if (!(m.x < p.x || m.x > p.x + s.x || m.y < p.y || m.y > p.y + s.y))
 			{
-				float a = (*it)->GetAlphaAt(m.x - p.x, m.y - p.y);
+				float a = (*it)->GetAlphaAt((int)(m.x - p.x), (int)(m.y - p.y));
 				if ((_ConsiderTransparency && ((a > _AlphaThreshold /*- EPSILON*/) || (a >= _ExceptionAlpha - EPSILON && a <= _ExceptionAlpha + EPSILON))) || !_ConsiderTransparency)
 				{
 					// This is the topmost view that the mouse is over and the pixel that the mouse is over in this view

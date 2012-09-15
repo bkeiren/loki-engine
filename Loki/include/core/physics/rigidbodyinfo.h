@@ -43,10 +43,10 @@ struct RigidBodyInfo
 	float m_Mass;	// A mass of zero means the object has an infinite mass and is not movable.
 	float m_Friction;
 	float m_Restitution;
-	glm::mat4 m_InitialTransform;
-	glm::mat4 m_CenterOfMassOffset;
+	mat4 m_InitialTransform;
+	mat4 m_CenterOfMassOffset;
 	
-	glm::vec3 m_LocalInertia;
+	vec3 m_LocalInertia;
 	float m_LinearDamping;
 	float m_AngularDamping;
 	float m_LinearSleepingThreshold;
@@ -70,7 +70,7 @@ struct RigidBodyInfo
 	// Box data.
 	struct  
 	{
-		glm::vec3 m_HalfExtents;
+		vec3 m_HalfExtents;
 	} m_BoxData;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -92,7 +92,7 @@ struct RigidBodyInfo
 	// (Infinite) Plane data.
 	struct  
 	{
-		glm::vec3 m_Normal;
+		vec3 m_Normal;
 		float m_Constant;	// ?Distance from the origin along the normal?
 	} m_StaticPlaneData;
 
@@ -109,7 +109,7 @@ struct RigidBodyInfo
 	// Cylinder data.
 	struct  
 	{
-		glm::vec3 m_HalfExtents;
+		vec3 m_HalfExtents;
 	} m_CylinderData;
 };
 

@@ -47,14 +47,14 @@ LkMesh::LkMesh( const aiScene* _aiScene )	:
 		}
 		for (int y = 0; y < NumVerts; ++y)
 		{
-			if (m_tempMeshArray[i]->mVertices)			Vertices[y].pos			= glm::vec3(m_tempMeshArray[i]->mVertices[y].x,			m_tempMeshArray[i]->mVertices[y].y,		m_tempMeshArray[i]->mVertices[y].z);
-			if (m_tempMeshArray[i]->mNormals)			Vertices[y].normal		= glm::vec3(m_tempMeshArray[i]->mNormals[y].x,			m_tempMeshArray[i]->mNormals[y].y,		m_tempMeshArray[i]->mNormals[y].z);
-			if (m_tempMeshArray[i]->mBitangents)		Vertices[y].binormal	= glm::vec3(m_tempMeshArray[i]->mBitangents[y].x,		m_tempMeshArray[i]->mBitangents[y].y,	m_tempMeshArray[i]->mBitangents[y].z);
+			if (m_tempMeshArray[i]->mVertices)			Vertices[y].pos			= vec3(m_tempMeshArray[i]->mVertices[y].x,			m_tempMeshArray[i]->mVertices[y].y,		m_tempMeshArray[i]->mVertices[y].z);
+			if (m_tempMeshArray[i]->mNormals)			Vertices[y].normal		= vec3(m_tempMeshArray[i]->mNormals[y].x,			m_tempMeshArray[i]->mNormals[y].y,		m_tempMeshArray[i]->mNormals[y].z);
+			if (m_tempMeshArray[i]->mBitangents)		Vertices[y].binormal	= vec3(m_tempMeshArray[i]->mBitangents[y].x,		m_tempMeshArray[i]->mBitangents[y].y,	m_tempMeshArray[i]->mBitangents[y].z);
 		
 			// IMPORTANT NOTE: The tangent is negated because apparently, that's what is required when using Cg. If this negation is not performed,
 			// certain faces will have incorrect TBN matrices and will not be properly shaded.
-			if (m_tempMeshArray[i]->mTangents)			Vertices[y].tangent		= -glm::vec3(m_tempMeshArray[i]->mTangents[y].x,			m_tempMeshArray[i]->mTangents[y].y,		m_tempMeshArray[i]->mTangents[y].z);
-			if (m_tempMeshArray[i]->mTextureCoords[0])	Vertices[y].uv			= glm::vec2(m_tempMeshArray[i]->mTextureCoords[0][y].x, m_tempMeshArray[i]->mTextureCoords[0][y].y);
+			if (m_tempMeshArray[i]->mTangents)			Vertices[y].tangent		= -vec3(m_tempMeshArray[i]->mTangents[y].x,			m_tempMeshArray[i]->mTangents[y].y,		m_tempMeshArray[i]->mTangents[y].z);
+			if (m_tempMeshArray[i]->mTextureCoords[0])	Vertices[y].uv			= vec2(m_tempMeshArray[i]->mTextureCoords[0][y].x, m_tempMeshArray[i]->mTextureCoords[0][y].y);
 		}
 		if(!m_SubMeshes[i]->_CreateVertexBuffer(Vertices, NumVerts))
 		{

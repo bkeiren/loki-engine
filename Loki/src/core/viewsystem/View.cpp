@@ -36,26 +36,26 @@ void View::LinkTo( IEntity* _Link )
 	m_LinkedEntity = _Link;
 }
 
-const glm::mat4& View::GetProjectionMatrix()
+const mat4& View::GetProjectionMatrix()
 {
 	if (m_ProjectionMatrixIsDirty)
 	{
 		(m_ProjectionType == PT_PERSPECTIVE)?
-			(m_ProjectionMatrix = glm::gtc::matrix_transform::perspectiveFov(m_FoV, (float)m_Viewport.x, (float)m_Viewport.y, m_ZNear, m_ZFar)):
-			(m_ProjectionMatrix = glm::gtc::matrix_transform::ortho(m_OrthoViewport.x, m_OrthoViewport.y, m_OrthoViewport.z, m_OrthoViewport.w, m_ZNear, m_ZFar));
+			(m_ProjectionMatrix = math::gtc::matrix_transform::perspectiveFov(m_FoV, (float)m_Viewport.x, (float)m_Viewport.y, m_ZNear, m_ZFar)):
+			(m_ProjectionMatrix = math::gtc::matrix_transform::ortho(m_OrthoViewport.x, m_OrthoViewport.y, m_OrthoViewport.z, m_OrthoViewport.w, m_ZNear, m_ZFar));
 		m_ProjectionMatrixIsDirty = false;
 	}
 	return m_ProjectionMatrix;
 }
 
-glm::mat4 View::GetViewMatrix()
+mat4 View::GetViewMatrix()
 {
 	if (m_LinkedEntity)
 	{
 		Transform& t = m_LinkedEntity->GetTransform();
-		return glm::inverse(t.GetMatrix());
+		return math::inverse(t.GetMatrix());
 	}
-	return glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
+	return mat4(1.0f, 0.0f, 0.0f, 0.0f,
 					 0.0f, 1.0f, 0.0f, 0.0f,
 					 0.0f, 0.0f, 1.0f, 0.0f,
 					 0.0f, 0.0f, 0.0f, 1.0f);
@@ -94,12 +94,12 @@ float View::GetZNear() const
 	return m_ZNear;
 }
 
-const glm::int2& View::GetViewport() const
+const int2& View::GetViewport() const
 {
 	return m_Viewport;
 }
 
-const glm::vec4& View::GetOrthoViewport() const
+const vec4& View::GetOrthoViewport() const
 {
 	return m_OrthoViewport;
 }

@@ -16,7 +16,7 @@ public:
 
 	float m_Age;
 	float m_Lifetime;
-	glm::vec4 m_Color;	// Color adjuster (Multiplicative), including alpha.
+	vec4 m_Color;	// Color adjuster (Multiplicative), including alpha.
 	float m_Size;
 	
 	void* m_UserData[8];	// Custom userdata, can be used in whatever way is needed by the client.

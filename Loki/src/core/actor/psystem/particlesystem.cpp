@@ -51,19 +51,19 @@ const LkParticleSystemDescriptor& LkParticleSystem::GetDescriptor() const
 	return m_Descriptor;
 }
 
-const glm::vec3& LkParticleSystem::GetPosition() const
+const vec3& LkParticleSystem::GetPosition() const
 {
 	return m_Descriptor.m_Position;
 }
 
-void LkParticleSystem::SetPosition( const glm::vec3& _Position )
+void LkParticleSystem::SetPosition( const vec3& _Position )
 {
 	m_Descriptor.m_Position = _Position;
 }
 
-void LkParticleSystem::Render( const glm::mat4& _ViewMatrix, const glm::mat4& _ProjectionMatrix )
+void LkParticleSystem::Render( const mat4& _ViewMatrix, const mat4& _ProjectionMatrix )
 {
-	glm::mat4 m = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
+	mat4 m = mat4(1.0f, 0.0f, 0.0f, 0.0f,
 							0.0f, 1.0f, 0.0f, 0.0f,
 							0.0f, 0.0f, 1.0f, 0.0f,
 							m_Descriptor.m_Position.x, m_Descriptor.m_Position.y, m_Descriptor.m_Position.z, 1.0f);
@@ -72,13 +72,13 @@ void LkParticleSystem::Render( const glm::mat4& _ViewMatrix, const glm::mat4& _P
 	{
 		LkParticleSource* source = (*it);
 
-		glm::mat4 m2 = glm::gtc::matrix_transform::translate(m, source->GetPosition());
+		mat4 m2 = math::gtc::matrix_transform::translate(m, source->GetPosition());
 		
 		for (LkParticleSource::ParticlesConstIter it2 = source->m_Particles.begin(); it2 != source->m_Particles.end(); ++it2)
 		{
 			LkParticle* p = (*it2);
 			
-			glm::mat4 m3 = m2 * p->GetTransformation();
+			mat4 m3 = m2 * p->GetTransformation();
 
 			renderer::LkEffectParameter* param = m_CGEffect->GetParameterBySemantic("LKMODELMATRIX");
 			if (param)

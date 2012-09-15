@@ -15,6 +15,7 @@ namespace loki
 {
 
 class LkHTMLView;
+class LkEngine;
 
 class LkConsole	: public LkEventListener, public LkHTMLViewListener
 {

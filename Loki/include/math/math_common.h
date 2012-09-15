@@ -6,48 +6,48 @@
 namespace loki
 {
 
-namespace math
-{
+//namespace glm
+//{
 
-extern const glm::vec3 GlobalX;
-extern const glm::vec3 GlobalY;
-extern const glm::vec3 GlobalZ;
+extern const math::vec3 GlobalX;
+extern const math::vec3 GlobalY;
+extern const math::vec3 GlobalZ;
 
-#define UNIT_X	loki::math::GlobalX
-#define UNIT_Y	loki::math::GlobalY
-#define UNIT_Z	loki::math::GlobalZ
+#define UNIT_X	loki/*::math*/::GlobalX
+#define UNIT_Y	loki/*::math*/::GlobalY
+#define UNIT_Z	loki/*::math*/::GlobalZ
 
 #define FORWARD	UNIT_X
 #define SIDE	UNIT_Z
 #define UP		UNIT_Y
 
-#define ZEROVECTOR	glm::vec3(0.0f, 0.0f, 0.0f)
+#define ZEROVECTOR	math::vec3(0.0f, 0.0f, 0.0f)
 
 namespace color
 {
 
-extern const glm::vec3 Red;
-extern const glm::vec4 RedA;
-extern const glm::vec3 Green;
-extern const glm::vec4 GreenA;
-extern const glm::vec3 Blue;
-extern const glm::vec4 BlueA;
+extern const math::vec3 Red;
+extern const math::vec4 RedA;
+extern const math::vec3 Green;
+extern const math::vec4 GreenA;
+extern const math::vec3 Blue;
+extern const math::vec4 BlueA;
 
-extern const glm::vec3 Yellow;
-extern const glm::vec4 YellowA;
-extern const glm::vec3 Turqiose;
-extern const glm::vec4 TurqioseA;
-extern const glm::vec3 Purple;
-extern const glm::vec4 PurpleA;
+extern const math::vec3 Yellow;
+extern const math::vec4 YellowA;
+extern const math::vec3 Turqiose;
+extern const math::vec4 TurqioseA;
+extern const math::vec3 Purple;
+extern const math::vec4 PurpleA;
 
-extern const glm::vec3 White;
-extern const glm::vec4 WhiteA;
-extern const glm::vec3 Black;
-extern const glm::vec4 BlackA;
-
-}
+extern const math::vec3 White;
+extern const math::vec4 WhiteA;
+extern const math::vec3 Black;
+extern const math::vec4 BlackA;
 
 }
+
+//}
 
 }
 

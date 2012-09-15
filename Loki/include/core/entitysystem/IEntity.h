@@ -17,7 +17,7 @@ struct EntityID
 {
 	EntityID();
 	
-	glm::uint32 m_ID;
+	uint32 m_ID;
 
 	bool operator == ( const EntityID& _ID ) const;
 	bool operator != ( const EntityID& _ID ) const;

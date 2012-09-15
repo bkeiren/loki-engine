@@ -35,6 +35,7 @@ IView* ViewSystem::CreateView( const char* _ViewName )
 	}
 	IView* view = new View(_ViewName);
 	(*res.first).second = view;
+	return view;
 }
 
 void ViewSystem::DestroyView( const char* _ViewName )

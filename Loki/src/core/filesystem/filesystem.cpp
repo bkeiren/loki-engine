@@ -102,7 +102,7 @@ LkFile* OpenFile( const char* _File )
 
 bool CreateDirectory( const char* _Directory )
 {
-	bool res = ::CreateDirectoryA(_Directory, NULL);
+	bool res = (bool)::CreateDirectoryA(_Directory, NULL);
 
 	if (!res)
 	{

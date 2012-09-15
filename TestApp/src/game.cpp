@@ -80,7 +80,7 @@ bool MyGame::Init()
 	loki::LkCamera* cam = m_Level->GetCurrentCamera();
 	loki::LkMovableComponent* cam_movcomp = cam->GetComponent<LkMovableComponent>();
 
-	//cam_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, -40.0f));
+	//cam_movcomp->SetPosition(vec3(0.0f, 0.0f, -40.0f));
 	cam_movcomp->RotateY(180.0f);
 
 	{
@@ -88,9 +88,9 @@ bool MyGame::Init()
 
 		LkPointLight* pointlight1 = m_Level->SpawnPointLight("PointLight1");
 		pointlight1->SetRadius(20.0f);
-		//pointlight1->SetPosition(glm::vec3(-3.5f, -3.0f, -12.0f));
+		//pointlight1->SetPosition(vec3(-3.5f, -3.0f, -12.0f));
 		LkMovableComponent* light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-		light_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 0.0f));
 		pointlight1->SetColor(Color(0.2f, 0.2f, 1.0f));
 		pointlight1->Disable();
 
@@ -99,7 +99,7 @@ bool MyGame::Init()
 		pointlight1 = m_Level->SpawnPointLight("PointLight2");
 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
 		pointlight1->SetRadius(50.0f);
-		light_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
+		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 10.0f));
 		pointlight1->SetColor(Color(1.0f, 0.2f, 0.2f));
 		//pointlight1->Disable();
 		
@@ -107,14 +107,14 @@ bool MyGame::Init()
 		pointlight1 = m_Level->SpawnPointLight("MassivePointLight");
 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
 		pointlight1->SetRadius(60.0f);
-		light_movcomp->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 0.0f));
 		pointlight1->SetColor(Color(1.0f, 1.0f, 1.0f));
 		//pointlight1->Disable();
 
 		pointlight1 = m_Level->SpawnPointLight("PointLight3");
 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
 		pointlight1->SetRadius(50.0f);
-		light_movcomp->SetPosition(glm::vec3(5.0f, 0.0f, 0.0f));
+		light_movcomp->SetPosition(vec3(5.0f, 0.0f, 0.0f));
 		pointlight1->SetColor(Color(0.0f, 1.0f, 0.2f));
 		//pointlight1->Disable();
 	}
@@ -134,7 +134,7 @@ bool MyGame::Init()
 			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
 			mtl->SetShininess(100.0f);
 			rendercomp->GetModel()->SetMaterial(mtl, 0);
-			rendercomp->GetModel()->SetUVScale(glm::vec2(3.0f, 3.0f));
+			rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));
 			LkPhysicsComponent* phycomp = pawn->GetComponent<LkPhysicsComponent>();
 			physics::RigidBodyInfo info;
 			info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
@@ -148,16 +148,17 @@ bool MyGame::Init()
 			{
 				std::string name = "StanfordDragon";
 				char buff[8];
-				name += itoa(i, buff, 2);
+				_itoa_s(i, buff, 2);
+				name += buff;
 				pawn = m_Level->SpawnPawn(name.c_str());
 				LkMovableComponent* movcomp = pawn->GetComponent<LkMovableComponent>();
-				movcomp->SetPosition(glm::vec3(i * 0.01f, 5 + i * 2, 0.0f));
+				movcomp->SetPosition(vec3(i * 0.01f, 5 + i * 2, 0.0f));
 				rendercomp = pawn->GetComponent<LkRenderComponent>();
 				rendercomp->SetModel(new loki::renderer::LkModel("resources//models//torus.dae"));
 				mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
 				mtl->SetShininess(100.0f);
 				rendercomp->GetModel()->SetMaterial(mtl, 0);
-				rendercomp->GetModel()->SetUVScale(glm::vec2(3.0f, 3.0f));			
+				rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));			
 				LkPhysicsComponent* phycomp = pawn->GetComponent<LkPhysicsComponent>();
 				physics::RigidBodyInfo info;
 				info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
@@ -176,13 +177,13 @@ bool MyGame::Init()
 			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture6.bmp", "resources//textures//texture6_normal.bmp", "resources//textures//texture6_specular.bmp");
 			mtl->SetShininess(100.0f);
 			rendercomp->GetModel()->SetMaterial(mtl, 0);
-			rendercomp->GetModel()->SetUVScale(glm::vec2(3.0f, 3.0f));
+			rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));
 		}
 	}
 
 	{
 		//DirectionalLight* directionallight1 = m_Level->SpawnDirectionalLight("DirectionalLight1");
-		//directionallight1->SetDirection(glm::normalize(glm::vec3(1.0f, -1.0f, 0.0f)));
+		//directionallight1->SetDirection(normalize(vec3(1.0f, -1.0f, 0.0f)));
 	}
 
 	//ui::Overlay* overlay = ui::g_OverlayManager->CreateOverlay("Overlay0");
@@ -198,7 +199,7 @@ bool MyGame::Init()
 
 	for (int i = 0; i < 10; ++i)
 	{
-		info.m_InitialTransform = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
+		info.m_InitialTransform = mat4(1.0f, 0.0f, 0.0f, 0.0f,
 											0.0f, 1.0f, 0.0f, 0.0f,
 											0.0f, 0.0f, 1.0f, 0.0f,
 											0.0f, 10.0f * (i + 1), 0.0f, 1.0f);
@@ -215,12 +216,12 @@ bool MyGame::Init()
 	if (overlay)
 	{
 		// Set the default button size before creating any.
-		//loki::ui::LkOverlayButton::SetDefaultSize(glm::vec2(0.428f, 0.116f));
+		//loki::ui::LkOverlayButton::SetDefaultSize(vec2(0.428f, 0.116f));
 
 		loki::ui::LkOverlayButton* button = (loki::ui::LkOverlayButton*)overlay->CreateElement("Button0", "button");
 		if (button)
 		{
-			button->SetRelativePosition(glm::vec2(0.1f, 0.1f));
+			button->SetRelativePosition(vec2(0.1f, 0.1f));
 // 			button->RegisterCallback(loki::ui::OCB_MOUSE_ENTER, testcallback);
 // 			button->RegisterCallback(loki::ui::OCB_MOUSE_LEFT_PRESSED, testcallback1);
 // 			button->RegisterCallback(loki::ui::OCB_MOUSE_LEFT_RELEASED, testcallback2);
@@ -229,14 +230,14 @@ bool MyGame::Init()
 		loki::ui::LkOverlayCheckBox* checkbox = (loki::ui::LkOverlayCheckBox*)overlay->CreateElement("Checkbox0", "checkbox");
 		if (checkbox)
 		{
-			checkbox->SetRelativePosition(glm::vec2(0.1f, 0.4f));
-			//checkbox->SetRelativeSize(glm::vec2(0.08f, 0.08f));
+			checkbox->SetRelativePosition(vec2(0.1f, 0.4f));
+			//checkbox->SetRelativeSize(vec2(0.08f, 0.08f));
 		}
 
 		loki::ui::LkOverlaySlider* slider = (loki::ui::LkOverlaySlider*)overlay->CreateElement("Slider0", "slider");
 		if (slider)
 		{
-			slider->SetRelativePosition(glm::vec2(0.1f, 0.6f));	
+			slider->SetRelativePosition(vec2(0.1f, 0.6f));	
  			slider->RegisterCallback(OCB_SLIDER_VALUE_MOVE, testcallback1);
 // 			slider->RegisterCallback(OCB_SLIDER_VALUE_RELEASE, testcallback2);
 		}
@@ -253,9 +254,7 @@ bool MyGame::Init()
 	LkParticleSystem* ps = m_Level->SpawnParticleSystem(descr);
 
 
-
 	IEntity* entity = g_EntitySystem->SpawnEntity("TestEntity");
-	
 
 	return true;
 }
@@ -289,7 +288,7 @@ void MyGame::Update()
 
 	if (KEY_RELEASED(KEY_R))
 	{
-		m_Level->GetPawn("StanfordDragon")->GetComponent<LkMovableComponent>()->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+		m_Level->GetPawn("StanfordDragon")->GetComponent<LkMovableComponent>()->SetPosition(vec3(0.0f, 0.0f, 0.0f));
 	}
 	
 	if (KEY_RELEASED(KEY_G))
@@ -300,7 +299,7 @@ void MyGame::Update()
 		info.m_SphereData.m_Radius = 0.5f;
 		info.m_InitialTransform = m_Level->GetCurrentCamera()->GetComponent<LkMovableComponent>()->GetTransformation();
 		physics::LkRigidBody* b = physics::g_Physics->AddRigidBody(info);
-		glm::vec3 force = glm::vec3(-info.m_InitialTransform[2]) * 200.0f;
+		vec3 force = vec3(-info.m_InitialTransform[2]) * 200.0f;
 		b->ApplyCentralImpulse(force);
 	}
 
@@ -312,23 +311,23 @@ void MyGame::Update()
 		LkMovableComponent* comp1 = p1->GetComponent<LkMovableComponent>();
 		static float f = 0.0f;
 		f += 0.01f;
-		comp0->SetPosition( glm::vec3(cos(f) * 10, cos(f) * 10, sin(f) * 10) );
-		comp1->SetPosition( glm::vec3(cos(-f) * 10, sin(f) * 10, sin(-f) * 10) );
+		comp0->SetPosition( vec3(cos(f) * 10, cos(f) * 10, sin(f) * 10) );
+		comp1->SetPosition( vec3(cos(-f) * 10, sin(f) * 10, sin(-f) * 10) );
 	}
 
 	/*
-	static glm::vec3 p0 = glm::vec3(0.0f, 0.0f, 0.0f);
-	static glm::vec3 p1 = glm::vec3(5.0f, 5.0f, 0.0f);
-	static glm::vec3 p2 = glm::vec3(10.0f, 0.0f, 0.0f);
-	static glm::vec3 p3 = glm::vec3(15.0f, -5.0f, 0.0f);
+	static vec3 p0 = vec3(0.0f, 0.0f, 0.0f);
+	static vec3 p1 = vec3(5.0f, 5.0f, 0.0f);
+	static vec3 p2 = vec3(10.0f, 0.0f, 0.0f);
+	static vec3 p3 = vec3(15.0f, -5.0f, 0.0f);
 	
 	float d = 0.01f;
 	for (float f = 0.0f; f < 1.0f; f += d)
 	{
-		glm::vec3 pos0 = glm::gtx::spline::catmullRom(p0, p1, p2, p3, f);
-		glm::vec3 pos1 = glm::gtx::spline::catmullRom(p0, p1, p2, p3, f + d);
+		vec3 pos0 = gtx::spline::catmullRom(p0, p1, p2, p3, f);
+		vec3 pos1 = gtx::spline::catmullRom(p0, p1, p2, p3, f + d);
 
-		renderer::debug::DrawLine3D(pos0, pos1, false, glm::vec3(0.0f, 1.0f, 0.0f));
+		renderer::debug::DrawLine3D(pos0, pos1, false, vec3(0.0f, 1.0f, 0.0f));
 	}
 	*/
 

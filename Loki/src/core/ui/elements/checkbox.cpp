@@ -47,7 +47,7 @@ void LkOverlayCheckBox::Render()
 
 void LkOverlayCheckBox::_Init()
 {
-	m_CheckMarkImage = new renderer::LkImage(0, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f));
+	m_CheckMarkImage = new renderer::LkImage(0, vec2(0.0f, 0.0f), vec2(1.0f, 1.0f));
 
 	const LkOverlayStyle* style = GetParentOverlay()->GetOverlayStyle();
 	std::string output;
@@ -109,7 +109,7 @@ void LkOverlayCheckBox::_Init()
 		x = (float)atof(output.c_str());
 		y = (float)atof(output2.c_str());
 
-		LkImage::SetRelativeSize(glm::vec2(x, y));
+		LkImage::SetRelativeSize(vec2(x, y));
 	}
 }
 

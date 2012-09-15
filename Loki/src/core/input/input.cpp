@@ -1,3 +1,4 @@
+#include "core/input/input.h"
 #include "core/eventsystem/eventmanager.h"
 #include "core/engine.h"
 #include "core/renderer/renderer.h"
@@ -10,14 +11,14 @@ namespace loki
 LkInput* g_Input = NULL;
 
 LkInput::LkInput()	:
-	m_Mouse(glm::int2(0, 0)),
-	m_MousePrevious(glm::int2(0, 0)),
-	m_MouseDelta(glm::int2(0, 0)),
+	m_Mouse(int2(0, 0)),
+	m_MousePrevious(int2(0, 0)),
+	m_MouseDelta(int2(0, 0)),
 	m_MouseMoved(false),
-	m_MouseRestDelta(glm::int2(400, 400)),
+	m_MouseRestDelta(int2(400, 400)),
 	m_MouseWheelDelta(0.0f),
 	m_MouseAccelerationEnabled(true),
-	m_MouseAccelerationParameters(glm::vec2(1.5f, 0.0f))
+	m_MouseAccelerationParameters(vec2(1.5f, 0.0f))
 {
 	_Init();
 }
@@ -195,9 +196,9 @@ EKeyState LkInput::Get( EKeys _Key ) const
 	return m_Keys[_Key];
 }
 
-const glm::int2 LkInput::GetMousePosition() const
+const int2 LkInput::GetMousePosition() const
 {
-	glm::int2 m = glm::int2(renderer::g_Renderer->GetPixelScale() * glm::vec2(m_Mouse));
+	int2 m = int2(renderer::g_Renderer->GetPixelScale() * vec2(m_Mouse));
 	return m;
 }
 
@@ -216,7 +217,7 @@ bool LkInput::GetMouseMoved() const
 	return m_MouseMoved;
 }
 
-const glm::int2& LkInput::GetMouseDelta() const
+const int2& LkInput::GetMouseDelta() const
 {
 	return m_MouseDelta;
 }
@@ -246,12 +247,12 @@ bool LkInput::GetMouseAccelerationEnabled() const
 	return m_MouseAccelerationEnabled;
 }
 
-void LkInput::SetMouseAccelerationParameters( const glm::vec2& _Parameters )
+void LkInput::SetMouseAccelerationParameters( const vec2& _Parameters )
 {
 	m_MouseAccelerationParameters = _Parameters;
 }
 
-const glm::vec2& LkInput::GetMouseAccelerationParameters() const
+const vec2& LkInput::GetMouseAccelerationParameters() const
 {
 	return m_MouseAccelerationParameters;
 }

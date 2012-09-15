@@ -29,7 +29,7 @@ private:
 
 	void _OnEvent( const LkEvent& _Event );
 
-	std::vector<glm::vec3> m_PathControlPoints;
+	std::vector<vec3> m_PathControlPoints;
 	float m_PathPosition;
 	unsigned int m_PathSegment;
 };

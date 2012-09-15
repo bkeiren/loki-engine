@@ -99,7 +99,7 @@ void LkPhysicsComponent::_Init()
 	{
 		// Use a simple unit box.
 		info.m_Shape = physics::CS_BOX;
-		info.m_BoxData.m_HalfExtents = glm::vec3(0.5f, 0.5f, 0.5f);
+		info.m_BoxData.m_HalfExtents = vec3(0.5f, 0.5f, 0.5f);
 	}
 
 	// Check whether we have a movable component.
@@ -109,7 +109,7 @@ void LkPhysicsComponent::_Init()
 	}
 	else
 	{
-		info.m_InitialTransform = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
+		info.m_InitialTransform = mat4(1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.0f,
 			0.0f, 0.0f, 0.0f, 1.0f);

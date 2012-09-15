@@ -136,7 +136,7 @@ bool LkRenderer::_Init( LkWindow* _Window )
 	}
 
 	m_GBuffer = new LkFramebufferObject(WindowWidth, WindowHeight, RenderBuffersInfo);
-	m_GBuffer->SetClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_GBuffer->SetClearColor(vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_GBuffer->SetClearDepth(1.0f);
 	m_GBuffer->SetClearStencil(0);
 	if (!m_GBuffer->CheckFramebufferStatus())
@@ -531,9 +531,9 @@ int LkRenderer::GetRenderHeight()
 	return m_GBuffer->GetHeight();
 }
 
-glm::vec2 LkRenderer::GetPixelScale()
+vec2 LkRenderer::GetPixelScale()
 {
-	return glm::vec2((float)renderer::g_Renderer->GetRenderWidth() / renderer::g_Renderer->GetWindowWidth(),
+	return vec2((float)renderer::g_Renderer->GetRenderWidth() / renderer::g_Renderer->GetWindowWidth(),
 					 (float)renderer::g_Renderer->GetRenderHeight() / renderer::g_Renderer->GetWindowHeight());
 }
 
@@ -544,9 +544,9 @@ void LkRenderer::_RenderSky()
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	glm::mat4 m = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
-	m[3] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-	glLoadMatrixf(glm::value_ptr(m));
+	mat4 m = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
+	m[3] = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	glLoadMatrixf(math::value_ptr(m));
 
 	glDisable(GL_CULL_FACE);
 	glDepthMask( GL_FALSE );  // Don't write to the depth buffer
@@ -674,8 +674,8 @@ void LkRenderer::_RenderOpaqueGeometry()
 	glColorMask(true, true, true, true);
 	glDepthMask(true);
 
-	glm::mat4 viewmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
-	glm::mat4 projectionmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix();
+	mat4 viewmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
+	mat4 projectionmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix();
 
 	for (std::list<LkRenderComponent*>::iterator it = LkRenderComponent::m_RenderComponents.begin(); it != LkRenderComponent::m_RenderComponents.end(); ++it)
 	{
@@ -683,7 +683,7 @@ void LkRenderer::_RenderOpaqueGeometry()
 
 		if ((*it)->m_Model)	// TODO: Replace this check with a default model to indicate missing models.
 		{
-			glm::mat4 t = (movcomp)?(movcomp->GetTransformation()):(glm::mat4(1.0f, 0.0f, 0.0f, 0.0f, 
+			mat4 t = (movcomp)?(movcomp->GetTransformation()):(mat4(1.0f, 0.0f, 0.0f, 0.0f, 
 																			  0.0f, 1.0f, 0.0f, 0.0f, 
 																			  0.0f, 0.0f, 1.0f, 0.0f,
 																			  0.0f, 0.0f, 0.0f, 1.0f));
@@ -824,10 +824,10 @@ void LkRenderer::_RenderLightingPointLights()
 {
 #define SETCGPARAM(paramname, value)	{LkEffectParameter* param = m_LightEffect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
 
-	glm::mat4 _ProjectionMatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix();
-	glm::mat4 _ViewMatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
-	glm::mat4 _ViewProjectionMatrix = _ProjectionMatrix * _ViewMatrix;
-	glm::vec3 _EyePosition = glm::vec3(glm::inverse(_ViewMatrix)[3]);
+	mat4 _ProjectionMatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix();
+	mat4 _ViewMatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
+	mat4 _ViewProjectionMatrix = _ProjectionMatrix * _ViewMatrix;
+	vec3 _EyePosition = vec3(math::inverse(_ViewMatrix)[3]);
 
 	SETCGPARAM("LKEYEPOSITION", _EyePosition);			// Set the eye position.
 	SETCGPARAM("LKRT0", m_GBuffer->GetRenderbufferTexture(0));
@@ -845,12 +845,12 @@ void LkRenderer::_RenderLightingPointLights()
 		}
 
 		LkMovableComponent* comp = pointlight->GetComponent<LkMovableComponent>();
-		glm::mat4 _ModelMatrix = comp->GetTransformation();
-		bool CameraInsideVolume = glm::length(_EyePosition - comp->GetPosition()) < pointlight->GetRadius();
-		_ModelMatrix = glm::gtc::matrix_transform::rotate(_ModelMatrix, 90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		mat4 _ModelMatrix = comp->GetTransformation();
+		bool CameraInsideVolume = math::length(_EyePosition - comp->GetPosition()) < pointlight->GetRadius();
+		_ModelMatrix = math::gtc::matrix_transform::rotate(_ModelMatrix, 90.0f, vec3(1.0f, 0.0f, 0.0f));
 		SETCGPARAM("LKMODELVIEWPROJ", _ViewProjectionMatrix * _ModelMatrix);		// Set the model view projection matrix.
 		SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
-		SETCGPARAM("LKMODELMATRIXIT", glm::mat3(glm::transpose(glm::inverse(_ModelMatrix))));		// Set the inverse transpose of the model matrix.	
+		SETCGPARAM("LKMODELMATRIXIT", mat3(math::transpose(math::inverse(_ModelMatrix))));		// Set the inverse transpose of the model matrix.	
 		SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
 		SETCGPARAM("LKLIGHTPOSITION", comp->GetPosition());
 		SETCGPARAM("LKLIGHTRADIUS", pointlight->GetRadius());
@@ -935,7 +935,7 @@ void LkRenderer::_RenderLightingDirectionalLights()
 		glUniform3fARB(m_DirectionalLightShaderColorID, color.r, color.g, color.b);
 
 		// Pass the light direction to the shader.
-		glm::vec3 direction = directionallight1->GetDirection();
+		vec3 direction = directionallight1->GetDirection();
 		glUniform3fARB(m_DirectionalLightShaderDirectionID, direction.x, direction.y, direction.z);
 
 		// Render a full-screen quad.

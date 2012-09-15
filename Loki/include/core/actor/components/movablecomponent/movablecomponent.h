@@ -17,23 +17,23 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the actor's position.
 	//////////////////////////////////////////////////////////////////////////
-	const glm::vec3& GetPosition() const;
+	const vec3& GetPosition() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the actor's orientation.
 	//////////////////////////////////////////////////////////////////////////
-	const glm::quat& GetOrientation() const;
+	const quat& GetOrientation() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the actor's orientation as a vector (A.k.a. the actor's
 	// 'forward' vector).
 	//////////////////////////////////////////////////////////////////////////
-	glm::vec3 GetOrientationVector() const;
+	vec3 GetOrientationVector() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the actor's rotation in Euler angles.
 	//////////////////////////////////////////////////////////////////////////
-	const glm::vec3 GetEulerAngles() const;
+	const vec3 GetEulerAngles() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Return single elements of the actor's Euler angles.
@@ -46,34 +46,34 @@ public:
 	// Calculates the actor's transformation matrix if it's dirty and returns
 	// it.
 	//////////////////////////////////////////////////////////////////////////
-	const glm::mat4x4& GetTransformation();
+	const mat4x4& GetTransformation();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Sets the transformation matrix directly.
 	//////////////////////////////////////////////////////////////////////////
-	void SetTransformation( const glm::mat4x4& _Matrix );
+	void SetTransformation( const mat4x4& _Matrix );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Sets the actor's position. TODO: Evaluate whether this is still correct
 	// and whether it works correctly with physics.
 	//////////////////////////////////////////////////////////////////////////
-	void SetPosition( const glm::vec3& _Position );
+	void SetPosition( const vec3& _Position );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Sets the actor's orientation. TODO: Evaluate whether this is still correct
 	// and whether it works correctly with physics.
 	//////////////////////////////////////////////////////////////////////////
-	void SetOrientation( const glm::quat& _Rotation );
+	void SetOrientation( const quat& _Rotation );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Various rotation functions.
 	//////////////////////////////////////////////////////////////////////////
-	void RotateLocal( const glm::vec3& _Axis, const float _Angle );
+	void RotateLocal( const vec3& _Axis, const float _Angle );
 	void RotateLocalX( const float _Angle );
 	void RotateLocalY( const float _Angle );
 	void RotateLocalZ( const float _Angle );
 
-	void Rotate( const glm::vec3& _Axis, const float _Angle );
+	void Rotate( const vec3& _Axis, const float _Angle );
 	void RotateX( const float _Angle );
 	void RotateY( const float _Angle );
 	void RotateZ( const float _Angle );
@@ -81,8 +81,8 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Translation functions.
 	//////////////////////////////////////////////////////////////////////////
-	void TranslateLocal( const glm::vec3& _Translation );
-	void Translate( const glm::vec3& _Translation );
+	void TranslateLocal( const vec3& _Translation );
+	void Translate( const vec3& _Translation );
 
 protected:
 	void Update();
@@ -92,9 +92,9 @@ private:
 
 	void _Init();
 
-	glm::vec3 m_Position;
-	glm::quat m_Orientation;
-	glm::mat4x4	m_Transformation;
+	vec3 m_Position;
+	quat m_Orientation;
+	mat4x4	m_Transformation;
 	bool m_MatrixIsDirty;
 };
 

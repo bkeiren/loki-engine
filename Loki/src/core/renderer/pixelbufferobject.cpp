@@ -56,7 +56,7 @@ void* LkPixelBufferObject::MapBuffer( EPBO_MAP_ACCESS _MapAccess ) const
 
 bool LkPixelBufferObject::UnmapBuffer() const
 {
-	bool b = glUnmapBuffer(m_UsageHintDirection);
+	bool b = (bool)glUnmapBuffer(m_UsageHintDirection);
 	if (!b)
 	{
 		LOG(VL_WARN, "PixelBufferObject::UnmapBuffer: glUnmapBuffer returned false, the buffer contents were corrupted while the buffer was mapped. Buffer will be re-initialized");

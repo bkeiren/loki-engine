@@ -15,18 +15,18 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the directional light's direction.
 	//////////////////////////////////////////////////////////////////////////
-	const glm::vec3& GetDirection() const;
+	const vec3& GetDirection() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Sets the directional light's direction.
 	//////////////////////////////////////////////////////////////////////////
-	void SetDirection( const glm::vec3& _Direction );
+	void SetDirection( const vec3& _Direction );
 private:
 	LkDirectionalLight( const char* _Name, game::LkLevel* _Level );
 	LkDirectionalLight();
 	~LkDirectionalLight();
 
-	glm::vec3 m_Direction;
+	vec3 m_Direction;
 };
 
 }

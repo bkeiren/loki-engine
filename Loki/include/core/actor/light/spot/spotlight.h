@@ -22,7 +22,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the spotlight's direction.
 	//////////////////////////////////////////////////////////////////////////
-	const glm::vec3& GetDirection() const;
+	const vec3& GetDirection() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the inner cone angle.
@@ -38,7 +38,7 @@ private:
 	LkSpotLight();	// Private default c-tor.
 	~LkSpotLight();
 
-	glm::vec3 m_Direction;
+	vec3 m_Direction;
 	float m_InnerAngle;
 	float m_OuterAngle;
 };

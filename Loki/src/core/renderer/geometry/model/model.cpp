@@ -22,8 +22,8 @@ using namespace loki::renderer;
 LkModel::LkModel( const char* _File )	:
 	LkResource(_File),
 	m_Mesh(0),
-	m_UVScale(glm::vec2(1.0f, 1.0f)),
-	m_Scale(glm::vec3(1.0f, 1.0f, 1.0f))
+	m_UVScale(vec2(1.0f, 1.0f)),
+	m_Scale(vec3(1.0f, 1.0f, 1.0f))
 {
 	assert(_File != NULL);
 	m_Filename = std::string(_File);
@@ -48,17 +48,17 @@ LkModel::~LkModel()
 // 	g_TextureManager->ReleaseResource(&m_EmissiveMap);
 }
 
-void LkModel::SetUVScale( const glm::vec2& _Scale )
+void LkModel::SetUVScale( const vec2& _Scale )
 {
 	m_UVScale = _Scale;
 }
 
-const glm::vec2& LkModel::GetUVScale() const
+const vec2& LkModel::GetUVScale() const
 {
 	return m_UVScale;
 }
 
-void LkModel::SetScale( const glm::vec3& _Scale )
+void LkModel::SetScale( const vec3& _Scale )
 {
 	m_Scale = _Scale;
 }
@@ -78,7 +78,7 @@ void LkModel::SetScaleZ( float _ScaleZ )
 	m_Scale.z = _ScaleZ;
 }
 
-const glm::vec3& LkModel::GetScale() const
+const vec3& LkModel::GetScale() const
 {
 	return m_Scale;
 }
@@ -212,7 +212,7 @@ void LkModel::_LoadMaterials( const aiScene* _aiScene )
 	}
 }
 
-void LkModel::_Render( const glm::mat4& _ModelMatrix, const glm::mat4& _ViewMatrix, const glm::mat4& _ProjectionMatrix, float _ZFar, float _ZNear )
+void LkModel::_Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat4& _ProjectionMatrix, float _ZFar, float _ZNear )
 {
 	// If no mesh exists, stop.
 	if (!m_Mesh)
@@ -241,8 +241,8 @@ void LkModel::_Render( const glm::mat4& _ModelMatrix, const glm::mat4& _ViewMatr
 		
 		SETCGPARAM("LKMODELVIEWPROJ", _ProjectionMatrix * _ViewMatrix * _ModelMatrix);		// Set the model view projection matrix.
 		SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
-		SETCGPARAM("LKMODELMATRIXIT", glm::mat3(glm::transpose(glm::inverse(_ModelMatrix))));		// Set the inverse transpose of the model matrix.	
-		SETCGPARAM("LKEYEPOSITION", glm::inverse(_ViewMatrix)[3]);			// Set the eye position.
+		SETCGPARAM("LKMODELMATRIXIT", mat3(math::transpose(math::inverse(_ModelMatrix))));		// Set the inverse transpose of the model matrix.	
+		SETCGPARAM("LKEYEPOSITION", math::inverse(_ViewMatrix)[3]);			// Set the eye position.
 		SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
 		SETCGPARAM("LKMODELSCALE", m_Scale);	// Set the model scale.
 		SETCGPARAM("LKUVSCALE", m_UVScale);		// Set the UV scale.
@@ -283,9 +283,9 @@ void LkModel::_Render( const glm::mat4& _ModelMatrix, const glm::mat4& _ViewMatr
 
 // 	glDisable(GL_CULL_FACE);
 // 	glMatrixMode(GL_PROJECTION);
-// 	glLoadMatrixf(glm::value_ptr(_ProjectionMatrix));
+// 	glLoadMatrixf(math::value_ptr(_ProjectionMatrix));
 // 	glMatrixMode(GL_MODELVIEW);
-// 	glLoadMatrixf(glm::value_ptr(_ViewMatrix));
+// 	glLoadMatrixf(math::value_ptr(_ViewMatrix));
 // 	glBegin(GL_TRIANGLES);
 // 	glVertex3f(0.0f, 0.0f, -2.0f);
 // 	glVertex3f(1.0f, 0.0f, -2.0f);

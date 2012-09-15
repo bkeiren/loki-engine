@@ -6,6 +6,8 @@
 #pragma warning( disable : 4800 )	// Force value to bool warning. Ignored because
 									// using Input::Get()'s return value as a boolean will result in this warning.
 
+#include "Types.h"	// Need this for client apps including this file.
+
 namespace loki
 {
 
@@ -131,18 +133,18 @@ public:
 	void Capture();
 	
 	EKeyState Get( EKeys _Key ) const;
-	const glm::int2 GetMousePosition() const;
+	const int2 GetMousePosition() const;
 	int	GetMouseX() const;
 	int	GetMouseY() const ;
 	bool GetMouseMoved() const;
-	const glm::int2& GetMouseDelta() const;
+	const int2& GetMouseDelta() const;
 	int	GetMouseDeltaX() const;
 	int	GetMouseDeltaY() const;
 	float GetMouseWheelDelta() const;
 	void SetMouseAccelerationEnabled( bool _Enabled );
 	bool GetMouseAccelerationEnabled() const;
-	void SetMouseAccelerationParameters( const glm::vec2& _Parameters );
-	const glm::vec2& GetMouseAccelerationParameters() const;
+	void SetMouseAccelerationParameters( const vec2& _Parameters );
+	const vec2& GetMouseAccelerationParameters() const;
 private:
 	LkInput();
 	~LkInput();
@@ -160,14 +162,14 @@ private:
 	inline void _CaptureKeyState( int _Key );
 
 	EKeyState m_Keys[KEY_LAST];
-	glm::int2 m_Mouse;
-	glm::int2 m_MousePrevious;
-	glm::int2 m_MouseDelta;
+	int2 m_Mouse;
+	int2 m_MousePrevious;
+	int2 m_MouseDelta;
 	bool m_MouseMoved;
-	glm::int2 m_MouseRestDelta;	// Mouse resting delta position.
+	int2 m_MouseRestDelta;	// Mouse resting delta position.
 	float m_MouseWheelDelta;	// Each 'tick' of the mouse wheel is 1 unit. Continuous mouse wheels can have intermediate values.
 	bool m_MouseAccelerationEnabled;
-	glm::vec2 m_MouseAccelerationParameters;	// Testing has showed that parameter X should not exceed 1.5f (Because that will result in over-compensation and thus jittering when the cursor comes to a stop).
+	vec2 m_MouseAccelerationParameters;	// Testing has showed that parameter X should not exceed 1.5f (Because that will result in over-compensation and thus jittering when the cursor comes to a stop).
 												
 };
 

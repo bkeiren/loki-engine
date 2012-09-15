@@ -18,7 +18,7 @@ void State_Test::Init()
 {
 // 	m_SphereModel = new SphereModel(5, 10, 10, "resources//shaders//deferredShading.vert", "resources//shaders//deferredShading.frag");
 // 	m_SphereModel->LoadTexture("resources//textures//earth.raw");
-// 	m_SphereModel->SetPosition(glm::vec3(0, 0, 0));
+// 	m_SphereModel->SetPosition(vec3(0, 0, 0));
 
 	// Create a scene.
 	//Renderer::SetScene(new Scene());

@@ -22,8 +22,8 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// _Duration is in seconds. Over this duration, _Frames will be shown.
 	//////////////////////////////////////////////////////////////////////////
-	LkAnimatedImage( float _Duration, int _Frames, const char* _Texture, const glm::vec3& _Position, const glm::vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
-	LkAnimatedImage( float _Duration, int _Frames, const char* _Texture, const glm::vec2& _Position, const glm::vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
+	LkAnimatedImage( float _Duration, int _Frames, const char* _Texture, const vec3& _Position, const vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
+	LkAnimatedImage( float _Duration, int _Frames, const char* _Texture, const vec2& _Position, const vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
 	~LkAnimatedImage();
 	
 	void SetAnimationSpeed( float _Speed );

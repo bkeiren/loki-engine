@@ -255,6 +255,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\ClassDiagram1.cd"
+			>
+		</File>
+		<File
 			RelativePath=".\src\util\clock\clock.cpp"
 			>
 		</File>
@@ -307,11 +311,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\commandlineparsing.h"
+			RelativePath=".\include\commandlineparsing.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\commandlineparsing.h"
+			RelativePath=".\include\core\commandlineparsing.h"
 			>
 		</File>
 		<File
@@ -387,11 +391,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\dev_notes.txt"
+			RelativePath=".\src\dev_notes.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\src\dev_notes.txt"
+			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -1559,11 +1563,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\SplashState.h"
+			RelativePath=".\include\core\states\SplashState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\SplashState.h"
+			RelativePath=".\include\states\SplashState.h"
 			>
 		</File>
 		<File
@@ -1603,11 +1607,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\statemanager.h"
+			RelativePath=".\include\statemanager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\statemanager.h"
+			RelativePath=".\include\core\statemanager.h"
 			>
 		</File>
 		<File
@@ -1619,7 +1623,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\util\StdAfx.cpp"
+			RelativePath=".\src\StdAfx.cpp"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1931,6 +1935,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\include\Types.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\util\uint128.cpp"
 			>
 		</File>
@@ -1967,11 +1975,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.inline.h"
+			RelativePath=".\include\util\util.inline.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.inline.h"
+			RelativePath=".\include\util.inline.h"
 			>
 		</File>
 		<File

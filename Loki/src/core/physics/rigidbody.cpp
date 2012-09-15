@@ -81,7 +81,7 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 			for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
 			{
 				const renderer::LkSubMesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
-				glm::mat4 submeshtransform;	// Identity, for now?
+				mat4 submeshtransform;	// Identity, for now?
 
 				// The original, non-reduced, shape.
 				// A btConvexHullShape simply takes a point cloud (No triangles are defined) and from this constructs
@@ -243,10 +243,10 @@ LkRigidBody::~LkRigidBody()
 	// Delete collision shape?
 }
 
-void LkRigidBody::SetPosition( const glm::vec3& _Position, bool _PreserveForces /*= false*/ )
+void LkRigidBody::SetPosition( const vec3& _Position, bool _PreserveForces /*= false*/ )
 {
-	glm::mat4 trans = GLMMat(m_RigidBody->getCenterOfMassTransform());
-	trans[3] = glm::vec4(_Position, 0.0f);
+	mat4 trans = GLMMat(m_RigidBody->getCenterOfMassTransform());
+	trans[3] = vec4(_Position, 0.0f);
 	m_RigidBody->setCenterOfMassTransform(BTTransform(trans));
 
 	if (!_PreserveForces)
@@ -257,15 +257,15 @@ void LkRigidBody::SetPosition( const glm::vec3& _Position, bool _PreserveForces 
 	m_RigidBody->activate(true);
 }
 
-glm::vec3 LkRigidBody::GetPosition() const
+vec3 LkRigidBody::GetPosition() const
 {
 	return GLMVec3(m_RigidBody->getCenterOfMassPosition());
 }
 
-void LkRigidBody::SetOrientation( const glm::quat& _Orientation, bool _PreserveForces /*= false*/ )
+void LkRigidBody::SetOrientation( const quat& _Orientation, bool _PreserveForces /*= false*/ )
 {
-	glm::mat4 m = glm::gtc::quaternion::mat4_cast(_Orientation);
-	m[3] = glm::vec4(GLMVec3(m_RigidBody->getCenterOfMassPosition()), 1.0f);
+	mat4 m = math::gtc::quaternion::mat4_cast(_Orientation);
+	m[3] = vec4(GLMVec3(m_RigidBody->getCenterOfMassPosition()), 1.0f);
 	m_RigidBody->setCenterOfMassTransform(BTTransform(m));
 
 	if (!_PreserveForces)
@@ -276,7 +276,7 @@ void LkRigidBody::SetOrientation( const glm::quat& _Orientation, bool _PreserveF
 	m_RigidBody->activate(true);
 }
 
-void LkRigidBody::SetTransformation( const glm::mat4& _Transformation, bool _PreserveForces /*= false*/ )
+void LkRigidBody::SetTransformation( const mat4& _Transformation, bool _PreserveForces /*= false*/ )
 {
 	m_RigidBody->setCenterOfMassTransform(BTTransform(_Transformation));
 
@@ -288,12 +288,12 @@ void LkRigidBody::SetTransformation( const glm::mat4& _Transformation, bool _Pre
 	m_RigidBody->activate(true);
 }
 
-void LkRigidBody::ApplyCentralForce( const glm::vec3& _Force )
+void LkRigidBody::ApplyCentralForce( const vec3& _Force )
 {
 	m_RigidBody->applyCentralForce(BTVec3(_Force));
 }
 
-void LkRigidBody::ApplyCentralImpulse( const glm::vec3& _Impulse )
+void LkRigidBody::ApplyCentralImpulse( const vec3& _Impulse )
 {
 	m_RigidBody->applyCentralImpulse(BTVec3(_Impulse));
 }
@@ -303,7 +303,7 @@ void LkRigidBody::ApplyDamping( float _TimeStep )
 	m_RigidBody->applyDamping(_TimeStep);
 }
 
-void LkRigidBody::ApplyForce( const glm::vec3& _Force, const glm::vec3& _Point )
+void LkRigidBody::ApplyForce( const vec3& _Force, const vec3& _Point )
 {
 	m_RigidBody->applyForce(BTVec3(_Force), BTVec3(_Point));
 }
@@ -313,17 +313,17 @@ void LkRigidBody::ApplyGravity()
 	m_RigidBody->applyGravity();
 }
 
-void LkRigidBody::ApplyImpulse( const glm::vec3& _Impulse, const glm::vec3& _Point )
+void LkRigidBody::ApplyImpulse( const vec3& _Impulse, const vec3& _Point )
 {
 	m_RigidBody->applyImpulse(BTVec3(_Impulse), BTVec3(_Point));
 }
 
-void LkRigidBody::ApplyTorque( const glm::vec3& _Torque )
+void LkRigidBody::ApplyTorque( const vec3& _Torque )
 {
 	m_RigidBody->applyTorque(BTVec3(_Torque));
 }
 
-void LkRigidBody::ApplyTorqueImpulse( const glm::vec3& _Torque )
+void LkRigidBody::ApplyTorqueImpulse( const vec3& _Torque )
 {
 	m_RigidBody->applyTorqueImpulse(BTVec3(_Torque));
 }
@@ -333,7 +333,7 @@ void LkRigidBody::ClearForces()
 	m_RigidBody->clearForces();
 }
 
-void LkRigidBody::GetAABB( glm::vec3& _AABBMin, glm::vec3& _AABBMax ) const
+void LkRigidBody::GetAABB( vec3& _AABBMin, vec3& _AABBMax ) const
 {
 	btVector3 aabbmin, aabbmax;
 	m_RigidBody->getAabb(aabbmin, aabbmax);
@@ -341,17 +341,17 @@ void LkRigidBody::GetAABB( glm::vec3& _AABBMin, glm::vec3& _AABBMax ) const
 	_AABBMax = GLMVec3(aabbmax);
 }
 
-glm::vec3 LkRigidBody::GetCenterOfMass() const
+vec3 LkRigidBody::GetCenterOfMass() const
 {
 	return GLMVec3(m_RigidBody->getCenterOfMassPosition());
 }
 
-glm::vec3 LkRigidBody::GetDeltaAngularVelocity() const
+vec3 LkRigidBody::GetDeltaAngularVelocity() const
 {
 	return GLMVec3(m_RigidBody->getDeltaAngularVelocity());
 }
 
-glm::vec3 LkRigidBody::GetDeltaLinearVelocity() const
+vec3 LkRigidBody::GetDeltaLinearVelocity() const
 {
 	return GLMVec3(m_RigidBody->getDeltaLinearVelocity());
 }
@@ -361,7 +361,7 @@ float LkRigidBody::GetFriction() const
 	return m_RigidBody->getFriction();
 }
 
-glm::vec3 LkRigidBody::GetGravity() const
+vec3 LkRigidBody::GetGravity() const
 {
 	return GLMVec3(m_RigidBody->getGravity());
 }
@@ -371,17 +371,17 @@ float LkRigidBody::GetLinearDamping() const
 	return m_RigidBody->getLinearDamping();
 }
 
-glm::vec3 LkRigidBody::GetLinearFactor() const
+vec3 LkRigidBody::GetLinearFactor() const
 {
 	return GLMVec3(m_RigidBody->getLinearFactor());
 }
 
-glm::vec3 LkRigidBody::GetLinearVelocity() const
+vec3 LkRigidBody::GetLinearVelocity() const
 {
 	return GLMVec3(m_RigidBody->getLinearVelocity());
 }
 
-glm::quat LkRigidBody::GetOrientation() const
+quat LkRigidBody::GetOrientation() const
 {
 	return GLMQuat(m_RigidBody->getOrientation());
 }
@@ -391,27 +391,27 @@ float LkRigidBody::GetRestitution() const
 	return m_RigidBody->getRestitution();
 }
 
-glm::vec3 LkRigidBody::GetTotalForce() const
+vec3 LkRigidBody::GetTotalForce() const
 {
 	return GLMVec3(m_RigidBody->getTotalForce());
 }
 
-glm::vec3 LkRigidBody::GetTotalTorque() const
+vec3 LkRigidBody::GetTotalTorque() const
 {
 	return GLMVec3(m_RigidBody->getTotalTorque());
 }
 
-glm::vec3 LkRigidBody::GetVelocityInLocalPoint( const glm::vec3& _Point ) const
+vec3 LkRigidBody::GetVelocityInLocalPoint( const vec3& _Point ) const
 {
 	return GLMVec3(m_RigidBody->getVelocityInLocalPoint(BTVec3(_Point)));
 }
 
-glm::mat4 LkRigidBody::GetWorldTransform() const
+mat4 LkRigidBody::GetWorldTransform() const
 {
 	return GLMMat(m_RigidBody->getWorldTransform());
 }
 
-void LkRigidBody::Translate( const glm::vec3& _Translation )
+void LkRigidBody::Translate( const vec3& _Translation )
 {
 	m_RigidBody->translate(BTVec3(_Translation));
 }

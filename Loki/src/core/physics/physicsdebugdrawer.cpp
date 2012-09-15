@@ -41,7 +41,7 @@ void LkDebugDrawer::drawLine( const btVector3& from, const btVector3& to, const 
 
 void LkDebugDrawer::drawContactPoint(const btVector3& PointOnB,const btVector3& normalOnB,btScalar distance,int lifeTime,const btVector3& color)
 {
-	glm::vec3 col = GLMVec3(color);
+	vec3 col = GLMVec3(color);
 	renderer::debug::DrawSphere(GLMVec3(PointOnB), 0.1f, true, col);
 	renderer::debug::DrawLine3D(GLMVec3(PointOnB), GLMVec3(PointOnB) + (GLMVec3(normalOnB) * distance), true, col);
 }

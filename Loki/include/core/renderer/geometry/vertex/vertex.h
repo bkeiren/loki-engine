@@ -19,11 +19,11 @@ namespace renderer
 //////////////////////////////////////////////////////////////////////////
 struct LkVertex
 {
-	glm::vec3 pos;
-	glm::vec2 uv;
-	glm::vec3 normal;
-	glm::vec3 tangent;
-	glm::vec3 binormal;
+	vec3 pos;
+	vec2 uv;
+	vec3 normal;
+	vec3 tangent;
+	vec3 binormal;
 };
 
 }

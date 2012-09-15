@@ -70,7 +70,7 @@ public:
 	int GetWindowHeight();
 	int GetRenderWidth();
 	int GetRenderHeight();
-	glm::vec2 GetPixelScale();
+	vec2 GetPixelScale();
 private:
 	bool _Init( LkWindow* _Window );
 	void _Shutdown();
