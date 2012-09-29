@@ -40,12 +40,12 @@ void testcb( LkParticle* _Particle )
 
 MyGame::MyGame()
 {
-
+	
 }
 
 MyGame::~MyGame()
 {
-
+	
 }
 
 void MyGame::PreInit()
