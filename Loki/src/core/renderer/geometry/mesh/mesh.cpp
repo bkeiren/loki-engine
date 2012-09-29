@@ -1,4 +1,3 @@
-#include "core/renderer/geometry/submesh/submesh.h"
 #include "core/renderer/geometry/mesh/mesh.h"
 #include "core/renderer/geometry/vertex/vertex.h"
 
@@ -7,6 +6,10 @@
 #include <AssImp//aiMesh.h>
 #include <AssImp//aiScene.h>
 #include <AssImp//aiPostProcess.h>
+
+#include "core/graphics/IndexBufferObject.h"
+#include "core/graphics/VertexBufferObject.h"
+#include "core/graphics/Mesh.h"
 
 namespace loki
 {
@@ -19,14 +22,15 @@ LkMesh::LkMesh( const aiScene* _aiScene )	:
 	m_SubMeshes(0)
 {
 	unsigned int NumMeshes = _aiScene->mNumMeshes;
-	m_SubMeshes = new LkSubMesh*[NumMeshes];
+	m_SubMeshes = new graphics::Mesh*[NumMeshes];
 	m_NumSubMeshes = NumMeshes;
 
 	aiMesh** m_tempMeshArray = _aiScene->mMeshes;
 
 	for (unsigned int i = 0; i < NumMeshes; ++i)
 	{       
-		m_SubMeshes[i] = new LkSubMesh();
+		graphics::IndexBufferObject* ibo = 0;
+		graphics::VertexBufferObject* vbo = 0;
 
 		int NumFaces = m_tempMeshArray[i]->mNumFaces;
 		int NumVerts = m_tempMeshArray[i]->mNumVertices;
@@ -40,7 +44,8 @@ LkMesh::LkMesh( const aiScene* _aiScene )	:
 			Indices[j * 3 + 1] = m_tempMeshArray[i]->mFaces[j].mIndices[1];
 			Indices[j * 3 + 2] = m_tempMeshArray[i]->mFaces[j].mIndices[2];
 		}
-		if (!m_SubMeshes[i]->_CreateIndexBuffer(Indices, NumIndices))
+		ibo = graphics::IndexBufferObject::Create(Indices, NumIndices);
+		if (!ibo/*m_SubMeshes[i]->_CreateIndexBuffer(Indices, NumIndices)*/)
 		{
 			LOG(VL_ERROR, "Mesh::Mesh: SubMesh::_CreateIndexBuffer failed");
 			assert("Mesh::Mesh: SubMesh::_CreateIndexBuffer failed" && 0);
@@ -56,11 +61,14 @@ LkMesh::LkMesh( const aiScene* _aiScene )	:
 			if (m_tempMeshArray[i]->mTangents)			Vertices[y].tangent		= -vec3(m_tempMeshArray[i]->mTangents[y].x,			m_tempMeshArray[i]->mTangents[y].y,		m_tempMeshArray[i]->mTangents[y].z);
 			if (m_tempMeshArray[i]->mTextureCoords[0])	Vertices[y].uv			= vec2(m_tempMeshArray[i]->mTextureCoords[0][y].x, m_tempMeshArray[i]->mTextureCoords[0][y].y);
 		}
-		if(!m_SubMeshes[i]->_CreateVertexBuffer(Vertices, NumVerts))
+		vbo = graphics::VertexBufferObject::Create((graphics::Vertex*)Vertices, NumVerts);
+		if(!vbo/*m_SubMeshes[i]->_CreateVertexBuffer(Vertices, NumVerts)*/)
 		{
 			LOG(VL_ERROR, "Mesh::Mesh: SubMesh::_CreateVertexBuffer failed");
 			assert("Mesh::Mesh: SubMesh::_CreateVertexBuffer failed" && 0);
 		}
+
+		m_SubMeshes[i] = graphics::Mesh::Create(ibo, vbo);
 
 		// No need to delete Vertices or Indices because we transferred ownership to the submesh.
 		// The submesh will take care of deleting the data at destruction.
@@ -86,7 +94,7 @@ unsigned int LkMesh::GetNumSubMeshes() const
 	return m_NumSubMeshes;
 }
 
-const LkSubMesh* LkMesh::GetSubMesh( unsigned int _Index ) const
+const graphics::Mesh* LkMesh::GetSubMesh( unsigned int _Index ) const
 {
 	assert(_Index >= 0 && _Index < m_NumSubMeshes);
 	return m_SubMeshes[_Index];

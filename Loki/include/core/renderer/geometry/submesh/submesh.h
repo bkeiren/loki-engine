@@ -39,15 +39,15 @@ private:
 	LkSubMesh();
 	~LkSubMesh();
 
-	unsigned int m_NumIndices;
-	unsigned int m_NumVertices;
-
-	GLuint m_IndicesVBO;
-	GLuint m_VerticesVBO;
-
-	// Data in main RAM instead of GPU memory. Is used to access the source data even when it is located on the GPU.
-	unsigned int* m_Indices;
-	LkVertex* m_Vertices;
+// 	unsigned int m_NumIndices;
+// 	unsigned int m_NumVertices;
+// 
+// 	GLuint m_IndicesVBO;
+// 	GLuint m_VerticesVBO;
+// 
+// 	// Data in main RAM instead of GPU memory. Is used to access the source data even when it is located on the GPU.
+// 	unsigned int* m_Indices;
+// 	LkVertex* m_Vertices;
 
 	graphics::IndexBufferObject* m_IBO;
 	graphics::VertexBufferObject* m_VBO;

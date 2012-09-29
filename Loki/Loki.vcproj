@@ -311,11 +311,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\commandlineparsing.h"
+			RelativePath=".\include\commandlineparsing.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\commandlineparsing.h"
+			RelativePath=".\include\core\commandlineparsing.h"
 			>
 		</File>
 		<File
@@ -343,11 +343,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\console\console.h"
+			RelativePath=".\include\console\console.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\console\console.h"
+			RelativePath=".\include\core\console\console.h"
 			>
 		</File>
 		<File
@@ -391,11 +391,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\dev_notes.txt"
+			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\dev_notes.txt"
+			RelativePath=".\src\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -1127,11 +1127,15 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\graphics\Mesh.h"
+			RelativePath=".\src\core\graphics\Mesh.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\include\core\renderer\geometry\mesh\mesh.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\Mesh.h"
 			>
 		</File>
 		<File
@@ -1423,19 +1427,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
-			>
-		</File>
-		<File
 			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.inl"
+			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
 			>
 		</File>
 		<File
 			RelativePath=".\include\math\glm\gtx\quaternion.inl"
+			>
+		</File>
+		<File
+			RelativePath=".\include\math\glm\gtc\quaternion.inl"
 			>
 		</File>
 		<File
@@ -1567,11 +1571,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\singleton.h"
+			RelativePath=".\include\core\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
+			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
@@ -1607,11 +1611,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\SplashState.h"
+			RelativePath=".\include\core\states\SplashState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\SplashState.h"
+			RelativePath=".\include\states\SplashState.h"
 			>
 		</File>
 		<File
@@ -1651,11 +1655,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\statemanager.h"
+			RelativePath=".\include\core\statemanager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\statemanager.h"
+			RelativePath=".\include\statemanager.h"
 			>
 		</File>
 		<File
@@ -2015,19 +2019,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\util.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.inline.h"
+			RelativePath=".\include\util\util.h"
 			>
 		</File>
 		<File
 			RelativePath=".\include\util.inline.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\util\util.inline.h"
 			>
 		</File>
 		<File
@@ -2071,11 +2075,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\renderer\geometry\vertex\vertex.h"
+			RelativePath=".\include\core\graphics\Vertex.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\graphics\Vertex.h"
+			RelativePath=".\include\core\renderer\geometry\vertex\vertex.h"
 			>
 		</File>
 		<File

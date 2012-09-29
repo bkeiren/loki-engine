@@ -8,10 +8,13 @@ struct aiScene;
 namespace loki
 {
 
+namespace graphics
+{
+	class Mesh;
+}
+
 namespace renderer
 {
-
-class LkSubMesh;
 
 //////////////////////////////////////////////////////////////////////////
 // The Mesh class represents a group of meshes that are defined in
@@ -25,13 +28,13 @@ class LkMesh
 	friend class LkModel;
 public:
 	unsigned int GetNumSubMeshes() const;
-	const LkSubMesh* GetSubMesh( unsigned int _Index ) const;
+	const graphics::Mesh* GetSubMesh( unsigned int _Index ) const;
 private:
 	LkMesh( const aiScene* _aiScene );
 	LkMesh();
 	~LkMesh();
 
-	LkSubMesh** m_SubMeshes;
+	graphics::Mesh** m_SubMeshes;
 	unsigned int m_NumSubMeshes;
 };
 
