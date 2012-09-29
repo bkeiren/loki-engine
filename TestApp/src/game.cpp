@@ -27,7 +27,7 @@
 
 #include "core/entitysystem/IEntitySystem.h"
 
-#include "util/json/jsondocument.h"
+#include "util/json/json.h"
 
 using namespace loki;
 
