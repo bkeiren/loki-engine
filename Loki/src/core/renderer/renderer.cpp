@@ -1,7 +1,7 @@
 #include <Windows.h>	// Required for wglGetProcAddress
 #include <GLEW\\glew.h>
 #include <GL\\glut.h>
-#include "core/renderer/geometry/model/model.h"
+//#include "core/renderer/geometry/model/model.h"
 #include "core/renderer/framebufferobject.h"
 #include "core/renderer/deferredrenderobject.h"
 #include "core/actor/camera/camera.h"
@@ -154,7 +154,7 @@ bool LkRenderer::_Init( LkWindow* _Window )
 	g_TextureManager = new LkTextureManager();
 
 	// Initialize the model manager.
-	g_ModelManager = new LkModelManager();
+	//g_ModelManager = new LkModelManager();
 
 
 	m_LightEffect = g_EffectManager->CreateEffectFromFile("resources//shaders//light.cgfx", "LightEffect");
@@ -207,8 +207,8 @@ void LkRenderer::_Shutdown()
 	// Shutdown AssImp.
 	aiDetachAllLogStreams();
 
-	delete g_ModelManager;
-	g_ModelManager = NULL;
+// 	delete g_ModelManager;
+// 	g_ModelManager = NULL;
 
 	delete g_TextureManager;
 	g_TextureManager = NULL;
@@ -680,19 +680,19 @@ void LkRenderer::_RenderOpaqueGeometry()
 	mat4 viewmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
 	mat4 projectionmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix();
 
-	for (std::list<LkRenderComponent*>::iterator it = LkRenderComponent::m_RenderComponents.begin(); it != LkRenderComponent::m_RenderComponents.end(); ++it)
-	{
-		LkMovableComponent* movcomp = (*it)->GetActor()->GetComponent<LkMovableComponent>();
-
-		if ((*it)->m_Model)	// TODO: Replace this check with a default model to indicate missing models.
-		{
-			mat4 t = (movcomp)?(movcomp->GetTransformation()):(mat4(1.0f, 0.0f, 0.0f, 0.0f, 
-																			  0.0f, 1.0f, 0.0f, 0.0f, 
-																			  0.0f, 0.0f, 1.0f, 0.0f,
-																			  0.0f, 0.0f, 0.0f, 1.0f));
-			(*it)->m_Model->_Render(t, viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
-		}
-	}
+// 	for (std::list<LkRenderComponent*>::iterator it = LkRenderComponent::m_RenderComponents.begin(); it != LkRenderComponent::m_RenderComponents.end(); ++it)
+// 	{
+// 		LkMovableComponent* movcomp = (*it)->GetActor()->GetComponent<LkMovableComponent>();
+// 
+// 		if ((*it)->m_Model)	// TODO: Replace this check with a default model to indicate missing models.
+// 		{
+// 			mat4 t = (movcomp)?(movcomp->GetTransformation()):(mat4(1.0f, 0.0f, 0.0f, 0.0f, 
+// 																			  0.0f, 1.0f, 0.0f, 0.0f, 
+// 																			  0.0f, 0.0f, 1.0f, 0.0f,
+// 																			  0.0f, 0.0f, 0.0f, 1.0f));
+// 			(*it)->m_Model->_Render(t, viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
+// 		}
+// 	}
 
 	static Model* mdl = Model::Load("resources//lmo//test.lmo");
 	mdl->Render(mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f), viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());

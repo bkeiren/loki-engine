@@ -6,11 +6,15 @@
 namespace loki
 {
 
+namespace renderer
+{
+class LkEffect;
+}
+
 namespace graphics
 {
 
 class Texture;
-class LkEffect;
 
 class Material
 {
@@ -29,13 +33,22 @@ public:
 		_TT_COUNT	// Do not touch.
 	};
 
-	const Texture* GetTexture( uint32 _Index ) const;
-	void SetTexture( uint32 _Index, Texture* _Texture );
+	Material();
+	~Material();
 
-	void SetEffect( LkEffect* _Effect );
+	const Texture* GetTexture( uint32 _Index ) const;
+	void SetTexture( uint32 _Index, Texture* _Texture, bool _DeleteOldTexture = true );
+
+	renderer::LkEffect* GetEffect() const;
+	void SetEffect( renderer::LkEffect* _Effect );
+
+	float GetShininess() const;
+	void SetShininess( float _Shininess );
 private:
+
 	Texture* m_Textures[_TT_COUNT];
-	LkEffect* m_Effect;
+	renderer::LkEffect* m_Effect;
+	float m_Shininess;
 };
 
 }

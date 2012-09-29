@@ -7,7 +7,7 @@
 #include "core/actor/handle/handle.h"
 #include "core/game/localization/localization.h"
 #include "core/renderer/renderer.h"
-#include "core/renderer/geometry/model/model.h"
+//#include "core/renderer/geometry/model/model.h"
 #include "core/actor/components/rendercomponent/rendercomponent.h"
 #include "core/actor/components/physicscomponent/physicscomponent.h"
 #include "core/actor/pawn/pawn.h"
@@ -129,58 +129,58 @@ bool MyGame::Init()
 		LkRenderComponent* rendercomp = NULL;
 		loki::renderer::LkMaterial* mtl = NULL;
 
-		{
-			pawn = m_Level->SpawnPawn("StanfordDragon");
-			rendercomp = pawn->GetComponent<LkRenderComponent>();
-			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//torus.dae"));
-			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
-			mtl->SetShininess(100.0f);
-			rendercomp->GetModel()->SetMaterial(mtl, 0);
-			rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));
-			LkPhysicsComponent* phycomp = pawn->GetComponent<LkPhysicsComponent>();
-			physics::RigidBodyInfo info;
-			info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-			info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
-			info.m_Restitution = 0.75f;
-			info.m_Mass = 100.0f;
-			phycomp->CreateBodyFromInfo(info);
-		}
-		for (int i = 0; i < 10; ++i)
-		{
-			{
-				std::string name = "StanfordDragon";
-				char buff[8];
-				_itoa_s(i, buff, 2);
-				name += buff;
-				pawn = m_Level->SpawnPawn(name.c_str());
-				LkMovableComponent* movcomp = pawn->GetComponent<LkMovableComponent>();
-				movcomp->SetPosition(vec3(i * 0.01f, 5 + i * 2, 0.0f));
-				rendercomp = pawn->GetComponent<LkRenderComponent>();
-				rendercomp->SetModel(new loki::renderer::LkModel("resources//models//torus.dae"));
-				mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
-				mtl->SetShininess(100.0f);
-				rendercomp->GetModel()->SetMaterial(mtl, 0);
-				rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));			
-				LkPhysicsComponent* phycomp = pawn->GetComponent<LkPhysicsComponent>();
-				physics::RigidBodyInfo info;
-				info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-				info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
-				info.m_Restitution = 0.75f;
-				info.m_Mass = 100.0f;
-				phycomp->CreateBodyFromInfo(info);
-			}
-		}
-
-		{
-			pawn = m_Level->SpawnPawn("Pawn1");
-			pawn->RemoveComponent<LkPhysicsComponent>();
-			rendercomp = pawn->GetComponent<LkRenderComponent>();
-			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//cube.dae"));
-			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture6.bmp", "resources//textures//texture6_normal.bmp", "resources//textures//texture6_specular.bmp");
-			mtl->SetShininess(100.0f);
-			rendercomp->GetModel()->SetMaterial(mtl, 0);
-			rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));
-		}
+// 		{
+// 			pawn = m_Level->SpawnPawn("StanfordDragon");
+// 			rendercomp = pawn->GetComponent<LkRenderComponent>();
+// 			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//torus.dae"));
+// 			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
+// 			mtl->SetShininess(100.0f);
+// 			rendercomp->GetModel()->SetMaterial(mtl, 0);
+// 			rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));
+// 			LkPhysicsComponent* phycomp = pawn->GetComponent<LkPhysicsComponent>();
+// 			physics::RigidBodyInfo info;
+// 			info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+// 			info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
+// 			info.m_Restitution = 0.75f;
+// 			info.m_Mass = 100.0f;
+// 			phycomp->CreateBodyFromInfo(info);
+// 		}
+// 		for (int i = 0; i < 10; ++i)
+// 		{
+// 			{
+// 				std::string name = "StanfordDragon";
+// 				char buff[8];
+// 				_itoa_s(i, buff, 2);
+// 				name += buff;
+// 				pawn = m_Level->SpawnPawn(name.c_str());
+// 				LkMovableComponent* movcomp = pawn->GetComponent<LkMovableComponent>();
+// 				movcomp->SetPosition(vec3(i * 0.01f, 5 + i * 2, 0.0f));
+// 				rendercomp = pawn->GetComponent<LkRenderComponent>();
+// 				rendercomp->SetModel(new loki::renderer::LkModel("resources//models//torus.dae"));
+// 				mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
+// 				mtl->SetShininess(100.0f);
+// 				rendercomp->GetModel()->SetMaterial(mtl, 0);
+// 				rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));			
+// 				LkPhysicsComponent* phycomp = pawn->GetComponent<LkPhysicsComponent>();
+// 				physics::RigidBodyInfo info;
+// 				info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+// 				info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
+// 				info.m_Restitution = 0.75f;
+// 				info.m_Mass = 100.0f;
+// 				phycomp->CreateBodyFromInfo(info);
+// 			}
+// 		}
+// 
+// 		{
+// 			pawn = m_Level->SpawnPawn("Pawn1");
+// 			pawn->RemoveComponent<LkPhysicsComponent>();
+// 			rendercomp = pawn->GetComponent<LkRenderComponent>();
+// 			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//cube.dae"));
+// 			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture6.bmp", "resources//textures//texture6_normal.bmp", "resources//textures//texture6_specular.bmp");
+// 			mtl->SetShininess(100.0f);
+// 			rendercomp->GetModel()->SetMaterial(mtl, 0);
+// 			rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));
+// 		}
 	}
 
 	{

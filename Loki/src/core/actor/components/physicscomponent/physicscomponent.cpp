@@ -1,10 +1,10 @@
 #include "core/actor/components/physicscomponent/physicscomponent.h"
 #include "core/actor/actor.h"
-#include "core/renderer/geometry/mesh/mesh.h"
+//#include "core/renderer/geometry/mesh/mesh.h"
 #include "core/physics/physics.h"
 #include "core/actor/components/movablecomponent/movablecomponent.h"
 #include "core/actor/components/rendercomponent/rendercomponent.h"
-#include "core/renderer/geometry/model/model.h"
+//#include "core/renderer/geometry/model/model.h"
 
 namespace loki
 {
@@ -83,39 +83,39 @@ void LkPhysicsComponent::_Init()
 	// Alterations can be made afterwards.
 	// If there is no movable component, the initial transformation will simply be an identity matrix.
 	// if there is no render component, the shape of the shape is a simple box of unit size.
-
-	LkMovableComponent* movcomp = GetActor()->GetComponent<LkMovableComponent>();
-	LkRenderComponent* rendercomp = GetActor()->GetComponent<LkRenderComponent>();
-
-	physics::RigidBodyInfo info;
-
-	// Check whether we have a render component, a model on that component and a mesh on that model.
-	if (rendercomp && rendercomp->GetModel() && rendercomp->GetModel()->GetMesh())
-	{
-		info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-		info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
-	}
-	else
-	{
-		// Use a simple unit box.
-		info.m_Shape = physics::CS_BOX;
-		info.m_BoxData.m_HalfExtents = vec3(0.5f, 0.5f, 0.5f);
-	}
-
-	// Check whether we have a movable component.
-	if (movcomp)
-	{
-		info.m_InitialTransform = movcomp->GetTransformation();
-	}
-	else
-	{
-		info.m_InitialTransform = mat4(1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f);
-	}
-
-	m_RigidBody = physics::g_Physics->AddRigidBody(info);
+// 
+// 	LkMovableComponent* movcomp = GetActor()->GetComponent<LkMovableComponent>();
+// 	LkRenderComponent* rendercomp = GetActor()->GetComponent<LkRenderComponent>();
+// 
+// 	physics::RigidBodyInfo info;
+// 
+// 	// Check whether we have a render component, a model on that component and a mesh on that model.
+// 	if (rendercomp && rendercomp->GetModel() && rendercomp->GetModel()->GetMesh())
+// 	{
+// 		info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+// 		info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
+// 	}
+// 	else
+// 	{
+// 		// Use a simple unit box.
+// 		info.m_Shape = physics::CS_BOX;
+// 		info.m_BoxData.m_HalfExtents = vec3(0.5f, 0.5f, 0.5f);
+// 	}
+// 
+// 	// Check whether we have a movable component.
+// 	if (movcomp)
+// 	{
+// 		info.m_InitialTransform = movcomp->GetTransformation();
+// 	}
+// 	else
+// 	{
+// 		info.m_InitialTransform = mat4(1.0f, 0.0f, 0.0f, 0.0f,
+// 			0.0f, 1.0f, 0.0f, 0.0f,
+// 			0.0f, 0.0f, 1.0f, 0.0f,
+// 			0.0f, 0.0f, 0.0f, 1.0f);
+// 	}
+// 
+// 	m_RigidBody = physics::g_Physics->AddRigidBody(info);
 }
 
 }

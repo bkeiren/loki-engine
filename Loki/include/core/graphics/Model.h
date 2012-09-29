@@ -21,6 +21,11 @@ public:
 
 	static Model* Load( const std::string& _LMOFile );
 
+	void SetScale( const vec3& _Scale );
+	void SetUVScale( const vec2& _Scale );
+	const vec3& GetScale() const;
+	const vec2& GetUVScale() const;
+
 	void Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat4& _ProjectionMatrix, float _ZFar, float _ZNear );
 private:
 	Model();
@@ -30,6 +35,9 @@ private:
 
 	Meshes m_Meshes;
 	Materials m_Materials;
+
+	vec3 m_Scale;
+	vec2 m_UVScale;
 };
 
 }

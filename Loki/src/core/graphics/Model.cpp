@@ -1,4 +1,15 @@
 #include "core/graphics/Model.h"
+#include "core/graphics/Material.h"
+#include "core/graphics/Texture.h"
+#include "core/graphics/Mesh.h"
+#include "core/graphics/Vertex.h"
+#include "core/graphics/IndexBufferObject.h"
+#include "core/graphics/VertexBufferObject.h"
+#include "AssImp/assimp.hpp"
+#include "AssImp/aiPostProcess.h"
+#include "AssImp/aiScene.h"
+#include "util/json/json.h"
+#include "core/renderer/effect/effectmanager.h"
 
 namespace loki
 {
@@ -6,7 +17,9 @@ namespace loki
 namespace graphics
 {
 
-Model::Model()
+Model::Model()	:
+	m_Scale(vec3(1.0f, 1.0f, 1.0f)),
+	m_UVScale(vec2(1.0f, 1.0f))
 {
 
 }
@@ -22,7 +35,7 @@ Model* Model::Load( const std::string& _LMOFile )
 	util::JSONDocument* doc = util::JSONDocument::Open(_LMOFile);
 	if (!doc->IsOpen())
 	{
-		JSON_CLOSE(doc);
+		JSON_CLOSE(doc)
 		LOG(VL_ERROR, "Model::Load: Failed to load LMO file '%s'", _LMOFile.c_str());
 		return 0;
 	}
@@ -43,7 +56,7 @@ Model* Model::Load( const std::string& _LMOFile )
 	// Read all material strings.
 	for (uint32 i = 0; i < materialsValue.Size(); ++i)
 	{
-		JSONValue material = materialsValue[i];
+		util::JSONValue material = materialsValue[i];
 		if (material.IsString())
 		{
 			MaterialsList.push_back(material.AsString());
@@ -65,9 +78,29 @@ Model* Model::Load( const std::string& _LMOFile )
 		Material* mat = _CreateMaterialFromLMAFile((*it));
 		if (mat)
 		{
-			mdl->m_Meshes.push_back(mat);
+			mdl->m_Materials.push_back(mat);
 		}
 	}
+}
+
+void Model::SetScale( const vec3& _Scale )
+{
+	m_Scale = _Scale;
+}
+
+void Model::SetUVScale( const vec2& _Scale )
+{
+	m_UVScale = _Scale;
+}
+
+const vec3& Model::GetScale() const
+{
+	return m_Scale;
+}
+
+const vec2& Model::GetUVScale() const
+{
+	return m_UVScale;
 }
 
 void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat4& _ProjectionMatrix, float _ZFar, float _ZNear )
@@ -76,7 +109,7 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 	{
 		graphics::Mesh* mesh = m_Meshes[i];
 		const Material* material = m_Materials[i];
-		LkEffect* effect = material->GetEffect();
+		renderer::LkEffect* effect = material->GetEffect();
 
 		if (!effect)
 		{
@@ -84,7 +117,7 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 			continue;
 		}
 
-		LkEffectParameter* param = 0;
+		renderer::LkEffectParameter* param = 0;
 
 		// Set the global ambient color.
 		// TODO.
@@ -102,23 +135,23 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 		SETCGPARAM("LKZNEAR", _ZNear);	// Set the Z-near value.
 		SETCGPARAM("LKMATERIALSHININESS", material->GetShininess());
 
-		const LkTexture* tex = 0;
+		const Texture* tex = 0;
 
 		// Set the diffuse texture.
 		tex = material->GetTexture(Material::TT_DIFFUSE);
-		SETCGPARAM("LKDIFFUSETEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
+		SETCGPARAM("LKDIFFUSETEX", (tex)?(tex->GetGLTextureHandle()):((GLuint)0));
 
 		// Set the normal texture.
 		tex = material->GetTexture(Material::TT_NORMAL);
-		SETCGPARAM("LKNORMALTEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
+		SETCGPARAM("LKNORMALTEX", (tex)?(tex->GetGLTextureHandle()):((GLuint)0));
 
 		// Set the specular texture.
 		tex = material->GetTexture(Material::TT_SPECULAR);
-		SETCGPARAM("LKSPECULARTEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
+		SETCGPARAM("LKSPECULARTEX", (tex)?(tex->GetGLTextureHandle()):((GLuint)0));
 
 		// Set the emissive texture.
 		tex = material->GetTexture(Material::TT_EMISSIVE);
-		SETCGPARAM("LKEMISSIVETEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
+		SETCGPARAM("LKEMISSIVETEX", (tex)?(tex->GetGLTextureHandle()):((GLuint)0));
 
 		while (effect->HasNextPass())
 		{
@@ -162,7 +195,7 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 		int NumFaces = m_tempMeshArray[i]->mNumFaces;
 		int NumVerts = m_tempMeshArray[i]->mNumVertices;
 		int NumIndices = NumFaces * 3;
-		LkVertex* Vertices = new LkVertex[NumVerts];
+		Vertex* Vertices = new Vertex[NumVerts];
 		unsigned int* Indices = new unsigned int[NumIndices];
 
 		for (int j = 0; j < NumFaces; ++j)
@@ -188,7 +221,7 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 			if (m_tempMeshArray[i]->mTangents)			Vertices[y].tangent		= -vec3(m_tempMeshArray[i]->mTangents[y].x,			m_tempMeshArray[i]->mTangents[y].y,		m_tempMeshArray[i]->mTangents[y].z);
 			if (m_tempMeshArray[i]->mTextureCoords[0])	Vertices[y].uv			= vec2(m_tempMeshArray[i]->mTextureCoords[0][y].x, m_tempMeshArray[i]->mTextureCoords[0][y].y);
 		}
-		vbo = graphics::VertexBufferObject::Create((graphics::Vertex*)Vertices, NumVerts);
+		vbo = graphics::VertexBufferObject::Create(Vertices, NumVerts);
 		if(!vbo/*m_SubMeshes[i]->_CreateVertexBuffer(Vertices, NumVerts)*/)
 		{
 			LOG(VL_ERROR, "Model::_CreateMeshesFromGeometryFile: Failed to instantiate VertexBufferObject class");
@@ -202,7 +235,7 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 		}
 		else
 		{
-			m_Meshes.push_back(mesh);
+			_Output.push_back(mesh);
 		}
 
 		// No need to delete Vertices or Indices because we transferred ownership to the submesh.
@@ -227,6 +260,7 @@ Material* Model::_CreateMaterialFromLMAFile( const std::string& _LMAFile )
 	util::JSONValue normalTexString = root["normal"];
 	util::JSONValue emissiveTexString = root["emissive"];
 	util::JSONValue effectString = root["effect"];
+	util::JSONValue shininessString = root["shininess"];
 
 	Material* mtl = new Material();
 
@@ -248,7 +282,14 @@ Material* Model::_CreateMaterialFromLMAFile( const std::string& _LMAFile )
 	}
 	if (effectString.IsString())
 	{
-		mtl->SetEffect(LkEffectManager.CreateEffectFromFile(effectString.AsString(), EffectName));	// TODO: Create unique name-creator function or class
+		std::stringstream ss;
+		ss << _LMAFile << (rand()%1024);
+
+		mtl->SetEffect(renderer::g_EffectManager->CreateEffectFromFile(effectString.AsString(), ss.str()));
+	}
+	if (shininessString.IsDouble())
+	{
+		mtl->SetShininess((float)shininessString.AsDouble());
 	}
 
 	JSON_CLOSE(doc);
