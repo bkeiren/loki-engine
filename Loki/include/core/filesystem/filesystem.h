@@ -32,6 +32,7 @@ public:
 	NativeFilePointer GetNativeFilePointer();
 
 	friend LkFile* OpenFile( const char* _File );
+	friend LkFile* OpenFile( const std::string& _File );
 private:
 	LkFile();
 	LkFile( const char* _File );
@@ -51,6 +52,7 @@ private:
 // has been opened.
 //////////////////////////////////////////////////////////////////////////
 LkFile* OpenFile( const char* _File );
+LkFile* OpenFile( const std::string& _File );
 
 //////////////////////////////////////////////////////////////////////////
 // Attempts to create the specified directory. 

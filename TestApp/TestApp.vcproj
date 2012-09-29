@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Loki_d.lib opengl32.lib glew32.lib glu32.lib squirrel_d.lib sqstdlib_d.lib lua52.lib fmodex_vc.lib SOIL.lib assimp_d.lib BulletCollision_debug.lib BulletDynamics_debug.lib BulletSoftBody_debug.lib ConvexDecomposition_debug.lib LinearMath_debug.lib cg.lib cgGL.lib Awesomium_d.lib"
+				AdditionalDependencies="Loki_d.lib opengl32.lib glew32.lib glu32.lib squirrel_d.lib sqstdlib_d.lib lua52.lib fmodex_vc.lib SOIL.lib assimp_d.lib BulletCollision_debug.lib BulletDynamics_debug.lib BulletSoftBody_debug.lib ConvexDecomposition_debug.lib LinearMath_debug.lib cg.lib cgGL.lib Awesomium_d.lib json_vc71_libmtd.lib"
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(LOKI_HOME);$(LOKI_HOME)\lib"
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Loki.lib opengl32.lib glew32.lib glu32.lib squirrel.lib sqstdlib.lib lua52.lib fmodex_vc.lib SOIL.lib assimp.lib BulletCollision.lib BulletDynamics.lib BulletSoftBody.lib ConvexDecomposition.lib LinearMath.lib cg.lib cgGL.lib Awesomium.lib"
+				AdditionalDependencies="Loki.lib opengl32.lib glew32.lib glu32.lib squirrel.lib sqstdlib.lib lua52.lib fmodex_vc.lib SOIL.lib assimp.lib BulletCollision.lib BulletDynamics.lib BulletSoftBody.lib ConvexDecomposition.lib LinearMath.lib cg.lib cgGL.lib Awesomium.lib json_vc71_libmt.lib"
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(LOKI_HOME);$(LOKI_HOME)\lib"

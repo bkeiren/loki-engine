@@ -40,6 +40,13 @@ public:
 	void RotateZWorld( float _Angle );
 	void RotateWorld( vec3& _Axis, float _Angle );
 
+	//////////////////////////////////////////////////////////////////////////
+	// If this returns true, it means that the next call to GetTranslation,
+	// GetOrientation or GetMatrix will trigger a regeneration of either the
+	// internal matrix or the internal translation vector and orientation
+	// quaternion. Although this is no issue, it might be useful to have this
+	// information.
+	//////////////////////////////////////////////////////////////////////////
 	bool IsDirty() const;
 
 	bool operator == ( Transform& _Transform );
