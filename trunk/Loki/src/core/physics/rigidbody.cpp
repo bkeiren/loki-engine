@@ -27,6 +27,10 @@
 #include "core/renderer/geometry/mesh/mesh.h"
 #include "core/renderer/geometry/submesh/submesh.h"
 
+#include "core/graphics/Mesh.h"
+#include "core/graphics/IndexBufferObject.h"
+#include "core/graphics/VertexBufferObject.h"
+
 namespace loki
 {
 
@@ -55,15 +59,15 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 
 				for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
 				{
-					const renderer::LkSubMesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
+					const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
 					
 					btIndexedMesh btmesh;
 
-					btmesh.m_numTriangles = mesh->GetNumIndices() / 3;
-					btmesh.m_numVertices = mesh->GetNumVertices();
-					btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndicesRAM();
+					btmesh.m_numTriangles = mesh->GetIndexBufferObject()->GetNumIndices() / 3;
+					btmesh.m_numVertices = mesh->GetVertexBufferObject()->GetNumVertices();
+					btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndexBufferObject()->GetIndicesRAM();
 					btmesh.m_triangleIndexStride = 3 * sizeof(int);
-					btmesh.m_vertexBase = (unsigned char*)((int)mesh->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos));
+					btmesh.m_vertexBase = (unsigned char*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos));
 					btmesh.m_vertexStride = sizeof(renderer::LkVertex);
 
 					meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
@@ -80,14 +84,14 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 
 			for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
 			{
-				const renderer::LkSubMesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
+				const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
 				mat4 submeshtransform;	// Identity, for now?
 
 				// The original, non-reduced, shape.
 				// A btConvexHullShape simply takes a point cloud (No triangles are defined) and from this constructs
 				// a basic shape primitive that most tightly fits this cloud (Which could be a box, sphere, cylinder, etc.).
-				btConvexHullShape* original = new btConvexHullShape((btScalar*)((int)mesh->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos)), 
-																	mesh->GetNumVertices(),
+				btConvexHullShape* original = new btConvexHullShape((btScalar*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos)), 
+																	mesh->GetVertexBufferObject()->GetNumVertices(),
 																	sizeof(renderer::LkVertex));
 				btShapeHull* hull = new btShapeHull(original);
 
@@ -111,15 +115,15 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 
 			for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
 			{
-				const renderer::LkSubMesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
+				const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
 
 				btIndexedMesh btmesh;
 
-				btmesh.m_numTriangles = mesh->GetNumIndices() / 3;
-				btmesh.m_numVertices = mesh->GetNumVertices();
-				btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndicesRAM();
+				btmesh.m_numTriangles = mesh->GetIndexBufferObject()->GetNumIndices() / 3;
+				btmesh.m_numVertices = mesh->GetVertexBufferObject()->GetNumVertices();
+				btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndexBufferObject()->GetIndicesRAM();
 				btmesh.m_triangleIndexStride = 3 * sizeof(int);
-				btmesh.m_vertexBase = (unsigned char*)((int)mesh->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos));
+				btmesh.m_vertexBase = (unsigned char*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos));
 				btmesh.m_vertexStride = sizeof(renderer::LkVertex);
 
 				meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);

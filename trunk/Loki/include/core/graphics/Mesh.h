@@ -25,6 +25,8 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	void Draw() const;
 
+	const IndexBufferObject* GetIndexBufferObject() const;
+	const VertexBufferObject* GetVertexBufferObject() const;
 private:
 	Mesh();
 

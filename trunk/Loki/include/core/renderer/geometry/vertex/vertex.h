@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef VERTEX_H
-#define VERTEX_H
+#ifndef VERTEX_OLD_H
+#define VERTEX_OLD_H
 
 namespace loki
 {

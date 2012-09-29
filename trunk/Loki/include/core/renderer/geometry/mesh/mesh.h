@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef MESH_H
-#define MESH_H
+#ifndef MESH_OLD_H
+#define MESH_OLD_H
 
 struct aiScene;
 
