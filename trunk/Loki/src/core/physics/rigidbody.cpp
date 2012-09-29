@@ -23,9 +23,9 @@
 
 #include "Bullet/LinearMath/btDefaultMotionState.h"
 
-#include "core/renderer/geometry/vertex/vertex.h"
-#include "core/renderer/geometry/mesh/mesh.h"
-#include "core/renderer/geometry/submesh/submesh.h"
+//#include "core/renderer/geometry/vertex/vertex.h"
+//#include "core/renderer/geometry/mesh/mesh.h"
+//#include "core/renderer/geometry/submesh/submesh.h"
 
 #include "core/graphics/IndexBufferObject.h"
 #include "core/graphics/VertexBufferObject.h"
@@ -57,21 +57,21 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 
 				btTriangleIndexVertexArray* meshinterface = new btTriangleIndexVertexArray();
 
-				for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
-				{
-					const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
-					
-					btIndexedMesh btmesh;
-
-					btmesh.m_numTriangles = mesh->GetIndexBufferObject()->GetNumIndices() / 3;
-					btmesh.m_numVertices = mesh->GetVertexBufferObject()->GetNumVertices();
-					btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndexBufferObject()->GetIndicesRAM();
-					btmesh.m_triangleIndexStride = 3 * sizeof(int);
-					btmesh.m_vertexBase = (unsigned char*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos));
-					btmesh.m_vertexStride = sizeof(renderer::LkVertex);
-
-					meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
-				}
+// 				for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
+// 				{
+// 					const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
+// 					
+// 					btIndexedMesh btmesh;
+// 
+// 					btmesh.m_numTriangles = mesh->GetIndexBufferObject()->GetNumIndices() / 3;
+// 					btmesh.m_numVertices = mesh->GetVertexBufferObject()->GetNumVertices();
+// 					btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndexBufferObject()->GetIndicesRAM();
+// 					btmesh.m_triangleIndexStride = 3 * sizeof(int);
+// 					btmesh.m_vertexBase = (unsigned char*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos));
+// 					btmesh.m_vertexStride = sizeof(renderer::LkVertex);
+// 
+// 					meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
+// 				}
 
 				// Is this static?
 				shape = new btBvhTriangleMeshShape(meshinterface, true, true);
@@ -82,27 +82,27 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 		{
 			shape = new btCompoundShape();
 
-			for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
-			{
-				const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
-				mat4 submeshtransform;	// Identity, for now?
-
-				// The original, non-reduced, shape.
-				// A btConvexHullShape simply takes a point cloud (No triangles are defined) and from this constructs
-				// a basic shape primitive that most tightly fits this cloud (Which could be a box, sphere, cylinder, etc.).
-				btConvexHullShape* original = new btConvexHullShape((btScalar*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos)), 
-																	mesh->GetVertexBufferObject()->GetNumVertices(),
-																	sizeof(renderer::LkVertex));
-				btShapeHull* hull = new btShapeHull(original);
-
-				// Build a new hull with less vertices. We do this because we don't want to have to construct a shape for a huge number
-				// of vertices when only some of these will be of any actual affect to the final shape.
-				// The Bullet documentation says that the number of vertices should be ideally kept below 100...
-				hull->buildHull(original->getMargin());
-
-				// Store the hull.
-				((btCompoundShape*)shape)->addChildShape(BTTransform(submeshtransform), new btConvexHullShape((btScalar*)hull->getVertexPointer(), hull->numVertices()));
-			}
+// 			for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
+// 			{
+// 				const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
+// 				mat4 submeshtransform;	// Identity, for now?
+// 
+// 				// The original, non-reduced, shape.
+// 				// A btConvexHullShape simply takes a point cloud (No triangles are defined) and from this constructs
+// 				// a basic shape primitive that most tightly fits this cloud (Which could be a box, sphere, cylinder, etc.).
+// 				btConvexHullShape* original = new btConvexHullShape((btScalar*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos)), 
+// 																	mesh->GetVertexBufferObject()->GetNumVertices(),
+// 																	sizeof(renderer::LkVertex));
+// 				btShapeHull* hull = new btShapeHull(original);
+// 
+// 				// Build a new hull with less vertices. We do this because we don't want to have to construct a shape for a huge number
+// 				// of vertices when only some of these will be of any actual affect to the final shape.
+// 				// The Bullet documentation says that the number of vertices should be ideally kept below 100...
+// 				hull->buildHull(original->getMargin());
+// 
+// 				// Store the hull.
+// 				((btCompoundShape*)shape)->addChildShape(BTTransform(submeshtransform), new btConvexHullShape((btScalar*)hull->getVertexPointer(), hull->numVertices()));
+// 			}
 
 			//delete original;	// Required?
 			break;
@@ -113,21 +113,21 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 
 			btTriangleIndexVertexArray* meshinterface = new btTriangleIndexVertexArray();
 
-			for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
-			{
-				const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
-
-				btIndexedMesh btmesh;
-
-				btmesh.m_numTriangles = mesh->GetIndexBufferObject()->GetNumIndices() / 3;
-				btmesh.m_numVertices = mesh->GetVertexBufferObject()->GetNumVertices();
-				btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndexBufferObject()->GetIndicesRAM();
-				btmesh.m_triangleIndexStride = 3 * sizeof(int);
-				btmesh.m_vertexBase = (unsigned char*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos));
-				btmesh.m_vertexStride = sizeof(renderer::LkVertex);
-
-				meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
-			}
+// 			for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
+// 			{
+// 				const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
+// 
+// 				btIndexedMesh btmesh;
+// 
+// 				btmesh.m_numTriangles = mesh->GetIndexBufferObject()->GetNumIndices() / 3;
+// 				btmesh.m_numVertices = mesh->GetVertexBufferObject()->GetNumVertices();
+// 				btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndexBufferObject()->GetIndicesRAM();
+// 				btmesh.m_triangleIndexStride = 3 * sizeof(int);
+// 				btmesh.m_vertexBase = (unsigned char*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos));
+// 				btmesh.m_vertexStride = sizeof(renderer::LkVertex);
+// 
+// 				meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
+// 			}
 
 			shape = new btConvexTriangleMeshShape(meshinterface, true);
 			//shape = new btGImpactMeshShape(meshinterface);

@@ -16,6 +16,7 @@ public:
 
 	static Texture* Load( const std::string& _File );
 
+	uint32 GetGLTextureHandle() const;
 private:
 	Texture();
 

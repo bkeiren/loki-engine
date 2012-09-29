@@ -13,7 +13,7 @@ namespace loki
 namespace util
 {
 
-#define JSON_CLOSE( doc )	( doc->Close(); doc = 0; )
+#define JSON_CLOSE( doc )	{ doc->Close(); doc = 0; }
 
 class JSONDocument
 {
