@@ -16,16 +16,16 @@ class VertexBufferObject
 public:
 	~VertexBufferObject();
 
-	static VertexBufferObject* Create( Vertex* _Vertices, unsigned int _NumVertices );
+	static VertexBufferObject* Create( Vertex* _Vertices, uint32 _NumVertices );
 
-	unsigned int GetNumVertices() const;
-	unsigned int GetBufferHandle() const;
+	uint32 GetNumVertices() const;
+	uint32 GetBufferHandle() const;
 	const Vertex* GetVerticesRAM() const;
 private:
 	VertexBufferObject();
 
-	unsigned int m_NumVertices;
-	unsigned int m_GLBufferHandle;
+	uint32 m_NumVertices;
+	uint32 m_GLBufferHandle;
 	Vertex* m_VerticesRAM;
 };
 

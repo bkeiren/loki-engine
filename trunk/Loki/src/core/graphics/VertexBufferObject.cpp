@@ -26,7 +26,7 @@ VertexBufferObject::~VertexBufferObject()
 	delete[] m_VerticesRAM;
 }
 
-VertexBufferObject* VertexBufferObject::Create( Vertex* _Vertices, unsigned int _NumVertices )
+VertexBufferObject* VertexBufferObject::Create( Vertex* _Vertices, uint32 _NumVertices )
 {
 	assert(_Vertices != NULL);
 	assert(_NumVertices > 0);
@@ -48,12 +48,12 @@ VertexBufferObject* VertexBufferObject::Create( Vertex* _Vertices, unsigned int 
 	return vbo;
 }
 
-unsigned int VertexBufferObject::GetNumVertices() const
+uint32 VertexBufferObject::GetNumVertices() const
 {
 	return m_NumVertices;
 }
 
-unsigned int VertexBufferObject::GetBufferHandle() const
+uint32 VertexBufferObject::GetBufferHandle() const
 {
 	return m_GLBufferHandle;
 }

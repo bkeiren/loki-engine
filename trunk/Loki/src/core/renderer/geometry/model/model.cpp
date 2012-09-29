@@ -1,6 +1,6 @@
 #include "core/renderer/geometry/model/model.h"
 #include "core/renderer/geometry/mesh/mesh.h"
-#include "core/renderer/geometry/submesh/submesh.h"
+//#include "core/renderer/geometry/submesh/submesh.h"
 #include "core/renderer/geometry/vertex/vertex.h"
 //#include "core/resourcemanager/meshmanager.h"
 #include "core/resourcemanager/texturemanager.h"

@@ -311,11 +311,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\commandlineparsing.h"
+			RelativePath=".\include\core\commandlineparsing.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\commandlineparsing.h"
+			RelativePath=".\include\commandlineparsing.h"
 			>
 		</File>
 		<File
@@ -343,11 +343,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\console\console.h"
+			RelativePath=".\include\core\console\console.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\console\console.h"
+			RelativePath=".\include\console\console.h"
 			>
 		</File>
 		<File
@@ -443,11 +443,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\engine.h"
+			RelativePath=".\include\engine.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\engine.h"
+			RelativePath=".\include\core\engine.h"
 			>
 		</File>
 		<File
@@ -923,11 +923,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\baseclass\istate.h"
+			RelativePath=".\include\core\states\baseclass\istate.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\baseclass\istate.h"
+			RelativePath=".\include\states\baseclass\istate.h"
 			>
 		</File>
 		<File
@@ -1019,11 +1019,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\logger.h"
+			RelativePath=".\include\core\logger.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\logger.h"
+			RelativePath=".\include\logger.h"
 			>
 		</File>
 		<File
@@ -1039,11 +1039,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\graphics\Material.h"
+			RelativePath=".\include\core\renderer\material\material.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\renderer\material\material.h"
+			RelativePath=".\include\core\graphics\Material.h"
 			>
 		</File>
 		<File
@@ -1123,11 +1123,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\renderer\geometry\mesh\mesh.cpp"
+			RelativePath=".\src\core\graphics\Mesh.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\graphics\Mesh.cpp"
+			RelativePath=".\src\core\renderer\geometry\mesh\mesh.cpp"
 			>
 		</File>
 		<File
@@ -1151,11 +1151,15 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\graphics\Model.h"
+			RelativePath=".\src\core\graphics\Model.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\include\core\renderer\geometry\model\model.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\Model.h"
 			>
 		</File>
 		<File
@@ -1427,11 +1431,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
 			>
 		</File>
 		<File
@@ -1655,11 +1659,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\statemanager.h"
+			RelativePath=".\include\statemanager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\statemanager.h"
+			RelativePath=".\include\core\statemanager.h"
 			>
 		</File>
 		<File
@@ -1747,11 +1751,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\graphics\Texture.h"
+			RelativePath=".\include\core\renderer\texture\texture.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\renderer\texture\texture.h"
+			RelativePath=".\include\core\graphics\Texture.h"
 			>
 		</File>
 		<File
@@ -2019,19 +2023,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\util\util.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.inline.h"
+			RelativePath=".\include\util.h"
 			>
 		</File>
 		<File
 			RelativePath=".\include\util\util.inline.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\util.inline.h"
 			>
 		</File>
 		<File
@@ -2075,11 +2079,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\graphics\Vertex.h"
+			RelativePath=".\include\core\renderer\geometry\vertex\vertex.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\renderer\geometry\vertex\vertex.h"
+			RelativePath=".\include\core\graphics\Vertex.h"
 			>
 		</File>
 		<File

@@ -28,6 +28,10 @@ public:
 		_TT_COUNT	// Do not touch.
 	};
 
+	const Texture* GetTexture( uint32 _Index ) const;
+	void SetTexture( uint32 _Index, Texture* _Texture );
+
+	void SetEffect( LkEffect* _Effect );
 private:
 	Texture* m_Textures[_TT_COUNT];
 	LkEffect* m_Effect;
