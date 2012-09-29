@@ -15,10 +15,21 @@ class VertexBufferObject;
 class Mesh
 {
 public:
+	~Mesh();
+
+	static Mesh* Create( IndexBufferObject* _IBO, VertexBufferObject* _VBO );
+
+	//////////////////////////////////////////////////////////////////////////
+	// Makes the draw calls required to draw the mesh. Shaders and materials
+	// and other settings must be set before calling this.
+	//////////////////////////////////////////////////////////////////////////
+	void Draw() const;
 
 private:
-	IndexBufferObject* m_IndexBufferObject;
-	VertexBufferObject* m_VertexBufferObject;
+	Mesh();
+
+	IndexBufferObject* m_IBO;
+	VertexBufferObject* m_VBO;
 };
 
 }
