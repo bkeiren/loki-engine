@@ -1127,14 +1127,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\renderer\geometry\mesh\mesh.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\renderer\geometry\mesh\mesh.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\core\graphics\Mesh.h"
 			>
 		</File>
@@ -1147,15 +1139,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\renderer\geometry\model\model.cpp"
-			>
-		</File>
-		<File
 			RelativePath=".\src\core\graphics\Model.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\renderer\geometry\model\model.h"
 			>
 		</File>
 		<File
@@ -1168,10 +1152,6 @@
 		</File>
 		<File
 			RelativePath=".\include\core\resourcemanager\modelmanager.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\renderer\geometry\model\modelparser_flex.flex"
 			>
 		</File>
 		<File
@@ -1575,11 +1555,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
+			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\singleton.h"
+			RelativePath=".\include\core\singleton.h"
 			>
 		</File>
 		<File
@@ -1615,11 +1595,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\SplashState.h"
+			RelativePath=".\include\states\SplashState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\SplashState.h"
+			RelativePath=".\include\core\states\SplashState.h"
 			>
 		</File>
 		<File
@@ -1704,14 +1684,6 @@
 		</File>
 		<File
 			RelativePath=".\include\math\glm\gtx\string_cast.inl"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\renderer\geometry\submesh\submesh.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\renderer\geometry\submesh\submesh.h"
 			>
 		</File>
 		<File
@@ -1808,10 +1780,6 @@
 		</File>
 		<File
 			RelativePath=".\include\math\glm\gtx\transform2.inl"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\renderer\geometry\triangle\triangle.h"
 			>
 		</File>
 		<File
@@ -2076,10 +2044,6 @@
 		</File>
 		<File
 			RelativePath=".\include\math\glm\gtx\verbose_operator.inl"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\renderer\geometry\vertex\vertex.h"
 			>
 		</File>
 		<File

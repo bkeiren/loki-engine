@@ -21,6 +21,7 @@ public:
 
 	static Model* Load( const std::string& _LMOFile );
 
+	void Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat4& _ProjectionMatrix, float _ZFar, float _ZNear );
 private:
 	Model();
 

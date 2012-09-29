@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef MODEL_OLD_H
+#define MODEL_OLD_H
 
 #include <string>
 #include <GLEW\\glew.h>

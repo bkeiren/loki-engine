@@ -70,6 +70,63 @@ Model* Model::Load( const std::string& _LMOFile )
 	}
 }
 
+void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat4& _ProjectionMatrix, float _ZFar, float _ZNear )
+{
+	for (unsigned int i = 0; i < m_Meshes.size(); ++i)
+	{
+		graphics::Mesh* mesh = m_Meshes[i];
+		const Material* material = m_Materials[i];
+		LkEffect* effect = material->GetEffect();
+
+		if (!effect)
+		{
+			LOG(VL_ERROR, "Model::_Render: No effect associated with material");
+			continue;
+		}
+
+		LkEffectParameter* param = 0;
+
+		// Set the global ambient color.
+		// TODO.
+
+#define SETCGPARAM(paramname, value)	{param = effect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
+
+		SETCGPARAM("LKMODELVIEWPROJ", _ProjectionMatrix * _ViewMatrix * _ModelMatrix);		// Set the model view projection matrix.
+		SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
+		SETCGPARAM("LKMODELMATRIXIT", mat3(math::transpose(math::inverse(_ModelMatrix))));		// Set the inverse transpose of the model matrix.	
+		SETCGPARAM("LKEYEPOSITION", math::inverse(_ViewMatrix)[3]);			// Set the eye position.
+		SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
+		SETCGPARAM("LKMODELSCALE", m_Scale);	// Set the model scale.
+		SETCGPARAM("LKUVSCALE", m_UVScale);		// Set the UV scale.
+		SETCGPARAM("LKZFAR", _ZFar);	// Set the Z-far value.
+		SETCGPARAM("LKZNEAR", _ZNear);	// Set the Z-near value.
+		SETCGPARAM("LKMATERIALSHININESS", material->GetShininess());
+
+		const LkTexture* tex = 0;
+
+		// Set the diffuse texture.
+		tex = material->GetTexture(Material::TT_DIFFUSE);
+		SETCGPARAM("LKDIFFUSETEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
+
+		// Set the normal texture.
+		tex = material->GetTexture(Material::TT_NORMAL);
+		SETCGPARAM("LKNORMALTEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
+
+		// Set the specular texture.
+		tex = material->GetTexture(Material::TT_SPECULAR);
+		SETCGPARAM("LKSPECULARTEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
+
+		// Set the emissive texture.
+		tex = material->GetTexture(Material::TT_EMISSIVE);
+		SETCGPARAM("LKEMISSIVETEX", (tex)?(tex->m_OpenGLTextureID):((GLuint)0));
+
+		while (effect->HasNextPass())
+		{
+			mesh->Draw();
+		}
+	}
+}
+
 void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Meshes& _Output )
 {
 	static Assimp::Importer* LocalImporter = new Assimp::Importer();
@@ -168,6 +225,7 @@ Material* Model::_CreateMaterialFromLMAFile( const std::string& _LMAFile )
 	util::JSONValue diffuseTexString = root["diffuse"];
 	util::JSONValue specularTexString = root["specular"];
 	util::JSONValue normalTexString = root["normal"];
+	util::JSONValue emissiveTexString = root["emissive"];
 	util::JSONValue effectString = root["effect"];
 
 	Material* mtl = new Material();
@@ -184,9 +242,13 @@ Material* Model::_CreateMaterialFromLMAFile( const std::string& _LMAFile )
 	{
 		mtl->SetTexture(Material::TT_NORMAL, Texture::Load(normalTexString.AsString()));
 	}
+	if (emissiveTexString.IsString())
+	{
+		mtl->SetTexture(Material::TT_EMISSIVE, Texture::Load(emissiveTexString.AsString()));
+	}
 	if (effectString.IsString())
 	{
-		mtl->SetEffect(LkEffectManager.CreateEffectFromFile(effectString.AsString(), EffectName));
+		mtl->SetEffect(LkEffectManager.CreateEffectFromFile(effectString.AsString(), EffectName));	// TODO: Create unique name-creator function or class
 	}
 
 	JSON_CLOSE(doc);
