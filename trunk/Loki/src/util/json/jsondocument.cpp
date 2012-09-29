@@ -1,3 +1,5 @@
+#include "JSONCpp/json.h"
+#include "util/json/jsonvalue.h"
 #include "util/json/jsondocument.h"
 
 namespace loki
