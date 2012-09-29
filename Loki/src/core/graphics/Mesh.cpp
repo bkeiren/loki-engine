@@ -6,7 +6,6 @@ namespace loki
 namespace graphics
 {
 
-
 // Cg input semantic names and values. The comment on each line provides the semantic name as it should appear in the
 // Cg shader. Each value is simply the index to which Cg binds a semantic and can be used
 // in the C++ application code to bind data to locations.
@@ -30,19 +29,6 @@ enum ECgSemantics
 	ATTR15 = 15,	TEXCOORD7 = 15,		BINORMAL = 15
 };
 
-Mesh* Mesh::Create( IndexBufferObject* _IBO, VertexBufferObject* _VBO )
-{
-	assert(_IBO != 0);
-	assert(_VBO != 0);
-
-	Mesh* mesh = new Mesh();
-
-	mesh->m_IBO = _IBO;
-	mesh->m_VBO = _VBO;
-
-	return mesh;
-}
-
 Mesh::Mesh()	:
 	m_IBO(0),
 	m_VBO(0)
@@ -54,6 +40,19 @@ Mesh::~Mesh()
 {
 	delete m_IBO;
 	delete m_VBO;
+}
+
+Mesh* Mesh::Create( IndexBufferObject* _IBO, VertexBufferObject* _VBO )
+{
+	assert(_IBO != 0);
+	assert(_VBO != 0);
+
+	Mesh* mesh = new Mesh();
+
+	mesh->m_IBO = _IBO;
+	mesh->m_VBO = _VBO;
+
+	return mesh;
 }
 
 void Mesh::Draw() const
@@ -96,6 +95,16 @@ void Mesh::Draw() const
 
 #undef BUFFER_OFFSET
 #undef MEMBER_OFFSET
+}
+
+const IndexBufferObject* Mesh::GetIndexBufferObject() const
+{
+	return m_IBO;
+}
+
+const VertexBufferObject* Mesh::GetVertexBufferObject() const
+{
+	return m_VBO;
 }
 
 }

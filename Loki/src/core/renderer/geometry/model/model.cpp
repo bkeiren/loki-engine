@@ -16,6 +16,8 @@
 
 #include "cg/cgGL.h"
 
+#include "core/graphics/Mesh.h"
+
 using namespace loki;
 using namespace loki::renderer;
 
@@ -222,7 +224,7 @@ void LkModel::_Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const 
 
 	for (unsigned int i = 0; i < m_Mesh->GetNumSubMeshes(); ++i)
 	{
-		LkSubMesh* submesh = m_Mesh->m_SubMeshes[i];
+		graphics::Mesh* submesh = m_Mesh->m_SubMeshes[i];
 		const LkMaterial* material = GetMaterial(i);
 		LkEffect* effect = material->GetEffect();
 
