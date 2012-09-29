@@ -27,8 +27,11 @@
 
 #include "core/actor/psystem/particlesystem.h"
 
+#include "core/graphics/Model.h"
+
 using namespace loki;
 using namespace loki::renderer;
+using namespace loki::graphics;
 
 #define ASSIMP_LOGFILE	"logs//log_assimp.txt"
 
@@ -690,6 +693,9 @@ void LkRenderer::_RenderOpaqueGeometry()
 			(*it)->m_Model->_Render(t, viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
 		}
 	}
+
+	static Model* mdl = Model::Load("resources//lmo//test.lmo");
+	mdl->Render(mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f), viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
 }
 
 void LkRenderer::_RenderLighting()
