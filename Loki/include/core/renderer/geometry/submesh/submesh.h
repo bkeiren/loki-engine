@@ -8,6 +8,12 @@
 namespace loki
 {
 
+namespace graphics
+{
+	class IndexBufferObject;
+	class VertexBufferObject;
+}
+
 namespace renderer
 {
 
@@ -42,6 +48,9 @@ private:
 	// Data in main RAM instead of GPU memory. Is used to access the source data even when it is located on the GPU.
 	unsigned int* m_Indices;
 	LkVertex* m_Vertices;
+
+	graphics::IndexBufferObject* m_IBO;
+	graphics::VertexBufferObject* m_VBO;
 };
 
 }

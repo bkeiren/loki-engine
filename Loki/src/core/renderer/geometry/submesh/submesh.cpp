@@ -1,6 +1,9 @@
 #include "core/renderer/geometry/submesh/submesh.h"
 #include "core/renderer/geometry/vertex/vertex.h"
 
+#include "core/graphics/IndexBufferObject.h"
+#include "core/graphics/VertexBufferObject.h"
+
 using namespace loki;
 using namespace renderer;
 
@@ -33,7 +36,9 @@ LkSubMesh::LkSubMesh()	:
 	m_IndicesVBO(0),
 	m_VerticesVBO(0),
 	m_Indices(0),
-	m_Vertices(0)
+	m_Vertices(0),
+	m_IBO(0),
+	m_VBO(0)
 {
 
 }
@@ -52,36 +57,45 @@ LkSubMesh::~LkSubMesh()
 	}
 	delete[] m_Indices;
 	delete[] m_Vertices;
+
+	delete m_IBO;
+	delete m_VBO;
 }
 
 unsigned int LkSubMesh::GetNumIndices() const
 {
-	return m_NumIndices;
+	return m_IBO->GetNumIndices();
+	//return m_NumIndices;
 }
 
 unsigned int LkSubMesh::GetNumVertices() const
 {
-	return m_NumVertices;
+	return m_VBO->GetNumVertices();
+	//return m_NumVertices;
 }
 
 GLuint LkSubMesh::GetIndicesVBO() const
 {
-	return m_IndicesVBO;
+	return m_IBO->GetBufferHandle();
+	//return m_IndicesVBO;
 }
 
 GLuint LkSubMesh::GetVerticesVBO() const
 {
-	return m_VerticesVBO;
+	return m_VBO->GetBufferHandle();
+	//return m_VerticesVBO;
 }
 
 const unsigned int* LkSubMesh::GetIndicesRAM() const
 {
-	return m_Indices;
+	return m_IBO->GetIndicesRAM();
+	//return m_Indices;
 }
 
 const LkVertex* LkSubMesh::GetVerticesRAM() const
 {
-	return m_Vertices;
+	return (LkVertex*)m_VBO->GetVerticesRAM();
+	//return m_Vertices;
 }
 
 void LkSubMesh::Draw() const
@@ -128,39 +142,43 @@ void LkSubMesh::Draw() const
 
 bool LkSubMesh::_CreateIndexBuffer( unsigned int* _Indices, unsigned int _NumIndices )
 {
-	assert(_Indices != NULL);
-	assert(_NumIndices >= 3);
+	m_IBO = graphics::IndexBufferObject::Create(_Indices, _NumIndices);
 
-	m_NumIndices = _NumIndices;
-	m_Indices = _Indices;	// We take ownership of this data.
-
-	// Create the Index-Buffer-Object.
-	glGenBuffers(1, &m_IndicesVBO);
-
-	// Copy the index data to the index VBO.
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndicesVBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * m_NumIndices, _Indices, GL_STATIC_DRAW);	// Copy data from RAM to VRAM.
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+// 	assert(_Indices != NULL);
+// 	assert(_NumIndices >= 3);
+// 
+// 	m_NumIndices = _NumIndices;
+// 	m_Indices = _Indices;	// We take ownership of this data.
+// 
+// 	// Create the Index-Buffer-Object.
+// 	glGenBuffers(1, &m_IndicesVBO);
+// 
+// 	// Copy the index data to the index VBO.
+// 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndicesVBO);
+// 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * m_NumIndices, _Indices, GL_STATIC_DRAW);	// Copy data from RAM to VRAM.
+// 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	return true;
 }
 
 bool LkSubMesh::_CreateVertexBuffer( LkVertex* _Vertices, unsigned int _NumVertices )
 {
-	assert(_Vertices != NULL);
-	assert(_NumVertices > 0);
+	m_VBO = graphics::VertexBufferObject::Create((graphics::Vertex*)_Vertices, _NumVertices);
 
-	m_NumVertices = _NumVertices;
-	m_Vertices = _Vertices;	// We take ownership of this data.
-	
-	// Create the Vertex-Buffer-Objects.
-	glGenBuffers(1, &m_VerticesVBO);
-
-	// Copy the vertex data to the vertex VBO.
-	glBindBuffer(GL_ARRAY_BUFFER, m_VerticesVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(LkVertex) * m_NumVertices, _Vertices, GL_STATIC_DRAW);	// Copy data from RAM to VRAM.
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+// 	assert(_Vertices != NULL);
+// 	assert(_NumVertices > 0);
+// 
+// 	m_NumVertices = _NumVertices;
+// 	m_Vertices = _Vertices;	// We take ownership of this data.
+// 	
+// 	// Create the Vertex-Buffer-Objects.
+// 	glGenBuffers(1, &m_VerticesVBO);
+// 
+// 	// Copy the vertex data to the vertex VBO.
+// 	glBindBuffer(GL_ARRAY_BUFFER, m_VerticesVBO);
+// 	glBufferData(GL_ARRAY_BUFFER, sizeof(LkVertex) * m_NumVertices, _Vertices, GL_STATIC_DRAW);	// Copy data from RAM to VRAM.
+// 
+// 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	return true;
 }
