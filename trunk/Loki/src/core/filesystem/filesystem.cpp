@@ -100,6 +100,11 @@ LkFile* OpenFile( const char* _File )
 	return file;
 }
 
+LkFile* OpenFile( const std::string& _File )
+{
+	return OpenFile(_File.c_str());
+}
+
 bool CreateDirectory( const char* _Directory )
 {
 	bool res = (bool)::CreateDirectoryA(_Directory, NULL);

@@ -27,6 +27,8 @@
 
 #include "core/entitysystem/IEntitySystem.h"
 
+#include "util/json/jsondocument.h"
+
 using namespace loki;
 
 physics::LkRigidBody* body = NULL;
@@ -255,6 +257,24 @@ bool MyGame::Init()
 
 
 	IEntity* entity = g_EntitySystem->SpawnEntity("TestEntity");
+
+// 	loki::util::JSONDocument* doc = loki::util::JSONDocument::Open("resources//test.json");
+// 	if (doc)
+// 	{
+// 		loki::util::JSONValue& root = doc->GetRoot();
+// 
+// 		std::string test = root["jeoma"].AsString();
+// 
+// 		int a = root["class"]["member_one"].AsInt();
+// 		int b = root["class"]["member_two"].AsInt();
+// 		
+// 		root["class"]["member_one"] = 16;
+// 
+// 		std::string output;
+// 		doc->WriteToString(output);
+// 
+// 		doc->Close();
+// 	}
 
 	return true;
 }
