@@ -25,7 +25,7 @@ IndexBufferObject::~IndexBufferObject()
 	delete[] m_IndicesRAM;
 }
 
-IndexBufferObject* IndexBufferObject::Create( unsigned int* _Indices, unsigned int _NumIndices )
+IndexBufferObject* IndexBufferObject::Create( uint32* _Indices, uint32 _NumIndices )
 {
 	assert(_Indices != NULL);
 	assert(_NumIndices >= 3);
@@ -40,23 +40,23 @@ IndexBufferObject* IndexBufferObject::Create( unsigned int* _Indices, unsigned i
 
 	// Copy the index data to the index VBO.
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo->m_GLBufferHandle);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * ibo->m_NumIndices, _Indices, GL_STATIC_DRAW);	// Copy data from RAM to VRAM.
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32) * ibo->m_NumIndices, _Indices, GL_STATIC_DRAW);	// Copy data from RAM to VRAM.
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	return ibo;
 }
 
-unsigned int IndexBufferObject::GetNumIndices() const
+uint32 IndexBufferObject::GetNumIndices() const
 {
 	return m_NumIndices;
 }
 
-unsigned int IndexBufferObject::GetBufferHandle() const
+uint32 IndexBufferObject::GetBufferHandle() const
 {
 	return m_GLBufferHandle;
 }
 
-const unsigned int* IndexBufferObject::GetIndicesRAM() const
+const uint32* IndexBufferObject::GetIndicesRAM() const
 {
 	return m_IndicesRAM;
 }

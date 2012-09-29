@@ -12,9 +12,15 @@ namespace graphics
 class Texture
 {
 public:
+	~Texture();
+
+	static Texture* Load( const std::string& _File );
 
 private:
-	unsigned int m_GLTextureHandle;
+	Texture();
+
+	uint32 m_GLTextureHandle;
+	std::string m_File;
 };
 
 }

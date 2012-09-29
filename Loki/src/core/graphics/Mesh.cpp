@@ -1,4 +1,8 @@
 #include "core/graphics/Mesh.h"
+#include "glew/glew.h"
+#include "core/graphics/IndexBufferObject.h"
+#include "core/graphics/VertexBufferObject.h"
+#include "core/graphics/Vertex.h"
 
 namespace loki
 {

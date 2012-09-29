@@ -27,9 +27,9 @@
 #include "core/renderer/geometry/mesh/mesh.h"
 #include "core/renderer/geometry/submesh/submesh.h"
 
-#include "core/graphics/Mesh.h"
 #include "core/graphics/IndexBufferObject.h"
 #include "core/graphics/VertexBufferObject.h"
+#include "core/graphics/Mesh.h"
 
 namespace loki
 {

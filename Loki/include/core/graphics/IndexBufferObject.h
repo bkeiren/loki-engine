@@ -14,17 +14,17 @@ class IndexBufferObject
 public:
 	~IndexBufferObject();
 
-	static IndexBufferObject* Create( unsigned int* _Indices, unsigned int _NumIndices );
+	static IndexBufferObject* Create( uint32* _Indices, uint32 _NumIndices );
 
-	unsigned int GetNumIndices() const;
-	unsigned int GetBufferHandle() const;
-	const unsigned int* GetIndicesRAM() const;
+	uint32 GetNumIndices() const;
+	uint32 GetBufferHandle() const;
+	const uint32* GetIndicesRAM() const;
 private:
 	IndexBufferObject();
 
-	unsigned int m_NumIndices;
-	unsigned int m_GLBufferHandle;
-	unsigned int* m_IndicesRAM;
+	uint32 m_NumIndices;
+	uint32 m_GLBufferHandle;
+	uint32* m_IndicesRAM;
 };
 
 }
