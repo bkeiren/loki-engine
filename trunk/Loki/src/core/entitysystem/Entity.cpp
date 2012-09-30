@@ -5,9 +5,10 @@ namespace loki
 
 Entity::Entity()	:
 	m_PhysicsObject(0),
-	m_CharacterObject(0),
-	m_AIObject(0),
-	m_StaticObject(0)
+	/*m_CharacterObject(0),*/
+	m_Model(0),
+	m_AIObject(0)
+	/*m_StaticObject(0)*/
 {
 	
 }
@@ -27,14 +28,24 @@ void Entity::SetPhysicsObject( IPhysicsObject* _PhysicsObject )
 	m_PhysicsObject = _PhysicsObject;
 }
 
-ICharacterObject* Entity::GetCharacterObject() const
+// ICharacterObject* Entity::GetCharacterObject() const
+// {
+// 	return m_CharacterObject;
+// }
+// 
+// void Entity::SetCharacterObject( ICharacterObject* _CharacterObject )
+// {
+// 	m_CharacterObject = _CharacterObject;
+// }
+
+graphics::Model* Entity::GetModel() const
 {
-	return m_CharacterObject;
+	return m_Model;
 }
 
-void Entity::SetCharacterObject( ICharacterObject* _CharacterObject )
+void Entity::SetModel( graphics::Model* _Model )
 {
-	m_CharacterObject = _CharacterObject;
+	m_Model = _Model;
 }
 
 IAIObject* Entity::GetAIObject() const
@@ -47,15 +58,15 @@ void Entity::SetAIObject( IAIObject* _AIObject )
 	m_AIObject = _AIObject;
 }
 
-IStaticObject* Entity::GetStaticObject() const
-{
-	return m_StaticObject;
-}
-
-void Entity::SetStaticObject( IStaticObject* _StaticObject )
-{
-	m_StaticObject = _StaticObject;
-}
+// IStaticObject* Entity::GetStaticObject() const
+// {
+// 	return m_StaticObject;
+// }
+// 
+// void Entity::SetStaticObject( IStaticObject* _StaticObject )
+// {
+// 	m_StaticObject = _StaticObject;
+// }
 
 EntityID Entity::GetID() const
 {

@@ -15,14 +15,17 @@ public:
 	IPhysicsObject* GetPhysicsObject() const;
 	void SetPhysicsObject( IPhysicsObject* _PhysicsObject );
 
-	ICharacterObject* GetCharacterObject() const;
-	void SetCharacterObject( ICharacterObject* _CharacterObject );
+// 	ICharacterObject* GetCharacterObject() const;
+// 	void SetCharacterObject( ICharacterObject* _CharacterObject );
+
+	graphics::Model* GetModel() const;
+	void SetModel( graphics::Model* _Model );
 
 	IAIObject* GetAIObject() const;
 	void SetAIObject( IAIObject* _AIObject );
 
-	IStaticObject* GetStaticObject() const;
-	void SetStaticObject( IStaticObject* _StaticObject );
+// 	IStaticObject* GetStaticObject() const;
+// 	void SetStaticObject( IStaticObject* _StaticObject );
 
 	EntityID GetID() const;
 
@@ -38,9 +41,10 @@ private:
 	void SetID( EntityID _ID );
 
 	IPhysicsObject* m_PhysicsObject;
-	ICharacterObject* m_CharacterObject;
+	/*ICharacterObject* m_CharacterObject;*/
+	graphics::Model* m_Model;
 	IAIObject* m_AIObject;
-	IStaticObject* m_StaticObject;
+	/*IStaticObject* m_StaticObject;*/
 
 	EntityID m_EntityID;
 	std::string m_Name;
