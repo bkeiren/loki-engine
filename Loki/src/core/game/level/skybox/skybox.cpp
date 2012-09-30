@@ -1,5 +1,6 @@
 #include "core/game/level/skybox/skybox.h"
-#include "core/renderer/texture/texture.h"
+//#include "core/renderer/texture/texture.h"
+#include "core/graphics/Texture.h"
 #include "core/resourcemanager/texturemanager.h"
 
 namespace loki
@@ -26,11 +27,12 @@ LkSkyBox::LkSkyBox( const std::string& _Skybox )
 	for (int i = 0; i < 6; ++i)
 	{
 		paths[i] += ext;
-		m_Textures[i] = g_TextureManager->GetResource(paths[i].c_str());
+		//m_Textures[i] = g_TextureManager->GetResource(paths[i].c_str());
+		m_Textures[i] = graphics::Texture::Load(paths[i]);
 
 		if (m_Textures[i])
 		{
-			m_Textures[i]->SetTextureParameter(renderer::LkTexture::TEXTURE_WRAP_S, renderer::LkTexture::CLAMP_TO_EDGE);
+			m_Textures[i]->SetTextureParameter(graphics::Texture::TEXTURE_WRAP_S, graphics::Texture::CLAMP_TO_EDGE);
 		}
 	}
 }
@@ -44,11 +46,12 @@ LkSkyBox::~LkSkyBox()
 {
 	for (int i = 0; i < 6; ++i)
 	{
-		g_TextureManager->ReleaseResource(&(m_Textures[i]));
+		//g_TextureManager->ReleaseResource(&(m_Textures[i]));
+		delete m_Textures[i];
 	}
 }
 
-renderer::LkTexture* LkSkyBox::GetTexture( ESkyBoxSide _Side ) const
+graphics::Texture* LkSkyBox::GetTexture( ESkyBoxSide _Side ) const
 {
 	return m_Textures[_Side];
 }

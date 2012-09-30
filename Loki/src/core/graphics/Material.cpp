@@ -8,7 +8,7 @@ namespace graphics
 
 Material::Material()	:
 	m_Effect(0),
-	m_Shininess(1.0f)
+	m_Shininess(50.0f)
 {
 	for (uint32 i = 0; i < _TT_COUNT; ++i)
 	{
@@ -56,6 +56,31 @@ float Material::GetShininess() const
 void Material::SetShininess( float _Shininess )
 {
 	m_Shininess = _Shininess;
+}
+
+bool Material::HasDiffuse() const
+{
+	return m_Textures[TT_DIFFUSE] != 0;
+}
+
+bool Material::HasNormal() const
+{
+	return m_Textures[TT_NORMAL] != 0;
+}
+
+bool Material::HasSpecular() const
+{
+	return m_Textures[TT_SPECULAR] != 0;
+}
+
+bool Material::HasEmissive() const
+{
+	return m_Textures[TT_EMISSIVE] != 0;
+}
+
+bool Material::HasEffect() const
+{
+	return m_Effect != 0;
 }
 
 }

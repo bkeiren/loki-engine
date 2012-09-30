@@ -1,0 +1,8 @@
+{
+	"diffuse":"resources//textures//texture2.bmp",
+	"normal":"resources//textures//texture2_normal.bmp",
+	"specular":"resources//textures//texture2_spec.bmp",
+	"emissive":"resources//textures//texture2_emissive.bmp",
+	"effect":"resources//shaders//testshader.cgfx",
+	"shininess":50.0
+}

@@ -5,10 +5,13 @@
 #include "core/graphics/Vertex.h"
 #include "core/graphics/IndexBufferObject.h"
 #include "core/graphics/VertexBufferObject.h"
+
 #include "AssImp/assimp.hpp"
 #include "AssImp/aiPostProcess.h"
 #include "AssImp/aiScene.h"
+
 #include "util/json/json.h"
+
 #include "core/renderer/effect/effectmanager.h"
 
 namespace loki
@@ -33,16 +36,15 @@ Model::~Model()
 Model* Model::Load( const std::string& _LMOFile )
 {
 	util::JSONDocument* doc = util::JSONDocument::Open(_LMOFile);
-	if (!doc->IsOpen())
+	if (!doc)
 	{
-		JSON_CLOSE(doc)
 		LOG(VL_ERROR, "Model::Load: Failed to load LMO file '%s'", _LMOFile.c_str());
 		return 0;
 	}
 
 	util::JSONValue& root = doc->GetRoot();
 	
-	util::JSONValue meshValue = root["meshes"];
+	util::JSONValue meshValue = root["mesh"];
 	util::JSONValue materialsValue = root["materials"];
 
 	std::string MeshFile;
@@ -81,6 +83,8 @@ Model* Model::Load( const std::string& _LMOFile )
 			mdl->m_Materials.push_back(mat);
 		}
 	}
+
+	return mdl;
 }
 
 void Model::SetScale( const vec3& _Scale )
@@ -246,9 +250,8 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 Material* Model::_CreateMaterialFromLMAFile( const std::string& _LMAFile )
 {
 	util::JSONDocument* doc = util::JSONDocument::Open(_LMAFile);
-	if (!doc->IsOpen())
+	if (!doc)
 	{
-		JSON_CLOSE(doc);
 		LOG(VL_ERROR, "Model::_CreateMaterialFromLMAFile: Failed to open LMA file '%s'", _LMAFile.c_str());
 		return 0;
 	}
