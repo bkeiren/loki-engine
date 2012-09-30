@@ -1,5 +1,5 @@
 #include "core/renderer/image/image.h"
-#include "core/renderer/texture/texture.h"
+#include "core/graphics/Texture.h"
 #include "core/renderer/renderer.h"
 #include "core/resourcemanager/texturemanager.h"
 
@@ -59,12 +59,12 @@ LkImage::~LkImage()
 	{
 		if ((*it).first)	// Only release through the resource manager if the texture was created through the resource manager.
 		{
-			g_TextureManager->ReleaseResource(&((*it).second));
+			//g_TextureManager->ReleaseResource(&((*it).second));
+			delete (*it).second;
 		}
 		else
 		{
-			LkTexture* tex = (*it).second;
-			glDeleteTextures(1, &(tex->m_OpenGLTextureID));
+			delete (*it).second;
 		}
 	}
 
@@ -121,14 +121,15 @@ bool LkImage::AddTexture( const char* _Texture )
 		return false;
 	}
 
-	LkTexture* tex = g_TextureManager->GetResource(_Texture);
+//	LkTexture* tex = g_TextureManager->GetResource(_Texture);
+	graphics::Texture* tex = graphics::Texture::Load(_Texture);
 	
 	if (!tex)
 	{
 		return false;
 	}
 
-	m_Textures.push_back(std::pair<bool, LkTexture*>(true, tex));
+	m_Textures.push_back(std::pair<bool, graphics::Texture*>(true, tex));
 	return true;
 }
 
@@ -144,9 +145,10 @@ bool LkImage::AddTextureFromMemory( const void* _Data, unsigned int _Width, unsi
 		return false;
 	}
 
-	LkTexture* tex = new LkTexture("LkImage::AddTextureFromMemory:Texture", texture);
+	//LkTexture* tex = new LkTexture("LkImage::AddTextureFromMemory:Texture", texture);
+	graphics::Texture* tex = graphics::Texture::Create();
 
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, tex->GetGLTextureHandle());
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -163,7 +165,9 @@ bool LkImage::AddTextureFromMemory( const void* _Data, unsigned int _Width, unsi
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	m_Textures.push_back(std::pair<bool, LkTexture*>(false, tex));
+	tex->UpdateGLInformation();
+
+	m_Textures.push_back(std::pair<bool, graphics::Texture*>(false, tex));
 	*(const_cast<int*>(&(tex->m_Width))) = _Width;
 	*(const_cast<int*>(&(tex->m_Height))) = _Height;
 
@@ -176,11 +180,11 @@ bool LkImage::AddTextureFromMemory( const void* _Data, unsigned int _Width, unsi
 
 void LkImage::SetSubTextureFromMemory( const void* _Data, int _XOffset, int _YOffset, unsigned int _Width, unsigned int _Height, ETextureFormat _Format, ETextureType _Type )
 {
-	LkTexture* tex = m_Textures[m_TextureIndex].second;
+	graphics::Texture* tex = m_Textures[m_TextureIndex].second;
 #ifdef USE_PBO
 
 #define USE_ORPHANANDMAP
-	glBindTexture(GL_TEXTURE_2D, tex->m_OpenGLTextureID);
+	glBindTexture(GL_TEXTURE_2D, tex->GetGLTextureHandle());
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, tex->m_Width);
 #ifdef USE_ORPHANANDMAP
 	m_PBO->BufferData(0);
@@ -260,7 +264,7 @@ void LkImage::Render()
 	LkEffectParameter* param = m_CgEffect->GetParameterBySemantic("LKDIFFUSETEX");
 	if (param)
 	{
-		param->Set(m_Textures[m_TextureIndex].second->m_OpenGLTextureID);
+		param->Set(m_Textures[m_TextureIndex].second->GetGLTextureHandle());
 	}
 	
 	param = m_CgEffect->GetParameterBySemantic("LKMODELVIEWPROJ");

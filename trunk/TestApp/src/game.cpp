@@ -12,7 +12,7 @@
 #include "core/actor/components/physicscomponent/physicscomponent.h"
 #include "core/actor/pawn/pawn.h"
 #include "mycontroller.h"
-#include "core/renderer/material/material.h"
+//#include "core/renderer/material/material.h"
 #include "core/script/squirrel/squirrel.h"
 #include "core/renderer/effect/effectmanager.h"
 
@@ -127,7 +127,7 @@ bool MyGame::Init()
 		LkPawn* pawn = NULL;
 		LkMovableComponent* movcomp = NULL;
 		LkRenderComponent* rendercomp = NULL;
-		loki::renderer::LkMaterial* mtl = NULL;
+		//loki::renderer::LkMaterial* mtl = NULL;
 
 // 		{
 // 			pawn = m_Level->SpawnPawn("StanfordDragon");
@@ -351,8 +351,8 @@ void MyGame::Update()
 	}
 	*/
 
-	loki::LkMovableComponent* movcomp = m_Level->GetPawn("StanfordDragon")->GetComponent<loki::LkMovableComponent>();
-	renderer::debug::DrawAxes(movcomp->GetPosition(), movcomp->GetOrientation(), 1.0f, true);
+	//loki::LkMovableComponent* movcomp = m_Level->GetPawn("StanfordDragon")->GetComponent<loki::LkMovableComponent>();
+	//renderer::debug::DrawAxes(movcomp->GetPosition(), movcomp->GetOrientation(), 1.0f, true);
 }
 
 void MyGame::PostUpdate()

@@ -3,13 +3,18 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include "core/renderer/texture/texture.h"
+#include "core/graphics/Texture.h"
 #include "core/renderer/enums.h"
 
 #define USE_PBO
 
 namespace loki
 {
+
+namespace graphics
+{
+	class Texture;
+}
 
 namespace renderer
 {
@@ -36,7 +41,7 @@ class LkPixelBufferObject;
 
 class LkImage
 {
-	typedef std::vector<std::pair<bool, LkTexture*> >		Textures;
+	typedef std::vector<std::pair<bool, graphics::Texture*> >		Textures;
 	typedef Textures::iterator								TexturesIter;
 	typedef Textures::const_iterator						TexturesConstIter;
 public:

@@ -11,7 +11,8 @@
 #include "core/actor/light/point/pointlight.h"
 #include "core/actor/light/spot/spotlight.h"
 #include "core/actor/light/directional/directionallight.h"
-#include "core/renderer/texture/texture.h"
+//#include "core/renderer/texture/texture.h"
+#include "core/graphics/Texture.h"
 #include "core/resourcemanager/texturemanager.h"
 #include "core/resourcemanager/modelmanager.h"
 #include "core/renderer/effect/effectmanager.h"
@@ -151,7 +152,7 @@ bool LkRenderer::_Init( LkWindow* _Window )
 
 
 	// Initialize the texture manager.
-	g_TextureManager = new LkTextureManager();
+	//g_TextureManager = new LkTextureManager();
 
 	// Initialize the model manager.
 	//g_ModelManager = new LkModelManager();
@@ -210,8 +211,8 @@ void LkRenderer::_Shutdown()
 // 	delete g_ModelManager;
 // 	g_ModelManager = NULL;
 
-	delete g_TextureManager;
-	g_TextureManager = NULL;
+// 	delete g_TextureManager;
+// 	g_TextureManager = NULL;
 
 	delete g_EffectManager;
 	g_EffectManager = NULL;
@@ -560,7 +561,7 @@ void LkRenderer::_RenderSky()
 	//glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); // Don't do any blending on the cube map textures
 
 	{
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_WEST)->m_OpenGLTextureID );
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_WEST)->GetGLTextureHandle());
 		glBegin( GL_QUADS );
 		// +X
 		glTexCoord2f(  0.0f, 0.0f );
@@ -577,7 +578,7 @@ void LkRenderer::_RenderSky()
 
 		glEnd();
 		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_EAST)->m_OpenGLTextureID );
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_EAST)->GetGLTextureHandle() );
 		glBegin( GL_QUADS );
 		// -X
 		glTexCoord2f(  1.0f, 0.0f );
@@ -594,7 +595,7 @@ void LkRenderer::_RenderSky()
 
 		glEnd();
 		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_UP)->m_OpenGLTextureID );
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_UP)->GetGLTextureHandle() );
 		glBegin( GL_QUADS );
 		// +Y
 		glTexCoord2f(  0.0f, 0.0f );
@@ -611,7 +612,7 @@ void LkRenderer::_RenderSky()
 
 		glEnd();
 		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_DOWN)->m_OpenGLTextureID );
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_DOWN)->GetGLTextureHandle() );
 		glBegin( GL_QUADS );
 		// -Y
 		glTexCoord2f(  0.0f,  1.0f );
@@ -628,7 +629,7 @@ void LkRenderer::_RenderSky()
 
 		glEnd();
 		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_NORTH)->m_OpenGLTextureID );
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_NORTH)->GetGLTextureHandle() );
 		glBegin( GL_QUADS );
 		// +Z
 		glTexCoord2f(  1.0f, 0.0f );
@@ -645,7 +646,7 @@ void LkRenderer::_RenderSky()
 
 		glEnd();
 		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_SOUTH)->m_OpenGLTextureID );
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_SOUTH)->GetGLTextureHandle() );
 		glBegin( GL_QUADS );
 		// -Z
 		glTexCoord2f(  0.0f, 0.0f );

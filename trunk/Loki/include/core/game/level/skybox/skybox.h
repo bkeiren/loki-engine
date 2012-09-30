@@ -6,10 +6,10 @@
 namespace loki
 {
 
-namespace renderer
+namespace graphics
 {
 
-class LkTexture;
+class Texture;
 
 }
 
@@ -37,11 +37,11 @@ public:
 	LkSkyBox( const std::string& _Skybox );
 	~LkSkyBox();
 
-	renderer::LkTexture* GetTexture( ESkyBoxSide _Side ) const;
+	graphics::Texture* GetTexture( ESkyBoxSide _Side ) const;
 private:
 	LkSkyBox();
 
-	renderer::LkTexture* m_Textures[6];
+	graphics::Texture* m_Textures[6];
 };
 
 }

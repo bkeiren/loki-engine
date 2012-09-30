@@ -44,6 +44,12 @@ public:
 
 	float GetShininess() const;
 	void SetShininess( float _Shininess );
+
+	bool HasDiffuse() const;
+	bool HasNormal() const;
+	bool HasSpecular() const;
+	bool HasEmissive() const;
+	bool HasEffect() const;
 private:
 
 	Texture* m_Textures[_TT_COUNT];

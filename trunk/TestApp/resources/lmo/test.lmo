@@ -1,0 +1,4 @@
+{
+	"mesh":"resources//models//torus.dae",
+	"materials":["resources//lma//test.lma"]
+}
