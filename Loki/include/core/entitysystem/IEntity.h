@@ -8,6 +8,11 @@
 namespace loki
 {
 
+namespace graphics
+{
+class Model;
+}
+
 class IPhysicsObject;
 class ICharacterObject;
 class IAIObject;
@@ -35,14 +40,17 @@ public:
 	virtual IPhysicsObject* GetPhysicsObject() const = 0;
 	virtual void SetPhysicsObject( IPhysicsObject* _PhysicsObject ) = 0;
 	
-	virtual ICharacterObject* GetCharacterObject() const = 0;
-	virtual void SetCharacterObject( ICharacterObject* _CharacterObject ) = 0;
+// 	virtual ICharacterObject* GetCharacterObject() const = 0;
+// 	virtual void SetCharacterObject( ICharacterObject* _CharacterObject ) = 0;
 	
+	virtual graphics::Model* GetModel() const = 0;
+	virtual void SetModel( graphics::Model* _Model ) = 0;
+
 	virtual IAIObject* GetAIObject() const = 0;
 	virtual void SetAIObject( IAIObject* _AIObject ) = 0;
 	
-	virtual IStaticObject* GetStaticObject() const = 0;
-	virtual void SetStaticObject( IStaticObject* _StaticObject ) = 0;
+// 	virtual IStaticObject* GetStaticObject() const = 0;
+// 	virtual void SetStaticObject( IStaticObject* _StaticObject ) = 0;
 
 	virtual EntityID GetID() const = 0;
 

@@ -579,6 +579,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\frustum\Frustum.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\frustum\Frustum.h"
+			>
+		</File>
+		<File
 			RelativePath=".\include\math\glm\core\func_common.hpp"
 			>
 		</File>
@@ -1019,11 +1027,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\logger.h"
+			RelativePath=".\include\core\logger.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\logger.h"
+			RelativePath=".\include\logger.h"
 			>
 		</File>
 		<File
@@ -1751,7 +1759,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\transform\Transform.cpp"
+			RelativePath=".\src\core\transform\Transform.cpp"
 			>
 		</File>
 		<File

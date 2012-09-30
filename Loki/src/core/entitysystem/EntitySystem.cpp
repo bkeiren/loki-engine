@@ -64,6 +64,23 @@ void EntitySystem::DestroyEntity( const char* _EntityName )
 	}
 }
 
+void EntitySystem::FindEntitiesInRange( const vec3& _Center, float _Range, EntitiesList& _OutputList ) const
+{
+
+}
+
+void EntitySystem::FindEntitiesInFrustum( const Frustum& _Frustum, const mat4& _FrustumTransform, EntitiesList& _OutputList ) const
+{
+	vec4 LeftNormal = _Frustum.GetPlaneNormal(Frustum::FP_LEFT) * _FrustumTransform;
+	vec4 RightNormal = _Frustum.GetPlaneNormal(Frustum::FP_RIGHT) * _FrustumTransform;
+	vec4 BottomNormal = _Frustum.GetPlaneNormal(Frustum::FP_BOTTOM) * _FrustumTransform;
+	vec4 TopNormal = _Frustum.GetPlaneNormal(Frustum::FP_TOP) * _FrustumTransform;
+	vec4 NearNormal = _Frustum.GetPlaneNormal(Frustum::FP_NEAR) * _FrustumTransform;
+	vec4 FarNormal = _Frustum.GetPlaneNormal(Frustum::FP_FAR) * _FrustumTransform;
+
+
+}
+
 EntityID EntitySystem::GenerateEntityIDFromName( const char* _EntityName ) const
 {
 	EntityID ID;
