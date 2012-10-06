@@ -114,6 +114,8 @@ inline GLenum GetOpenGLMappingAccessEnum( Buffer::EMappingAccess _Access )
 	return 0;
 }
 
+#define BUFFER_TARGET	GetOpenGLTargetEnum(m_BufferTarget)
+
 }
 
 Buffer::Buffer( EBufferTarget _Target )	:
@@ -146,27 +148,34 @@ uint32 Buffer::GetBufferHandle() const
 
 void Buffer::Bind() const
 {
-	glBindBuffer(GetOpenGLTargetEnum(m_BufferTarget), m_GLBufferHandle);
+	glBindBuffer(BUFFER_TARGET, m_GLBufferHandle);
 }
 
 void Buffer::Unbind() const
 {
-	glBindBuffer(GetOpenGLTargetEnum(m_BufferTarget), 0);
+	glBindBuffer(BUFFER_TARGET, 0);
 }
 
 void* Buffer::Map( EMappingAccess _Access ) const
 {
 	Bind();
-	return glMapBuffer(m_BufferTarget, _Access);
+	
+	void* p = glMapBuffer(BUFFER_TARGET, GetOpenGLMappingAccessEnum(_Access));
+
+	if (!p)
+	{
+		LOG(VL_WARN, "Buffer::Map: glMapBuffer returned a zero-address. Buffer data store was not mapped.");
+	}
+	return p;
 }
 
 bool Buffer::Unmap()
 {
-	bool b = (bool)glUnmapBuffer(m_BufferTarget);
+	bool b = (bool)glUnmapBuffer(BUFFER_TARGET);
 	if (!b)
 	{
 		LOG(VL_WARN, "Buffer::Unmap: glUnmapBuffer returned false. Buffer contents were corrupted while buffer was mapped; buffer will be re-initialized");
-		_UploadData(m_SizeInBytes, 0, m_UsageHint);
+		UploadData(m_SizeInBytes, 0, m_UsageHint);
 	}
 	return b;
 }
@@ -176,22 +185,27 @@ uint32 Buffer::GetSize() const
 	return m_SizeInBytes;
 }
 
-void Buffer::_UploadData( uint32 _SizeInBytes, const void* _Data, EUsageHint _UsageHint )
+void Buffer::Resize( uint32 _SizeInBytes )
+{
+	UploadData(_SizeInBytes, 0, m_UsageHint);
+}
+
+void Buffer::UploadData( uint32 _SizeInBytes, const void* _Data, EUsageHint _UsageHint )
 {
 	Bind();
 
 	// Optimization: If we're replacing the entire data store (and not trying to initialize it by passing 0 for _Data),
-	// we use _UploadSubData instead because it is faster than reinitializing the entire data store.
-	// Although we can expect client code to take this into account and use _UploadSubData directly when it's better,
+	// we use UploadSubData instead because it is faster than reinitializing the entire data store.
+	// Although we can expect client code to take this into account and use UploadSubData directly when it's better,
 	// we still do this check because it simplifies things a little (And we don't have to worry about unexpected 
 	// re-allocations of the data store).
 	if (_SizeInBytes != m_SizeInBytes || _Data == 0)
 	{
-		glBufferData(GetOpenGLTargetEnum(m_BufferTarget), _SizeInBytes, _Data, GetOpenGLUsageHintEnum(_UsageHint));
+		glBufferData(BUFFER_TARGET, _SizeInBytes, _Data, GetOpenGLUsageHintEnum(_UsageHint));
 	}
 	else
 	{
-		_UploadSubData(0, _SizeInBytes, _Data);
+		UploadSubData(0, _SizeInBytes, _Data);
 	}
 
 	Unbind();
@@ -200,10 +214,10 @@ void Buffer::_UploadData( uint32 _SizeInBytes, const void* _Data, EUsageHint _Us
 	m_SizeInBytes = _SizeInBytes;
 }
 
-void Buffer::_UploadSubData( uint32 _OffsetInBytes, uint32 _SizeInBytes, const void* _Data )
+void Buffer::UploadSubData( uint32 _OffsetInBytes, uint32 _SizeInBytes, const void* _Data )
 {
 	Bind();
-	glBufferSubData(GetOpenGLTargetEnum(m_BufferTarget), _OffsetInBytes, _SizeInBytes, _Data);
+	glBufferSubData(BUFFER_TARGET, _OffsetInBytes, _SizeInBytes, _Data);
 	Unbind();
 }
 

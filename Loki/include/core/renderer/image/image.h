@@ -15,6 +15,9 @@ namespace graphics
 {
 	class Texture;
 
+#ifdef USE_PBO
+	class PixelBuffer;
+#endif
 }
 
 namespace renderer
@@ -36,9 +39,6 @@ enum EAnchorPoint
 //class Texture;
 class LkEffect;
 
-#ifdef USE_PBO
-class LkPixelBufferObject;
-#endif
 
 class LkImage
 {
@@ -151,7 +151,7 @@ private:
 	bool m_FlipY;
 
 #ifdef USE_PBO
-	LkPixelBufferObject* m_PBO;
+	graphics::PixelBuffer* m_PBO;
 #endif
 
 	static LkEffect* m_CgEffect;

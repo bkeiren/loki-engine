@@ -11,7 +11,7 @@
 #include "core/actor/camera/camera.h"
 
 #ifdef USE_PBO
-#include "core/renderer/pixelbufferobject.h"
+#include "core/graphics/PixelBuffer.h"
 #endif
 
 namespace loki
@@ -77,7 +77,9 @@ LkImage::~LkImage()
 void LkImage::_Init( const char* _Texture, const vec3& _Position, const vec2& _Size, bool _PositionIsAbsolute /*= false*/, bool _SizeIsAbsolute /*= false*/ )
 {
 #ifdef USE_PBO
-	m_PBO = new LkPixelBufferObject(PBO_UNPACK, PBO_DYNAMIC_DRAW, 1);
+	m_PBO = graphics::PixelBuffer::Create(graphics::PixelBuffer::PIXEL_BUFFER_UNPACK__CPU_TO_GPU);
+	m_PBO->Resize(1);
+	//m_PBO = new LkPixelBufferObject(PBO_UNPACK, PBO_DYNAMIC_DRAW, 1);
 #endif
 
 	//assert(_Texture);
@@ -172,7 +174,7 @@ bool LkImage::AddTextureFromMemory( const void* _Data, unsigned int _Width, unsi
 	*(const_cast<int*>(&(tex->m_Height))) = _Height;
 
 #ifdef USE_PBO
-	m_PBO->Resize(tex->m_Width * tex->m_Height * 4);
+	m_PBO->Resize(tex->m_Width * tex->m_Height * 4);	//m_PBO->Resize(tex->m_Width * tex->m_Height * 4);
 #endif
 
 	return true;
@@ -187,10 +189,11 @@ void LkImage::SetSubTextureFromMemory( const void* _Data, int _XOffset, int _YOf
 	glBindTexture(GL_TEXTURE_2D, tex->GetGLTextureHandle());
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, tex->m_Width);
 #ifdef USE_ORPHANANDMAP
-	m_PBO->BufferData(0);
-	void* m = m_PBO->MapBuffer(PBO_MAP_WRITE_ONLY);
+	m_PBO->UploadData(m_PBO->GetSize(), 0, graphics::Buffer::BUFFER_USAGE_DYNAMIC_DRAW);	//m_PBO->BufferData(0);
+	void* m = m_PBO->Map(graphics::Buffer::BUFFER_MAPPING_WRITE_ONLY);	//void* m = m_PBO->MapBuffer(PBO_MAP_WRITE_ONLY);
 	memcpy_s(m, m_PBO->GetSize(), _Data, _Width * _Height * 4);
-	m_PBO->UnmapBuffer();
+	m_PBO->Unmap();	//m_PBO->UnmapBuffer();
+	m_PBO->Bind();
 	glTexSubImage2D(GL_TEXTURE_2D, 0, _XOffset, _YOffset, _Width, _Height, _Format, _Type, (void*)0);
 	m_PBO->Unbind();
 #else
