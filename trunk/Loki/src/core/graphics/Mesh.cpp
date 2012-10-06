@@ -1,7 +1,7 @@
 #include "core/graphics/Mesh.h"
 #include "glew/glew.h"
-#include "core/graphics/IndexBufferObject.h"
-#include "core/graphics/VertexBufferObject.h"
+#include "core/graphics/IndexBuffer.h"
+#include "core/graphics/VertexBuffer.h"
 #include "core/graphics/Vertex.h"
 
 namespace loki
@@ -46,7 +46,7 @@ Mesh::~Mesh()
 	delete m_VBO;
 }
 
-Mesh* Mesh::Create( IndexBufferObject* _IBO, VertexBufferObject* _VBO )
+Mesh* Mesh::Create( IndexBuffer* _IBO, VertexBuffer* _VBO )
 {
 	assert(_IBO != 0);
 	assert(_VBO != 0);
@@ -65,7 +65,7 @@ void Mesh::Draw() const
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 	// Bind the vertices' VBO buffer.
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBO->GetBufferHandle());
+	m_VBO->Bind();
 
 	//////////////////////////////////////////////////////////////////////////
 	// IMPORTANT LIFE LESSON: glVertexAttribPointer must be called each time
@@ -89,24 +89,24 @@ void Mesh::Draw() const
 	//////////////////////////////////////////////////////////////////////////
 
 	// Bind the indices' VBO buffer.
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO->GetBufferHandle());
+	m_IBO->Bind();
 
 	glDrawElements(GL_TRIANGLES, m_IBO->GetNumIndices(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 
 	// Unbind both buffers.
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	m_IBO->Unbind();
+	m_VBO->Unbind();
 
 #undef BUFFER_OFFSET
 #undef MEMBER_OFFSET
 }
 
-const IndexBufferObject* Mesh::GetIndexBufferObject() const
+const IndexBuffer* Mesh::GetIndexBuffer() const
 {
 	return m_IBO;
 }
 
-const VertexBufferObject* Mesh::GetVertexBufferObject() const
+const VertexBuffer* Mesh::GetVertexBuffer() const
 {
 	return m_VBO;
 }

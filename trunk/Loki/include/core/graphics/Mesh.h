@@ -9,15 +9,15 @@ namespace loki
 namespace graphics
 {
 
-class IndexBufferObject;
-class VertexBufferObject;
+class IndexBuffer;
+class VertexBuffer;
 
 class Mesh
 {
 public:
 	~Mesh();
 
-	static Mesh* Create( IndexBufferObject* _IBO, VertexBufferObject* _VBO );
+	static Mesh* Create( IndexBuffer* _IBO, VertexBuffer* _VBO );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Makes the draw calls required to draw the mesh. Shaders and materials
@@ -25,13 +25,13 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	void Draw() const;
 
-	const IndexBufferObject* GetIndexBufferObject() const;
-	const VertexBufferObject* GetVertexBufferObject() const;
+	const IndexBuffer* GetIndexBuffer() const;
+	const VertexBuffer* GetVertexBuffer() const;
 private:
 	Mesh();
 
-	IndexBufferObject* m_IBO;
-	VertexBufferObject* m_VBO;
+	IndexBuffer* m_IBO;
+	VertexBuffer* m_VBO;
 };
 
 }

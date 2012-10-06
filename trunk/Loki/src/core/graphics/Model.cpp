@@ -3,8 +3,8 @@
 #include "core/graphics/Texture.h"
 #include "core/graphics/Mesh.h"
 #include "core/graphics/Vertex.h"
-#include "core/graphics/IndexBufferObject.h"
-#include "core/graphics/VertexBufferObject.h"
+#include "core/graphics/IndexBuffer.h"
+#include "core/graphics/VertexBuffer.h"
 
 #include "AssImp/assimp.hpp"
 #include "AssImp/aiPostProcess.h"
@@ -193,8 +193,8 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 
 	for (unsigned int i = 0; i < NumMeshes; ++i)
 	{       
-		graphics::IndexBufferObject* ibo = 0;
-		graphics::VertexBufferObject* vbo = 0;
+		graphics::IndexBuffer* ibo = 0;
+		graphics::VertexBuffer* vbo = 0;
 
 		int NumFaces = m_tempMeshArray[i]->mNumFaces;
 		int NumVerts = m_tempMeshArray[i]->mNumVertices;
@@ -208,11 +208,11 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 			Indices[j * 3 + 1] = m_tempMeshArray[i]->mFaces[j].mIndices[1];
 			Indices[j * 3 + 2] = m_tempMeshArray[i]->mFaces[j].mIndices[2];
 		}
-		ibo = graphics::IndexBufferObject::Create(Indices, NumIndices);
+		ibo = graphics::IndexBuffer::Create(Indices, NumIndices);
 		if (!ibo/*m_SubMeshes[i]->_CreateIndexBuffer(Indices, NumIndices)*/)
 		{
-			LOG(VL_ERROR, "Model::_CreateMeshesFromGeometryFile: Failed to instantiate IndexBufferObject class");
-			assert("Model::_CreateMeshesFromGeometryFile: Failed to instantiate IndexBufferObject class" && 0);
+			LOG(VL_ERROR, "Model::_CreateMeshesFromGeometryFile: Failed to instantiate IndexBuffer class");
+			assert("Model::_CreateMeshesFromGeometryFile: Failed to instantiate IndexBuffer class" && 0);
 		}
 		for (int y = 0; y < NumVerts; ++y)
 		{
@@ -225,11 +225,11 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 			if (m_tempMeshArray[i]->mTangents)			Vertices[y].tangent		= -vec3(m_tempMeshArray[i]->mTangents[y].x,			m_tempMeshArray[i]->mTangents[y].y,		m_tempMeshArray[i]->mTangents[y].z);
 			if (m_tempMeshArray[i]->mTextureCoords[0])	Vertices[y].uv			= vec2(m_tempMeshArray[i]->mTextureCoords[0][y].x, m_tempMeshArray[i]->mTextureCoords[0][y].y);
 		}
-		vbo = graphics::VertexBufferObject::Create(Vertices, NumVerts);
+		vbo = graphics::VertexBuffer::Create(Vertices, NumVerts);
 		if(!vbo/*m_SubMeshes[i]->_CreateVertexBuffer(Vertices, NumVerts)*/)
 		{
-			LOG(VL_ERROR, "Model::_CreateMeshesFromGeometryFile: Failed to instantiate VertexBufferObject class");
-			assert("Model::_CreateMeshesFromGeometryFile: Failed to instantiate VertexBufferObject class" && 0);
+			LOG(VL_ERROR, "Model::_CreateMeshesFromGeometryFile: Failed to instantiate VertexBuffer class");
+			assert("Model::_CreateMeshesFromGeometryFile: Failed to instantiate VertexBuffer class" && 0);
 		}
 
 		graphics::Mesh* mesh = graphics::Mesh::Create(ibo, vbo);

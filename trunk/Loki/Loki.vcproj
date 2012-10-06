@@ -227,6 +227,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\graphics\Buffer.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\Buffer.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\core\ui\elements\button.cpp"
 			>
 		</File>
@@ -343,11 +351,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\console\console.h"
+			RelativePath=".\include\core\console\console.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\console\console.h"
+			RelativePath=".\include\console\console.h"
 			>
 		</File>
 		<File
@@ -391,11 +399,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\dev_notes.txt"
+			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\dev_notes.txt"
+			RelativePath=".\src\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -443,11 +451,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\engine.h"
+			RelativePath=".\include\core\engine.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\engine.h"
+			RelativePath=".\include\engine.h"
 			>
 		</File>
 		<File
@@ -807,11 +815,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\graphics\IndexBufferObject.cpp"
+			RelativePath=".\src\core\graphics\IndexBuffer.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\graphics\IndexBufferObject.h"
+			RelativePath=".\include\core\graphics\IndexBuffer.h"
 			>
 		</File>
 		<File
@@ -920,6 +928,10 @@
 		</File>
 		<File
 			RelativePath=".\include\core\renderer\IRenderer.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\IRenderer.h"
 			>
 		</File>
 		<File
@@ -1415,11 +1427,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
 			>
 		</File>
 		<File
@@ -1559,11 +1571,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\singleton.h"
+			RelativePath=".\include\core\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
+			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
@@ -1599,11 +1611,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\SplashState.h"
+			RelativePath=".\include\states\SplashState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\SplashState.h"
+			RelativePath=".\include\core\states\SplashState.h"
 			>
 		</File>
 		<File
@@ -1715,11 +1727,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\TestState.h"
+			RelativePath=".\include\states\TestState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\TestState.h"
+			RelativePath=".\include\core\states\TestState.h"
 			>
 		</File>
 		<File
@@ -1991,11 +2003,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.h"
+			RelativePath=".\include\util.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.h"
+			RelativePath=".\include\util\util.h"
 			>
 		</File>
 		<File
@@ -2051,11 +2063,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\graphics\VertexBufferObject.cpp"
+			RelativePath=".\src\core\graphics\VertexBuffer.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\graphics\VertexBufferObject.h"
+			RelativePath=".\include\core\graphics\VertexBuffer.h"
 			>
 		</File>
 		<File
