@@ -31,7 +31,7 @@ VertexBuffer* VertexBuffer::Create( Vertex* _Vertices, uint32 _NumVertices )
 	vbo->m_NumVertices = _NumVertices;
 	vbo->m_VerticesRAM = _Vertices;	// We take ownership of this data.
 
-	vbo->_UploadData(sizeof(Vertex) * vbo->m_NumVertices, _Vertices, Buffer::BUFFER_USAGE_STATIC_DRAW);
+	vbo->UploadData(sizeof(Vertex) * vbo->m_NumVertices, _Vertices, Buffer::BUFFER_USAGE_STATIC_DRAW);
 
 	return vbo;
 }

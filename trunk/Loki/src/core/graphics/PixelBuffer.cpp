@@ -9,7 +9,7 @@ namespace graphics
 PixelBuffer::PixelBuffer( EPixelBufferTarget _Target )	:
 	Buffer( (_Target == PIXEL_BUFFER_PACK__GPU_TO_CPU) ? (Buffer::BUFFER_TARGET_PIXEL_PACK_BUFFER) : (Buffer::BUFFER_TARGET_PIXEL_UNPACK_BUFFER) )
 {
-
+	Resize(1);
 }
 
 PixelBuffer::PixelBuffer()	:

@@ -71,23 +71,35 @@ public:
 	bool Unmap();
 
 	uint32 GetSize() const;
-protected:
-	Buffer( EBufferTarget _Target );
-	virtual ~Buffer();
 	
-	// NOTE: When resizing the buffer, simply call this function with the size value for _SizeInBytes and the buffer
+	//////////////////////////////////////////////////////////////////////////
+	// To resize the buffer, simply call this function with the size value for _SizeInBytes and the buffer
 	// will be re-allocated.
+	// NOTE: Because the buffer is re-allocated for resizing, the contents
+	// of the buffer are not preserved and will be undefined after resizing.
+	//////////////////////////////////////////////////////////////////////////
+	void Resize( uint32 _SizeInBytes );
+
+	//////////////////////////////////////////////////////////////////////////
 	// If you want to force a re-allocation of the buffer, you can call this function and pass 0 as value for _Data.
 	// Note that a re-allocation will NOT preserve the contents of the buffer. Therefore, after a re-allocation
 	// the contents of the buffer are undefined until new data is uploaded.
 	// The EUsageHint enumeration value does not limit the functionality 
 	// of the buffer, but instead provides hints to the graphics driver so that 
 	// it can choose the best memory location for the internal buffer.
-	void _UploadData( uint32 _SizeInBytes, const void* _Data, EUsageHint _UsageHint );
+	//////////////////////////////////////////////////////////////////////////
+	void UploadData( uint32 _SizeInBytes, const void* _Data, EUsageHint _UsageHint );
 
+	//////////////////////////////////////////////////////////////////////////
 	// NOTE: If _OffsetInBytes + _SizeInBytes is greater than the total size of the allocated buffer,
 	// an error is generated. It will NOT increase the size of the buffer.
-	void _UploadSubData( uint32 _OffsetInBytes, uint32 _SizeInBytes, const void* _Data );
+	//////////////////////////////////////////////////////////////////////////
+	void UploadSubData( uint32 _OffsetInBytes, uint32 _SizeInBytes, const void* _Data );
+
+protected:
+	Buffer( EBufferTarget _Target );
+	virtual ~Buffer();
+
 private:
 	Buffer();
 

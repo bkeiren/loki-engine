@@ -30,7 +30,7 @@ IndexBuffer* IndexBuffer::Create( uint32* _Indices, uint32 _NumIndices )
 	ibo->m_NumIndices = _NumIndices;
 	ibo->m_IndicesRAM = _Indices;	// We take ownership of this data.
 
-	ibo->_UploadData(sizeof(uint32) * ibo->m_NumIndices, _Indices, Buffer::BUFFER_USAGE_STATIC_DRAW);
+	ibo->UploadData(sizeof(uint32) * ibo->m_NumIndices, _Indices, Buffer::BUFFER_USAGE_STATIC_DRAW);
 
 	return ibo;
 }
