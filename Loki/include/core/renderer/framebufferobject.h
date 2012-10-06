@@ -44,8 +44,8 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Assumes the frame buffer is bound.
 	//////////////////////////////////////////////////////////////////////////
-	void SetDrawBuffers( EAttachment* _Buffers, unsigned int _NumBuffers );
-	void SetDrawBuffer( EAttachment _Buffer );
+	void SetDrawBuffers( EFrameBufferAttachment* _Buffers, unsigned int _NumBuffers );
+	void SetDrawBuffer( EFrameBufferAttachment _Buffer );
 	
 	void SetClearColor( const vec4& _Color );
 	

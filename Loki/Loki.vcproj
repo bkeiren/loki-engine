@@ -479,10 +479,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\renderer\enums.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\core\graphics\Enums.h"
 			>
 		</File>

@@ -15,7 +15,7 @@
 #include "core/renderer/GLSLShader/glslshader.h"
 #include "core/renderer/debugrenderer.h"	// So that files including renderer.h can also use the debug suite.
 #include <AssImp//assimp.h>
-#include "core/renderer/enums.h"
+#include "core/graphics/Enums.h"
 
 namespace loki
 {
@@ -26,6 +26,8 @@ namespace game
 }
 
 class LkWindow;
+
+using namespace loki::graphics;
 
 namespace renderer
 {

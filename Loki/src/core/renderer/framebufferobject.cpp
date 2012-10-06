@@ -2,6 +2,7 @@
 #include "core/renderer/renderer.h"	// For CheckGL().
 
 #include "core/graphics/RenderBuffer.h"
+#include "core/graphics/Texture.h"
 
 namespace loki
 {
@@ -42,13 +43,17 @@ LkFramebufferObject::LkFramebufferObject( unsigned int _Width, unsigned int _Hei
 		{
 			m_RenderBuffers[i].first = RBST_TEXTURE;
 
-			GLuint* Tex = &(m_RenderBuffers[i].second);
+			graphics::Texture* tex = graphics::Texture::Create();	// glGenTextures(1, Tex);
 
-			glGenTextures(1, Tex);
-			glBindTexture(GL_TEXTURE_2D, *Tex);
-			glTexImage2D(GL_TEXTURE_2D, 0, Info.m_InternalFormat, m_Width, m_Height, 0, Info.m_TextureFormat, Info.m_TextureType, Info.m_TexturePixels);
+			m_RenderBuffers[i].second = (GLuint)tex;
+			
+			//glBindTexture(GL_TEXTURE_2D, *Tex);
+			
+			//glTexImage2D(GL_TEXTURE_2D, 0, GLInternalFormats[Info.m_InternalFormat], m_Width, m_Height, 0, GLTextureFormats[Info.m_TextureFormat], GLTextureTypes[Info.m_TextureType], Info.m_TexturePixels);
+			tex->UploadData(Info.m_InternalFormat, Info.m_TextureFormat, Info.m_TextureType, m_Width, m_Height, Info.m_TexturePixels);
 			CheckGL();
 
+			tex->Bind();
 			// Apply texture parameters.
 			for (std::vector<std::pair<GLenum, GLint> >::const_iterator it2 = Info.m_TextureParametersInteger.begin(); it2 != Info.m_TextureParametersInteger.end(); ++it2)
 			{
@@ -60,19 +65,19 @@ LkFramebufferObject::LkFramebufferObject( unsigned int _Width, unsigned int _Hei
 			}
 
 			// Attach the texture to the FBO by connecting it to the right attachment point.
-			glFramebufferTexture2D(GL_FRAMEBUFFER, Info.m_Attachment, GL_TEXTURE_2D, m_RenderBuffers[i].second, 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GLFrameBufferAttachments[Info.m_Attachment], GL_TEXTURE_2D, tex->GetTextureHandle(), 0);
 			CheckGL();
 		}
 		else
 		{
 			m_RenderBuffers[i].first = RBST_BUFFER;
 
-			graphics::RenderBuffer* rb = graphics::RenderBuffer::Create((graphics::EInternalFormat)Info.m_InternalFormat, m_Width, m_Height);
+			graphics::RenderBuffer* rb = graphics::RenderBuffer::Create(Info.m_InternalFormat, m_Width, m_Height);
 
 			m_RenderBuffers[i].second = (GLuint)rb;
 
 			// Attach the generated render buffer to the FBO by connecting it to the right attachment point.
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, Info.m_Attachment, GL_RENDERBUFFER, rb->GetBufferHandle());
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GLFrameBufferAttachments[Info.m_Attachment], GL_RENDERBUFFER, rb->GetBufferHandle());
 			CheckGL();
 		}	
 
@@ -93,7 +98,8 @@ LkFramebufferObject::~LkFramebufferObject()
 	{
 		if ((*it).first == RBST_TEXTURE)
 		{
-			glDeleteTextures(1, &((*it).second));
+			//glDeleteTextures(1, &((*it).second));
+			delete (graphics::Texture*)((*it).second);
 		}
 		else
 		{
@@ -117,7 +123,7 @@ unsigned int LkFramebufferObject::GetRenderbufferTexture( unsigned int _Index )
 		LOG(VL_WARN, "FrameBufferObject::GetRenderbufferTexture: Requested index has an OpenGL render buffer associated instead of a shareable texture");
 		return 0;
 	}
-	return m_RenderBuffers[_Index].second;
+	return ((graphics::Texture*)m_RenderBuffers[_Index].second)->GetTextureHandle();
 }
 
 bool LkFramebufferObject::CheckFramebufferStatus()
@@ -197,14 +203,19 @@ void LkFramebufferObject::Unbind()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void LkFramebufferObject::SetDrawBuffers( EAttachment* _Buffers, unsigned int _NumBuffers )
+void LkFramebufferObject::SetDrawBuffers( EFrameBufferAttachment* _Buffers, unsigned int _NumBuffers )
 {
-	glDrawBuffers(_NumBuffers, (GLenum*)_Buffers);
+	static GLenum buffers[16];
+	for (uint32 i = 0; i < _NumBuffers; ++i)
+	{
+		buffers[i] = GLFrameBufferAttachments[_Buffers[i]];
+	}
+	glDrawBuffers(_NumBuffers, buffers);
 }
 
-void LkFramebufferObject::SetDrawBuffer( EAttachment _Buffer )
+void LkFramebufferObject::SetDrawBuffer( EFrameBufferAttachment _Buffer )
 {
-	glDrawBuffer(_Buffer);
+	glDrawBuffer(GLFrameBufferAttachments[_Buffer]);
 }
 
 void LkFramebufferObject::SetClearColor( const vec4& _Color )

@@ -91,30 +91,30 @@ bool LkRenderer::_Init( LkWindow* _Window )
 	{
 		// Diffuse and specular color buffer.
 		LkRenderBufferInfo info;
-		info.m_Attachment = RBA_COLOR_ATTACHMENT0;
-		info.m_InternalFormat = RBIF_RGBA;
-		info.m_TextureFormat = RBF_RGBA;
-		info.m_TextureType = RBT_UNSIGNED_INT_8_8_8_8;
+		info.m_Attachment = graphics::FRAMEBUFFER_COLOR_ATTACHMENT0;
+		info.m_InternalFormat = graphics::INTERNAL_FORMAT_RGBA;
+		info.m_TextureFormat = graphics::TEXTURE_FORMAT_RGBA;
+		info.m_TextureType = graphics::TEXTURE_TYPE_UNSIGNED_INT_8_8_8_8;
 		RenderBuffersInfo.push_back(info);
 	}
 
 	{
 		// Positions buffer.
 		LkRenderBufferInfo info;
-		info.m_Attachment = RBA_COLOR_ATTACHMENT1;
-		info.m_InternalFormat = RBIF_RGBA32F;
-		info.m_TextureFormat = RBF_RGBA;
-		info.m_TextureType = RBT_UNSIGNED_INT_8_8_8_8;
+		info.m_Attachment = graphics::FRAMEBUFFER_COLOR_ATTACHMENT1;
+		info.m_InternalFormat = graphics::INTERNAL_FORMAT_RGBA32F;
+		info.m_TextureFormat = graphics::TEXTURE_FORMAT_RGBA;
+		info.m_TextureType = graphics::TEXTURE_TYPE_UNSIGNED_INT_8_8_8_8;
 		RenderBuffersInfo.push_back(info);
 	}
 
 	{
 		// Normals buffer.
 		LkRenderBufferInfo info;
-		info.m_Attachment = RBA_COLOR_ATTACHMENT2;
-		info.m_InternalFormat = RBIF_RGBA32F;
-		info.m_TextureFormat = RBF_RGBA;
-		info.m_TextureType = RBT_UNSIGNED_INT_8_8_8_8;
+		info.m_Attachment = graphics::FRAMEBUFFER_COLOR_ATTACHMENT2;
+		info.m_InternalFormat = graphics::INTERNAL_FORMAT_RGBA32F;
+		info.m_TextureFormat = graphics::TEXTURE_FORMAT_RGBA;
+		info.m_TextureType = graphics::TEXTURE_TYPE_UNSIGNED_INT_8_8_8_8;
 		RenderBuffersInfo.push_back(info);
 	}
 
@@ -122,20 +122,20 @@ bool LkRenderer::_Init( LkWindow* _Window )
 		// Depth + Stencil buffer.
 		LkRenderBufferInfo info;
 		//info.m_GenerateTexture = false;
-		info.m_Attachment = RBA_DEPTH_STENCIL_ATTACHMENT;
-		info.m_InternalFormat = RBIF_DEPTH24_STENCIL8;
-		info.m_TextureFormat = RBF_DEPTH_STENCIL;
-		info.m_TextureType = RBT_UNSIGNED_INT_24_8;
+		info.m_Attachment = graphics::FRAMEBUFFER_DEPTH_STENCIL_ATTACHMENT;
+		info.m_InternalFormat = graphics::INTERNAL_FORMAT_DEPTH24_STENCIL8;
+		info.m_TextureFormat = graphics::TEXTURE_FORMAT_DEPTH_STENCIL;
+		info.m_TextureType = graphics::TEXTURE_TYPE_UNSIGNED_INT_24_8;
 		RenderBuffersInfo.push_back(info);
 	}
 
 	{
 		// Light accumulation buffer.
 		LkRenderBufferInfo info;
-		info.m_Attachment = RBA_COLOR_ATTACHMENT3;
-		info.m_InternalFormat = RBIF_RGBA32F;
-		info.m_TextureFormat = RBF_RGBA;
-		info.m_TextureType = RBT_FLOAT;
+		info.m_Attachment = graphics::FRAMEBUFFER_COLOR_ATTACHMENT3;
+		info.m_InternalFormat = graphics::INTERNAL_FORMAT_RGBA32F;
+		info.m_TextureFormat = graphics::TEXTURE_FORMAT_RGBA;
+		info.m_TextureType = graphics::TEXTURE_TYPE_FLOAT;
 		RenderBuffersInfo.push_back(info);
 	}
 
@@ -267,8 +267,8 @@ void LkRenderer::Render( game::LkLevel* _Level )
 	*/
 
 	//m_MRTObject->StartGBuffer();
-	static EAttachment DrawBuffersP0[] = { RBA_COLOR_ATTACHMENT3 };
-	static EAttachment DrawBuffersP1[] = { RBA_COLOR_ATTACHMENT0, RBA_COLOR_ATTACHMENT1, RBA_COLOR_ATTACHMENT2, RBA_COLOR_ATTACHMENT3 }; 
+	static EFrameBufferAttachment DrawBuffersP0[] = { graphics::FRAMEBUFFER_COLOR_ATTACHMENT3 };
+	static EFrameBufferAttachment DrawBuffersP1[] = { graphics::FRAMEBUFFER_COLOR_ATTACHMENT0, graphics::FRAMEBUFFER_COLOR_ATTACHMENT1, graphics::FRAMEBUFFER_COLOR_ATTACHMENT2, graphics::FRAMEBUFFER_COLOR_ATTACHMENT3 }; 
 
 	m_GBuffer->Bind();
 	m_GBuffer->SetDrawBuffers(DrawBuffersP1, 4);
@@ -288,7 +288,7 @@ void LkRenderer::Render( game::LkLevel* _Level )
 		debug::DrawItems(m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix(), m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix());
 
 		//m_MRTObject->StartLightAccumulation();
-		m_GBuffer->SetDrawBuffer(RBA_COLOR_ATTACHMENT3);
+		m_GBuffer->SetDrawBuffer(graphics::FRAMEBUFFER_COLOR_ATTACHMENT3);
 		
 		_RenderLighting();
 

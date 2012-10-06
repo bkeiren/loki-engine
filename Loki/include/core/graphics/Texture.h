@@ -37,13 +37,14 @@ public:
 	int32 GetHeight() const;
 
 	void UploadData( EInternalFormat _InternalFormat, ETextureFormat _Format, ETextureType _Type, int32 _Width, int32 _Height, const void* _Data );
+	void UploadSubData( ETextureFormat _Format, ETextureType _Type, int32 _XOffset, int32 _YOffset, int32 _Width, int32 _Height, const void* _Data );
 private:
 	Texture();
 
 	uint32 m_GLTextureHandle;
 	std::string m_File;
-	int32 m_OpenGLInternalFormat;
-	int32 m_OpenGLTextureDepth;
+	EInternalFormat m_InternalFormat;
+	int32 m_TextureDepth;
 	int32 m_Width;
 	int32 m_Height;
 };

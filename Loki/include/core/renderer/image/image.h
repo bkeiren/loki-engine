@@ -4,7 +4,7 @@
 #define IMAGE_H
 
 #include "core/graphics/Texture.h"
-#include "core/renderer/enums.h"
+#include "core/graphics/Enums.h"
 
 #define USE_PBO
 
@@ -19,6 +19,8 @@ namespace graphics
 	class PixelBuffer;
 #endif
 }
+
+using namespace loki::graphics;
 
 namespace renderer
 {
