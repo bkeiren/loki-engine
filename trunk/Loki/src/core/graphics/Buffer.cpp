@@ -91,12 +91,36 @@ inline GLenum GetOpenGLUsageHintEnum( Buffer::EUsageHint _UsageHint )
 	return 0;
 }
 
+inline GLenum GetOpenGLMappingAccessEnum( Buffer::EMappingAccess _Access )
+{
+	switch (_Access)
+	{
+	case Buffer::BUFFER_MAPPING_READ_ONLY:
+		{
+			return GL_READ_ONLY;
+			break;
+		}
+	case Buffer::BUFFER_MAPPING_WRITE_ONLY:
+		{
+			return GL_WRITE_ONLY;
+			break;
+		}
+	case Buffer::BUFFER_MAPPING_READ_WRITE:
+		{
+			return GL_READ_WRITE;
+			break;
+		}
+	}
+	return 0;
+}
+
 }
 
 Buffer::Buffer( EBufferTarget _Target )	:
 	m_BufferTarget(_Target),
 	m_GLBufferHandle(0),
-	m_UsageHint(BUFFER_USAGE_STATIC_DRAW)
+	m_UsageHint(BUFFER_USAGE_STATIC_DRAW),
+	m_SizeInBytes(0)
 {
 	glGenBuffers(1, &m_GLBufferHandle);
 }
@@ -130,12 +154,56 @@ void Buffer::Unbind() const
 	glBindBuffer(GetOpenGLTargetEnum(m_BufferTarget), 0);
 }
 
-void Buffer::_UploadData( int32 _Size, void* _Data, EUsageHint _UsageHint )
+void* Buffer::Map( EMappingAccess _Access ) const
 {
-	m_UsageHint = _UsageHint;
-
 	Bind();
-	glBufferData(GetOpenGLTargetEnum(m_BufferTarget), _Size, _Data, GetOpenGLUsageHintEnum(m_UsageHint));
+	return glMapBuffer(m_BufferTarget, _Access);
+}
+
+bool Buffer::Unmap()
+{
+	bool b = (bool)glUnmapBuffer(m_BufferTarget);
+	if (!b)
+	{
+		LOG(VL_WARN, "Buffer::Unmap: glUnmapBuffer returned false. Buffer contents were corrupted while buffer was mapped; buffer will be re-initialized");
+		_UploadData(m_SizeInBytes, 0, m_UsageHint);
+	}
+	return b;
+}
+
+uint32 Buffer::GetSize() const
+{
+	return m_SizeInBytes;
+}
+
+void Buffer::_UploadData( uint32 _SizeInBytes, const void* _Data, EUsageHint _UsageHint )
+{
+	Bind();
+
+	// Optimization: If we're replacing the entire data store (and not trying to initialize it by passing 0 for _Data),
+	// we use _UploadSubData instead because it is faster than reinitializing the entire data store.
+	// Although we can expect client code to take this into account and use _UploadSubData directly when it's better,
+	// we still do this check because it simplifies things a little (And we don't have to worry about unexpected 
+	// re-allocations of the data store).
+	if (_SizeInBytes != m_SizeInBytes || _Data == 0)
+	{
+		glBufferData(GetOpenGLTargetEnum(m_BufferTarget), _SizeInBytes, _Data, GetOpenGLUsageHintEnum(_UsageHint));
+	}
+	else
+	{
+		_UploadSubData(0, _SizeInBytes, _Data);
+	}
+
+	Unbind();
+
+	m_UsageHint = _UsageHint;
+	m_SizeInBytes = _SizeInBytes;
+}
+
+void Buffer::_UploadSubData( uint32 _OffsetInBytes, uint32 _SizeInBytes, const void* _Data )
+{
+	Bind();
+	glBufferSubData(GetOpenGLTargetEnum(m_BufferTarget), _OffsetInBytes, _SizeInBytes, _Data);
 	Unbind();
 }
 
