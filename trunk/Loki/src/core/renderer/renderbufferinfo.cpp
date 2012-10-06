@@ -11,10 +11,10 @@ LkRenderBufferInfo::LkRenderBufferInfo()	:
 	//m_TextureHandle(0),
 	m_GenerateTexture(true)
 {
-	m_InternalFormat = RBIF_RGBA;
-	m_TextureFormat = RBF_RGBA;
-	m_TextureType = RBT_UNSIGNED_INT_8_8_8_8;
-	m_Attachment = RBA_COLOR_ATTACHMENT0;
+	m_InternalFormat = graphics::INTERNAL_FORMAT_RGBA;
+	m_TextureFormat = graphics::TEXTURE_FORMAT_RGBA;
+	m_TextureType = graphics::TEXTURE_TYPE_UNSIGNED_INT_8_8_8_8;
+	m_Attachment = graphics::FRAMEBUFFER_COLOR_ATTACHMENT0;
 
 	{
 		// NOTE: If no mipmap levels are generated for the texture (Which is not done by default), then these parameters are required in order to

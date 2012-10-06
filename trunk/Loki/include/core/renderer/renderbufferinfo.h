@@ -4,7 +4,11 @@
 #define RENDERBUFFERINFO_H
 
 #include <vector>
-#include "core/renderer/enums.h"
+#include "core/graphics/Enums.h"
+
+#include "glew/glew.h"
+
+using namespace loki::graphics;
 
 namespace loki
 {
@@ -36,7 +40,7 @@ struct LkRenderBufferInfo
 	//////////////////////////////////////////////////////////////////////////
 	const void* m_TexturePixels;
 
-	EAttachment m_Attachment;
+	EFrameBufferAttachment m_Attachment;
 	
 	bool m_GenerateTexture;	// If true, will generate a texture instead of using a standard OpenGL render buffer.
 

@@ -6,6 +6,7 @@
 #include "core/renderer/image/image.h"
 #include "util/clock/clock.h"
 #include "core/input/input.h"
+#include "core/graphics/Enums.h"
 
 namespace loki
 {
@@ -184,7 +185,7 @@ void LkHTMLView::Render()
 		if (m_RenderImage->GetNumTextureIndices() == 0)
 		{
 			//clock.Start();
-			m_RenderImage->AddTextureFromMemory((void*)(m_LastRenderbuffer->buffer), m_LastRenderbuffer->width, m_LastRenderbuffer->height, renderer::RBIF_RGBA, renderer::RBF_BGRA, renderer::RBT_UNSIGNED_INT_8_8_8_8_REV);
+			m_RenderImage->AddTextureFromMemory((void*)(m_LastRenderbuffer->buffer), m_LastRenderbuffer->width, m_LastRenderbuffer->height, graphics::INTERNAL_FORMAT_RGBA, graphics::TEXTURE_FORMAT_BGRA, graphics::TEXTURE_TYPE_UNSIGNED_INT_8_8_8_8_REV);
 
 			//LOG(VL_NORMAL, "AddTextureFromMemory: %f", clock.Lap_ms());
 		}
@@ -201,7 +202,7 @@ void LkHTMLView::Render()
 																	dirtybounds.height, 
 																	renderer::RBF_BGRA, renderer::RBT_UNSIGNED_INT_8_8_8_8_REV);
 #else
-			m_RenderImage->SetSubTextureFromMemory((void*)m_LastRenderbuffer->buffer, 0, 0, m_LastRenderbuffer->width, m_LastRenderbuffer->height, renderer::RBF_BGRA, renderer::RBT_UNSIGNED_INT_8_8_8_8_REV);
+			m_RenderImage->SetSubTextureFromMemory((void*)m_LastRenderbuffer->buffer, 0, 0, m_LastRenderbuffer->width, m_LastRenderbuffer->height, graphics::TEXTURE_FORMAT_BGRA, graphics::TEXTURE_TYPE_UNSIGNED_INT_8_8_8_8_REV);
 #endif
 
 			//LOG(VL_NORMAL, "SetSubTextureFromMemory: %f", clock.Lap_ms());

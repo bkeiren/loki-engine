@@ -12,8 +12,8 @@ Texture::Texture()	:
 	m_File(std::string("")),
 	m_Width(1),
 	m_Height(1),
-	m_OpenGLInternalFormat(0),
-	m_OpenGLTextureDepth(0)
+	m_InternalFormat(INTERNAL_FORMAT_RGBA),
+	m_TextureDepth(0)
 {
 	glGenTextures(1, &m_GLTextureHandle);
 }
@@ -79,18 +79,24 @@ void Texture::SetTextureParameter( ETextureParameterName _Parameter, ETexturePar
 void Texture::UpdateGLInformation()
 {
 	// Obtain texture information from OpenGL.
+
+	int32 InternalFormat = 0;
+
 	glActiveTexture(GL_TEXTURE0);
 	Bind();
 
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &m_Width);
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &m_Height);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &m_OpenGLInternalFormat);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_DEPTH, &m_OpenGLTextureDepth);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &InternalFormat);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_DEPTH, &m_TextureDepth);
 	
 	Unbind();
 
+	// NOTE: Why is this here...?
 	SetTextureParameter(TEXTURE_WRAP_S, REPEAT);
 	SetTextureParameter(TEXTURE_WRAP_T, REPEAT);
+
+	m_InternalFormat = GetEnumInteralFormat(InternalFormat);
 }
 
 int32 Texture::GetWidth() const
@@ -108,6 +114,16 @@ void Texture::UploadData( EInternalFormat _InternalFormat, ETextureFormat _Forma
 	Bind();
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GLInternalFormats[_InternalFormat], _Width, _Height, 0, GLTextureFormats[_Format], GLTextureTypes[_Type], _Data);
+	UpdateGLInformation();
+
+	Unbind();
+}
+
+void Texture::UploadSubData( ETextureFormat _Format, ETextureType _Type, int32 _XOffset, int32 _YOffset, int32 _Width, int32 _Height, const void* _Data )
+{
+	Bind();
+
+	glTexSubImage2D(GL_TEXTURE_2D, 0, _XOffset, _YOffset, _Width, _Height, GLTextureFormats[_Format], GLTextureTypes[_Type], _Data);
 	UpdateGLInformation();
 
 	Unbind();

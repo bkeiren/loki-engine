@@ -161,7 +161,7 @@ bool LkImage::AddTextureFromMemory( const void* _Data, unsigned int _Width, unsi
 	// This line indicates that if any change occurs to the base mipmap level, the other levels should be regenerated.
 	//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	
-	tex->UploadData(graphics::GetEnumInteralFormat(_InternalFormat), graphics::GetEnumTextureFormat(_Format), graphics::GetEnumTextureType(_Type), _Width, _Height, _Data);
+	tex->UploadData(_InternalFormat, _Format, _Type, _Width, _Height, _Data);
 //	glTexImage2D(GL_TEXTURE_2D, 0, _InternalFormat, _Width, _Height, 0, _Format, _Type, _Data);
 
 	tex->Bind();
@@ -189,7 +189,7 @@ void LkImage::SetSubTextureFromMemory( const void* _Data, int _XOffset, int _YOf
 #ifdef USE_PBO
 
 #define USE_ORPHANANDMAP
-	glBindTexture(GL_TEXTURE_2D, tex->GetTextureHandle());
+	tex->Bind();	//glBindTexture(GL_TEXTURE_2D, tex->GetTextureHandle());
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, tex->GetWidth());
 #ifdef USE_ORPHANANDMAP
 	m_PBO->UploadData(m_PBO->GetSize(), 0, graphics::Buffer::BUFFER_USAGE_DYNAMIC_DRAW);	//m_PBO->BufferData(0);
@@ -197,7 +197,7 @@ void LkImage::SetSubTextureFromMemory( const void* _Data, int _XOffset, int _YOf
 	memcpy_s(m, m_PBO->GetSize(), _Data, _Width * _Height * 4);
 	m_PBO->Unmap();	//m_PBO->UnmapBuffer();
 	m_PBO->Bind();
-	glTexSubImage2D(GL_TEXTURE_2D, 0, _XOffset, _YOffset, _Width, _Height, _Format, _Type, (void*)0);
+	tex->UploadSubData(_Format, _Type, _XOffset, _YOffset, _Width, _Height, (void*)0);	//glTexSubImage2D(GL_TEXTURE_2D, 0, _XOffset, _YOffset, _Width, _Height, _Format, _Type, (void*)0);
 	m_PBO->Unbind();
 #else
 #define USE_BUFFERSUB	// If defined, uses BufferSubData instead of orphaning the buffer and copying the data.
@@ -212,7 +212,7 @@ void LkImage::SetSubTextureFromMemory( const void* _Data, int _XOffset, int _YOf
 #endif
 #undef USE_ORPHANANDMAP
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	tex->Unbind();	//glBindTexture(GL_TEXTURE_2D, 0);
 #else
 	glBindTexture(GL_TEXTURE_2D, tex->m_OpenGLTextureID);
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, tex->m_Width);
