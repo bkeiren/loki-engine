@@ -67,6 +67,24 @@ public:
 		STENCIL_OPERATION_INVERT
 	};
 
+	enum EBlendMode
+	{
+		BLEND_MODE_ZERO = 0,
+		BLEND_MODE_ONE,
+		BLEND_MODE_SRC_COLOR,
+		BLEND_MODE_ONE_MINUS_SRC_COLOR,
+		BLEND_MODE_DST_COLOR,
+		BLEND_MODE_ONE_MINUS_DST_COLOR,
+		BLEND_MODE_SRC_ALPHA,
+		BLEND_MODE_ONE_MINUS_SRC_ALPHA,
+		BLEND_MODE_DST_ALPHA,
+		BLEND_MODE_ONE_MINUS_DST_ALPHA,
+		BLEND_MODE_CONSTANT_COLOR,
+		BLEND_MODE_ONE_MINUS_CONSTANT_COLOR,
+		BLEND_MODE_CONSTANT_ALPHA,
+		BLEND_MODE_ONE_MINUS_CONSTANT_ALPHA
+	};
+
 	virtual void SetColorMask( bool _Red, bool _Green, bool _Blue, bool _Alpha ) const = 0;
 	virtual void SetDepthMask( bool _Mask ) const = 0;
 	virtual void SetStencilMask( bool _Mask ) const = 0;
@@ -82,7 +100,10 @@ public:
 	virtual void SetStencilMode( EStencilMode _Mode, int _ReferenceValue, uint32 _Mask ) const = 0;
 	virtual void SetStencilOperation( EStencilOperation _StenciLFail, EStencilOperation _DepthFail, EStencilOperation _DepthPass ) const = 0;
 	
-	virtual void SetCullFaceEnabled( bool _Enabled ) const = 0;
+	virtual void SetBlendingEnabled( bool _Enabled ) const = 0;
+	virtual void SetBlendMode( EBlendMode _SourceFactor, EBlendMode _DestinationFactor );
+
+	virtual void SetCullingEnabled( bool _Enabled ) const = 0;
 	virtual void SetCullMode( ECullMode _Mode ) const = 0;
 	
 protected:

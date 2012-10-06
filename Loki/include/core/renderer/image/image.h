@@ -14,6 +14,7 @@ namespace loki
 namespace graphics
 {
 	class Texture;
+
 }
 
 namespace renderer

@@ -319,11 +319,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\commandlineparsing.h"
+			RelativePath=".\include\commandlineparsing.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\commandlineparsing.h"
+			RelativePath=".\include\core\commandlineparsing.h"
 			>
 		</File>
 		<File
@@ -403,11 +403,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\dev_notes.txt"
+			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\dev_notes.txt"
+			RelativePath=".\src\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -927,10 +927,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\renderer\IRenderer.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\core\graphics\IRenderer.h"
 			>
 		</File>
@@ -943,11 +939,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\baseclass\istate.h"
+			RelativePath=".\include\core\states\baseclass\istate.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\baseclass\istate.h"
+			RelativePath=".\include\states\baseclass\istate.h"
 			>
 		</File>
 		<File
@@ -1383,6 +1379,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\graphics\PixelBuffer.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\PixelBuffer.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\core\renderer\pixelbufferobject.cpp"
 			>
 		</File>
@@ -1435,11 +1439,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtx\quaternion.inl"
+			RelativePath=".\include\math\glm\gtc\quaternion.inl"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.inl"
+			RelativePath=".\include\math\glm\gtx\quaternion.inl"
 			>
 		</File>
 		<File
@@ -1571,11 +1575,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
+			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\singleton.h"
+			RelativePath=".\include\core\singleton.h"
 			>
 		</File>
 		<File
@@ -1655,11 +1659,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\statemanager.h"
+			RelativePath=".\include\statemanager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\statemanager.h"
+			RelativePath=".\include\core\statemanager.h"
 			>
 		</File>
 		<File
@@ -1727,11 +1731,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\TestState.h"
+			RelativePath=".\include\core\states\TestState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\TestState.h"
+			RelativePath=".\include\states\TestState.h"
 			>
 		</File>
 		<File
@@ -2003,11 +2007,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.h"
+			RelativePath=".\include\util\util.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.h"
+			RelativePath=".\include\util.h"
 			>
 		</File>
 		<File
