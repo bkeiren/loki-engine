@@ -67,20 +67,12 @@ LkFramebufferObject::LkFramebufferObject( unsigned int _Width, unsigned int _Hei
 		{
 			m_RenderBuffers[i].first = RBST_BUFFER;
 
-			graphics::RenderBuffer* rb = graphics::RenderBuffer::Create((graphics::RenderBuffer::EInternalFormat)Info.m_InternalFormat, m_Width, m_Height);
+			graphics::RenderBuffer* rb = graphics::RenderBuffer::Create((graphics::EInternalFormat)Info.m_InternalFormat, m_Width, m_Height);
 
 			m_RenderBuffers[i].second = (GLuint)rb;
 
-			// Ask OpenGL to create a render buffer.
-			//glGenRenderbuffers(1, &(m_RenderBuffers[i].second));
-
-			// Bind the render buffer, set it's storage and indicate which attachment point it should connect to.
-			//glBindRenderbuffer(GL_RENDERBUFFER, m_RenderBuffers[i].second);
-			
 			// Attach the generated render buffer to the FBO by connecting it to the right attachment point.
-			//glFramebufferRenderbuffer(GL_FRAMEBUFFER, Info.m_Attachment, GL_RENDERBUFFER, m_RenderBuffers[i].second);
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, Info.m_Attachment, GL_RENDERBUFFER, rb->GetBufferHandle());
-			//glRenderbufferStorage(GL_RENDERBUFFER, Info.m_InternalFormat, m_Width, m_Height);
 			CheckGL();
 		}	
 

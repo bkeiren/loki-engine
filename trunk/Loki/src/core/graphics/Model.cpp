@@ -143,19 +143,19 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 
 		// Set the diffuse texture.
 		tex = material->GetTexture(Material::TT_DIFFUSE);
-		SETCGPARAM("LKDIFFUSETEX", (tex)?(tex->GetGLTextureHandle()):((GLuint)0));
+		SETCGPARAM("LKDIFFUSETEX", (tex)?(tex->GetTextureHandle()):((GLuint)0));
 
 		// Set the normal texture.
 		tex = material->GetTexture(Material::TT_NORMAL);
-		SETCGPARAM("LKNORMALTEX", (tex)?(tex->GetGLTextureHandle()):((GLuint)0));
+		SETCGPARAM("LKNORMALTEX", (tex)?(tex->GetTextureHandle()):((GLuint)0));
 
 		// Set the specular texture.
 		tex = material->GetTexture(Material::TT_SPECULAR);
-		SETCGPARAM("LKSPECULARTEX", (tex)?(tex->GetGLTextureHandle()):((GLuint)0));
+		SETCGPARAM("LKSPECULARTEX", (tex)?(tex->GetTextureHandle()):((GLuint)0));
 
 		// Set the emissive texture.
 		tex = material->GetTexture(Material::TT_EMISSIVE);
-		SETCGPARAM("LKEMISSIVETEX", (tex)?(tex->GetGLTextureHandle()):((GLuint)0));
+		SETCGPARAM("LKEMISSIVETEX", (tex)?(tex->GetTextureHandle()):((GLuint)0));
 
 		while (effect->HasNextPass())
 		{

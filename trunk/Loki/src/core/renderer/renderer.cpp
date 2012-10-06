@@ -32,7 +32,7 @@
 
 using namespace loki;
 using namespace loki::renderer;
-using namespace loki::graphics;
+//using namespace loki::graphics;
 
 #define ASSIMP_LOGFILE	"logs//log_assimp.txt"
 
@@ -561,7 +561,7 @@ void LkRenderer::_RenderSky()
 	//glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); // Don't do any blending on the cube map textures
 
 	{
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_WEST)->GetGLTextureHandle());
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_WEST)->GetTextureHandle());
 		glBegin( GL_QUADS );
 		// +X
 		glTexCoord2f(  0.0f, 0.0f );
@@ -578,7 +578,7 @@ void LkRenderer::_RenderSky()
 
 		glEnd();
 		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_EAST)->GetGLTextureHandle() );
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_EAST)->GetTextureHandle() );
 		glBegin( GL_QUADS );
 		// -X
 		glTexCoord2f(  1.0f, 0.0f );
@@ -595,7 +595,7 @@ void LkRenderer::_RenderSky()
 
 		glEnd();
 		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_UP)->GetGLTextureHandle() );
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_UP)->GetTextureHandle() );
 		glBegin( GL_QUADS );
 		// +Y
 		glTexCoord2f(  0.0f, 0.0f );
@@ -612,7 +612,7 @@ void LkRenderer::_RenderSky()
 
 		glEnd();
 		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_DOWN)->GetGLTextureHandle() );
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_DOWN)->GetTextureHandle() );
 		glBegin( GL_QUADS );
 		// -Y
 		glTexCoord2f(  0.0f,  1.0f );
@@ -629,7 +629,7 @@ void LkRenderer::_RenderSky()
 
 		glEnd();
 		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_NORTH)->GetGLTextureHandle() );
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_NORTH)->GetTextureHandle() );
 		glBegin( GL_QUADS );
 		// +Z
 		glTexCoord2f(  1.0f, 0.0f );
@@ -646,7 +646,7 @@ void LkRenderer::_RenderSky()
 
 		glEnd();
 		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_SOUTH)->GetGLTextureHandle() );
+		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_SOUTH)->GetTextureHandle() );
 		glBegin( GL_QUADS );
 		// -Z
 		glTexCoord2f(  0.0f, 0.0f );
@@ -695,7 +695,7 @@ void LkRenderer::_RenderOpaqueGeometry()
 // 		}
 // 	}
 
-	static Model* mdl = Model::Load("resources//lmo//test.lmo");
+	static graphics::Model* mdl = graphics::Model::Load("resources//lmo//test.lmo");
 	mdl->Render(mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f), viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
 }
 

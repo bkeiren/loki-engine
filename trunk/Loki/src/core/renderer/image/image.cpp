@@ -150,7 +150,7 @@ bool LkImage::AddTextureFromMemory( const void* _Data, unsigned int _Width, unsi
 	//LkTexture* tex = new LkTexture("LkImage::AddTextureFromMemory:Texture", texture);
 	graphics::Texture* tex = graphics::Texture::Create();
 
-	glBindTexture(GL_TEXTURE_2D, tex->GetGLTextureHandle());
+	tex->Bind();
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -161,20 +161,23 @@ bool LkImage::AddTextureFromMemory( const void* _Data, unsigned int _Width, unsi
 	// This line indicates that if any change occurs to the base mipmap level, the other levels should be regenerated.
 	//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	
-	glTexImage2D(GL_TEXTURE_2D, 0, _InternalFormat, _Width, _Height, 0, _Format, _Type, _Data);
+	tex->UploadData(graphics::GetEnumInteralFormat(_InternalFormat), graphics::GetEnumTextureFormat(_Format), graphics::GetEnumTextureType(_Type), _Width, _Height, _Data);
+//	glTexImage2D(GL_TEXTURE_2D, 0, _InternalFormat, _Width, _Height, 0, _Format, _Type, _Data);
+
+	tex->Bind();
 	glGenerateMipmap(GL_TEXTURE_2D);	// Apparently this is hardware accelerated, which gluBuild2DMipMaps is not.
 	//gluBuild2DMipmaps(GL_TEXTURE_2D, 4, _Width, _Height, _Format, _Type, _Data);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	tex->Unbind();
 
 	tex->UpdateGLInformation();
 
 	m_Textures.push_back(std::pair<bool, graphics::Texture*>(false, tex));
-	*(const_cast<int*>(&(tex->m_Width))) = _Width;
-	*(const_cast<int*>(&(tex->m_Height))) = _Height;
+	//*(const_cast<int*>(&(tex->m_Width))) = _Width;
+	//*(const_cast<int*>(&(tex->m_Height))) = _Height;
 
 #ifdef USE_PBO
-	m_PBO->Resize(tex->m_Width * tex->m_Height * 4);	//m_PBO->Resize(tex->m_Width * tex->m_Height * 4);
+	m_PBO->Resize(tex->GetWidth() * tex->GetHeight() * 4);	//m_PBO->Resize(tex->m_Width * tex->m_Height * 4);
 #endif
 
 	return true;
@@ -186,8 +189,8 @@ void LkImage::SetSubTextureFromMemory( const void* _Data, int _XOffset, int _YOf
 #ifdef USE_PBO
 
 #define USE_ORPHANANDMAP
-	glBindTexture(GL_TEXTURE_2D, tex->GetGLTextureHandle());
-	glPixelStorei(GL_UNPACK_ROW_LENGTH, tex->m_Width);
+	glBindTexture(GL_TEXTURE_2D, tex->GetTextureHandle());
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, tex->GetWidth());
 #ifdef USE_ORPHANANDMAP
 	m_PBO->UploadData(m_PBO->GetSize(), 0, graphics::Buffer::BUFFER_USAGE_DYNAMIC_DRAW);	//m_PBO->BufferData(0);
 	void* m = m_PBO->Map(graphics::Buffer::BUFFER_MAPPING_WRITE_ONLY);	//void* m = m_PBO->MapBuffer(PBO_MAP_WRITE_ONLY);
@@ -267,7 +270,7 @@ void LkImage::Render()
 	LkEffectParameter* param = m_CgEffect->GetParameterBySemantic("LKDIFFUSETEX");
 	if (param)
 	{
-		param->Set(m_Textures[m_TextureIndex].second->GetGLTextureHandle());
+		param->Set(m_Textures[m_TextureIndex].second->GetTextureHandle());
 	}
 	
 	param = m_CgEffect->GetParameterBySemantic("LKMODELVIEWPROJ");
@@ -460,7 +463,7 @@ int LkImage::GetWidth() const
 {
 	if (m_TextureIndex < GetNumTextureIndices())
 	{
-		return m_Textures[m_TextureIndex].second->m_Width;
+		return m_Textures[m_TextureIndex].second->GetWidth();
 	}
 	return 0;
 }
@@ -469,7 +472,7 @@ int LkImage::GetHeight() const
 {
 	if (m_TextureIndex < GetNumTextureIndices())
 	{
-		return m_Textures[m_TextureIndex].second->m_Height;
+		return m_Textures[m_TextureIndex].second->GetHeight();
 	}
 	return 0;
 }
