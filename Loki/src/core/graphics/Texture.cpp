@@ -9,23 +9,13 @@ namespace graphics
 
 Texture::Texture()	:
 	m_GLTextureHandle(0),
+	m_File(std::string("")),
 	m_Width(1),
 	m_Height(1),
 	m_OpenGLInternalFormat(0),
 	m_OpenGLTextureDepth(0)
 {
-	ILLEGAL_CTOR_ERROR("Texture");
-}
-
-Texture::Texture( uint32 _GLTextureHandle, const std::string& _Filename )	:
-	m_GLTextureHandle(_GLTextureHandle),
-	m_File(_Filename),
-	m_Width(1),
-	m_Height(1),
-	m_OpenGLInternalFormat(0),
-	m_OpenGLTextureDepth(0)
-{
-	UpdateGLInformation();
+	glGenTextures(1, &m_GLTextureHandle);
 }
 
 Texture::~Texture()
@@ -35,57 +25,92 @@ Texture::~Texture()
 
 Texture* Texture::Load( const std::string& _File )
 {
-	uint32 id = SOIL_load_OGL_texture(_File.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	Texture* tex = Texture::Create();
 
-	if (id == 0)
+	uint32 res = SOIL_load_OGL_texture(_File.c_str(), SOIL_LOAD_AUTO, tex->GetTextureHandle(), SOIL_FLAG_INVERT_Y);
+
+	if (!res)
 	{
 		LOG(VL_ERROR, "Texture::Load: Failed to load texture '%s'", _File.c_str());
 		return 0;
 	}
 
-	glBindTexture(GL_TEXTURE_2D, id);
+	tex->Bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	tex->Unbind();
 
-	Texture* tex = new Texture(id, _File);
+	tex->UpdateGLInformation();
+
 	return tex;
 }
 
 Texture* Texture::Create()
 {
-	uint32 id = 0;
-	glGenTextures(1, &id);
-
-	Texture* tex = new Texture(id, "");
+	Texture* tex = new Texture();
 	return tex;
 }
 
-uint32 Texture::GetGLTextureHandle() const
+void Texture::Bind() const
+{
+	glBindTexture(GL_TEXTURE_2D, m_GLTextureHandle);
+}
+
+void Texture::Unbind() const
+{
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+uint32 Texture::GetTextureHandle() const
 {
 	return m_GLTextureHandle;
 }
 
-void Texture::SetTextureParameter( TextureParameter _Parameter, TextureParameterValue _Value )
+void Texture::SetTextureParameter( ETextureParameterName _Parameter, ETextureParameterValue _Value )
 {
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_GLTextureHandle);
-	glTexParameteri(GL_TEXTURE_2D, _Parameter, _Value);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	Bind();
+
+	glTexParameteri(GL_TEXTURE_2D, GLTextureParameterNames[_Parameter], GLTextureParameterValues[_Value]);
+	
+	Unbind();
 }
 
 void Texture::UpdateGLInformation()
 {
 	// Obtain texture information from OpenGL.
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_GLTextureHandle);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, const_cast<int*>(&m_Width));
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, const_cast<int*>(&m_Height));
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, const_cast<int*>(&m_OpenGLInternalFormat));
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_DEPTH, const_cast<int*>(&m_OpenGLTextureDepth));
-	glBindTexture(GL_TEXTURE_2D, 0);
+	Bind();
+
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &m_Width);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &m_Height);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &m_OpenGLInternalFormat);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_DEPTH, &m_OpenGLTextureDepth);
+	
+	Unbind();
 
 	SetTextureParameter(TEXTURE_WRAP_S, REPEAT);
 	SetTextureParameter(TEXTURE_WRAP_T, REPEAT);
+}
+
+int32 Texture::GetWidth() const
+{
+	return m_Width;
+}
+
+int32 Texture::GetHeight() const
+{
+	return m_Height;
+}
+
+void Texture::UploadData( EInternalFormat _InternalFormat, ETextureFormat _Format, ETextureType _Type, int32 _Width, int32 _Height, const void* _Data )
+{
+	Bind();
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GLInternalFormats[_InternalFormat], _Width, _Height, 0, GLTextureFormats[_Format], GLTextureTypes[_Type], _Data);
+	UpdateGLInformation();
+
+	Unbind();
 }
 
 }

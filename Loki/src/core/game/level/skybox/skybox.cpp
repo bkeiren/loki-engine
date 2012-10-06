@@ -32,7 +32,7 @@ LkSkyBox::LkSkyBox( const std::string& _Skybox )
 
 		if (m_Textures[i])
 		{
-			m_Textures[i]->SetTextureParameter(graphics::Texture::TEXTURE_WRAP_S, graphics::Texture::CLAMP_TO_EDGE);
+			m_Textures[i]->SetTextureParameter(graphics::TEXTURE_WRAP_S, graphics::CLAMP_TO_EDGE);
 		}
 	}
 }
