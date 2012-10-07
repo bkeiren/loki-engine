@@ -184,32 +184,32 @@ const JSONValue JSONValue::operator[]( const std::string& _Key ) const
 
 bool JSONValue::operator <( const JSONValue& _Other ) const
 {
-	return (m_Value->operator < (_Other.m_Value));
+	return (bool)(m_Value->operator < (_Other.m_Value));
 }
 
 bool JSONValue::operator <=( const JSONValue& _Other ) const
 {
-	return (m_Value->operator <= (_Other.m_Value));
+	return (bool)(m_Value->operator <= (_Other.m_Value));
 }
 
 bool JSONValue::operator >=( const JSONValue& _Other ) const
 {
-	return (m_Value->operator >= (_Other.m_Value));
+	return (bool)(m_Value->operator >= (_Other.m_Value));
 }
 
 bool JSONValue::operator >( const JSONValue& _Other ) const
 {
-	return (m_Value->operator > (_Other.m_Value));
+	return (bool)(m_Value->operator > (_Other.m_Value));
 }
 
 bool JSONValue::operator ==( const JSONValue& _Other ) const
 {
-	return (m_Value->operator == (_Other.m_Value));
+	return (bool)(m_Value->operator == (_Other.m_Value));
 }
 
 bool JSONValue::operator !=( const JSONValue& _Other ) const
 {
-	return (m_Value->operator != (_Other.m_Value));
+	return (bool)(m_Value->operator != (_Other.m_Value));
 }
 
 JSONValue& JSONValue::operator =( const JSONValue& _Other )

@@ -2,7 +2,7 @@
 #include <GLEW\\glew.h>
 #include <GL\\glut.h>
 //#include "core/renderer/geometry/model/model.h"
-#include "core/renderer/framebufferobject.h"
+//#include "core/renderer/framebufferobject.h"
 #include "core/renderer/deferredrenderobject.h"
 #include "core/actor/camera/camera.h"
 #include "core/renderer/renderer.h"
@@ -29,6 +29,8 @@
 #include "core/actor/psystem/particlesystem.h"
 
 #include "core/graphics/Model.h"
+
+#include "core/graphics/FrameBuffer.h"
 
 using namespace loki;
 using namespace loki::renderer;
@@ -90,10 +92,10 @@ bool LkRenderer::_Init( LkWindow* _Window )
 	g_EffectManager = new LkEffectManager();
 
 
-	std::vector<LkRenderBufferInfo> RenderBuffersInfo;
+	std::vector<graphics::FrameBuffer::FrameBufferAttachmentInfo> RenderBuffersInfo;
 	{
 		// Diffuse and specular color buffer.
-		LkRenderBufferInfo info;
+		graphics::FrameBuffer::FrameBufferAttachmentInfo info;
 		info.m_Attachment = graphics::FRAMEBUFFER_COLOR_ATTACHMENT0;
 		info.m_InternalFormat = graphics::INTERNAL_FORMAT_RGBA;
 		info.m_TextureFormat = graphics::TEXTURE_FORMAT_RGBA;
@@ -103,7 +105,7 @@ bool LkRenderer::_Init( LkWindow* _Window )
 
 	{
 		// Positions buffer.
-		LkRenderBufferInfo info;
+		graphics::FrameBuffer::FrameBufferAttachmentInfo info;
 		info.m_Attachment = graphics::FRAMEBUFFER_COLOR_ATTACHMENT1;
 		info.m_InternalFormat = graphics::INTERNAL_FORMAT_RGBA32F;
 		info.m_TextureFormat = graphics::TEXTURE_FORMAT_RGBA;
@@ -113,7 +115,7 @@ bool LkRenderer::_Init( LkWindow* _Window )
 
 	{
 		// Normals buffer.
-		LkRenderBufferInfo info;
+		graphics::FrameBuffer::FrameBufferAttachmentInfo info;
 		info.m_Attachment = graphics::FRAMEBUFFER_COLOR_ATTACHMENT2;
 		info.m_InternalFormat = graphics::INTERNAL_FORMAT_RGBA32F;
 		info.m_TextureFormat = graphics::TEXTURE_FORMAT_RGBA;
@@ -123,7 +125,7 @@ bool LkRenderer::_Init( LkWindow* _Window )
 
 	{
 		// Depth + Stencil buffer.
-		LkRenderBufferInfo info;
+		graphics::FrameBuffer::FrameBufferAttachmentInfo info;
 		//info.m_GenerateTexture = false;
 		info.m_Attachment = graphics::FRAMEBUFFER_DEPTH_STENCIL_ATTACHMENT;
 		info.m_InternalFormat = graphics::INTERNAL_FORMAT_DEPTH24_STENCIL8;
@@ -134,7 +136,7 @@ bool LkRenderer::_Init( LkWindow* _Window )
 
 	{
 		// Light accumulation buffer.
-		LkRenderBufferInfo info;
+		graphics::FrameBuffer::FrameBufferAttachmentInfo info;
 		info.m_Attachment = graphics::FRAMEBUFFER_COLOR_ATTACHMENT3;
 		info.m_InternalFormat = graphics::INTERNAL_FORMAT_RGBA32F;
 		info.m_TextureFormat = graphics::TEXTURE_FORMAT_RGBA;
@@ -142,14 +144,16 @@ bool LkRenderer::_Init( LkWindow* _Window )
 		RenderBuffersInfo.push_back(info);
 	}
 
-	m_GBuffer = new LkFramebufferObject(WindowWidth, WindowHeight, RenderBuffersInfo);
-	m_GBuffer->SetClearColor(vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	m_GBuffer->SetClearDepth(1.0f);
-	m_GBuffer->SetClearStencil(0);
-	if (!m_GBuffer->CheckFramebufferStatus())
+	//m_GBuffer = new LkFramebufferObject(WindowWidth, WindowHeight, RenderBuffersInfo);
+	m_GBuffer = graphics::FrameBuffer::Create(WindowWidth, WindowHeight, RenderBuffersInfo);
+// 	m_GBuffer->SetClearColor(vec4(0.0f, 0.0f, 0.0f, 1.0f));
+// 	m_GBuffer->SetClearDepth(1.0f);
+// 	m_GBuffer->SetClearStencil(0);
+//	if (!m_GBuffer->CheckFramebufferStatus())
+	if (!m_GBuffer)
 	{
 		LOG(VL_ERROR, "Renderer::Init: G-Buffer creation failed");
-		delete m_GBuffer;
+		//delete m_GBuffer;
 		m_GBuffer = NULL;
 	}
 
@@ -297,12 +301,16 @@ void LkRenderer::Render( game::LkLevel* _Level )
 	*/
 
 	//m_MRTObject->StartGBuffer();
-	static EFrameBufferAttachment DrawBuffersP0[] = { graphics::FRAMEBUFFER_COLOR_ATTACHMENT3 };
-	static EFrameBufferAttachment DrawBuffersP1[] = { graphics::FRAMEBUFFER_COLOR_ATTACHMENT0, graphics::FRAMEBUFFER_COLOR_ATTACHMENT1, graphics::FRAMEBUFFER_COLOR_ATTACHMENT2, graphics::FRAMEBUFFER_COLOR_ATTACHMENT3 }; 
+	static graphics::EFrameBufferAttachment DrawBuffersP0[] = { graphics::FRAMEBUFFER_COLOR_ATTACHMENT3 };
+	static graphics::EFrameBufferAttachment DrawBuffersP1[] = { graphics::FRAMEBUFFER_COLOR_ATTACHMENT0, graphics::FRAMEBUFFER_COLOR_ATTACHMENT1, graphics::FRAMEBUFFER_COLOR_ATTACHMENT2, graphics::FRAMEBUFFER_COLOR_ATTACHMENT3 }; 
 
 	m_GBuffer->Bind();
 	m_GBuffer->SetDrawBuffers(DrawBuffersP1, 4);
-	m_GBuffer->ClearBuffers(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//m_GBuffer->ClearBuffers(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearDepth(1.0f);
+	glClearStencil(0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	m_GBuffer->SetDrawBuffers(DrawBuffersP0, 1);
 	_RenderSky();
@@ -543,9 +551,9 @@ void LkRenderer::ToggleVisualizeLightVolumes()
 }
 #endif
 
-void LkRenderer::DrawPixels( int _Width, int _Height, EInternalFormat _Format, const void* _Buffer )
+void LkRenderer::DrawPixels( int _Width, int _Height, graphics::EInternalFormat _Format, const void* _Buffer )
 {
-	glDrawPixels(_Width, _Height, _Format, GL_UNSIGNED_BYTE, _Buffer);
+	glDrawPixels(_Width, _Height, graphics::GLInternalFormats[_Format], GL_UNSIGNED_BYTE, _Buffer);
 }
 
 int LkRenderer::GetWindowWidth()
@@ -870,9 +878,9 @@ void LkRenderer::_RenderLightingPointLights()
 	vec3 _EyePosition = vec3(math::inverse(_ViewMatrix)[3]);
 
 	SETCGPARAM("LKEYEPOSITION", _EyePosition);			// Set the eye position.
-	SETCGPARAM("LKRT0", m_GBuffer->GetRenderbufferTexture(0));
-	SETCGPARAM("LKRT1", m_GBuffer->GetRenderbufferTexture(1));
-	SETCGPARAM("LKRT2", m_GBuffer->GetRenderbufferTexture(2));
+	SETCGPARAM("LKRT0", m_GBuffer->GetAttachmentTexture(graphics::FRAMEBUFFER_COLOR_ATTACHMENT0));
+	SETCGPARAM("LKRT1", m_GBuffer->GetAttachmentTexture(graphics::FRAMEBUFFER_COLOR_ATTACHMENT1));
+	SETCGPARAM("LKRT2", m_GBuffer->GetAttachmentTexture(graphics::FRAMEBUFFER_COLOR_ATTACHMENT2));
 	//SETCGPARAM("LKRT3", m_GBuffer->GetRenderbufferTexture(3));
 
 	for (game::LkLevel::PointLights::const_iterator it = m_CurrentLevelToRender->GetPointLights()->begin(); it != m_CurrentLevelToRender->GetPointLights()->end(); ++it)
@@ -1028,7 +1036,8 @@ void LkRenderer::_RenderLightAccumulationToBackBuffer()
 
 #define SETCGPARAM(paramname, value)	{LkEffectParameter* param = m_LightAccumulationToBackBufferEffect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
 
-	SETCGPARAM("LKLIGHTACCUMULATIONTEX", m_GBuffer->GetRenderbufferTexture(4));
+	//SETCGPARAM("LKLIGHTACCUMULATIONTEX", m_GBuffer->GetRenderbufferTexture(4));
+	SETCGPARAM("LKLIGHTACCUMULATIONTEX", m_GBuffer->GetAttachmentTexture(graphics::FRAMEBUFFER_COLOR_ATTACHMENT3));
 
 	while (m_LightAccumulationToBackBufferEffect->HasNextPass())
 	{
@@ -1060,8 +1069,10 @@ void LkRenderer::_RenderGBufferTargets()
 	{
 		float x = -1.0f + (0.5f * i);
 
+		static graphics::EFrameBufferAttachment Attachments[4] = { graphics::FRAMEBUFFER_COLOR_ATTACHMENT0, graphics::FRAMEBUFFER_COLOR_ATTACHMENT1, graphics::FRAMEBUFFER_COLOR_ATTACHMENT2, graphics::FRAMEBUFFER_DEPTH_STENCIL_ATTACHMENT };
+
 		LkEffect* effect = (i == 2)?(m_GBufferTargets_Normals):((i == 3)?(m_GBufferTargets_Depth):(m_GBufferTargets_General));
-		SETCGPARAM("LKGBUFFERTEX", m_GBuffer->GetRenderbufferTexture(i));
+		SETCGPARAM("LKGBUFFERTEX", m_GBuffer->GetAttachmentTexture(Attachments[i]));
 
 		if (i == 3)
 		{
