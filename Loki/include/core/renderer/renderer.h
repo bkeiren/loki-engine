@@ -77,6 +77,9 @@ private:
 	bool _Init( LkWindow* _Window );
 	void _Shutdown();
 
+	void _GetAPIInformation();
+	void _LogAPIInformation();
+
 	void _BindGLFunctions();
 
 	void _RenderSky();					// Renders the sky.
@@ -134,6 +137,11 @@ private:
 	bool m_DBG_VisualizeGBufferTargets;
 	bool m_DBG_VisualizeLightVolumes;
 #endif
+
+	std::string m_OpenGL_Vendor;
+	std::string m_OpenGL_Renderer;
+	std::string m_OpenGL_Version;
+	std::vector<std::string> m_OpenGL_Extensions;
 };
 
 extern LkRenderer* g_Renderer;

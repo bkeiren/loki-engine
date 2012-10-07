@@ -75,6 +75,9 @@ LkRenderer::~LkRenderer()
 
 bool LkRenderer::_Init( LkWindow* _Window )
 {
+	_GetAPIInformation();
+	_LogAPIInformation();
+
 	// In order to avoid crashes (because certain OpenGL methods aren't fully defined), we need to explicitly bind certain
 	// methods to their implementations.
 	_BindGLFunctions();
@@ -221,6 +224,33 @@ void LkRenderer::_Shutdown()
 	m_GBuffer = NULL;
 	
 	LOG(VL_ALWAYS, "Renderer::Shutdown: Renderer terminated");
+}
+
+void LkRenderer::_GetAPIInformation()
+{
+	m_OpenGL_Vendor = std::string((const char*)glGetString(GL_VENDOR));
+	m_OpenGL_Renderer = std::string((const char*)glGetString(GL_RENDERER));
+	m_OpenGL_Version = std::string((const char*)glGetString(GL_VERSION));
+	std::string extensions = std::string((const char*)glGetString(GL_EXTENSIONS));
+	
+	while (extensions.length() > 0)
+	{
+		int next_space = extensions.find((char)32);
+		if (next_space != extensions.npos)
+		{
+			std::string extension = extensions.substr(0, next_space);
+			extensions.erase(0, next_space + 1);
+			m_OpenGL_Extensions.push_back(extension);
+		}
+	}
+}
+
+void LkRenderer::_LogAPIInformation()
+{
+	LOG(VL_NORMAL, "Graphics Information:\n\tVendor: %s\n\tCard: %s\n\tAPI Version: %s",
+				   m_OpenGL_Vendor.c_str(),
+				   m_OpenGL_Renderer.c_str(),
+				   m_OpenGL_Version.c_str());
 }
 
 // NOTE: Renderer needing to be passed an instance to a level == circular dependency between engine systems.
