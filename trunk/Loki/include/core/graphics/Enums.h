@@ -9,6 +9,29 @@ namespace loki
 namespace graphics
 {
 
+// Cg input semantic names and values. The comment on each line provides the semantic name as it should appear in the
+// Cg shader. Each value is simply the index to which Cg binds a semantic and can be used
+// in the C++ application code to bind data to locations.
+enum ECgSemantics
+{
+	ATTR0 = 0,		POSITION = 0,
+	ATTR1 = 1,		BLENDWEIGHT = 1,
+	ATTR2 = 2,		NORMAL = 2,
+	ATTR3 = 3,		COLOR0 = 3,			DIFFUSE = 3,
+	ATTR4 = 4,		COLOR1 = 4,			SPECULAR = 4,
+	ATTR5 = 5,		FOGCOORD = 5,		TESSFACTOR = 5,
+	ATTR6 = 6,		POINTSIZE = 6,		// NOTE: Cg shader semantic for point size is actually 'PSIZE', but can't be used here because it's typedeffed.
+	ATTR7 = 7,		BLENDINDICES = 7,
+	ATTR8 = 8,		TEXCOORD0 = 8,
+	ATTR9 = 9,		TEXCOORD1 = 9,
+	ATTR10 = 10,	TEXCOORD2 = 10,
+	ATTR11 = 11,	TEXCOORD3 = 11,
+	ATTR12 = 12,	TEXCOORD4 = 12,
+	ATTR13 = 13,	TEXCOORD5 = 13,
+	ATTR14 = 14,	TEXCOORD6 = 14,		TANGENT = 14,
+	ATTR15 = 15,	TEXCOORD7 = 15,		BINORMAL = 15
+};
+
 enum EInternalFormat
 {
 	INTERNAL_FORMAT_DEPTH_COMPONENT = 0,
