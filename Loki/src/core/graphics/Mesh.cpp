@@ -34,6 +34,8 @@ Mesh* Mesh::Create( IndexBuffer* _IBO, VertexBuffer* _VBO )
 
 	Mesh* mesh = new Mesh();
 
+	mesh->m_IBO = _IBO;	// We take ownership of the index buffer and 
+	mesh->m_VBO = _VBO;	// the vertex buffer.
 	mesh->m_VAO = VertexArray::Create(_IBO, _VBO);
 
 	return mesh;

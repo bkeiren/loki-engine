@@ -1,4 +1,5 @@
 #include "core/graphics/Material.h"
+#include "core/graphics/Texture.h"
 
 namespace loki
 {

@@ -142,31 +142,37 @@ uint32 GLTextureParameterValues[_TEXTURE_PARAMETER_VALUE_COUNT] = {	GL_REPEAT,
 EInternalFormat GetEnumInteralFormat( uint32 _GLEnum )
 {
 	GETENUM_FUNCTION_HELPER(_INTERNAL_FORMAT_COUNT, GLInternalFormats, EInternalFormat);
+	return INTERNAL_FORMAT_RGBA;	// Just return something.
 }
 
 ETextureFormat GetEnumTextureFormat( uint32 _GLEnum )
 {
 	GETENUM_FUNCTION_HELPER(_TEXTURE_FORMAT_COUNT, GLTextureFormats, ETextureFormat);
+	return TEXTURE_FORMAT_RGBA;	// Just return something.
 }
 
 ETextureType GetEnumTextureType( uint32 _GLEnum )
 {
 	GETENUM_FUNCTION_HELPER(_TEXTURE_TYPE_COUNT, GLTextureTypes, ETextureType);
+	return TEXTURE_TYPE_INT;	// Just return something.
 }
 
 EFrameBufferAttachment GetEnumFrameBufferAttachment( uint32 _GLEnum )
 {
 	GETENUM_FUNCTION_HELPER(_FRAMEBUFFER_ATTACHMENT_COUNT, GLFrameBufferAttachments, EFrameBufferAttachment);
+	return FRAMEBUFFER_COLOR_ATTACHMENT0;	// Just return something.
 }
 
 ETextureParameterName GetEnumTextureParameterName( uint32 _GLEnum )
 {
 	GETENUM_FUNCTION_HELPER(_TEXTURE_PARAMETER_NAME_COUNT, GLTextureParameterNames, ETextureParameterName);
+	return TEXTURE_BORDER_COLOR;	// Just return something.
 }
 
 ETextureParameterValue GetEnumTextureParameterValue( uint32 _GLEnum )
 {
 	GETENUM_FUNCTION_HELPER(_TEXTURE_PARAMETER_VALUE_COUNT, GLTextureParameterValues, ETextureParameterValue);
+	return CLAMP;	// Just return something.
 }
 
 #undef GETENUM_FUNCTION_HELPER

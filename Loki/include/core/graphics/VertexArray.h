@@ -18,6 +18,8 @@ class VertexBuffer;
 // passing vertex data to be rendered, a VAO 'binds' to these two buffers
 // and allows us to simply bind the VAO once before each render call
 // without having to rebind attribute locations etc.
+// NOTE: This VertexArray class expects the vertex buffer contents
+// to contain data as loki::graphics::Vertex objects.
 //////////////////////////////////////////////////////////////////////////
 class VertexArray
 {

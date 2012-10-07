@@ -27,7 +27,10 @@ namespace game
 
 class LkWindow;
 
-using namespace loki::graphics;
+namespace graphics
+{
+	class FrameBuffer;
+}
 
 namespace renderer
 {
@@ -66,7 +69,7 @@ public:
 	// be chosen by the client (Currently, it is hardcoded to 
 	// GL_UNSIGNED_BYTE).
 	//////////////////////////////////////////////////////////////////////////
-	void DrawPixels( int _Width, int _Height, EInternalFormat _Format, const void* _Buffer );
+	void DrawPixels( int _Width, int _Height, graphics::EInternalFormat _Format, const void* _Buffer );
 
 	int GetWindowWidth();
 	int GetWindowHeight();
@@ -131,7 +134,8 @@ private:
 	LkEffect* m_GBufferTargets_Normals;
 	LkEffect* m_GBufferTargets_Depth;
 
-	LkFramebufferObject* m_GBuffer;
+//	LkFramebufferObject* m_GBuffer;
+	graphics::FrameBuffer* m_GBuffer;
 
 #ifdef DBG_VISUALIZATIONS
 	bool m_DBG_VisualizeGBufferTargets;
