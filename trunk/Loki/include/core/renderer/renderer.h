@@ -36,9 +36,7 @@ namespace renderer
 {
 
 class LkScene;
-class LkDeferredRenderObject;
 class LkEffect;
-class LkFramebufferObject;
 
 /*
 	The Renderer class is responsible for keeping track of the renderable scene
@@ -134,7 +132,6 @@ private:
 	LkEffect* m_GBufferTargets_Normals;
 	LkEffect* m_GBufferTargets_Depth;
 
-//	LkFramebufferObject* m_GBuffer;
 	graphics::FrameBuffer* m_GBuffer;
 
 #ifdef DBG_VISUALIZATIONS
