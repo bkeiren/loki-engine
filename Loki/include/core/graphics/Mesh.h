@@ -11,6 +11,7 @@ namespace graphics
 
 class IndexBuffer;
 class VertexBuffer;
+class VertexArray;
 
 class Mesh
 {
@@ -25,13 +26,12 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	void Draw() const;
 
-	const IndexBuffer* GetIndexBuffer() const;
-	const VertexBuffer* GetVertexBuffer() const;
 private:
 	Mesh();
 
 	IndexBuffer* m_IBO;
 	VertexBuffer* m_VBO;
+	VertexArray* m_VAO;
 };
 
 }
