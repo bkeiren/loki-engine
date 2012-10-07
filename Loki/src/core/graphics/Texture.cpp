@@ -40,6 +40,8 @@ Texture* Texture::Load( const std::string& _File )
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	tex->Unbind();
 
+	glGenerateMipmap(GL_TEXTURE_2D);
+
 	tex->UpdateGLInformation();
 
 	return tex;
@@ -114,6 +116,7 @@ void Texture::UploadData( EInternalFormat _InternalFormat, ETextureFormat _Forma
 	Bind();
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GLInternalFormats[_InternalFormat], _Width, _Height, 0, GLTextureFormats[_Format], GLTextureTypes[_Type], _Data);
+	glGenerateMipmap(GL_TEXTURE_2D);	// Generate mipmaps.
 	UpdateGLInformation();
 
 	Unbind();
@@ -124,6 +127,7 @@ void Texture::UploadSubData( ETextureFormat _Format, ETextureType _Type, int32 _
 	Bind();
 
 	glTexSubImage2D(GL_TEXTURE_2D, 0, _XOffset, _YOffset, _Width, _Height, GLTextureFormats[_Format], GLTextureTypes[_Type], _Data);
+	glGenerateMipmap(GL_TEXTURE_2D);	// Generate mipmaps.
 	UpdateGLInformation();
 
 	Unbind();

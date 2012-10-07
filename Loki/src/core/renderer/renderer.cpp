@@ -1,9 +1,6 @@
 #include <Windows.h>	// Required for wglGetProcAddress
 #include <GLEW\\glew.h>
 #include <GL\\glut.h>
-//#include "core/renderer/geometry/model/model.h"
-//#include "core/renderer/framebufferobject.h"
-#include "core/renderer/deferredrenderobject.h"
 #include "core/actor/camera/camera.h"
 #include "core/renderer/renderer.h"
 #include "core/renderer/scene/scene.h"
@@ -11,7 +8,6 @@
 #include "core/actor/light/point/pointlight.h"
 #include "core/actor/light/spot/spotlight.h"
 #include "core/actor/light/directional/directionallight.h"
-//#include "core/renderer/texture/texture.h"
 #include "core/graphics/Texture.h"
 #include "core/resourcemanager/texturemanager.h"
 #include "core/resourcemanager/modelmanager.h"
@@ -34,7 +30,6 @@
 
 using namespace loki;
 using namespace loki::renderer;
-//using namespace loki::graphics;
 
 #define ASSIMP_LOGFILE	"logs//log_assimp.txt"
 
@@ -144,12 +139,10 @@ bool LkRenderer::_Init( LkWindow* _Window )
 		RenderBuffersInfo.push_back(info);
 	}
 
-	//m_GBuffer = new LkFramebufferObject(WindowWidth, WindowHeight, RenderBuffersInfo);
 	m_GBuffer = graphics::FrameBuffer::Create(WindowWidth, WindowHeight, RenderBuffersInfo);
 // 	m_GBuffer->SetClearColor(vec4(0.0f, 0.0f, 0.0f, 1.0f));
 // 	m_GBuffer->SetClearDepth(1.0f);
 // 	m_GBuffer->SetClearStencil(0);
-//	if (!m_GBuffer->CheckFramebufferStatus())
 	if (!m_GBuffer)
 	{
 		LOG(VL_ERROR, "Renderer::Init: G-Buffer creation failed");

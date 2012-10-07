@@ -2,7 +2,6 @@
 
 #include "core/states/Splashstate.h"
 #include "core/states/Teststate.h"
-#include "core/renderer/mrtobject.h"	// TODO: Remove.
 #include "core/renderer/renderer.h"
 #include "core/engine.h"
 #include "core/window.h"
