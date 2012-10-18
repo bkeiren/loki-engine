@@ -14,8 +14,7 @@ class IEntitySystem
 public:
 	CONTAINER_MACRO_LIST(IEntity*, EntitiesList);
 
-	IEntitySystem();
-	virtual ~IEntitySystem() = 0;
+	virtual ~IEntitySystem() = 0;	// TODO: Make this protected again?
 
 	virtual IEntity* FindEntityByName( const char* _EntityName ) const = 0;
 
@@ -27,6 +26,10 @@ public:
 
 	virtual void FindEntitiesInRange( const vec3& _Center, float _Range, EntitiesList& _OutputList ) const = 0;
 	virtual void FindEntitiesInFrustum( const Frustum& _Frustum, const mat4& _FrustumTransform, EntitiesList& _OutputList ) const = 0;
+
+protected:
+	IEntitySystem();
+
 private:
 	virtual EntityID GenerateEntityIDFromName( const char* _EntityName ) const = 0;
 };
