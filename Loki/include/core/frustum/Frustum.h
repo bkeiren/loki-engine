@@ -11,14 +11,14 @@ class Frustum
 public:
 	enum EFrustumPlanes
 	{
-		FP_LEFT = 0,
-		FP_RIGHT,
-		FP_BOTTOM,
-		FP_TOP,
-		FP_NEAR,
-		FP_FAR,
+		FRUSTUM_PLANE_LEFT = 0,
+		FRUSTUM_PLANE_RIGHT,
+		FRUSTUM_PLANE_BOTTOM,
+		FRUSTUM_PLANE_TOP,
+		FRUSTUM_PLANE_NEAR,
+		FRUSTUM_PLANE_FAR,
 
-		_FP_COUNT
+		_FRUSTUM_PLANE_COUNT
 	};
 	
 	Frustum( float _Left, float _Right, float _Bottom, float _Top, float _Near, float _Far );
@@ -37,7 +37,7 @@ private:
 	void _ComputePlaneNormals();
 
 	mat4 m_FrustumMatrix;
-	vec4 m_Normals[_FP_COUNT];
+	vec4 m_Normals[_FRUSTUM_PLANE_COUNT];
 };
 
 }

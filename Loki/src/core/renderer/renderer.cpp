@@ -730,7 +730,9 @@ void LkRenderer::_RenderOpaqueGeometry()
 // 	}
 
 	static graphics::Model* mdl = graphics::Model::Load("resources//lmo//test.lmo");
+	static graphics::Model* mdl2 = graphics::Model::Load("resources//lmo//cube.lmo");
 	mdl->Render(mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f), viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
+	mdl2->Render(mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f), viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
 }
 
 void LkRenderer::_RenderLighting()

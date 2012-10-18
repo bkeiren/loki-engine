@@ -5,6 +5,8 @@
 namespace loki
 {
 
+#define FOREACH_ENTITY(iteratorname)	for (EntitiesConstIter iteratorname = m_Entities.begin(); iteratorname != m_Entities.end(); ++iteratorname)
+
 IEntitySystem* g_EntitySystem = 0;
 
 IEntitySystem* CreateEntitySystem()
@@ -71,14 +73,27 @@ void EntitySystem::FindEntitiesInRange( const vec3& _Center, float _Range, Entit
 
 void EntitySystem::FindEntitiesInFrustum( const Frustum& _Frustum, const mat4& _FrustumTransform, EntitiesList& _OutputList ) const
 {
-	vec4 LeftNormal = _Frustum.GetPlaneNormal(Frustum::FP_LEFT) * _FrustumTransform;
-	vec4 RightNormal = _Frustum.GetPlaneNormal(Frustum::FP_RIGHT) * _FrustumTransform;
-	vec4 BottomNormal = _Frustum.GetPlaneNormal(Frustum::FP_BOTTOM) * _FrustumTransform;
-	vec4 TopNormal = _Frustum.GetPlaneNormal(Frustum::FP_TOP) * _FrustumTransform;
-	vec4 NearNormal = _Frustum.GetPlaneNormal(Frustum::FP_NEAR) * _FrustumTransform;
-	vec4 FarNormal = _Frustum.GetPlaneNormal(Frustum::FP_FAR) * _FrustumTransform;
+	// Frustum plane normals in world-space.
+	vec4 PlaneNormals[Frustum::_FRUSTUM_PLANE_COUNT] = {_Frustum.GetPlaneNormal(Frustum::FRUSTUM_PLANE_LEFT) * _FrustumTransform,
+											 _Frustum.GetPlaneNormal(Frustum::FRUSTUM_PLANE_RIGHT) * _FrustumTransform,
+											 _Frustum.GetPlaneNormal(Frustum::FRUSTUM_PLANE_BOTTOM) * _FrustumTransform,
+											 _Frustum.GetPlaneNormal(Frustum::FRUSTUM_PLANE_TOP) * _FrustumTransform,
+											 _Frustum.GetPlaneNormal(Frustum::FRUSTUM_PLANE_NEAR) * _FrustumTransform,
+											 _Frustum.GetPlaneNormal(Frustum::FRUSTUM_PLANE_FAR) * _FrustumTransform};
 
+	FOREACH_ENTITY(it)
+	{
+		Entity* ent = (Entity*)((*it).second);
 
+		for (int i = 0; i < Frustum::_FRUSTUM_PLANE_COUNT; ++i)
+		{
+			// Move plane inward (along normal) by an amount equal to the radius of the bounding sphere of the
+			// current entity.
+			// Then check on which side of the plane the entity lies.
+			// If the entity lies on the 'inside' side of each plane, it can be added to the output list.
+			//PlaneNormals[i]
+		}
+	}
 }
 
 EntityID EntitySystem::GenerateEntityIDFromName( const char* _EntityName ) const
@@ -89,5 +104,7 @@ EntityID EntitySystem::GenerateEntityIDFromName( const char* _EntityName ) const
 	
 	return ID;
 }
+
+#undef FOREACH_ENTITY
 
 }

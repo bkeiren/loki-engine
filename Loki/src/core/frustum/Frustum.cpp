@@ -33,12 +33,12 @@ const vec4& Frustum::GetPlaneNormal( EFrustumPlanes _Plane ) const
 void Frustum::_ComputePlaneNormals()
 {
 	mat4 transpose = math::transpose(m_FrustumMatrix);
-	m_Normals[FP_LEFT] = math::normalize(vec4(1.0f, 0.0f, 0.0f, 1.0f) * transpose);
-	m_Normals[FP_RIGHT] = math::normalize(vec4(-1.0f, 0.0f, 0.0f, 1.0f) * transpose);
-	m_Normals[FP_BOTTOM] = math::normalize(vec4(0.0f, 1.0f, 0.0f, 1.0f) * transpose);
-	m_Normals[FP_TOP] = math::normalize(vec4(0.0f, -1.0f, 0.0f, 1.0f) * transpose);
-	m_Normals[FP_NEAR] = math::normalize(vec4(0.0f, 0.0f, 1.0f, 1.0f) * transpose);
-	m_Normals[FP_FAR] = math::normalize(vec4(0.0f, 0.0f, -1.0f, 1.0f) * transpose);
+	m_Normals[FRUSTUM_PLANE_LEFT] = math::normalize(vec4(1.0f, 0.0f, 0.0f, 1.0f) * transpose);
+	m_Normals[FRUSTUM_PLANE_RIGHT] = math::normalize(vec4(-1.0f, 0.0f, 0.0f, 1.0f) * transpose);
+	m_Normals[FRUSTUM_PLANE_BOTTOM] = math::normalize(vec4(0.0f, 1.0f, 0.0f, 1.0f) * transpose);
+	m_Normals[FRUSTUM_PLANE_TOP] = math::normalize(vec4(0.0f, -1.0f, 0.0f, 1.0f) * transpose);
+	m_Normals[FRUSTUM_PLANE_NEAR] = math::normalize(vec4(0.0f, 0.0f, 1.0f, 1.0f) * transpose);
+	m_Normals[FRUSTUM_PLANE_FAR] = math::normalize(vec4(0.0f, 0.0f, -1.0f, 1.0f) * transpose);
 }
 
 }

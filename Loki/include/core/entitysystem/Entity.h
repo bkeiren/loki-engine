@@ -31,7 +31,9 @@ public:
 
 	const std::string& GetName() const;
 
+	const Transform& GetTransform() const;
 	Transform& GetTransform();
+
 private:
 	Entity();
 	~Entity();

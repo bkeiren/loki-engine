@@ -56,7 +56,9 @@ public:
 
 	virtual const std::string& GetName() const = 0;
 
+	virtual const Transform& GetTransform() const = 0;
 	virtual Transform& GetTransform() = 0;
+
 protected:
 	IEntity();
 	virtual ~IEntity() = 0;

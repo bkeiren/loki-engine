@@ -78,8 +78,17 @@ const std::string& Entity::GetName() const
 	return m_Name;
 }
 
+const Transform& Entity::GetTransform() const
+{
+	return m_Transform;
+}
+
 Transform& Entity::GetTransform()
 {
+	// NOTE: Post event to check translation in scene management system?
+	// There is also a version of GetTransform which returns a const reference, so hopefully the compiler will use that version
+	// in places where the transform is only read and not modified. That will ensure that if we only want to read the transform
+	// we won't place an unnecessary event for this entity.
 	return m_Transform;
 }
 
