@@ -13,7 +13,7 @@
 #include "core/resourcemanager/modelmanager.h"
 #include "core/renderer/effect/effectmanager.h"
 #include "core/renderer/debugrenderer.h"
-#include "core/actor/components/rendercomponent/rendercomponent.h"
+#include "core/actor/components/rendercomponent/rendercomponent_old.h"
 #include "core/renderer/effect/effectmanager.h"
 #include "core/window.h"
 
@@ -27,6 +27,8 @@
 #include "core/graphics/Model.h"
 
 #include "core/graphics/FrameBuffer.h"
+
+#include "core/entitysystem/component/default/RenderComponent.h"
 
 using namespace loki;
 using namespace loki::renderer;
@@ -714,6 +716,8 @@ void LkRenderer::_RenderOpaqueGeometry()
 
 	mat4 viewmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
 	mat4 projectionmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix();
+	float zfar = m_CurrentLevelToRender->GetCurrentCamera()->GetZFar();
+	float znear = m_CurrentLevelToRender->GetCurrentCamera()->GetZNear();
 
 // 	for (std::list<LkRenderComponent*>::iterator it = LkRenderComponent::m_RenderComponents.begin(); it != LkRenderComponent::m_RenderComponents.end(); ++it)
 // 	{
@@ -729,10 +733,22 @@ void LkRenderer::_RenderOpaqueGeometry()
 // 		}
 // 	}
 
-	static graphics::Model* mdl = graphics::Model::Load("resources//lmo//test.lmo");
-	static graphics::Model* mdl2 = graphics::Model::Load("resources//lmo//cube.lmo");
-	mdl->Render(mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f), viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
-	mdl2->Render(mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f), viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
+	for (components::RenderComponent::RenderComponentsConstIter it = components::RenderComponent::m_RenderComponents.begin();
+		 it != components::RenderComponent::m_RenderComponents.end();
+		 ++it)
+	{
+		components::RenderComponent* rc = (*it);
+
+		if (rc->m_Model)	// TODO: Replace this check with a default model to indicate missing models.
+		{
+			rc->m_Model->Render(rc->GetEntity()->GetTransform().GetMatrix(), viewmatrix, projectionmatrix, zfar, znear);
+		}
+	}
+
+// 	static graphics::Model* mdl = graphics::Model::Load("resources//lmo//test.lmo");
+// 	static graphics::Model* mdl2 = graphics::Model::Load("resources//lmo//cube.lmo");
+// 	mdl->Render(mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f), viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
+// 	mdl2->Render(mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f), viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
 }
 
 void LkRenderer::_RenderLighting()

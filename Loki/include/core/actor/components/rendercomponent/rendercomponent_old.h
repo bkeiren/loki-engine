@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef RENDERCOMPONENT_H
-#define RENDERCOMPONENT_H
+#ifndef LKRENDERCOMPONENT_H
+#define LKRENDERCOMPONENT_H
 
 #include <list>
 #include "core/actor/components/base/actorcomponent.h"

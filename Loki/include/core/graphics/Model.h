@@ -27,6 +27,8 @@ public:
 	const vec2& GetUVScale() const;
 
 	void Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat4& _ProjectionMatrix, float _ZFar, float _ZNear );
+
+	const Mesh* GetMesh( unsigned int _Index ) const;
 private:
 	Model();
 

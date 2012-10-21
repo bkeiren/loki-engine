@@ -7,11 +7,8 @@
 #include "core/actor/handle/handle.h"
 #include "core/game/localization/localization.h"
 #include "core/renderer/renderer.h"
-//#include "core/renderer/geometry/model/model.h"
-#include "core/actor/components/rendercomponent/rendercomponent.h"
 #include "core/actor/pawn/pawn.h"
 #include "mycontroller.h"
-//#include "core/renderer/material/material.h"
 #include "core/script/squirrel/squirrel.h"
 #include "core/renderer/effect/effectmanager.h"
 
@@ -28,7 +25,9 @@
 
 #include "util/json/json.h"
 
-#include "core/entitysystem/component/default/physicscomponent/PhysicsComponent.h"
+#include "core/entitysystem/component/default/PhysicsComponent.h"
+#include "core/entitysystem/component/default/RenderComponent.h"
+#include "core/graphics/Model.h"
 
 using namespace loki;
 
@@ -126,8 +125,6 @@ bool MyGame::Init()
 	loki::renderer::g_EffectManager->CreateEffectFromFile("resources//shaders//testshader.cgfx", "TestEffect");
 	{
 		LkPawn* pawn = NULL;
-		LkMovableComponent* movcomp = NULL;
-		LkRenderComponent* rendercomp = NULL;
 		//loki::renderer::LkMaterial* mtl = NULL;
 
 // 		{
@@ -256,15 +253,21 @@ bool MyGame::Init()
 
 	LkParticleSystem* ps = m_Level->SpawnParticleSystem(descr);
 
+
 	Entity* entity = g_EntitySystem->SpawnEntity("TestEntity");
 	entity->InstantiateComponent<loki::components::PhysicsComponent>();
-	loki::components::PhysicsComponent* po = entity->GetComponent<loki::components::PhysicsComponent>();
-	// 			physics::RigidBodyInfo info;
-	// 			info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-	// 			info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
-	// 			info.m_Restitution = 0.75f;
-	// 			info.m_Mass = 100.0f;
-	// 			phycomp->CreateBodyFromInfo(info);
+	entity->InstantiateComponent<loki::components::RenderComponent>();
+	loki::components::PhysicsComponent* pc = entity->GetComponent<loki::components::PhysicsComponent>();
+	loki::components::RenderComponent* rc = entity->GetComponent<loki::components::RenderComponent>();
+	
+	rc->SetModel(graphics::Model::Load("resources//lmo//test.lmo"));
+
+	physics::RigidBodyInfo info;
+	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+	info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetModel()->GetMesh(0));
+	info.m_Restitution = 0.75f;
+	info.m_Mass = 100.0f;
+	pc->CreateBodyFromInfo(info);
 
 // 	loki::util::JSONDocument* doc = loki::util::JSONDocument::Open("resources//test.json");
 // 	if (doc)

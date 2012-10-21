@@ -1,5 +1,7 @@
-#include "core/entitysystem/component/default/physicscomponent/PhysicsComponent.h"
+#include "core/entitysystem/component/default/PhysicsComponent.h"
+#include "core/entitysystem/component/default/RenderComponent.h"
 #include "core/physics/physics.h"
+#include "core/graphics/Model.h"
 
 namespace loki
 {
@@ -66,27 +68,26 @@ void PhysicsComponent::_Init()
 	// Alterations can be made afterwards.
 	// if there is no render component, the shape of the physicsshape is a simple box of unit size.
 	  
-//   	RenderComponent* rendercomp = GetEntity()->GetComponent<RenderComponent>();
-//   
-//   	physics::RigidBodyInfo info;
-//   
-//   	// Check whether we have a render component, a model on that component and a mesh on that model.
-//   	if (rendercomp && rendercomp->GetModel() && rendercomp->GetModel()->GetMesh())
-//   	{
-//   		info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-//   		info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
-//   	}
-//   	else
-//   	{
-//   		// Use a simple unit box.
-//   		info.m_Shape = physics::CS_BOX;
-//   		info.m_BoxData.m_HalfExtents = vec3(0.5f, 0.5f, 0.5f);
-//   	}
-//   
-//   	// Check whether we have a movable component.
-//   	info.m_InitialTransform = GetEntity()->GetTransform().GetMatrix();
-//   
-//   	m_RigidBody = physics::g_Physics->AddRigidBody(info);
+	RenderComponent* rendercomp = GetEntity()->GetComponent<RenderComponent>();
+
+   	physics::RigidBodyInfo info;
+
+   	// Check whether we have a render component, a model on that component and a mesh on that model.
+   	if (rendercomp && rendercomp->GetModel() && rendercomp->GetModel()->GetMesh(0))
+   	{
+   		info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+		info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rendercomp->GetModel()->GetMesh(0));
+   	}
+   	else
+   	{
+   		// Use a simple unit box.
+   		info.m_Shape = physics::CS_BOX;
+   		info.m_BoxData.m_HalfExtents = vec3(0.5f, 0.5f, 0.5f);
+   	}
+   
+   	info.m_InitialTransform = GetEntity()->GetTransform().GetMatrix();
+   
+   	m_RigidBody = physics::g_Physics->AddRigidBody(info);
 }
 
 void PhysicsComponent::_Terminate()

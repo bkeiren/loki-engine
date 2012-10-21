@@ -98,10 +98,10 @@ _ComponentType* Entity::GetComponent() const
 			return comp;
 		}
 	}
-	util::TypeInfo typeinfo = util::TypeInfo(typeid(_ComponentType));
+//	util::TypeInfo typeinfo = util::TypeInfo(typeid(_ComponentType));
 #endif
-	std::string t(typeinfo.GetTypeName());
-	LOG(VL_ERROR, "Entity::GetComponent: Entity does not have a component of type %s.", t.c_str());
+// 	std::string t(typeinfo.GetTypeName());
+// 	LOG(VL_ERROR, "Entity::GetComponent: Entity does not have a component of type %s.", t.c_str());
 	return 0;
 }
 

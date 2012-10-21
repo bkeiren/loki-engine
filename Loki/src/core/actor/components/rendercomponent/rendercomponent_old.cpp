@@ -1,4 +1,4 @@
-#include "core/actor/components/rendercomponent/rendercomponent.h"
+#include "core/actor/components/rendercomponent/rendercomponent_old.h"
 
 namespace loki
 {

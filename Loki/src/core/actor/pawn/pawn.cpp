@@ -3,7 +3,7 @@
 #include "core/actor/pawn/pawn.h"
 #include "core/actor/pawn/controller/controller.h"
 #include "core/actor/components/movablecomponent/movablecomponent.h"
-#include "core/actor/components/rendercomponent/rendercomponent.h"
+#include "core/actor/components/rendercomponent/rendercomponent_old.h"
 
 using namespace loki;
 
