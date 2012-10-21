@@ -14,8 +14,8 @@ class View	: public IView
 public:
 	const std::string& GetName() const;
 
-	IEntity* GetLinkedEntity() const;
-	void LinkTo( IEntity* _Link );
+	Entity* GetLinkedEntity() const;
+	void LinkTo( Entity* _Link );
 
 	const mat4& GetProjectionMatrix();
 	mat4 GetViewMatrix();
@@ -43,7 +43,7 @@ private:
 	~View();
 
 	std::string m_Name;
-	IEntity* m_LinkedEntity;
+	Entity* m_LinkedEntity;
 
 	mat4 m_ProjectionMatrix;
 	int2 m_Viewport;

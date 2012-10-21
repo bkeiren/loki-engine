@@ -1,72 +1,54 @@
 #include "core/entitysystem/Entity.h"
+#include "core/entitysystem/component/Component.h"
 
 namespace loki
 {
 
-Entity::Entity()	:
-	m_PhysicsObject(0),
-	/*m_CharacterObject(0),*/
-	m_Model(0),
-	m_AIObject(0)
-	/*m_StaticObject(0)*/
+EntityID::EntityID()	:
+	m_ID(0)
+{
+
+}
+
+bool EntityID::operator == ( const EntityID& _ID ) const
+{
+	return (m_ID == _ID.m_ID);
+}
+
+bool EntityID::operator != ( const EntityID& _ID ) const
+{
+	return (m_ID != _ID.m_ID);
+}
+
+bool EntityID::operator < ( const EntityID& _ID ) const
+{
+	return (m_ID < _ID.m_ID);
+}
+
+bool EntityID::operator > ( const EntityID& _ID ) const
+{
+	return (m_ID > _ID.m_ID);
+}
+
+bool EntityID::operator <= ( const EntityID& _ID ) const
+{
+	return (m_ID <= _ID.m_ID);
+}
+
+bool EntityID::operator >= ( const EntityID& _ID ) const
+{
+	return (m_ID >= _ID.m_ID);
+}
+
+Entity::Entity()
 {
 	
 }
 
 Entity::~Entity()
 {
-	
+	_ClearComponents();
 }
-
-IPhysicsObject* Entity::GetPhysicsObject() const
-{
-	return m_PhysicsObject;
-}
-
-void Entity::SetPhysicsObject( IPhysicsObject* _PhysicsObject )
-{
-	m_PhysicsObject = _PhysicsObject;
-}
-
-// ICharacterObject* Entity::GetCharacterObject() const
-// {
-// 	return m_CharacterObject;
-// }
-// 
-// void Entity::SetCharacterObject( ICharacterObject* _CharacterObject )
-// {
-// 	m_CharacterObject = _CharacterObject;
-// }
-
-graphics::Model* Entity::GetModel() const
-{
-	return m_Model;
-}
-
-void Entity::SetModel( graphics::Model* _Model )
-{
-	m_Model = _Model;
-}
-
-IAIObject* Entity::GetAIObject() const
-{
-	return m_AIObject;
-}
-
-void Entity::SetAIObject( IAIObject* _AIObject )
-{
-	m_AIObject = _AIObject;
-}
-
-// IStaticObject* Entity::GetStaticObject() const
-// {
-// 	return m_StaticObject;
-// }
-// 
-// void Entity::SetStaticObject( IStaticObject* _StaticObject )
-// {
-// 	m_StaticObject = _StaticObject;
-// }
 
 EntityID Entity::GetID() const
 {
@@ -100,6 +82,19 @@ void Entity::SetName( const char* _Name )
 void Entity::SetID( EntityID _ID )
 {
 	m_EntityID = _ID;
+}
+
+void Entity::_ClearComponents()
+{
+	for (Components::iterator it = m_Components.begin(); it != m_Components.end(); ++it)
+	{
+#if RTTI_TYPE == RTTI_TYPEID
+		delete (*it).second;
+#elif RTTI_TYPE == RTTI_DYNAMIC_CAST
+		delete (*it);
+#endif
+	}
+	m_Components.clear();
 }
 
 }

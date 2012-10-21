@@ -70,6 +70,11 @@ void SceneGraph::Node::Delete()
 	delete this;
 }
 
+SceneGraph::Node* SceneGraph::Node::GetParent() const
+{
+	return m_Parent;
+}
+
 void SceneGraph::Node::_MakeOrphan()
 {
 	if (!m_Parent)

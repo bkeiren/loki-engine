@@ -6,7 +6,7 @@
 namespace loki
 {
 
-class IEntity;
+class Entity;
 
 enum EProjectionType
 {
@@ -19,8 +19,8 @@ class IView
 public:
 	virtual const std::string& GetName() const = 0;
 
-	virtual IEntity* GetLinkedEntity() const = 0;
-	virtual void LinkTo( IEntity* _Link ) = 0;
+	virtual Entity* GetLinkedEntity() const = 0;
+	virtual void LinkTo( Entity* _Link ) = 0;
 
 	virtual const mat4& GetProjectionMatrix() = 0;
 	virtual mat4 GetViewMatrix() = 0;

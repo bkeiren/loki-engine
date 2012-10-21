@@ -59,6 +59,8 @@ public:
 	// is no longer valid and should NOT be used.
 	//////////////////////////////////////////////////////////////////////////
 	void Delete();
+
+	Node* GetParent() const;
 private:
 	Node();
 	~Node();
@@ -68,7 +70,7 @@ private:
 	//////////////////////////////////////////////////////////////////////////
 	void _MakeOrphan();
 
-	BaseNode* m_Parent;
+	Node* m_Parent;
 };
 
 }

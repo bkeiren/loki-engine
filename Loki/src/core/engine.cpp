@@ -42,7 +42,7 @@
 #include "core/renderer/image/image.h"
 #include "core/renderer/image/animatedimage.h"
 
-#include "core/entitysystem/IEntitySystem.h"
+#include "core/entitysystem/EntitySystem.h"
 
 #include "core/input/input.h"
 

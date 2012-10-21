@@ -1,53 +1,52 @@
 #pragma once
 
-#ifndef ACTORCOMPONENT_H
-#define ACTORCOMPONENT_H
+#ifndef COMPONENT_H
+#define COMPONENT_H
 
 #include "core/eventsystem/eventlistener/eventlistener.h"
+#include "core/entitysystem/Entity.h"
 
 namespace loki
 {
 
-// enum EComponentType
-// {
-// 	CT_RENDERCOMPONENT = 0,
-// 	CT_MOVEABLECOMPONENT,
-// 	CT_PHYSICSCOMPONENT,
-// 
-// 	CT_COUNT
-// };
-
 //////////////////////////////////////////////////////////////////////////
-// The ActorComponent class is the base class for any components that 
-// an actor should be composed of.
+// The Component class is the base class for any components that 
+// an entity could be composed of.
 // Examples for component types are: PhysicsComponent, RenderComponent,
 // MoveableComponent.
 //////////////////////////////////////////////////////////////////////////
-class LkActorComponent	: public LkEventListener
+class Component	: public LkEventListener
 {
-	friend class LkActor;
+	friend class Entity;
 public:
 protected:
-	LkActorComponent();
-	virtual ~LkActorComponent() = 0;
+	Component();
+	virtual ~Component() = 0;
 
-	LkActor* GetActor();
+	inline Entity* GetEntity();
 private:
-	void SetActor( LkActor* _Actor );
+	void SetEntity( Entity* _Entity );
 
 	virtual void _OnEvent( const LkEvent& _Event );
 
 	//////////////////////////////////////////////////////////////////////////
-	// Called after data such as m_Actor is set.
+	// Called after data such as m_Entity is set.
 	//////////////////////////////////////////////////////////////////////////
 	virtual void _Init() = 0;
 
 	//////////////////////////////////////////////////////////////////////////
-	// The actor to which this component belongs.
+	// Called before the component is deleted.
 	//////////////////////////////////////////////////////////////////////////
-	LkActor* m_Actor;	
+	virtual void _Terminate() = 0;
+
+	//////////////////////////////////////////////////////////////////////////
+	// The entity to which this component belongs.
+	//////////////////////////////////////////////////////////////////////////
+	Entity* m_Entity;	
 };
 
 }
+
+#include "core/entitysystem/component/Component.inl"
 
 #endif

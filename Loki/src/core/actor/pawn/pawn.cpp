@@ -4,7 +4,6 @@
 #include "core/actor/pawn/controller/controller.h"
 #include "core/actor/components/movablecomponent/movablecomponent.h"
 #include "core/actor/components/rendercomponent/rendercomponent.h"
-#include "core/actor/components/physicscomponent/physicscomponent.h"
 
 using namespace loki;
 
@@ -14,7 +13,7 @@ loki::LkPawn::LkPawn( const char* _Name, game::LkLevel* _Level )	:
 {
 	AddComponent<LkMovableComponent>();
 	AddComponent<LkRenderComponent>();
-	AddComponent<LkPhysicsComponent>();
+	//AddComponent<LkPhysicsComponent>();
 }
 
 LkPawn::LkPawn()
