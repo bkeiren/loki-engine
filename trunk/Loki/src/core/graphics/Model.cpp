@@ -164,6 +164,15 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 	}
 }
 
+const Mesh* Model::GetMesh( unsigned int _Index ) const
+{
+	if (_Index >= 0 && _Index < m_Meshes.size())
+	{
+		return m_Meshes[_Index];
+	}
+	return 0;
+}
+
 void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Meshes& _Output )
 {
 	static Assimp::Importer* LocalImporter = new Assimp::Importer();

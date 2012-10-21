@@ -19,16 +19,13 @@ namespace components
 
 class PhysicsComponent	: public Component
 {
-	friend class Entity;
 public:
-	bool CreateBodyFromInfo( physics::RigidBodyInfo& _Info );
-	
-	physics::LkRigidBody* GetBody() const;
-
-protected:
 	PhysicsComponent();
 	~PhysicsComponent();
 
+	bool CreateBodyFromInfo( physics::RigidBodyInfo& _Info );
+	
+	physics::LkRigidBody* GetBody() const;
 private:
 	void _OnEvent( const LkEvent& _Event );
 	void _Init();
