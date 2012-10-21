@@ -7,9 +7,9 @@ namespace loki
 
 #define FOREACH_ENTITY(iteratorname)	for (EntitiesConstIter iteratorname = m_Entities.begin(); iteratorname != m_Entities.end(); ++iteratorname)
 
-IEntitySystem* g_EntitySystem = 0;
+EntitySystem* g_EntitySystem = 0;
 
-IEntitySystem* CreateEntitySystem()
+EntitySystem* CreateEntitySystem()
 {
 	return new EntitySystem();
 }
@@ -24,13 +24,13 @@ EntitySystem::~EntitySystem()
 
 }
 
-IEntity* EntitySystem::FindEntityByName( const char* _EntityName ) const
+Entity* EntitySystem::FindEntityByName( const char* _EntityName ) const
 {
 	EntityID id = GenerateEntityIDFromName(_EntityName);
 	return FindEntityByID(id);
 }
 
-IEntity* EntitySystem::FindEntityByID( EntityID _ID ) const
+Entity* EntitySystem::FindEntityByID( EntityID _ID ) const
 {
 	EntitiesConstIter it = m_Entities.find(_ID);
 	if (it != m_Entities.end())
@@ -40,9 +40,9 @@ IEntity* EntitySystem::FindEntityByID( EntityID _ID ) const
 	return 0;
 }
 
-IEntity* EntitySystem::SpawnEntity( const char* _EntityName )
+Entity* EntitySystem::SpawnEntity( const char* _EntityName )
 {
-	IEntity* entity = FindEntityByName(_EntityName);
+	Entity* entity = FindEntityByName(_EntityName);
 	if (entity)
 	{
 		LOG(VL_ERROR, "EntitySystem::SpawnEntity: An entity named '%s' already exists", _EntityName);
@@ -59,7 +59,7 @@ IEntity* EntitySystem::SpawnEntity( const char* _EntityName )
 
 void EntitySystem::DestroyEntity( const char* _EntityName )
 {
-	IEntity* entity = FindEntityByName(_EntityName);
+	Entity* entity = FindEntityByName(_EntityName);
 	if (entity)
 	{
 		m_Entities.erase(entity->GetID());

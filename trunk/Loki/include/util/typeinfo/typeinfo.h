@@ -40,6 +40,8 @@ public:
 	// in order to be able to hash it.
 	//////////////////////////////////////////////////////////////////////////
 	operator size_t() const;	// NOTE: the 'const' at the end is VERY important. Without it, hash_map will not accept it.
+
+	const char* GetTypeName() const;
 private:
 	TypeInfo();
 

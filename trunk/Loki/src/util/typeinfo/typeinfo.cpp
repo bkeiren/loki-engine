@@ -22,6 +22,11 @@ TypeInfo::operator size_t() const
 	return (size_t)m_Ptr;
 }
 
+const char* TypeInfo::GetTypeName() const
+{
+	return m_Ptr->name();
+}
+
 bool operator == ( const TypeInfo& _LHS, const TypeInfo& _RHS ) 
 { 
 	return (_LHS.m_Ptr == _RHS.m_Ptr); 

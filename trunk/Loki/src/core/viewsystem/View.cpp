@@ -1,5 +1,5 @@
 #include "core/viewsystem/View.h"
-#include "core/entitysystem/IEntity.h"
+#include "core/entitysystem/Entity.h"
 
 namespace loki
 {
@@ -26,12 +26,12 @@ const std::string& View::GetName() const
 	return m_Name;
 }
 
-IEntity* View::GetLinkedEntity() const
+Entity* View::GetLinkedEntity() const
 {
 	return m_LinkedEntity;
 }
 
-void View::LinkTo( IEntity* _Link )
+void View::LinkTo( Entity* _Link )
 {
 	m_LinkedEntity = _Link;
 }

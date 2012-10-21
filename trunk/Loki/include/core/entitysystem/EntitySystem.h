@@ -3,22 +3,29 @@
 #ifndef ENTITYSYSTEM_H
 #define ENTITYSYSTEM_H
 
-#include "core/entitysystem/IEntitySystem.h"
+#include "core/entitysystem/Entity.h"
+#include "core/frustum/Frustum.h"
 
 namespace loki
 {
 
-class EntitySystem	: public IEntitySystem
+class Entity;
+
+class EntitySystem
 {
-	friend IEntitySystem* CreateEntitySystem();
+	friend EntitySystem* CreateEntitySystem();
 
-	CONTAINER_MACRO_MAP(EntityID, IEntity*, Entities);
+	CONTAINER_MACRO_MAP(EntityID, Entity*, Entities);
 public:
-	IEntity* FindEntityByName( const char* _EntityName ) const;
+	~EntitySystem();
 
-	IEntity* FindEntityByID( EntityID _ID ) const;
+	CONTAINER_MACRO_LIST(Entity*, EntitiesList);
 
-	IEntity* SpawnEntity( const char* _EntityName );
+	Entity* FindEntityByName( const char* _EntityName ) const;
+
+	Entity* FindEntityByID( EntityID _ID ) const;
+
+	Entity* SpawnEntity( const char* _EntityName );
 
 	void DestroyEntity( const char* _EntityName );
 
@@ -26,12 +33,15 @@ public:
 	void FindEntitiesInFrustum( const Frustum& _Frustum, const mat4& _FrustumTransform, EntitiesList& _OutputList ) const;
 private:
 	EntitySystem();
-	~EntitySystem();
 
 	EntityID GenerateEntityIDFromName( const char* _EntityName ) const;
 
 	Entities m_Entities;
 };
+
+EntitySystem* CreateEntitySystem();
+
+extern EntitySystem* g_EntitySystem;
 
 }
 
