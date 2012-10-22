@@ -24,6 +24,7 @@ protected:
 	virtual ~Component() = 0;
 
 	inline Entity* GetEntity();
+
 private:
 	void SetEntity( Entity* _Entity );
 
@@ -42,7 +43,7 @@ private:
 	//////////////////////////////////////////////////////////////////////////
 	// The entity to which this component belongs.
 	//////////////////////////////////////////////////////////////////////////
-	Entity* m_Entity;	
+	Entity* m_Entity;
 };
 
 }
