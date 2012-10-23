@@ -250,17 +250,17 @@ const unsigned short LkSystemInfo::GetProcessorArchitecture()
 	return m_ProcessorArchitecture;
 }
 
-const unsigned __int64 LkSystemInfo::GetMemoryAmountTotalPhysical()
+const uint64 LkSystemInfo::GetMemoryAmountTotalPhysical()
 {
 	return m_MemoryAmountTotalPhysical;
 }
 
-const unsigned __int64 LkSystemInfo::GetMemoryAmountTotalVirtual()
+const uint64 LkSystemInfo::GetMemoryAmountTotalVirtual()
 {
 	return m_MemoryAmountTotalVirtual;
 }
 
-const unsigned int LkSystemInfo::GetCPUFrequencyHz()
+const uint32 LkSystemInfo::GetCPUFrequencyHz()
 {
 	return m_CPUFrequency;
 }

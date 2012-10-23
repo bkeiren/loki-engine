@@ -48,16 +48,16 @@
 // Function that can be called to parse command line input.
 // First two arguments match the arguments of the main() function, the third argument is an std::list<> reference in which the
 // resulting list must be stored.
-void ParseCommandLine( int argc, char** argv, std::list<Parameter*>& paramsList )
+void ParseCommandLine( int argc, char** argv, CommandLineParameters& paramsList )
 {
 	// List of std::string which will contain command line arguments and their associated values (all in a single string).
 	std::list<std::string*> stringList;
 	std::string* previousString = 0;
 	
 	// Handle the first argument on it's own, as this argument is the absolute path to the executable.
-	Parameter* initialParameter = new Parameter();
-	initialParameter->m_Key = std::string(argv[0]);
-	paramsList.push_back(initialParameter);
+	Parameter* pathparameter = new Parameter();
+	pathparameter->m_String = argv[0];
+	paramsList["EXEPATH"] = pathparameter;
 
 	// For each command line argument...
 	for ( int i = 1; i < argc; ++i )
@@ -84,8 +84,7 @@ void ParseCommandLine( int argc, char** argv, std::list<Parameter*>& paramsList 
 #ifdef _DEBUG
 			else
 			{
-				printf(__FUNCTION__);	// NOTE: MSVS specific! NOT PORTABLE. Prints the name of the current function.
-				printf(": Argument skipped due to an incorrect syntax or because there were no associated parameters: '");
+				printf("ParseCommandLine: Argument skipped due to an incorrect syntax or because there were no associated parameters: '");
 				printf( argv[i] );
 				printf("'\n");
 			}
@@ -118,7 +117,7 @@ void ParseCommandLine( int argc, char** argv, std::list<Parameter*>& paramsList 
 		cstring[stringIteratorIndex] = '\0';
 
 		// Store the key.
-		currentParameter->m_Key = std::string(cstring);
+		std::string key = std::string(cstring);
 
 		// List for values (which will be represented through char*).
 		std::list<char*> valueList;
@@ -173,20 +172,21 @@ void ParseCommandLine( int argc, char** argv, std::list<Parameter*>& paramsList 
 		}
 
 		// Store entire parameter in paramsList.
-		paramsList.push_back(currentParameter);
+		paramsList[key] = currentParameter;
 	}
 }
 
 // This is a simple utility function that takes a parameter list such as the one used by ParseCommandLine(), and prints
 // it's contents in a understandable, organized manner.
-void PrintParameterList( std::list<Parameter*>& paramsList )
+void PrintParameterList( CommandLineParameters& paramsList )
 {
 	printf("\nCommand Line Parameter List:\n\nKey:\tkeyname\nValues:\tinteger\tfloat\tdouble\n\n----------------------------------------------------\n");
-	for (std::list<Parameter*>::iterator it = paramsList.begin(); it != paramsList.end(); ++it)
+	for (CommandLineParametersConstIter it = paramsList.begin(); it != paramsList.end(); ++it)
 	{
-		Parameter* currentParam = (*it);
+		Parameter* currentParam = (*it).second;
+		std::string key = (*it).first;
 		printf("\nKey:\t");
-		printf(currentParam->m_Key.c_str());
+		printf(key.c_str());
 
 		if (currentParam->m_NumValues > 0)
 		{

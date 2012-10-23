@@ -349,16 +349,6 @@ bool LkEngine::Init()
 void LkEngine::Run()
 {
 	Loop();
-
-	/*
-	// Even though the application should not have been gotten out of the main application loop if the application window is still opened, it's 
-	// good to double check and close it here if it is still open.
-	if (g_RenderWindow.IsOpened())
-	{
-		LOG(VL_WARN, "Exited main loop before window was closed, there may be an error in the code.");
-		g_RenderWindow.Close();
-	}
-	*/
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -413,7 +403,7 @@ void LkEngine::Shutdown()
 	delete g_StateManager;
 	g_StateManager = NULL;
 
-	//delete g_EntitySystem;
+	delete g_EntitySystem;
 	g_EntitySystem = NULL;
 
 	// Same kind of story as with LkConsole::FinalizeInitialization.

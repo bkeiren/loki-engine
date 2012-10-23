@@ -20,14 +20,15 @@ struct Parameter
 		//delete[m_NumValues] m_ValuesChar;
 	}
 
-	std::string		m_Key;
 	unsigned int	m_NumValues;
 	int*			m_ValuesInt;
 	float*			m_ValuesFloat;
 	double*			m_ValuesDouble;
 	//char**			m_ValuesChar;
+	std::string		m_String;
 };
 
 // TODO: Use a multiset instead of a list of Parameter*?
-void ParseCommandLine( int argc, char** argv, std::list<Parameter*>& paramsList );
-void PrintParameterList( std::list<Parameter*>& paramsList );
+CONTAINER_MACRO_MAP(std::string, Parameter*, CommandLineParameters);
+void ParseCommandLine( int argc, char** argv, CommandLineParameters& paramsList );
+void PrintParameterList( CommandLineParameters& paramsList );

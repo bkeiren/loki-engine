@@ -60,7 +60,7 @@ private:
 	//////////////////////////////////////////////////////////////////////////
 	// The JobMain function is the function that should contain the code
 	// that the job is designed to execute.
-	// It is called by JobMainWrapper by the job manager.
+	// It is called by _JobMainWrapper by the job manager.
 	//////////////////////////////////////////////////////////////////////////
 	virtual void JobMain() = 0;
 
@@ -68,12 +68,12 @@ private:
 	// This is called by the job manager. It provides functionality such as 
 	// logging before and after the main job function is executed.
 	//////////////////////////////////////////////////////////////////////////
-	void JobMainWrapper();
+	void _JobMainWrapper();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Checks all dependencies to see whether the job can start.
 	//////////////////////////////////////////////////////////////////////////
-	bool CanStart();
+	bool _CanStart();
 
 	EJobState m_State;
 	JobList m_Dependencies;

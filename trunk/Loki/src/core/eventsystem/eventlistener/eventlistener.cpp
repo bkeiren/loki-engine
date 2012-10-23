@@ -10,9 +10,12 @@ LkEventListener::LkEventListener()
 
 LkEventListener::~LkEventListener()
 {
-	for (SubscriptionsConstIter it = m_Subscriptions.begin(); it != m_Subscriptions.end(); ++it)
+	if (g_EventManager != 0)
 	{
-		g_EventManager->UnsubscribeFromEvent((*it), this);
+		for (SubscriptionsConstIter it = m_Subscriptions.begin(); it != m_Subscriptions.end(); ++it)
+		{
+			g_EventManager->UnsubscribeFromEvent((*it), this);
+		}
 	}
 	m_Subscriptions.clear();
 }

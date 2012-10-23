@@ -109,7 +109,7 @@ LkJob* LkJobManager::GetNextJob()
 			for (JobList::iterator job_it = m_JobList.begin(); job_it != m_JobList.end(); ++job_it)
 			{
 				LkJob* job = (*job_it);
-				if (job->CanStart())
+				if (job->_CanStart())
 				{
 					m_JobList.remove(job);
 					LeaveCriticalSection(&m_JobListCritSec);
@@ -160,7 +160,7 @@ DWORD WINAPI LkJobManager::ThreadEntry( LPVOID _Parameter )
 		}
 
 		// Execute the job.
-		job->JobMainWrapper();
+		job->_JobMainWrapper();
 
 		// Increment the job-finished semaphore.
 		ReleaseSemaphore(Data->m_JobManager->m_Handles[HANDLE_JOBFINISHED], 1, NULL);

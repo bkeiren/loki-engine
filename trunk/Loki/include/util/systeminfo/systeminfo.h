@@ -44,9 +44,9 @@ public:
 	const unsigned long GetNumProcessors();
 	const unsigned long GetProcessorType();
 	const unsigned short GetProcessorArchitecture();
-	const unsigned __int64 GetMemoryAmountTotalPhysical();
-	const unsigned __int64 GetMemoryAmountTotalVirtual();
-	const unsigned int GetCPUFrequencyHz();		// Hertz.
+	const uint64 GetMemoryAmountTotalPhysical();
+	const uint64 GetMemoryAmountTotalVirtual();
+	const uint32 GetCPUFrequencyHz();		// Hertz.
 	const float GetCPUFrequencyGHz();	// Gigahertz.
 	const std::string& GetComputerName();
 	const std::string& GetUserName();
@@ -66,9 +66,9 @@ private:
 	unsigned long m_NumProcessors;
 	unsigned long m_ProcessorType;
 	unsigned short m_ProcessorArchitecture;
-	unsigned __int64 m_MemoryAmountTotalPhysical;
-	unsigned __int64 m_MemoryAmountTotalVirtual;
-	unsigned int m_CPUFrequency;
+	uint64 m_MemoryAmountTotalPhysical;
+	uint64 m_MemoryAmountTotalVirtual;
+	uint32 m_CPUFrequency;
 	std::string m_ComputerName;
 	std::string m_UserName;
 };

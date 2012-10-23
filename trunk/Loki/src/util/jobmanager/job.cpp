@@ -57,9 +57,9 @@ JobID LkJob::GetJobID()
 	return m_ID;
 }
 
-void LkJob::JobMainWrapper()
+void LkJob::_JobMainWrapper()
 {
-	LOG(VL_NORMAL, "Job::JobMainWrapper: Starting job...");
+	LOG(VL_NORMAL, "Job::_JobMainWrapper: Starting job...");
 
 	m_State = JS_RUNNING;
 
@@ -70,10 +70,10 @@ void LkJob::JobMainWrapper()
 	// Signal the 'done'-event.
 	SetEvent(m_EventDone);
 
-	LOG(VL_NORMAL, "Job::JobMainWrapper: Job done.");
+	LOG(VL_NORMAL, "Job::_JobMainWrapper: Job done.");
 }
 
-bool LkJob::CanStart()
+bool LkJob::_CanStart()
 {
 	if (m_State != JS_PENDING)
 	{
