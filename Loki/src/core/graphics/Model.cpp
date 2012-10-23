@@ -46,6 +46,8 @@ Model* Model::Load( const std::string& _LMOFile )
 	
 	util::JSONValue meshValue = root["mesh"];
 	util::JSONValue materialsValue = root["materials"];
+	util::JSONValue uscale = root["uscale"];
+	util::JSONValue vscale = root["vscale"];
 
 	std::string MeshFile;
 	std::list<std::string> MaterialsList;
@@ -65,12 +67,21 @@ Model* Model::Load( const std::string& _LMOFile )
 		}
 	}
 
+	// Istantiate new model.
+	Model* mdl = new Model();
+
+	if (uscale.IsDouble())
+	{
+		mdl->m_UVScale.x = (f32)uscale.AsDouble();
+	}
+	if (vscale.IsDouble())
+	{
+		mdl->m_UVScale.y = (f32)vscale.AsDouble();
+	}
+
 	// Close JSON document and set pointer to 0.
 	JSON_CLOSE(doc);
 
-	// Istantiate new model.
-	Model* mdl = new Model();
-	
 	// Generate meshes.
 	_CreateMeshesFromGeometryFile(MeshFile, mdl->m_Meshes);
 
