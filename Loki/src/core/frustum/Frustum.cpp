@@ -3,7 +3,7 @@
 namespace loki
 {
 
-Frustum::Frustum( float _Left, float _Right, float _Bottom, float _Top, float _Near, float _Far )
+Frustum::Frustum( f32 _Left, f32 _Right, f32 _Bottom, f32 _Top, f32 _Near, f32 _Far )
 {
 	m_FrustumMatrix = math::gtc::matrix_transform::frustum(_Left, _Right, _Bottom, _Top, _Near, _Far);
 	_ComputePlaneNormals();

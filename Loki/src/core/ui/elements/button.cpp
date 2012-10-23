@@ -114,11 +114,11 @@ void LkOverlayButton::_Init()
 	}
 	else
 	{
-		float x = 0.0f;
-		float y = 0.0f;
+		f32 x = 0.0f;
+		f32 y = 0.0f;
 
-		x = (float)atof(output.c_str());
-		y = (float)atof(output2.c_str());
+		x = (f32)atof(output.c_str());
+		y = (f32)atof(output2.c_str());
 
 		LkImage::SetRelativeSize(vec2(x, y));
 	}

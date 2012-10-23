@@ -179,7 +179,7 @@ SQInteger LkSquirrel::SquirrelLexRead( SQUserPointer _UserPointer )
 {
 	// Code obtained from http://squirrel-lang.org/doc/squirrel3.html#d0e3733.
 	// Accessed 02-03-2012 @ 16:10.
-	int ret;
+	int32 ret;
 	char c;
 	if ((ret=fread(&c, sizeof(c), 1, ((filesystem::LkFile*)_UserPointer)->GetNativeFilePointer()) > 0) )
 	{
@@ -237,7 +237,7 @@ void LkSquirrel::SquirrelCompilerErrorLog( HSQUIRRELVM _VM, const SQChar* _Desc,
 	LOG(VL_ERROR, "Squirrel (COMPILER %i:%i):\nDesc: %s\nFile: %s", _Line, _Column, _Desc, _Source);
 }
 
-int LkSquirrel::Thread( void* _Arg )
+int32 LkSquirrel::Thread( void* _Arg )
 {
 	LkSquirrel* instance = (LkSquirrel*)_Arg;
 

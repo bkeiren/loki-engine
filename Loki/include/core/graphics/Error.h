@@ -15,7 +15,7 @@ namespace graphics
 #define CheckGL()
 #endif
 
-void CheckGLErrors( int _Line, const char* _File );
+void CheckGLErrors( int32 _Line, const char* _File );
 
 }
 

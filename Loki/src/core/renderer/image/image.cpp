@@ -135,7 +135,7 @@ bool LkImage::AddTexture( const char* _Texture )
 	return true;
 }
 
-bool LkImage::AddTextureFromMemory( const void* _Data, unsigned int _Width, unsigned int _Height, EInternalFormat _InternalFormat, ETextureFormat _Format, ETextureType _Type )
+bool LkImage::AddTextureFromMemory( const void* _Data, uint32 _Width, uint32 _Height, EInternalFormat _InternalFormat, ETextureFormat _Format, ETextureType _Type )
 {
 	// TODO: Maybe use the resource manager some how?
 
@@ -173,8 +173,8 @@ bool LkImage::AddTextureFromMemory( const void* _Data, unsigned int _Width, unsi
 	tex->UpdateGLInformation();
 
 	m_Textures.push_back(std::pair<bool, graphics::Texture*>(false, tex));
-	//*(const_cast<int*>(&(tex->m_Width))) = _Width;
-	//*(const_cast<int*>(&(tex->m_Height))) = _Height;
+	//*(const_cast<int32*>(&(tex->m_Width))) = _Width;
+	//*(const_cast<int32*>(&(tex->m_Height))) = _Height;
 
 #ifdef USE_PBO
 	m_PBO->Resize(tex->GetWidth() * tex->GetHeight() * 4);	//m_PBO->Resize(tex->m_Width * tex->m_Height * 4);
@@ -183,7 +183,7 @@ bool LkImage::AddTextureFromMemory( const void* _Data, unsigned int _Width, unsi
 	return true;
 }
 
-void LkImage::SetSubTextureFromMemory( const void* _Data, int _XOffset, int _YOffset, unsigned int _Width, unsigned int _Height, ETextureFormat _Format, ETextureType _Type )
+void LkImage::SetSubTextureFromMemory( const void* _Data, int32 _XOffset, int32 _YOffset, uint32 _Width, uint32 _Height, ETextureFormat _Format, ETextureType _Type )
 {
 	graphics::Texture* tex = m_Textures[m_TextureIndex].second;
 #ifdef USE_PBO
@@ -222,7 +222,7 @@ void LkImage::SetSubTextureFromMemory( const void* _Data, int _XOffset, int _YOf
 #endif
 }
 
-void LkImage::SetTextureIndex( unsigned int _Index )
+void LkImage::SetTextureIndex( uint32 _Index )
 {
 	if (_Index >= 0 && _Index < m_Textures.size())
 	{
@@ -230,12 +230,12 @@ void LkImage::SetTextureIndex( unsigned int _Index )
 	}
 }
 
-unsigned int LkImage::GetTextureIndex() const
+uint32 LkImage::GetTextureIndex() const
 {
 	return m_TextureIndex;
 }
 
-unsigned int LkImage::GetNumTextureIndices() const
+uint32 LkImage::GetNumTextureIndices() const
 {
 	return m_Textures.size();
 }
@@ -293,10 +293,10 @@ void LkImage::Render()
 		}
 		vec3 pos = ((vec3(m_Position.x, 1.0f - m_Position.y, m_Position.z) + vec3(m_AnchorPointVector, 0.0f)) * 2.0f) - 1.0f;
 
-		float uv_x_left = 0.0f;
-		float uv_x_right = 0.0f;
-		float uv_y_top = 0.0f;
-		float uv_y_bottom = 0.0f;
+		f32 uv_x_left = 0.0f;
+		f32 uv_x_right = 0.0f;
+		f32 uv_y_top = 0.0f;
+		f32 uv_y_bottom = 0.0f;
 
 		if (m_FlipX)
 		{
@@ -425,7 +425,7 @@ void LkImage::SetAnchorPoint( EAnchorPoint _AnchorPoint )
 {
 	m_AnchorPoint = _AnchorPoint;
 
-	float size_x = (m_Size.x * g_Renderer->GetRenderHeight()) / g_Renderer->GetRenderWidth();
+	f32 size_x = (m_Size.x * g_Renderer->GetRenderHeight()) / g_Renderer->GetRenderWidth();
 
 	switch (m_AnchorPoint)
 	{
@@ -459,7 +459,7 @@ void LkImage::SetAnchorPoint( EAnchorPoint _AnchorPoint )
 	}
 }
 
-int LkImage::GetWidth() const
+int32 LkImage::GetWidth() const
 {
 	if (m_TextureIndex < GetNumTextureIndices())
 	{
@@ -468,7 +468,7 @@ int LkImage::GetWidth() const
 	return 0;
 }
 
-int LkImage::GetHeight() const
+int32 LkImage::GetHeight() const
 {
 	if (m_TextureIndex < GetNumTextureIndices())
 	{
@@ -536,9 +536,9 @@ void LkImage::SetOrientation( const quat& _Orientation )
 	m_Orientation = _Orientation;
 }
 
-float LkImage::GetWindowWidthValue()
+f32 LkImage::GetWindowWidthValue()
 {
-	return ((float)g_Renderer->GetRenderWidth() / (float)g_Renderer->GetRenderHeight());
+	return ((f32)g_Renderer->GetRenderWidth() / (f32)g_Renderer->GetRenderHeight());
 }
 
 }

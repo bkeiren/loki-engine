@@ -5,7 +5,7 @@
 namespace loki
 {
 
-LkWindow::LkWindow( int _Width, int _Height, char* _Title, int _Bits, bool _Fullscreen, WindowProc _WindowCallback, int _PositionX /*= 0*/, int _PositionY /*= 0*/ )	:
+LkWindow::LkWindow( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fullscreen, WindowProc _WindowCallback, int32 _PositionX /*= 0*/, int32 _PositionY /*= 0*/ )	:
 	m_Fullscreen(_Fullscreen),
 	m_hDC(0),
 	m_hRC(0),
@@ -221,37 +221,37 @@ void LkWindow::UpdateCursorImage()
 	}
 }
 
-int LkWindow::GetWidth() const
+int32 LkWindow::GetWidth() const
 {
 	return m_Width;
 }
 
-int LkWindow::GetHeight() const
+int32 LkWindow::GetHeight() const
 {
 	return m_Height;
 }
 
-int LkWindow::GetX() const
+int32 LkWindow::GetX() const
 {
 	return m_X;
 }
 
-int LkWindow::GetY() const
+int32 LkWindow::GetY() const
 {
 	return m_Y;
 }
 
-void LkWindow::SetWidth( int _Width )
+void LkWindow::SetWidth( int32 _Width )
 {
 	SetDimensions(_Width, GetHeight());
 }
 
-void LkWindow::SetHeight( int _Height )
+void LkWindow::SetHeight( int32 _Height )
 {
 	SetDimensions(GetWidth(), _Height);
 }
 
-void LkWindow::SetDimensions( int _Width, int _Height )
+void LkWindow::SetDimensions( int32 _Width, int32 _Height )
 {
 	RECT w;
 	RECT c;
@@ -263,17 +263,17 @@ void LkWindow::SetDimensions( int _Width, int _Height )
 	_UpdateRectangleInfo();
 }
 
-void LkWindow::SetX( int _X )
+void LkWindow::SetX( int32 _X )
 {
 	SetPosition(_X, GetY());
 }
 
-void LkWindow::SetY( int _Y )
+void LkWindow::SetY( int32 _Y )
 {
 	SetPosition(GetX(), _Y);
 }
 
-void LkWindow::SetPosition( int _X, int _Y )
+void LkWindow::SetPosition( int32 _X, int32 _Y )
 {
 	::SetWindowPos(m_hWnd, 0, _X, _Y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOSENDCHANGING);
 	_UpdateRectangleInfo();
@@ -323,8 +323,8 @@ void LkWindow::SetFullscreen( bool _Fullscreen )
 		SetWindowLongPtr(m_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
 		isChangeSuccessful = ChangeDisplaySettings(NULL, CDS_RESET) == DISP_CHANGE_SUCCESSFUL;
 
-		int width = m_LastWindowedWidth;
-		int height = m_LastWindowedHeight;
+		int32 width = m_LastWindowedWidth;
+		int32 height = m_LastWindowedHeight;
 
 		if (width == 0 || height == 0)
 		{
@@ -353,7 +353,7 @@ bool LkWindow::IsValid() const
 	return m_WindowCreated;
 }
 
-bool LkWindow::LoadCursor( const char* _CursorFile, unsigned int _SizeX /* = 26 */, unsigned int _SizeY /* = 26 */ )
+bool LkWindow::LoadCursor( const char* _CursorFile, uint32 _SizeX /* = 26 */, uint32 _SizeY /* = 26 */ )
 {
 	m_Cursor = (HCURSOR)LoadImageA(NULL, _CursorFile, IMAGE_CURSOR, _SizeX, _SizeY, LR_LOADFROMFILE);
 	SetCursor(m_Cursor);
@@ -361,7 +361,7 @@ bool LkWindow::LoadCursor( const char* _CursorFile, unsigned int _SizeX /* = 26 
 	return (bool)m_Cursor;
 }
 
-bool LkWindow::LoadIcon( const char* _IconFile, unsigned int _SizeX /* = 32 */, unsigned int _SizeY /* = 32 */ )
+bool LkWindow::LoadIcon( const char* _IconFile, uint32 _SizeX /* = 32 */, uint32 _SizeY /* = 32 */ )
 {
 	m_Icon = (HICON)LoadImageA(NULL, _IconFile, IMAGE_ICON, _SizeX, _SizeY, LR_LOADFROMFILE);
 	SendMessage(m_hWnd, WM_SETICON, ICON_SMALL, (LPARAM)m_Icon );
@@ -436,10 +436,10 @@ void LkWindow::_UpdateRectangleInfo()
 	RECT out;
 	GetClientRect(m_hWnd, &out);
 
-	m_Width = (int)(out.right - out.left);
-	m_Height = (int)(out.bottom - out.top);
-	m_X = (int)(out.left);
-	m_Y = (int)(out.top);
+	m_Width = (int32)(out.right - out.left);
+	m_Height = (int32)(out.bottom - out.top);
+	m_X = (int32)(out.left);
+	m_Y = (int32)(out.top);
 }
 
 LRESULT CALLBACK LkWindow::_WindowProc( HWND _hWnd, UINT _uMsg, WPARAM _wParam, LPARAM _lParam )
@@ -485,14 +485,14 @@ void LkWindow::_ParseWindowMessage( UINT _Msg, WPARAM _WParam, LPARAM _LParam )
 	{
 	case WM_MOVE:
 		{
-			m_X = (int)LOWORD(_LParam);
-			m_Y = (int)HIWORD(_LParam);
+			m_X = (int32)LOWORD(_LParam);
+			m_Y = (int32)HIWORD(_LParam);
 			break;
 		}
 	case WM_SIZE:
 		{
-			m_Width = (int)LOWORD(_LParam);
-			m_Height = (int)HIWORD(_LParam);
+			m_Width = (int32)LOWORD(_LParam);
+			m_Height = (int32)HIWORD(_LParam);
 			break;
 		}
 	}

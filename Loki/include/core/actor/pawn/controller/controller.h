@@ -29,12 +29,12 @@ public:
 
 	LkPawn* GetPawn();
 
-	unsigned int GetID();
+	uint32 GetID();
 protected:
 	virtual void _OnEvent( const LkEvent& _Event ) = 0;
 
 	LkPawn* m_Pawn;
-	unsigned int m_ID;
+	uint32 m_ID;
 };
 
 }

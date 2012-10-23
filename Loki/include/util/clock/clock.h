@@ -15,8 +15,8 @@ public:
 	Clock();
 	~Clock();
 
-	static int GetMilliCount();
-	static int GetMilliSpan( int nTimeStart );
+	static int32 GetMilliCount();
+	static int32 GetMilliSpan( int32 nTimeStart );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Starts the timer.
@@ -25,23 +25,23 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the time span since Start() was called in seconds. To obtain
 	// the time in milliseconds, use Stop_ms().
-// 	float Stop();
+// 	f32 Stop();
 // 
-// 	int Stop_ms();
+// 	int32 Stop_ms();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the time span since Start() was called in seconds. To obtain the time
 	// in milliseconds, use Lap_ms(). NOTE: Does not reset the start time in any way.
 	// In order to set a new start time, call Start().
-	float Lap() const;
+	f32 Lap() const;
 
-	float Lap_ms() const;
+	f32 Lap_ms() const;
 private:
 #ifdef WIN32
 	LARGE_INTEGER m_Start;
 	static LARGE_INTEGER m_Frequency;
 #else
-	int m_StartCount;
+	int32 m_StartCount;
 #endif
 };
 

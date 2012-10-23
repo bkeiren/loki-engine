@@ -23,7 +23,7 @@ LkStateManager::LkStateManager()	:
 LkStateManager::~LkStateManager()
 {
 	// If the statemanager is destroyed, all it's states should be cleaned up and deleted.
-	for (unsigned int i = 0; i < m_States.size(); ++i)
+	for (uint32 i = 0; i < m_States.size(); ++i)
 	{
 		m_States[i]->CleanUp();
 		delete m_States[i];
@@ -78,10 +78,10 @@ void LkStateManager::ResetActiveState()
 //////////////////////////////////////////////////////////////////////////
 // Sets the state with ID _ID to be the currently active state
 //////////////////////////////////////////////////////////////////////////
-void LkStateManager::SetActiveState( const int _ID )
+void LkStateManager::SetActiveState( const int32 _ID )
 {
 	LkIState* state = NULL;
-	for (unsigned int i = 0; i < m_States.size(); ++i)
+	for (uint32 i = 0; i < m_States.size(); ++i)
 	{
 		state = m_States[i];
 		if (state->GetID() == _ID)
@@ -100,7 +100,7 @@ void LkStateManager::SetActiveState( const int _ID )
 void LkStateManager::SetActiveState( const char* _Name )
 {
 	LkIState* state = NULL;
-	for (unsigned int i = 0; i < m_States.size(); ++i)
+	for (uint32 i = 0; i < m_States.size(); ++i)
 	{
 		state = m_States[i];
 		if (state->GetName() == _Name)

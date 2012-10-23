@@ -21,7 +21,7 @@ JSONValue::JSONValue( const std::string& _String )	:
 
 }
 
-JSONValue::JSONValue( int _Int )	:
+JSONValue::JSONValue( int32 _Int )	:
 	m_Value(new Json::Value(_Int)),
 	m_ValueIsOwned(true)
 {
@@ -77,7 +77,7 @@ std::string JSONValue::AsString()
 	return m_Value->asString();
 }
 
-int JSONValue::AsInt() const
+int32 JSONValue::AsInt() const
 {
 	return m_Value->asInt();
 }
@@ -224,7 +224,7 @@ JSONValue& JSONValue::operator =( const std::string& _String )
 	return *this;
 }
 
-JSONValue& JSONValue::operator =( int _Int )
+JSONValue& JSONValue::operator =( int32 _Int )
 {
 	m_Value->operator = (_Int);	
 	return *this;

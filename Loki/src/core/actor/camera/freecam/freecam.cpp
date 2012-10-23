@@ -50,18 +50,18 @@ void LkFreeCam::_OnEvent( const LkEvent& _Event )
 	// 			if (g_Input->Get(BUTTON_MOUSELEFT) == KEYSTATE_DOWN && (tab && tab->GetAlphaAtCursor() == 0.0f))
 	// 			{
 	// 				int2 mouseDelta = -g_Input->GetMouseDelta();
-	// 				movcomp->RotateX((float)mouseDelta.y / 3);
-	// 				movcomp->RotateLocalY((float)mouseDelta.x / 3);
+	// 				movcomp->RotateX((f32)mouseDelta.y / 3);
+	// 				movcomp->RotateLocalY((f32)mouseDelta.x / 3);
 	// 			}
 
 				if (g_Input->Get(BUTTON_MOUSELEFT))
 				{
 					int2 mouseDelta = -g_Input->GetMouseDelta();
-					movcomp->RotateX((float)mouseDelta.y / 3);
-					movcomp->RotateLocalY((float)mouseDelta.x / 3);
+					movcomp->RotateX((f32)mouseDelta.y / 3);
+					movcomp->RotateLocalY((f32)mouseDelta.x / 3);
 				}
 
-				static float camSpeed = 0.3f;
+				static f32 camSpeed = 0.3f;
 				camSpeed = max(camSpeed + (g_Input->GetMouseWheelDelta() * 0.25f), 0.1f);
 
 				// Not sure why SIDE and FORWARD need to be switched around here...

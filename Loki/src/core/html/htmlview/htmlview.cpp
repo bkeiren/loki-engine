@@ -11,7 +11,7 @@
 namespace loki
 {
 
-LkHTMLView::LkHTMLView( Awesomium::WebView* _WebView, LkHTMLCore* _ParentBrowser, int _Width, int _Height )	:
+LkHTMLView::LkHTMLView( Awesomium::WebView* _WebView, LkHTMLCore* _ParentBrowser, int32 _Width, int32 _Height )	:
 	m_WebView(NULL),
 	m_ParentCore(NULL),
 	m_Width(_Width),
@@ -231,18 +231,18 @@ bool LkHTMLView::IsTransparent() const
 	return m_WebView->isTransparent();
 }
 
-float LkHTMLView::GetAlphaAt( int _X, int _Y ) const
+f32 LkHTMLView::GetAlphaAt( int32 _X, int32 _Y ) const
 {
 	if (m_LastRenderbuffer)
 	{
-		//return ((float)m_LastRenderbuffer->getAlphaAtPoint(_X, _Y) / 255.0f);	// This does not actually work correctly for some reason, so
+		//return ((f32)m_LastRenderbuffer->getAlphaAtPoint(_X, _Y) / 255.0f);	// This does not actually work correctly for some reason, so
 																				// we just access the buffer manually.
-		return (((float)m_LastRenderbuffer->buffer[((_X + _Y * m_LastRenderbuffer->width) * 4) + 3]) / 255.0f);
+		return (((f32)m_LastRenderbuffer->buffer[((_X + _Y * m_LastRenderbuffer->width) * 4) + 3]) / 255.0f);
 	}
 	return 0.0f;
 }
 
-float LkHTMLView::GetAlphaAtCursor()	const
+f32 LkHTMLView::GetAlphaAtCursor()	const
 {
 	int2 m = TranslateGlobalMousePositionToLocal(g_Input->GetMousePosition());
 	return GetAlphaAt(m.x, m.y);
@@ -253,7 +253,7 @@ int2 LkHTMLView::TranslateGlobalMousePositionToLocal( const int2& _GlobalPositio
 	return (g_Input->GetMousePosition() - int2(m_RenderImage->GetAbsolutePosition()));
 }
 
-void LkHTMLView::Resize( int _Width, int _Height, bool _WaitForRepaint /*= true*/, int _RepaintTimeoutMs /*= 300*/ )
+void LkHTMLView::Resize( int32 _Width, int32 _Height, bool _WaitForRepaint /*= true*/, int32 _RepaintTimeoutMs /*= 300*/ )
 {
 	m_WebView->resize(m_Width, m_Height, _WaitForRepaint, _RepaintTimeoutMs);
 	m_Width = _Width;
@@ -262,12 +262,12 @@ void LkHTMLView::Resize( int _Width, int _Height, bool _WaitForRepaint /*= true*
 	m_RenderImage->SetAbsoluteSize(vec2(m_Width, m_Height));
 }
 
-int LkHTMLView::GetWidth() const
+int32 LkHTMLView::GetWidth() const
 {
 	return m_Width;
 }
 
-int LkHTMLView::GetHeight() const
+int32 LkHTMLView::GetHeight() const
 {
 	return m_Height;
 }
@@ -298,7 +298,7 @@ void LkHTMLView::SetAllowHistoryBrowsing( bool _Allow )
 	m_AllowHistoryBrowsing = _Allow;
 }
 
-void LkHTMLView::GoToHistoryOffset( int _Offset )
+void LkHTMLView::GoToHistoryOffset( int32 _Offset )
 {
 	m_WebView->goToHistoryOffset(_Offset);
 }
@@ -314,12 +314,12 @@ LkHTMLViewListener* LkHTMLView::_GetListener()
 	return listener;
 }
 
-void LkHTMLView::_SetLayer( int _Layer )
+void LkHTMLView::_SetLayer( int32 _Layer )
 {
 	m_Layer = _Layer;
 }
 
-int LkHTMLView::_GetLayer() const
+int32 LkHTMLView::_GetLayer() const
 {
 	return m_Layer;
 }

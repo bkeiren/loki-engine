@@ -31,13 +31,13 @@ LkCSVParser::LkCSVDataTable* LkCSVParser::ParseFile( const char* _File )
 	LkCSVDataTable* table = new LkCSVDataTable();
 	std::string str;
 	std::string value;
-	unsigned int row = 0;
-	unsigned int column = 0;
+	uint32 row = 0;
+	uint32 column = 0;
 	while (getline(file, str))
 	{
 		table->m_Data.push_back(std::vector<std::string>());
 		std::vector<std::string>* list = &(*table->m_Data.rbegin());
-		for (unsigned int i = 0; i < str.length(); ++i)
+		for (uint32 i = 0; i < str.length(); ++i)
 		{
 			if (str[i] == ',')
 			{
@@ -67,7 +67,7 @@ LkCSVParser::LkCSVDataTable::~LkCSVDataTable()
 
 }
 
-bool LkCSVParser::LkCSVDataTable::GetDataAt( unsigned int _Column, unsigned int _Row, std::string& _Output )
+bool LkCSVParser::LkCSVDataTable::GetDataAt( uint32 _Column, uint32 _Row, std::string& _Output )
 {
 	if (m_Data.size() > _Row && m_Data[_Row].size() > _Column)
 	{
@@ -77,7 +77,7 @@ bool LkCSVParser::LkCSVDataTable::GetDataAt( unsigned int _Column, unsigned int 
 	return false;
 }
 
-void LkCSVParser::LkCSVDataTable::SetDataAt( unsigned int _Column, unsigned int _Row, std::string& _Data )
+void LkCSVParser::LkCSVDataTable::SetDataAt( uint32 _Column, uint32 _Row, std::string& _Data )
 {
 	// Resize the number of rows if required.
 	if (_Row > m_Data.size())
@@ -95,23 +95,23 @@ void LkCSVParser::LkCSVDataTable::SetDataAt( unsigned int _Column, unsigned int 
 	m_Data[_Row][_Column] = _Data;
 }
 
-unsigned int LkCSVParser::LkCSVDataTable::GetNumRows()
+uint32 LkCSVParser::LkCSVDataTable::GetNumRows()
 {
 	return m_Data.size();
 }
 
-unsigned int LkCSVParser::LkCSVDataTable::GetNumColumnsAtRow( unsigned int _Row )
+uint32 LkCSVParser::LkCSVDataTable::GetNumColumnsAtRow( uint32 _Row )
 {
 	assert(_Row < m_Data.size());
 
 	return m_Data[_Row].size();
 }
 
-unsigned int LkCSVParser::LkCSVDataTable::GetNumEntries()
+uint32 LkCSVParser::LkCSVDataTable::GetNumEntries()
 {
-	unsigned int entries = 0;
-	unsigned int rows = GetNumRows();
-	for (unsigned int i = 0; i < rows; ++i)
+	uint32 entries = 0;
+	uint32 rows = GetNumRows();
+	for (uint32 i = 0; i < rows; ++i)
 	{
 		entries += GetNumColumnsAtRow(i);
 	}

@@ -29,7 +29,7 @@ public:
 
 	void DestroyEntity( const char* _EntityName );
 
-	void FindEntitiesInRange( const vec3& _Center, float _Range, EntitiesList& _OutputList ) const;
+	void FindEntitiesInRange( const vec3& _Center, f32 _Range, EntitiesList& _OutputList ) const;
 	void FindEntitiesInFrustum( const Frustum& _Frustum, const mat4& _FrustumTransform, EntitiesList& _OutputList ) const;
 private:
 	EntitySystem();

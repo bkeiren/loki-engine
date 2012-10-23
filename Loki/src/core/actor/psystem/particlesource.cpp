@@ -18,32 +18,32 @@ LkParticleSource::~LkParticleSource()
 
 }
 
-void LkParticleSource::SetQuota( int _Quota )
+void LkParticleSource::SetQuota( int32 _Quota )
 {
 	if (_Quota < 0)
 	{
 		return;
 	}
 
-	int PreviousQuota = GetQuota();
+	int32 PreviousQuota = GetQuota();
 
 	// If _Quota is greater than the current quota, more storage space is allocated.
 	// If _Quota is smaller than the current quota, the storage space that 
 	// is no longer needed is deleted (by calling each element's destructor).
 	m_Particles.resize(_Quota, 0);
 
-	int CurrentQuota = GetQuota();
+	int32 CurrentQuota = GetQuota();
 
 	if (CurrentQuota > PreviousQuota)
 	{
-		for (int i = PreviousQuota; i < CurrentQuota; ++i)
+		for (int32 i = PreviousQuota; i < CurrentQuota; ++i)
 		{
 			m_Particles[i] = new LkParticle();
 		}
 	}
 }
 
-int LkParticleSource::GetQuota() const
+int32 LkParticleSource::GetQuota() const
 {
 	return m_Particles.capacity();
 }
@@ -73,7 +73,7 @@ void LkParticleSource::_Update()
 
 void LkParticleSource::_Spawn()
 {
-	int sq = m_Descriptor.m_SpawnQuota;
+	int32 sq = m_Descriptor.m_SpawnQuota;
 
 	for (ParticlesIter it = m_Particles.begin(); it != m_Particles.end(); ++it)
 	{

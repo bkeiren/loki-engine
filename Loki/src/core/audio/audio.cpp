@@ -16,8 +16,8 @@ LkAudio* g_Audio = NULL;
 // FMOD::System* Audio::m_System = NULL;
 // FMOD::Sound* Audio::m_Sound = NULL;
 // FMOD::Channel* Audio::m_Channel = NULL;
-// int Audio::m_Key = 0;
-// unsigned int Audio::m_Version = 0;
+// int32 Audio::m_Key = 0;
+// uint32 Audio::m_Version = 0;
 // std::list<Sound*> Audio::m_Sounds;
 
 LkAudio::LkAudio()	:

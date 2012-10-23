@@ -37,11 +37,11 @@ struct DbgDrawItem
 #define DBGDRAW_TYPE_DISK				12
 #define DBGDRAW_TYPE_DISK_PARTIAL		13
 
-	int m_Type;
+	int32 m_Type;
 	vec3 m_Vec0;
 	vec3 m_Vec1;
-	float m_Val0;
-	float m_Val1;
+	f32 m_Val0;
+	f32 m_Val1;
 	vec3 m_Color;
 	bool m_DepthTest;
 };
@@ -51,9 +51,9 @@ struct DbgDrawItem
 // unnecessary matrix mode switches.
 //////////////////////////////////////////////////////////////////////////
 #ifdef DBG_DRAW_ENABLED
-const unsigned int DbgDrawItemsMaxCount = 2048;
+const uint32 DbgDrawItemsMaxCount = 2048;
 #else
-const unsigned int DbgDrawItemsMaxCount = 2048;
+const uint32 DbgDrawItemsMaxCount = 2048;
 #endif
 typedef std::vector<DbgDrawItem>		DbgDrawItems;
 typedef DbgDrawItems::iterator			DbgDrawItemsIter;
@@ -62,8 +62,8 @@ typedef DbgDrawItems::const_iterator	DbgDrawItemsConstIter;
 DbgDrawItems DbgDrawItems3D = DbgDrawItems(DbgDrawItemsMaxCount);
 DbgDrawItems DbgDrawItems2D = DbgDrawItems(DbgDrawItemsMaxCount);
 
-unsigned int DbgDrawItems3DCounter = 0;
-unsigned int DbgDrawItems2DCounter = 0;
+uint32 DbgDrawItems3DCounter = 0;
+uint32 DbgDrawItems2DCounter = 0;
 
 }
 
@@ -186,7 +186,7 @@ void DrawItems( const mat4& _ProjectionMatrix, const mat4& _ViewMatrix )
 				static GLUquadric* q = gluNewQuadric();
 				(item->m_Type == DBGDRAW_TYPE_DISK)?
 					(gluDisk(q, 0, item->m_Val0, 50, 1)):
-					(gluPartialDisk(q, 0, item->m_Val0, max((int)((item->m_Vec1.y / 360) * 50), 5), 1, item->m_Vec1.x, item->m_Vec1.y));
+					(gluPartialDisk(q, 0, item->m_Val0, max((int32)((item->m_Vec1.y / 360) * 50), 5), 1, item->m_Vec1.x, item->m_Vec1.y));
 				glPopMatrix();
 
 				glEnable(GL_CULL_FACE);
@@ -242,7 +242,7 @@ void DrawItems( const mat4& _ProjectionMatrix, const mat4& _ViewMatrix )
 				static GLUquadric* q = gluNewQuadric();
 				(item->m_Type == DBGDRAW_TYPE_DISK)?
 					(gluDisk(q, 0, item->m_Val0, 50, 1)):
-					(gluPartialDisk(q, 0, item->m_Val0, max((int)((item->m_Vec1.y / 360) * 50), 5), 1, item->m_Vec1.x, item->m_Vec1.y));
+					(gluPartialDisk(q, 0, item->m_Val0, max((int32)((item->m_Vec1.y / 360) * 50), 5), 1, item->m_Vec1.x, item->m_Vec1.y));
 				glPopMatrix();
 
 				glEnable(GL_CULL_FACE);
@@ -300,7 +300,7 @@ void DrawLine2D(const vec2& _From, const vec2& _To, bool _DepthTest /*= true*/, 
 #endif
 }
 
-void DrawSphere(const vec3& _Pos, float _Radius, bool _DepthTest /*= true*/, const vec3& _Color /* = vec3 */, bool _Wire /*= true*/ )
+void DrawSphere(const vec3& _Pos, f32 _Radius, bool _DepthTest /*= true*/, const vec3& _Color /* = vec3 */, bool _Wire /*= true*/ )
 {
 #ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
@@ -316,7 +316,7 @@ void DrawSphere(const vec3& _Pos, float _Radius, bool _DepthTest /*= true*/, con
 #endif
 }
 
-void DrawCube(const vec3& _Pos, float _Size, bool _DepthTest /*= true*/, const vec3& _Color /* = vec3 */, bool _Wire /*= true*/ )
+void DrawCube(const vec3& _Pos, f32 _Size, bool _DepthTest /*= true*/, const vec3& _Color /* = vec3 */, bool _Wire /*= true*/ )
 {
 #ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
@@ -332,7 +332,7 @@ void DrawCube(const vec3& _Pos, float _Size, bool _DepthTest /*= true*/, const v
 #endif
 }
 
-void DrawIcosahedron(const vec3& _Pos, float _Size, bool _DepthTest /* = true */, const vec3& _Color /* = vec3 */, bool _Wire /*= true*/ )
+void DrawIcosahedron(const vec3& _Pos, f32 _Size, bool _DepthTest /* = true */, const vec3& _Color /* = vec3 */, bool _Wire /*= true*/ )
 {
 #ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
@@ -348,7 +348,7 @@ void DrawIcosahedron(const vec3& _Pos, float _Size, bool _DepthTest /* = true */
 #endif
 }
 
-void DrawCone(const vec3& _Pos, float _Base, float _Height, vec3& _Direction, bool _DepthTest /* = true */, const vec3& _Color /* = vec3 */, bool _Wire /*= true*/ )
+void DrawCone(const vec3& _Pos, f32 _Base, f32 _Height, vec3& _Direction, bool _DepthTest /* = true */, const vec3& _Color /* = vec3 */, bool _Wire /*= true*/ )
 {
 #ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
@@ -366,7 +366,7 @@ void DrawCone(const vec3& _Pos, float _Base, float _Height, vec3& _Direction, bo
 #endif
 }
 
-void DrawCylinder(const vec3& _Pos, float _Radius, float _Height, bool _DepthTest /* = true */, const vec3& _Color /* = vec3 */, bool _Wire /*= true*/ )
+void DrawCylinder(const vec3& _Pos, f32 _Radius, f32 _Height, bool _DepthTest /* = true */, const vec3& _Color /* = vec3 */, bool _Wire /*= true*/ )
 {
 #ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
@@ -383,7 +383,7 @@ void DrawCylinder(const vec3& _Pos, float _Radius, float _Height, bool _DepthTes
 #endif
 }
 
-void DrawDisk3D( const vec3& _Pos, float _Radius, bool _DepthTest /*= true*/, const vec3& _Color /*= vec3(1.0f, 1.0f, 1.0f)*/ )
+void DrawDisk3D( const vec3& _Pos, f32 _Radius, bool _DepthTest /*= true*/, const vec3& _Color /*= vec3(1.0f, 1.0f, 1.0f)*/ )
 {
 #ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
@@ -399,7 +399,7 @@ void DrawDisk3D( const vec3& _Pos, float _Radius, bool _DepthTest /*= true*/, co
 #endif
 }
 
-void DrawDisk2D( const vec3& _Pos, float _Radius, const vec3& _Color /*= vec3(1.0f, 1.0f, 1.0f)*/ )
+void DrawDisk2D( const vec3& _Pos, f32 _Radius, const vec3& _Color /*= vec3(1.0f, 1.0f, 1.0f)*/ )
 {
 #ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems2DCounter < DbgDrawItemsMaxCount)
@@ -415,7 +415,7 @@ void DrawDisk2D( const vec3& _Pos, float _Radius, const vec3& _Color /*= vec3(1.
 #endif
 }
 
-void DrawPartialDisk3D( const vec3& _Pos, float _Radius, float _StartAngle, float _Angle, bool _DepthTest /*= true*/, const vec3& _Color /*= vec3(1.0f, 1.0f, 1.0f)*/ )
+void DrawPartialDisk3D( const vec3& _Pos, f32 _Radius, f32 _StartAngle, f32 _Angle, bool _DepthTest /*= true*/, const vec3& _Color /*= vec3(1.0f, 1.0f, 1.0f)*/ )
 {
 #ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems3DCounter < DbgDrawItemsMaxCount)
@@ -432,7 +432,7 @@ void DrawPartialDisk3D( const vec3& _Pos, float _Radius, float _StartAngle, floa
 #endif
 }
 
-void DrawPartialDisk2D( const vec3& _Pos, float _Radius, float _StartAngle, float _Angle, const vec3& _Color /*= vec3(1.0f, 1.0f, 1.0f)*/ )
+void DrawPartialDisk2D( const vec3& _Pos, f32 _Radius, f32 _StartAngle, f32 _Angle, const vec3& _Color /*= vec3(1.0f, 1.0f, 1.0f)*/ )
 {
 #ifdef DBG_DRAW_ENABLED
 	if (DbgDrawItems2DCounter < DbgDrawItemsMaxCount)
@@ -449,10 +449,10 @@ void DrawPartialDisk2D( const vec3& _Pos, float _Radius, float _StartAngle, floa
 #endif
 }
 
-void DrawAxes( const vec3& _Pos, const mat3& _Axes, float _Scale /* = 1.0f */, bool _DepthTest /* = true */, bool _Wire /* = true*/ )
+void DrawAxes( const vec3& _Pos, const mat3& _Axes, f32 _Scale /* = 1.0f */, bool _DepthTest /* = true */, bool _Wire /* = true*/ )
 {
-	float cone_base = 0.085f;
-	float cone_height = 0.25f;
+	f32 cone_base = 0.085f;
+	f32 cone_height = 0.25f;
 	vec3 forward = _Axes[0];
 	vec3 up = _Axes[1];
 	vec3 side = _Axes[2];
@@ -473,7 +473,7 @@ void DrawAxes( const vec3& _Pos, const mat3& _Axes, float _Scale /* = 1.0f */, b
 	DrawCone(_Pos + (side * _Scale), cone_base * _Scale, cone_height * _Scale, -side, _DepthTest, SIDE, _Wire);
 }
 
-void DrawAxes( const vec3& _Pos, const quat& _LocalForwardOrientation, float _Scale /* = 1.0f*/, bool _DepthTest /* = true*/, bool _Wire /* = true*/ )
+void DrawAxes( const vec3& _Pos, const quat& _LocalForwardOrientation, f32 _Scale /* = 1.0f*/, bool _DepthTest /* = true*/, bool _Wire /* = true*/ )
 {
 	DrawAxes(_Pos, math::gtc::quaternion::mat3_cast(_LocalForwardOrientation), _Scale, _DepthTest, _Wire);
 }

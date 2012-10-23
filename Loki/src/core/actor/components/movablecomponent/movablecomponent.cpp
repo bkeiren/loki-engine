@@ -40,17 +40,17 @@ vec3 LkMovableComponent::GetOrientationVector() const
 	return m_Orientation * FORWARD;
 }
 
-float LkMovableComponent::GetPitch() const
+f32 LkMovableComponent::GetPitch() const
 {
 	return math::gtx::quaternion::pitch(m_Orientation);
 }
 
-float LkMovableComponent::GetYaw() const
+f32 LkMovableComponent::GetYaw() const
 {
 	return math::gtx::quaternion::yaw(m_Orientation);
 }
 
-float LkMovableComponent::GetRoll() const
+f32 LkMovableComponent::GetRoll() const
 {
 	return math::gtx::quaternion::roll(m_Orientation);
 }
@@ -95,49 +95,49 @@ void LkMovableComponent::SetOrientation( const quat& _Rotation )
 	m_MatrixIsDirty = true;
 }
 
-void LkMovableComponent::RotateLocal( const vec3& _Axis, const float _Angle )
+void LkMovableComponent::RotateLocal( const vec3& _Axis, const f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, _Axis * m_Orientation);
 	m_MatrixIsDirty = true;
 }
 
-void LkMovableComponent::RotateLocalX( const float _Angle )
+void LkMovableComponent::RotateLocalX( const f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalX * m_Orientation);
 	m_MatrixIsDirty = true;
 }
 
-void LkMovableComponent::RotateLocalY( const float _Angle )
+void LkMovableComponent::RotateLocalY( const f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalY * m_Orientation);
 	m_MatrixIsDirty = true;
 }
 
-void LkMovableComponent::RotateLocalZ( const float _Angle )
+void LkMovableComponent::RotateLocalZ( const f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalZ * m_Orientation);
 	m_MatrixIsDirty = true;
 }
 
-void LkMovableComponent::Rotate( const vec3& _Axis, const float _Angle )
+void LkMovableComponent::Rotate( const vec3& _Axis, const f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, _Axis);
 	m_MatrixIsDirty = true;
 }
 
-void LkMovableComponent::RotateX( const float _Angle )
+void LkMovableComponent::RotateX( const f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalX);
 	m_MatrixIsDirty = true;
 }
 
-void LkMovableComponent::RotateY( const float _Angle )
+void LkMovableComponent::RotateY( const f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalY);
 	m_MatrixIsDirty = true;
 }
 
-void LkMovableComponent::RotateZ( const float _Angle )
+void LkMovableComponent::RotateZ( const f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalZ);
 	m_MatrixIsDirty = true;

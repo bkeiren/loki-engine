@@ -18,7 +18,7 @@ namespace	// Anonymous namespace.
 
 }
 
-LkThread::LkThread( ThreadFunc _Function, void* _Argument, unsigned int _Flags )	:
+LkThread::LkThread( ThreadFunc _Function, void* _Argument, uint32 _Flags )	:
 	m_Function(_Function),
 	m_Callback(0),
 	m_Argument(_Argument),
@@ -92,7 +92,7 @@ DWORD WINAPI LkThread::EntryPoint( LPVOID _Argument )
 
 	while (1)
 	{
-		int result = threadInstance->m_Function(threadInstance->m_Argument);
+		int32 result = threadInstance->m_Function(threadInstance->m_Argument);
 	
 		// If the thread was signaled to stop, stop it.
 		if (WaitForSingleObject(threadInstance->m_StopEventHandle, 0) != WAIT_TIMEOUT)

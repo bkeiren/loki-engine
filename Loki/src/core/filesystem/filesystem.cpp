@@ -24,7 +24,7 @@ LkFile::LkFile( const char* _File )	:
 	fopen_s(&m_File, _File, "r");
 	if (m_File)
 	{
-		int pathlength = strlen(_File);
+		int32 pathlength = strlen(_File);
 		m_Path = new char[pathlength + 1];
 		memcpy(m_Path, _File, pathlength);
 		m_Path[pathlength] = '\0';

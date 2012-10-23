@@ -35,7 +35,7 @@ void LkResourceManager<_ResType>::_Shutdown()
 template< class _ResType >
 _ResType LkResourceManager<_ResType>::GetResource( const char* _Res )
 {
-	unsigned int Hash = HASH(_Res);
+	uint32 Hash = HASH(_Res);
 
 	stdext::hash_map<ResourceID, _ResType>::iterator it = m_Resources.find(Hash);
 	if (it != m_Resources.end())
@@ -79,7 +79,7 @@ void LkResourceManager<_ResType>::ReleaseResource( _ResType* _Res )
 	// If the Texture's ref count is 0, the TextureManager is free to delete it.
 	if ((*_Res)->m_RefCount == 0)
 	{
-		unsigned int Hash = HASH((*_Res)->m_Name.c_str());
+		uint32 Hash = HASH((*_Res)->m_Name.c_str());
 		m_Resources.erase(Hash);
 		delete (*_Res);
 	}
@@ -89,7 +89,7 @@ void LkResourceManager<_ResType>::ReleaseResource( _ResType* _Res )
 }
 
 template< class _ResType >
-unsigned int LkResourceManager<_ResType>::GetNumLoadedResources()
+uint32 LkResourceManager<_ResType>::GetNumLoadedResources()
 {
 	return m_Resources.size();
 }

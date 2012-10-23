@@ -42,8 +42,8 @@ public:
 	renderer::LkEffect* GetEffect() const;
 	void SetEffect( renderer::LkEffect* _Effect );
 
-	float GetShininess() const;
-	void SetShininess( float _Shininess );
+	f32 GetShininess() const;
+	void SetShininess( f32 _Shininess );
 
 	bool HasDiffuse() const;
 	bool HasNormal() const;
@@ -54,7 +54,7 @@ private:
 
 	Texture* m_Textures[_TT_COUNT];
 	renderer::LkEffect* m_Effect;
-	float m_Shininess;
+	f32 m_Shininess;
 };
 
 }

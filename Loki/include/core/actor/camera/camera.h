@@ -48,19 +48,19 @@ public:
 	const mat4& GetProjectionMatrix();
 	mat4 GetViewMatrix();
 	
-	void SetFoVY( float _FoVY );
-	float GetFoVY() const;
+	void SetFoVY( f32 _FoVY );
+	f32 GetFoVY() const;
 	
-	void SetZFar( float _ZFar );
-	float GetZFar() const;
+	void SetZFar( f32 _ZFar );
+	f32 GetZFar() const;
 	
-	void SetZNear( float _ZNear );
-	float GetZNear() const;
+	void SetZNear( f32 _ZNear );
+	f32 GetZNear() const;
 
 	void SetViewport( const int2& _Viewport );
 	const int2& GetViewport() const;
 
-	float GetAspectRatio() const;
+	f32 GetAspectRatio() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// 0 = Perspective, 1 = Orthogonal.
@@ -83,9 +83,9 @@ protected:
 private:
 
 	mat4 m_ProjectionMatrix;
-	float m_FoVY;
-	float m_ZFar;
-	float m_ZNear;
+	f32 m_FoVY;
+	f32 m_ZFar;
+	f32 m_ZNear;
 	int2 m_Viewport;
 	bool m_ProjectionType;	// 0 == Perspective, 1 == Orthogonal.
 	bool m_ProjectionMatrixIsDirty;

@@ -26,12 +26,12 @@ const vec3& LkSpotLight::GetDirection() const
 	return m_Direction;
 }
 
-float LkSpotLight::GetInnerAngle() const
+f32 LkSpotLight::GetInnerAngle() const
 {
 	return m_InnerAngle;
 }
 
-float LkSpotLight::GetOuterAngle() const
+f32 LkSpotLight::GetOuterAngle() const
 {
 	return m_OuterAngle;
 }

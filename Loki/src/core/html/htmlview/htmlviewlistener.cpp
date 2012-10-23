@@ -31,7 +31,7 @@ void LkHTMLViewListener::onBeginNavigation(Awesomium::WebView* caller,
 void LkHTMLViewListener::onBeginLoading(Awesomium::WebView* caller, 
 							const std::string& url, 
 							const std::wstring& frameName, 
-							int statusCode, 
+							int32 statusCode, 
 							const std::wstring& mimeType)
 {
 
@@ -63,7 +63,7 @@ void LkHTMLViewListener::onCallback(Awesomium::WebView* caller,
 			std::wstring type;
 			if (it->isInteger())
 			{
-				type = L"int";
+				type = L"int32";
 			}
 			else if (it->isBoolean())
 			{
@@ -156,7 +156,7 @@ void LkHTMLViewListener::onPluginCrashed(Awesomium::WebView* caller,
 }
 
 void LkHTMLViewListener::onRequestMove(Awesomium::WebView* caller, 
-									 int x, int y)
+									 int32 x, int32 y)
 {
 
 }
@@ -183,18 +183,18 @@ void LkHTMLViewListener::onRequestFileChooser(Awesomium::WebView* caller,
 }
 
 void LkHTMLViewListener::onGetScrollData(Awesomium::WebView* caller,
-							 int contentWidth,
-							 int contentHeight,
-							 int preferredWidth,
-							 int scrollX,
-							 int scrollY)
+							 int32 contentWidth,
+							 int32 contentHeight,
+							 int32 preferredWidth,
+							 int32 scrollX,
+							 int32 scrollY)
 {
 
 }
 
 void LkHTMLViewListener::onJavascriptConsoleMessage(Awesomium::WebView* caller,
 										const std::wstring& message,
-										int lineNumber,
+										int32 lineNumber,
 										const std::wstring& source)
 {
 	std::string str = "Awesomium JS: ";
@@ -210,10 +210,10 @@ void LkHTMLViewListener::onJavascriptConsoleMessage(Awesomium::WebView* caller,
 }
 
 void LkHTMLViewListener::onGetFindResults(Awesomium::WebView* caller,
-							  int requestID,
-							  int numMatches,
+							  int32 requestID,
+							  int32 numMatches,
 							  const Awesomium::Rect& selection,
-							  int curMatch,
+							  int32 curMatch,
 							  bool finalUpdate)
 {
 
@@ -227,23 +227,23 @@ void LkHTMLViewListener::onUpdateIME(Awesomium::WebView* caller,
 }
 
 void LkHTMLViewListener::onShowContextMenu(Awesomium::WebView* caller,
-							   int mouseX,
-							   int mouseY,
+							   int32 mouseX,
+							   int32 mouseY,
 							   Awesomium::MediaType type,
-							   int mediaState,
+							   int32 mediaState,
 							   const std::string& linkURL,
 							   const std::string& srcURL,
 							   const std::string& pageURL,
 							   const std::string& frameURL,
 							   const std::wstring& selectionText,
 							   bool isEditable,
-							   int editFlags)
+							   int32 editFlags)
 {
 
 }
 
 void LkHTMLViewListener::onRequestLogin(Awesomium::WebView* caller,
-							int requestID,
+							int32 requestID,
 							const std::string& requestURL,
 							bool isProxy,
 							const std::wstring& hostAndPort,
@@ -254,22 +254,22 @@ void LkHTMLViewListener::onRequestLogin(Awesomium::WebView* caller,
 }
 
 void LkHTMLViewListener::onChangeHistory(Awesomium::WebView* caller,
-							 int backCount,
-							 int forwardCount)
+							 int32 backCount,
+							 int32 forwardCount)
 {
 
 }
 
 void LkHTMLViewListener::onFinishResize(Awesomium::WebView* caller,
-							int width,
-							int height)
+							int32 width,
+							int32 height)
 {
 
 }
 
 void LkHTMLViewListener::onShowJavascriptDialog(Awesomium::WebView* caller,
-									int requestID,
-									int dialogFlags,
+									int32 requestID,
+									int32 dialogFlags,
 									const std::wstring& message,
 									const std::wstring& defaultPrompt,
 									const std::string& frameURL)

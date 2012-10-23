@@ -57,7 +57,7 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 
 				btTriangleIndexVertexArray* meshinterface = new btTriangleIndexVertexArray();
 
-// 				for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
+// 				for (uint32 i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
 // 				{
 // 					const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
 // 					
@@ -66,8 +66,8 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 // 					btmesh.m_numTriangles = mesh->GetIndexBufferObject()->GetNumIndices() / 3;
 // 					btmesh.m_numVertices = mesh->GetVertexBufferObject()->GetNumVertices();
 // 					btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndexBufferObject()->GetIndicesRAM();
-// 					btmesh.m_triangleIndexStride = 3 * sizeof(int);
-// 					btmesh.m_vertexBase = (unsigned char*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos));
+// 					btmesh.m_triangleIndexStride = 3 * sizeof(int32);
+// 					btmesh.m_vertexBase = (unsigned char*)((int32)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int32)MEMBER_OFFSET(renderer::LkVertex, pos));
 // 					btmesh.m_vertexStride = sizeof(renderer::LkVertex);
 // 
 // 					meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
@@ -82,7 +82,7 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 		{
 			shape = new btCompoundShape();
 
-// 			for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
+// 			for (uint32 i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
 // 			{
 // 				const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
 // 				mat4 submeshtransform;	// Identity, for now?
@@ -90,7 +90,7 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 // 				// The original, non-reduced, shape.
 // 				// A btConvexHullShape simply takes a point cloud (No triangles are defined) and from this constructs
 // 				// a basic shape primitive that most tightly fits this cloud (Which could be a box, sphere, cylinder, etc.).
-// 				btConvexHullShape* original = new btConvexHullShape((btScalar*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos)), 
+// 				btConvexHullShape* original = new btConvexHullShape((btScalar*)((int32)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int32)MEMBER_OFFSET(renderer::LkVertex, pos)), 
 // 																	mesh->GetVertexBufferObject()->GetNumVertices(),
 // 																	sizeof(renderer::LkVertex));
 // 				btShapeHull* hull = new btShapeHull(original);
@@ -113,7 +113,7 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 
 			btTriangleIndexVertexArray* meshinterface = new btTriangleIndexVertexArray();
 
-// 			for (unsigned int i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
+// 			for (uint32 i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
 // 			{
 // 				const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
 // 
@@ -122,8 +122,8 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 // 				btmesh.m_numTriangles = mesh->GetIndexBufferObject()->GetNumIndices() / 3;
 // 				btmesh.m_numVertices = mesh->GetVertexBufferObject()->GetNumVertices();
 // 				btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndexBufferObject()->GetIndicesRAM();
-// 				btmesh.m_triangleIndexStride = 3 * sizeof(int);
-// 				btmesh.m_vertexBase = (unsigned char*)((int)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int)MEMBER_OFFSET(renderer::LkVertex, pos));
+// 				btmesh.m_triangleIndexStride = 3 * sizeof(int32);
+// 				btmesh.m_vertexBase = (unsigned char*)((int32)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int32)MEMBER_OFFSET(renderer::LkVertex, pos));
 // 				btmesh.m_vertexStride = sizeof(renderer::LkVertex);
 // 
 // 				meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
@@ -302,7 +302,7 @@ void LkRigidBody::ApplyCentralImpulse( const vec3& _Impulse )
 	m_RigidBody->applyCentralImpulse(BTVec3(_Impulse));
 }
 
-void LkRigidBody::ApplyDamping( float _TimeStep )
+void LkRigidBody::ApplyDamping( f32 _TimeStep )
 {
 	m_RigidBody->applyDamping(_TimeStep);
 }
@@ -360,7 +360,7 @@ vec3 LkRigidBody::GetDeltaLinearVelocity() const
 	return GLMVec3(m_RigidBody->getDeltaLinearVelocity());
 }
 
-float LkRigidBody::GetFriction() const
+f32 LkRigidBody::GetFriction() const
 {
 	return m_RigidBody->getFriction();
 }
@@ -370,7 +370,7 @@ vec3 LkRigidBody::GetGravity() const
 	return GLMVec3(m_RigidBody->getGravity());
 }
 
-float LkRigidBody::GetLinearDamping() const
+f32 LkRigidBody::GetLinearDamping() const
 {
 	return m_RigidBody->getLinearDamping();
 }
@@ -390,7 +390,7 @@ quat LkRigidBody::GetOrientation() const
 	return GLMQuat(m_RigidBody->getOrientation());
 }
 
-float LkRigidBody::GetRestitution() const
+f32 LkRigidBody::GetRestitution() const
 {
 	return m_RigidBody->getRestitution();
 }
@@ -430,7 +430,7 @@ void LkRigidBody::Activate( bool _ForceActivation /*= false*/ )
 	m_RigidBody->activate(_ForceActivation);
 }
 
-void LkRigidBody::SetMass( float _Mass )
+void LkRigidBody::SetMass( f32 _Mass )
 {
 	btVector3 inertia;
 	m_RigidBody->getCollisionShape()->calculateLocalInertia(_Mass, inertia);

@@ -20,9 +20,9 @@ struct Parameter
 		//delete[m_NumValues] m_ValuesChar;
 	}
 
-	unsigned int	m_NumValues;
-	int*			m_ValuesInt;
-	float*			m_ValuesFloat;
+	loki::uint32			m_NumValues;
+	loki::int32*			m_ValuesInt;
+	loki::f32*			m_ValuesFloat;
 	double*			m_ValuesDouble;
 	//char**			m_ValuesChar;
 	std::string		m_String;
@@ -30,5 +30,5 @@ struct Parameter
 
 // TODO: Use a multiset instead of a list of Parameter*?
 CONTAINER_MACRO_MAP(std::string, Parameter*, CommandLineParameters);
-void ParseCommandLine( int argc, char** argv, CommandLineParameters& paramsList );
+void ParseCommandLine( loki::int32 argc, char** argv, CommandLineParameters& paramsList );
 void PrintParameterList( CommandLineParameters& paramsList );

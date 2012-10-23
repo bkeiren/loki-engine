@@ -27,9 +27,9 @@ public:
 	// Sets the progress bar's progress. Value will be clamped to the range 
 	// [0 .. 1].
 	//////////////////////////////////////////////////////////////////////////
-	void SetProgress( float _Progress );
+	void SetProgress( f32 _Progress );
 	
-	float GetProgress() const;
+	f32 GetProgress() const;
 
 protected:
 	virtual void Render();
@@ -49,7 +49,7 @@ private:
 	renderer::LkImage* m_BarCenterFilled;
 	renderer::LkImage* m_BarEndFilled;
 
-	float m_Progress;
+	f32 m_Progress;
 };
 
 }

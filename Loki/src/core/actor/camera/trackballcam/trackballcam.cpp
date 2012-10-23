@@ -27,12 +27,12 @@ LkTrackBallCam::~LkTrackBallCam()
 
 }
 
-void LkTrackBallCam::SetTrackBallDistance( float _Distance )
+void LkTrackBallCam::SetTrackBallDistance( f32 _Distance )
 {
 	m_Distance = _Distance;
 }
 
-float LkTrackBallCam::GetTrackBallDistance() const
+f32 LkTrackBallCam::GetTrackBallDistance() const
 {
 	return m_Distance;
 }
@@ -62,8 +62,8 @@ void LkTrackBallCam::_OnEvent( const LkEvent& _Event )
 			if (g_Input->Get(BUTTON_MOUSELEFT) == KEYSTATE_DOWN)
 			{
 				int2 mouseDelta = -g_Input->GetMouseDelta();
-				movcomp->RotateX((float)mouseDelta.y / 3);
-				movcomp->RotateLocalY((float)mouseDelta.x / 3);
+				movcomp->RotateX((f32)mouseDelta.y / 3);
+				movcomp->RotateLocalY((f32)mouseDelta.x / 3);
 			}
 
 			SetTrackBallDistance(GetTrackBallDistance() - (g_Input->GetMouseWheelDelta() * 0.6f));

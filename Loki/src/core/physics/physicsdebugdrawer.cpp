@@ -39,7 +39,7 @@ void LkDebugDrawer::drawLine( const btVector3& from, const btVector3& to, const 
 	renderer::debug::DrawLine3D(GLMVec3(from), GLMVec3(to), true, GLMVec3(color));
 }
 
-void LkDebugDrawer::drawContactPoint(const btVector3& PointOnB,const btVector3& normalOnB,btScalar distance,int lifeTime,const btVector3& color)
+void LkDebugDrawer::drawContactPoint(const btVector3& PointOnB,const btVector3& normalOnB,btScalar distance,int32 lifeTime,const btVector3& color)
 {
 	vec3 col = GLMVec3(color);
 	renderer::debug::DrawSphere(GLMVec3(PointOnB), 0.1f, true, col);
@@ -56,22 +56,22 @@ void LkDebugDrawer::draw3dText(const btVector3& location,const char* textString)
 
 }
 
-void LkDebugDrawer::setDebugMode(int debugMode)
+void LkDebugDrawer::setDebugMode(int32 debugMode)
 {
 	m_DebugModeFlags = debugMode;
 }
 
-void LkDebugDrawer::addDebugModeFlag(int debugMode)
+void LkDebugDrawer::addDebugModeFlag(int32 debugMode)
 {
 	m_DebugModeFlags |= debugMode;
 }
 
-void LkDebugDrawer::removeDebugModeFlag(int debugMode)
+void LkDebugDrawer::removeDebugModeFlag(int32 debugMode)
 {
 	m_DebugModeFlags ^= debugMode;	// Is this correct?
 }
 
-int	LkDebugDrawer::getDebugMode() const
+int32	LkDebugDrawer::getDebugMode() const
 {
 	return m_DebugModeFlags;
 }

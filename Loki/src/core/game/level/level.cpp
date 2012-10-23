@@ -50,7 +50,7 @@ LkLevel::~LkLevel()
 
 LkActor* LkLevel::ActorExists( const char* _Name )
 {
-	unsigned int hash = LkActor::GetHashForName(_Name);
+	uint32 hash = LkActor::GetHashForName(_Name);
 	
 	Actors::iterator it = m_Actors.find(hash);
 	if (it == m_Actors.end())
@@ -78,7 +78,7 @@ LkPointLight* LkLevel::SpawnPointLight( const char* _Name )
 
 LkPointLight* LkLevel::GetPointLight( const char* _Name )
 {
-	unsigned int hash = LkActor::GetHashForName(_Name);
+	uint32 hash = LkActor::GetHashForName(_Name);
 	PointLights::iterator it = m_PointLights.find(hash);
 	if (it == m_PointLights.end())
 	{
@@ -115,7 +115,7 @@ LkSpotLight* LkLevel::SpawnSpotLight( const char* _Name )
 
 LkSpotLight* LkLevel::GetSpotLight( const char* _Name )
 {
-	unsigned int hash = LkActor::GetHashForName(_Name);
+	uint32 hash = LkActor::GetHashForName(_Name);
 	SpotLights::iterator it = m_SpotLights.find(hash);
 	if (it == m_SpotLights.end())
 	{
@@ -152,7 +152,7 @@ LkDirectionalLight* LkLevel::SpawnDirectionalLight( const char* _Name )
 
 LkDirectionalLight* LkLevel::GetDirectionalLight( const char* _Name )
 {
-	unsigned int hash = LkActor::GetHashForName(_Name);
+	uint32 hash = LkActor::GetHashForName(_Name);
 	DirectionalLights::iterator it = m_DirectionalLights.find(hash);
 	if (it == m_DirectionalLights.end())
 	{
@@ -185,7 +185,7 @@ LkPawn* LkLevel::SpawnPawn( const char* _Name )
 
 LkPawn* LkLevel::GetPawn( const char* _Name )
 {
-	unsigned int hash = LkActor::GetHashForName(_Name);
+	uint32 hash = LkActor::GetHashForName(_Name);
 	Pawns::iterator it = m_Pawns.find(hash);
 	if (it == m_Pawns.end())
 	{
@@ -230,7 +230,7 @@ LkCamera* LkLevel::SpawnCamera( const char* _Name, const char* _Type )
 
 LkCamera* LkLevel::GetCamera( const char* _Name )
 {
-	unsigned int hash = LkActor::GetHashForName(_Name);
+	uint32 hash = LkActor::GetHashForName(_Name);
 	Cameras::iterator it = m_Cameras.find(hash);
 	if (it == m_Cameras.end())
 	{
@@ -258,7 +258,7 @@ void LkLevel::DespawnCamera( LkCamera* _Camera )
 
 LkParticleSystem* LkLevel::SpawnParticleSystem( LkParticleSystemDescriptor& _SystemDescriptor )
 {
-	static int cntr = 0;
+	static int32 cntr = 0;
 	const char* _Name = (std::string("ParticleSystem") + util::LexicalCast(cntr++)).c_str();
 
 	CHECK_IF_EXISTS("SpawnParticleSystem");
@@ -272,7 +272,7 @@ LkParticleSystem* LkLevel::SpawnParticleSystem( LkParticleSystemDescriptor& _Sys
 
 LkParticleSystem* LkLevel::GetParticleSystem( const char* _Name )
 {
-	unsigned int hash = LkActor::GetHashForName(_Name);
+	uint32 hash = LkActor::GetHashForName(_Name);
 	ParticleSystems::iterator it = m_ParticleSystems.find(hash);
 	if (it == m_ParticleSystems.end())
 	{

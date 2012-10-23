@@ -1,7 +1,7 @@
 /*
 	This file contains code that can be used to parse the command line input of an application.
 	The parsing process formats the input and stores it in an std::list<Parameter*>.
-	The Parameter structure contains an std::string which represents the command line parameter itself, and integer, float and double value
+	The Parameter structure contains an std::string which represents the command line parameter itself, and integer, f32 and double value
 	arrays which represent any (optional) values passed for the associated parameter. Additionally, each value is also stored as a C-string.
 	NOTE: It is NOT possible to pass negative values because the minus sign ('-') is parsed as being the beginning of a new parameter.
 	NOTE: THe maximum length in characters for any key or value is 32.		
@@ -27,7 +27,7 @@
 
 	Example:
 
-	int main( int argc, char** argv )
+	int32 main( int32 argc, char** argv )
 	{
 		// Parse command line arguments and store list with Parameter-pointers.
 		std::list<Parameter*> cmdParams;
@@ -44,11 +44,12 @@
 #include <stdio.h>	// Required for printf().
 #include "core/commandlineparsing.h"
 
+using namespace loki;
 
 // Function that can be called to parse command line input.
 // First two arguments match the arguments of the main() function, the third argument is an std::list<> reference in which the
 // resulting list must be stored.
-void ParseCommandLine( int argc, char** argv, CommandLineParameters& paramsList )
+void ParseCommandLine( int32 argc, char** argv, CommandLineParameters& paramsList )
 {
 	// List of std::string which will contain command line arguments and their associated values (all in a single string).
 	std::list<std::string*> stringList;
@@ -60,7 +61,7 @@ void ParseCommandLine( int argc, char** argv, CommandLineParameters& paramsList 
 	paramsList["EXEPATH"] = pathparameter;
 
 	// For each command line argument...
-	for ( int i = 1; i < argc; ++i )
+	for ( int32 i = 1; i < argc; ++i )
 	{
 		// If argument starts with a dash ('-')...
 		if (argv[i][0] == '-')
@@ -102,7 +103,7 @@ void ParseCommandLine( int argc, char** argv, CommandLineParameters& paramsList 
 		char cstring[32];
 
 		// Find the first occurrence of a space (" ") and store it's position.
-		unsigned int stringIteratorIndex = currentString->find(" ", 0);
+		uint32 stringIteratorIndex = currentString->find(" ", 0);
 
 		// Make sure that if stringIteratorIndex is -1, it is set to the length of the string, minus 1.
 		if (stringIteratorIndex == -1) stringIteratorIndex = currentString->size() - 1;
@@ -126,7 +127,7 @@ void ParseCommandLine( int argc, char** argv, CommandLineParameters& paramsList 
 		while ( stringIteratorIndex < currentString->length() - 1 )
 		{
 			// Store the next position of a space (or the end of the string if that is found before any space).
-			int nextStringIteratorIndex = currentString->find(" ", stringIteratorIndex + 1);
+			int32 nextStringIteratorIndex = currentString->find(" ", stringIteratorIndex + 1);
 
 			if (nextStringIteratorIndex == -1) nextStringIteratorIndex = currentString->size() - 1;
 
@@ -140,31 +141,31 @@ void ParseCommandLine( int argc, char** argv, CommandLineParameters& paramsList 
 			stringIteratorIndex = nextStringIteratorIndex; // Set stringIteratorIndex for the next iteration.
 		}
 
-		int NumValues = valueList.size();
+		int32 NumValues = valueList.size();
 
-		currentParameter->m_ValuesInt = new int[NumValues];
-		currentParameter->m_ValuesFloat = new float[NumValues];
+		currentParameter->m_ValuesInt = new int32[NumValues];
+		currentParameter->m_ValuesFloat = new f32[NumValues];
 		currentParameter->m_ValuesDouble = new double[NumValues];
 		//currentParameter->m_ValuesChar = new char*[NumValues];
 
 		// Initialize all variables to 0.
-		for ( int j = 0; j < NumValues; ++j )
+		for ( int32 j = 0; j < NumValues; ++j )
 		{
 			currentParameter->m_ValuesInt[j] = 0;
 			currentParameter->m_ValuesFloat[j] = 0.0f;
 			currentParameter->m_ValuesDouble[j] = 0;
 		}
 
-		int ValueIndex = 0;
+		int32 ValueIndex = 0;
 
 		// For each value represented through a char* in valueList...
 		for ( std::list<char*>::iterator it2 = valueList.begin(); it2 != valueList.end(); ++it2, ++ValueIndex )
 		{
-			int IntegerValue = atoi( (*it2) );
+			int32 IntegerValue = atoi( (*it2) );
 			double DoubleValue = atof( (*it2) );
 
 			currentParameter->m_ValuesInt[ValueIndex] = IntegerValue;
-			currentParameter->m_ValuesFloat[ValueIndex] = (float)DoubleValue;
+			currentParameter->m_ValuesFloat[ValueIndex] = (f32)DoubleValue;
 			currentParameter->m_ValuesDouble[ValueIndex] = DoubleValue;
 			//currentParameter->m_ValuesChar[ValueIndex] = (*it2);
 
@@ -191,7 +192,7 @@ void PrintParameterList( CommandLineParameters& paramsList )
 		if (currentParam->m_NumValues > 0)
 		{
 			printf("\nValues:");
-			for ( unsigned int i = 0; i < currentParam->m_NumValues; ++i )
+			for ( uint32 i = 0; i < currentParam->m_NumValues; ++i )
 			{
 				printf("\t%i\t%f\t%f\t\n", currentParam->m_ValuesInt[i], currentParam->m_ValuesFloat[i], currentParam->m_ValuesDouble[i]);
 			}

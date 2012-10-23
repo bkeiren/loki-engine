@@ -25,15 +25,15 @@ public:
 											// Only for internal use.
 
 	// Thread ID typedef.
-	typedef unsigned int ThreadID;
+	typedef uint32 ThreadID;
 
 	// Thread function typedef.
 	// Thread functions return an integer value that can be used to signal to the thread
 	// class that the thread should stop executing.
 	// A thread should return THREAD_RETURN_EXIT in order for this to happen.
-	typedef int(*ThreadFunc)(void*);
+	typedef int32(*ThreadFunc)(void*);
 
-	typedef void(*ThreadCallback)(int, void*, ThreadID);
+	typedef void(*ThreadCallback)(int32, void*, ThreadID);
 
 	//////////////////////////////////////////////////////////////////////////
 	// _Function is the thread function to execute on each iteration of
@@ -51,7 +51,7 @@ public:
 	// THREAD_START_SUSPENDED, the thread will not start until Thread::Start()
 	// is explicitly called.
 	//////////////////////////////////////////////////////////////////////////
-	LkThread( ThreadFunc _Function, void* _Argument, unsigned int _Flags );
+	LkThread( ThreadFunc _Function, void* _Argument, uint32 _Flags );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Starts or resumes the thread's execution.
@@ -124,7 +124,7 @@ private:
 	ThreadFunc		m_Function;
 	ThreadCallback	m_Callback;
 	void*			m_Argument;
-	unsigned int	m_Flags;
+	uint32	m_Flags;
 	ThreadID		m_ID;
 };
 

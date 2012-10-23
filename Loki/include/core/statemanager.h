@@ -35,7 +35,7 @@ public:
 	/*
 		Sets the state with ID _ID to be the active state.
 	*/
-	void SetActiveState( const int _ID );
+	void SetActiveState( const int32 _ID );
 
 	/*
 		Sets the state with name _Name to be the active state.

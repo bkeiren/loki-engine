@@ -4,6 +4,6 @@ namespace loki
 {
 
 // Initialize static member data.
-int LkIState::m_StateCounter = 0;
+int32 LkIState::m_StateCounter = 0;
 
 }

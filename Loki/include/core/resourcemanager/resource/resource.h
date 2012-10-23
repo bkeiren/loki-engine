@@ -21,7 +21,7 @@ protected:
 	virtual ~LkResource();
 
 private:
-	int m_RefCount;
+	int32 m_RefCount;
 };
 
 }

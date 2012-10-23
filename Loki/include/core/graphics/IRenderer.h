@@ -91,13 +91,13 @@ public:
 
 	virtual void SetDepthTestEnabled( bool _Enabled ) const = 0;
 	virtual void SetDepthMode( EDepthMode _Mode ) const = 0;
-	virtual void SetDepthRange( float _Near, float _Far ) const = 0;
+	virtual void SetDepthRange( f32 _Near, f32 _Far ) const = 0;
 
 	virtual void SetAlphaTestEnabled( bool _Enabled ) const = 0;
-	virtual void SetAlphaMode( EAlphaMode _Mode, float _ReferenceValue ) const = 0;
+	virtual void SetAlphaMode( EAlphaMode _Mode, f32 _ReferenceValue ) const = 0;
 
 	virtual void SetStencilTestEnabled( bool _Enabled ) const = 0;
-	virtual void SetStencilMode( EStencilMode _Mode, int _ReferenceValue, uint32 _Mask ) const = 0;
+	virtual void SetStencilMode( EStencilMode _Mode, int32 _ReferenceValue, uint32 _Mask ) const = 0;
 	virtual void SetStencilOperation( EStencilOperation _StenciLFail, EStencilOperation _DepthFail, EStencilOperation _DepthPass ) const = 0;
 	
 	virtual void SetBlendingEnabled( bool _Enabled ) const = 0;

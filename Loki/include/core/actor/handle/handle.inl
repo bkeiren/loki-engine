@@ -19,10 +19,10 @@ namespace
 	// Finds the index for the given pointer if it already exists in
 	// the array. If it doesn't HANDLE_INVALID_INDEX is returned.
 	//////////////////////////////////////////////////////////////////////////
-	int FindIndexForPointer( LkActor* _Pointer )
+	int32 FindIndexForPointer( LkActor* _Pointer )
 	{
 		// Find the instance.
-		for (unsigned int i = HANDLE_FIRST_VALID_INDEX; i < Actors.size(); ++i)
+		for (uint32 i = HANDLE_FIRST_VALID_INDEX; i < Actors.size(); ++i)
 		{
 			if (Actors[i] == _Pointer)
 			{
@@ -36,10 +36,10 @@ namespace
 	//////////////////////////////////////////////////////////////////////////
 	// Searches the array for a free spot.
 	//////////////////////////////////////////////////////////////////////////
-	int GetFreeHandleIndex()
+	int32 GetFreeHandleIndex()
 	{
 		// Find the first
-		for (unsigned int i = HANDLE_FIRST_VALID_INDEX; i < Actors.size(); ++i)
+		for (uint32 i = HANDLE_FIRST_VALID_INDEX; i < Actors.size(); ++i)
 		{
 			if (Actors[i] == NULL)
 			{
@@ -59,14 +59,14 @@ LkHandle<_T>::LkHandle( _T* _Instance )	:
 
 	// First find out whether the instance was already stored in the array. If that is the case,
 	// we don't want to store it again.
-	int idx = FindIndexForPointer(_Instance);
+	int32 idx = FindIndexForPointer(_Instance);
 	if (idx != HANDLE_INVALID_INDEX)
 	{
 		m_Index = idx;
 	}
 	else
 	{
-		int idx = GetFreeHandleIndex();
+		int32 idx = GetFreeHandleIndex();
 		if (idx != HANDLE_INVALID_INDEX)
 		{
 			m_Index = idx;					// Store the index in the handle class.

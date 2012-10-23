@@ -28,7 +28,7 @@ class LkLevel;
 
 class LkActorComponent;
 
-typedef unsigned int ActorID;
+typedef uint32 ActorID;
 
 //////////////////////////////////////////////////////////////////////////
 // Base class for all game objects. 
@@ -50,7 +50,7 @@ public:
 	// This function hashes an actor name and returns the hashed value.
 	// Can be used to find what hash value a certain name corresponds to.
 	//////////////////////////////////////////////////////////////////////////
-	static unsigned int GetHashForName( const char* _Name ); 
+	static uint32 GetHashForName( const char* _Name ); 
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the actor name.

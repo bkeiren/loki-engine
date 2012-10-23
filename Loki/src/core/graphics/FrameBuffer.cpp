@@ -53,7 +53,7 @@ FrameBuffer::FrameBuffer()	:
 {
 	glGenFramebuffers(1, &m_GLBufferHandle);
 
-	for (int i = 0; i < _FRAMEBUFFER_ATTACHMENT_COUNT; ++i)
+	for (int32 i = 0; i < _FRAMEBUFFER_ATTACHMENT_COUNT; ++i)
 	{
 		m_Attachments[i] = AttachmentPair(ATTACHMENT_STORAGE_TEXTURE, 0);
 	}
@@ -63,7 +63,7 @@ FrameBuffer::~FrameBuffer()
 {
 	glDeleteFramebuffers(1, &m_GLBufferHandle);
 
-	for (int i = 0; i < _FRAMEBUFFER_ATTACHMENT_COUNT; ++i)
+	for (int32 i = 0; i < _FRAMEBUFFER_ATTACHMENT_COUNT; ++i)
 	{
 		if (m_Attachments[i].second != 0)
 		{
@@ -266,7 +266,7 @@ bool FrameBuffer::CheckFrameBufferStatus()
 		}
 	default:
 		{
-			LOG(VL_WARN, "FrameBufferObject::CheckFramebufferStatus: Unhandled error (Framebuffer status is %i)", (int)status);
+			LOG(VL_WARN, "FrameBufferObject::CheckFramebufferStatus: Unhandled error (Framebuffer status is %i)", (int32)status);
 			break;
 		}
 	}

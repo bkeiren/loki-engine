@@ -16,7 +16,7 @@ uint128::uint128( uint64 _high, uint64 _low )	:
 
 }
 
-uint128::uint128( unsigned int _i0, unsigned int _i1, unsigned int _i2, unsigned int _i3 )	:
+uint128::uint128( uint32 _i0, uint32 _i1, uint32 _i2, uint32 _i3 )	:
 	i0(_i0),
 	i1(_i1),
 	i2(_i2),

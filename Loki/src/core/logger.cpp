@@ -25,7 +25,7 @@ const char* LkLogger::m_CommandPrefix = ">> ";
 const char* LkLogger::m_DumpSeperator = "^ LOG DUMP---------------------------------------------------------------------";
 // VerbosityLevel Logger::m_CurrentVerbosityLevel = VL_NORMAL;
 // std::list<std::string>* Logger::m_Buffer = NULL;
-// unsigned int Logger::m_BufferSize = 0;
+// uint32 Logger::m_BufferSize = 0;
 // CRITICAL_SECTION Logger::m_CriticalSection;
 
 //////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ void LkLogger::Log( const VerbosityLevel _Level, const char* _Message, ... )
 //////////////////////////////////////////////////////////////////////////
 void LkLogger::Log( const VerbosityLevel _Level, const char* _Message, va_list _ArgList )
 {
-	static const int msg_buffer_size = 2048;
+	static const int32 msg_buffer_size = 2048;
 	/*static*/ char msg_buffer[msg_buffer_size];
 
 	static HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -299,7 +299,7 @@ void LkLogger::DumpToFile( const char* _File /*= DefaultLogFile*/, bool _Append 
 //////////////////////////////////////////////////////////////////////////
 // Returns the current size of the log buffer in bytes.
 //////////////////////////////////////////////////////////////////////////
-unsigned int LkLogger::GetBufferSize()
+uint32 LkLogger::GetBufferSize()
 {
 	return m_BufferSize;	
 }
@@ -307,7 +307,7 @@ unsigned int LkLogger::GetBufferSize()
 //////////////////////////////////////////////////////////////////////////
 // Returns the number of messages that the logger has received.
 //////////////////////////////////////////////////////////////////////////
-unsigned int LkLogger::GetNumMessages()
+uint32 LkLogger::GetNumMessages()
 {
 	return m_Buffer->size();
 }

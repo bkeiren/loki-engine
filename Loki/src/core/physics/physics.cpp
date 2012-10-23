@@ -89,12 +89,12 @@ void LkPhysics::DebugDraw()
 }
 #endif
 
-float LkPhysics::GetFixedTimeStep() const
+f32 LkPhysics::GetFixedTimeStep() const
 {
 	return m_FixedTimeStep;
 }
 
-void LkPhysics::SetFixedTimeStep( float _TimeStep )
+void LkPhysics::SetFixedTimeStep( f32 _TimeStep )
 {
 	m_FixedTimeStep = _TimeStep;
 }

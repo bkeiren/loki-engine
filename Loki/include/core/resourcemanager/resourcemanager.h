@@ -22,7 +22,7 @@ namespace loki
 template< class _ResType >
 class LkResourceManager
 {
-	typedef unsigned int							ResourceID;
+	typedef uint32							ResourceID;
 public:
 	LkResourceManager();
 	~LkResourceManager();
@@ -30,7 +30,7 @@ public:
 	_ResType GetResource( const char* _Res );
 	void ReleaseResource( _ResType* _Res );
 
-	unsigned int GetNumLoadedResources();
+	uint32 GetNumLoadedResources();
 private:
 	bool _Init();
 	void _Shutdown();

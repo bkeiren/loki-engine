@@ -35,8 +35,8 @@ private:
 	FMOD::System*		m_System;
 	FMOD::Sound*			m_Sound;
 	FMOD::Channel*		m_Channel;
-	int					m_Key;
-	unsigned int			m_Version;
+	int32					m_Key;
+	uint32			m_Version;
 	std::list<LkSound*>	m_Sounds;
 };
 

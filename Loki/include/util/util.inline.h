@@ -56,7 +56,7 @@ namespace
 namespace util
 {
 
-inline void Sleep( unsigned int _ms )
+inline void Sleep( uint32 _ms )
 {
 #ifdef WIN32
 	::Sleep(_ms);

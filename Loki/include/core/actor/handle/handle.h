@@ -36,7 +36,7 @@ private:
 	LkHandle();	// Private default c-tor.
 
 	// Index into an array of actors.
-	int m_Index;
+	int32 m_Index;
 };
 
 }

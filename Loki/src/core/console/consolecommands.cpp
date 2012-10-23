@@ -23,15 +23,15 @@ namespace
 // Returns 0 if it matches a false case, 1 if it matches a true case.
 // If none of the cases is found, returns 3.
 //////////////////////////////////////////////////////////////////////////
-int ScanStringForBoolean( const std::string& _Str )
+int32 ScanStringForBoolean( const std::string& _Str )
 {
 	if (!_Str.compare("true") || !_Str.compare("TRUE"))
 	{
-		return (int)true;
+		return (int32)true;
 	}
 	else if (!_Str.compare("false") || !_Str.compare("FALSE"))
 	{
-		return (int)false;
+		return (int32)false;
 	}
 	return 3;
 }
@@ -39,7 +39,7 @@ int ScanStringForBoolean( const std::string& _Str )
 bool ScanValueForBoolean( LkConsole::Value _V )
 {
 	bool b = false;
-	int i = ScanStringForBoolean(_V.m_String);
+	int32 i = ScanStringForBoolean(_V.m_String);
 	if (i == 0)
 	{
 		b = false;
@@ -122,13 +122,13 @@ CONSOLE_FUNCTION(Console_ReloadConsoleUI)
 
 CONSOLE_FUNCTION(Console_GetEngineUpTime)
 {
-	float s = g_Engine->GetEngineUpTime();	// Seconds.
-	float m = s / 60.0f;	// Minutes.
-	float h = s / 3600.0f;	// Hours.
+	f32 s = g_Engine->GetEngineUpTime();	// Seconds.
+	f32 m = s / 60.0f;	// Minutes.
+	f32 h = s / 3600.0f;	// Hours.
 
-	int h2 = (int)h;
-	int m2 = (int)(m - ((int)h * 60));
-	float s2 = s - (h2 * 3600) - (m2 * 60);
+	int32 h2 = (int32)h;
+	int32 m2 = (int32)(m - ((int32)h * 60));
+	f32 s2 = s - (h2 * 3600) - (m2 * 60);
 
 	LkConsole::CommandResult res("Engine up-time: %02ih:%02im:%02.4fs", h2, m2, s2);
 	return res;
@@ -217,9 +217,9 @@ CONSOLE_FUNCTION(Console_LuaRunStringAsync)
 
 CONSOLE_FUNCTION(Console_CamSetPos)
 {
-	float x = _Command->m_Arguments[0].m_Float;
-	float y = _Command->m_Arguments[1].m_Float;
-	float z = _Command->m_Arguments[2].m_Float;
+	f32 x = _Command->m_Arguments[0].m_Float;
+	f32 y = _Command->m_Arguments[1].m_Float;
+	f32 z = _Command->m_Arguments[2].m_Float;
 	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->SetPosition(vec3(x, y, z));
 	return LkConsole::CommandResult("");
 }
@@ -232,10 +232,10 @@ CONSOLE_FUNCTION(Console_CamGetPos)
 
 CONSOLE_FUNCTION(Console_CamSetOrientation)
 {
-	float x = _Command->m_Arguments[0].m_Float;
-	float y = _Command->m_Arguments[1].m_Float;
-	float z = _Command->m_Arguments[2].m_Float;
-	float w = _Command->m_Arguments[3].m_Float;
+	f32 x = _Command->m_Arguments[0].m_Float;
+	f32 y = _Command->m_Arguments[1].m_Float;
+	f32 z = _Command->m_Arguments[2].m_Float;
+	f32 w = _Command->m_Arguments[3].m_Float;
 	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->SetOrientation(quat(x, y, z, w));
 	return LkConsole::CommandResult("");
 }
@@ -290,8 +290,8 @@ CONSOLE_FUNCTION(Console_SetFullscreen)
 CONSOLE_FUNCTION(Console_SetWindowPos)
 {
 	LkWindow* window = g_Engine->GetWindow();
-	int x = _Command->m_Arguments[0].m_Int;
-	int y = _Command->m_Arguments[1].m_Int;
+	int32 x = _Command->m_Arguments[0].m_Int;
+	int32 y = _Command->m_Arguments[1].m_Int;
 	window->SetPosition(x, y);
 	return LkConsole::CommandResult("Set window position to [%i, %i]", x, y);
 }
@@ -299,8 +299,8 @@ CONSOLE_FUNCTION(Console_SetWindowPos)
 CONSOLE_FUNCTION(Console_SetWindowSize)
 {
 	LkWindow* window = g_Engine->GetWindow();
-	int x = _Command->m_Arguments[0].m_Int;
-	int y = _Command->m_Arguments[1].m_Int;
+	int32 x = _Command->m_Arguments[0].m_Int;
+	int32 y = _Command->m_Arguments[1].m_Int;
 	window->SetDimensions(x, y);
 	return LkConsole::CommandResult("Set window size to [%i, %i]", x, y);
 }

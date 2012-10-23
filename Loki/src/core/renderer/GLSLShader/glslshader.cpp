@@ -72,7 +72,7 @@ bool LkGLSLShader::AttachVertexShader( const char* _Shader )
 
 	delete[] vertexsource;	// Vertex source is no longer required.
 
-	int result = false;
+	int32 result = false;
 	glGetObjectParameterivARB( m_VertexShaders[m_NumVertexShaders], GL_OBJECT_COMPILE_STATUS_ARB, &result );
 	if( result == false )
 	{	
@@ -114,7 +114,7 @@ bool LkGLSLShader::AttachFragmentShader( const char* _Shader )
 
 	delete[] fragmentsource;	// Fragment source is no longer required,
 
-	int result = 0;
+	int32 result = 0;
 	glGetObjectParameterivARB( m_FragmentShaders[m_NumFragmentShaders], GL_OBJECT_COMPILE_STATUS_ARB, &result );
 	if( result == false )
 	{	
@@ -142,11 +142,11 @@ bool LkGLSLShader::LinkProgram()
 	// Now that the programs are compiled, they can be attached to a shader program and compiled together.
 	m_ProgramHandle = glCreateProgramObjectARB();
 
-	for (unsigned int i = 0; i < m_NumVertexShaders; ++i)
+	for (uint32 i = 0; i < m_NumVertexShaders; ++i)
 	{
 		glAttachObjectARB(m_ProgramHandle, m_VertexShaders[i]);
 	}
-	for (unsigned int i = 0; i < m_NumFragmentShaders; ++i)
+	for (uint32 i = 0; i < m_NumFragmentShaders; ++i)
 	{
 		glAttachObjectARB(m_ProgramHandle, m_FragmentShaders[i]);
 	}
@@ -155,10 +155,10 @@ bool LkGLSLShader::LinkProgram()
 
 	glLinkProgramARB(m_ProgramHandle);
 
-// 	int test = glGetAttribLocation(m_ProgramHandle, "AttribPosition");
+// 	int32 test = glGetAttribLocation(m_ProgramHandle, "AttribPosition");
 // 	test = glGetAttribLocation(m_ProgramHandle, "AttribNormal");
 
-	int result = 0;
+	int32 result = 0;
 	glGetObjectParameterivARB(m_ProgramHandle, GL_LINK_STATUS, &result);
 	if ( result == false )
 	{
@@ -198,14 +198,14 @@ GLhandleARB LkGLSLShader::GetProgramHandle()
 	return m_ProgramHandle;
 }
 
-int LkGLSLShader::GetUniformLocation( const char* _Name )
+int32 LkGLSLShader::GetUniformLocation( const char* _Name )
 {
 	return glGetUniformLocation(m_ProgramHandle, _Name);
 }
 
 void LkGLSLShader::_BindAttributeLocations()
 {
-	for (unsigned int i = 0; i < LkGLSLShader::ATTRIB_Count; ++i)
+	for (uint32 i = 0; i < LkGLSLShader::ATTRIB_Count; ++i)
 	{
 		glBindAttribLocation(m_ProgramHandle, i, ATTRIB_LOCATION_NAMES[i]);
 	}

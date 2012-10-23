@@ -47,7 +47,7 @@ public:
 	const uint64 GetMemoryAmountTotalPhysical();
 	const uint64 GetMemoryAmountTotalVirtual();
 	const uint32 GetCPUFrequencyHz();		// Hertz.
-	const float GetCPUFrequencyGHz();	// Gigahertz.
+	const f32 GetCPUFrequencyGHz();	// Gigahertz.
 	const std::string& GetComputerName();
 	const std::string& GetUserName();
 private:

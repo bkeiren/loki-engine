@@ -23,8 +23,8 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 	// Set functions.
-	void Set( float _P );
-	void Set( int _P );
+	void Set( f32 _P );
+	void Set( int32 _P );
 	void Set( const vec2& _P );
 	void Set( const vec3& _P );
 	void Set( const vec4& _P );
@@ -35,8 +35,8 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 	// Get functions.
-	void Get( float* _V );
-	void Get( int* _V );
+	void Get( f32* _V );
+	void Get( int32* _V );
 	void Get( vec2* _P );
 	void Get( vec3* _P );
 	void Get( vec4* _P );

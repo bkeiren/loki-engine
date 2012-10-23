@@ -157,10 +157,10 @@ void LkHTMLCore::_OnEvent( const LkEvent& _Event )
 					}
 				}
 
-				float d = g_Input->GetMouseWheelDelta();
+				f32 d = g_Input->GetMouseWheelDelta();
 				if (d != 0.0f)
 				{
-					m_HTMLViewInFocus->m_WebView->injectMouseWheel((int)(d * 100), 0);	// (100 pixels per 'tick' of the wheel).
+					m_HTMLViewInFocus->m_WebView->injectMouseWheel((int32)(d * 100), 0);	// (100 pixels per 'tick' of the wheel).
 				}
 
 				if (m_HTMLViewInFocus->GetAllowHistoryBrowsing())
@@ -219,11 +219,11 @@ void LkHTMLCore::_OnEvent( const LkEvent& _Event )
 						vec3 planepos = vec3(view->m_RenderImage->GetModelMatrix() * vec4(pos, 1.0f));
 
 						// Intersect the ray with the quad to find the intersection distance.
-						float rayDirDotNormal = math::dot(r, planenormal);
+						f32 rayDirDotNormal = math::dot(r, planenormal);
 						if (rayDirDotNormal != 0) 
 						{
 							// Intersection.
-							float dist = math::dot(planepos - r_origin, planenormal) / rayDirDotNormal;
+							f32 dist = math::dot(planepos - r_origin, planenormal) / rayDirDotNormal;
 
 							vec3 intersectpos = r_origin + (r * dist);
 
@@ -235,8 +235,8 @@ void LkHTMLCore::_OnEvent( const LkEvent& _Event )
 
 							// Yay.
 
-							int x = int(math::clamp(modelspacepos.x / size.x, 0.0f, 1.0f) * view->m_RenderImage->GetWidth());
-							int y = int(math::clamp(modelspacepos.y / size.y, 0.0f, 1.0f) * view->m_RenderImage->GetHeight());
+							int32 x = int32(math::clamp(modelspacepos.x / size.x, 0.0f, 1.0f) * view->m_RenderImage->GetWidth());
+							int32 y = int32(math::clamp(modelspacepos.y / size.y, 0.0f, 1.0f) * view->m_RenderImage->GetHeight());
 							view->m_WebView->injectMouseMove(x, y);
 							LOG(VL_NORMAL, "x: %i\ty: %i", x, y);
 						}
@@ -250,7 +250,7 @@ void LkHTMLCore::_OnEvent( const LkEvent& _Event )
 	}
 }
 
-LkHTMLView* LkHTMLCore::CreateView( int _Width, int _Height, int _Layer /*= 0*/ )
+LkHTMLView* LkHTMLCore::CreateView( int32 _Width, int32 _Height, int32 _Layer /*= 0*/ )
 {
 	LkHTMLView* view = new LkHTMLView(m_WebCore->createWebView(_Width, _Height), this, _Width, _Height);
 
@@ -334,7 +334,7 @@ bool LkHTMLCore::GetInputDetected() const
 	return m_InputDetected;
 }
 
-LkHTMLView* LkHTMLCore::_GetTopMostViewUnderMouse( bool _ConsiderTransparency /*= true*/, float _AlphaThreshold /*= 0.0f*/, float _ExceptionAlpha /*= -1.0f*/ ) const
+LkHTMLView* LkHTMLCore::_GetTopMostViewUnderMouse( bool _ConsiderTransparency /*= true*/, f32 _AlphaThreshold /*= 0.0f*/, f32 _ExceptionAlpha /*= -1.0f*/ ) const
 {
 #define EPSILON 0.02f
 
@@ -349,7 +349,7 @@ LkHTMLView* LkHTMLCore::_GetTopMostViewUnderMouse( bool _ConsiderTransparency /*
 
 			if (!(m.x < p.x || m.x > p.x + s.x || m.y < p.y || m.y > p.y + s.y))
 			{
-				float a = (*it)->GetAlphaAt((int)(m.x - p.x), (int)(m.y - p.y));
+				f32 a = (*it)->GetAlphaAt((int32)(m.x - p.x), (int32)(m.y - p.y));
 				if ((_ConsiderTransparency && ((a > _AlphaThreshold /*- EPSILON*/) || (a >= _ExceptionAlpha - EPSILON && a <= _ExceptionAlpha + EPSILON))) || !_ConsiderTransparency)
 				{
 					// This is the topmost view that the mouse is over and the pixel that the mouse is over in this view

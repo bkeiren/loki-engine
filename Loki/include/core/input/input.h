@@ -134,13 +134,13 @@ public:
 	
 	EKeyState Get( EKeys _Key ) const;
 	const int2 GetMousePosition() const;
-	int	GetMouseX() const;
-	int	GetMouseY() const ;
+	int32	GetMouseX() const;
+	int32	GetMouseY() const ;
 	bool GetMouseMoved() const;
 	const int2& GetMouseDelta() const;
-	int	GetMouseDeltaX() const;
-	int	GetMouseDeltaY() const;
-	float GetMouseWheelDelta() const;
+	int32	GetMouseDeltaX() const;
+	int32	GetMouseDeltaY() const;
+	f32 GetMouseWheelDelta() const;
 	void SetMouseAccelerationEnabled( bool _Enabled );
 	bool GetMouseAccelerationEnabled() const;
 	void SetMouseAccelerationParameters( const vec2& _Parameters );
@@ -159,7 +159,7 @@ private:
 
 	void _PerformMouseAcceleration();
 
-	inline void _CaptureKeyState( int _Key );
+	inline void _CaptureKeyState( int32 _Key );
 
 	EKeyState m_Keys[KEY_LAST];
 	int2 m_Mouse;
@@ -167,7 +167,7 @@ private:
 	int2 m_MouseDelta;
 	bool m_MouseMoved;
 	int2 m_MouseRestDelta;	// Mouse resting delta position.
-	float m_MouseWheelDelta;	// Each 'tick' of the mouse wheel is 1 unit. Continuous mouse wheels can have intermediate values.
+	f32 m_MouseWheelDelta;	// Each 'tick' of the mouse wheel is 1 unit. Continuous mouse wheels can have intermediate values.
 	bool m_MouseAccelerationEnabled;
 	vec2 m_MouseAccelerationParameters;	// Testing has showed that parameter X should not exceed 1.5f (Because that will result in over-compensation and thus jittering when the cursor comes to a stop).
 												

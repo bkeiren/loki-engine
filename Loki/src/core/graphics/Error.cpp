@@ -7,7 +7,7 @@ namespace loki
 namespace graphics
 {
 
-void CheckGLErrors( int _Line, const char* _File )
+void CheckGLErrors( int32 _Line, const char* _File )
 {
 #define SUFFIX_HELPER	" - %s : (%i)", _File, _Line
 
@@ -41,7 +41,7 @@ void CheckGLErrors( int _Line, const char* _File )
 			LOG(VL_ERROR, "CheckGLErrors: GL_TABLE_TOO_LARGE"SUFFIX_HELPER);
 			break;
 		default:
-			LOG(VL_ERROR, "CheckGLErrors: Unhandled error (%i) - %s : (%i)", (int)error, _File, _Line);
+			LOG(VL_ERROR, "CheckGLErrors: Unhandled error (%i) - %s : (%i)", (int32)error, _File, _Line);
 			break;
 		}
 	} while (error != GL_NO_ERROR);

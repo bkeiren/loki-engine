@@ -28,9 +28,9 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Set this data in your c-tor.
 	//////////////////////////////////////////////////////////////////////////
-	const int GameVersionMajor;
-	const int GameVersionMinor;
-	const int GameVersionBuild;
+	const int32 GameVersionMajor;
+	const int32 GameVersionMinor;
+	const int32 GameVersionBuild;
 	const char* GameName;
 protected:
 	virtual void PreInit() = 0;

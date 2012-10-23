@@ -31,7 +31,7 @@ public:
 	// layer, we assume that the newest view should get priority and it is inserted
 	// on top of the older view.
 	//////////////////////////////////////////////////////////////////////////
-	LkHTMLView* CreateView( int _Width, int _Height, int _Layer = 0 );
+	LkHTMLView* CreateView( int32 _Width, int32 _Height, int32 _Layer = 0 );
 
 	void DestroyView( LkHTMLView** _Tab );
 
@@ -76,7 +76,7 @@ private:
 	// For an alpha value of 0.5 for _ExceptionAlpha, any value in 
 	// the range [0.48, 0.52] will be accepted.
 	//////////////////////////////////////////////////////////////////////////
-	LkHTMLView* _GetTopMostViewUnderMouse( bool _ConsiderTransparency = true, float _AlphaThreshold = 0.0f, float _ExceptionAlpha = -1.0f ) const;
+	LkHTMLView* _GetTopMostViewUnderMouse( bool _ConsiderTransparency = true, f32 _AlphaThreshold = 0.0f, f32 _ExceptionAlpha = -1.0f ) const;
 
 	Awesomium::WebCore* m_WebCore;
 

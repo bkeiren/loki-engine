@@ -118,8 +118,8 @@ void State_Test::Render()
 	g_RenderWindow.Draw(g_Text);
 
 	// Apply a shader effect to whatever is on the screen right now.
-	g_ScreenColorizeEffect.SetParameter("color", 1.0f,	g_RenderWindow.GetInput().GetMouseX() / (float)g_RenderWindow.GetWidth(), 
-		g_RenderWindow.GetInput().GetMouseY() / (float)g_RenderWindow.GetHeight());
+	g_ScreenColorizeEffect.SetParameter("color", 1.0f,	g_RenderWindow.GetInput().GetMouseX() / (f32)g_RenderWindow.GetWidth(), 
+		g_RenderWindow.GetInput().GetMouseY() / (f32)g_RenderWindow.GetHeight());
 	g_RenderWindow.Draw(g_ScreenColorizeEffect);
 	*/
 }

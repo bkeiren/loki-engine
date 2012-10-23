@@ -48,7 +48,7 @@ namespace loki
 #define EVENT_PREPHYSICSUPDATE		(EVENT_BASE - 20)
 #define EVENT_POSTPHYSICSUPDATE		(EVENT_BASE - 21)
 
-typedef unsigned int	EventType;
+typedef uint32	EventType;
 
 class LkEvent
 {
