@@ -17,7 +17,7 @@ class JSONValue
 {
 public:
 	JSONValue( const std::string& _String );
-	JSONValue( int _Int );
+	JSONValue( int32 _Int );
 	JSONValue( uint32 _UInt );
 	JSONValue( double _Double );
 	JSONValue( bool _Bool );
@@ -25,7 +25,7 @@ public:
 
 	// Get value functions.
 	std::string AsString();
-	int AsInt() const;
+	int32 AsInt() const;
 	uint32 AsUInt() const;
 	double AsDouble() const;
 	bool AsBool() const;
@@ -66,7 +66,7 @@ public:
 	// Assignment operators.
 	JSONValue& operator =( const JSONValue& _Other );
 	JSONValue& operator =( const std::string& _String );
-	JSONValue& operator =( int _Int );
+	JSONValue& operator =( int32 _Int );
 	JSONValue& operator =( uint32 _UInt );
 	JSONValue& operator =( double _Double );
 	JSONValue& operator =( bool _Bool );

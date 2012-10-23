@@ -11,7 +11,7 @@ namespace game
 
 LkSkyBox::LkSkyBox( const std::string& _Skybox )
 {
-	int i = _Skybox.find_last_of('.');
+	int32 i = _Skybox.find_last_of('.');
 	std::string s = _Skybox.substr(0, i);
 	std::string ext = _Skybox.substr(i);
 	std::string paths[6];
@@ -24,7 +24,7 @@ LkSkyBox::LkSkyBox( const std::string& _Skybox )
 	paths[4] += "s";
 	paths[5] += "n";
 
-	for (int i = 0; i < 6; ++i)
+	for (int32 i = 0; i < 6; ++i)
 	{
 		paths[i] += ext;
 		//m_Textures[i] = g_TextureManager->GetResource(paths[i].c_str());
@@ -44,7 +44,7 @@ LkSkyBox::LkSkyBox()
 
 LkSkyBox::~LkSkyBox()
 {
-	for (int i = 0; i < 6; ++i)
+	for (int32 i = 0; i < 6; ++i)
 	{
 		//g_TextureManager->ReleaseResource(&(m_Textures[i]));
 		delete m_Textures[i];

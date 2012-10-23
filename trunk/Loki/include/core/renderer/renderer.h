@@ -67,12 +67,12 @@ public:
 	// be chosen by the client (Currently, it is hardcoded to 
 	// GL_UNSIGNED_BYTE).
 	//////////////////////////////////////////////////////////////////////////
-	void DrawPixels( int _Width, int _Height, graphics::EInternalFormat _Format, const void* _Buffer );
+	void DrawPixels( int32 _Width, int32 _Height, graphics::EInternalFormat _Format, const void* _Buffer );
 
-	int GetWindowWidth();
-	int GetWindowHeight();
-	int GetRenderWidth();
-	int GetRenderHeight();
+	int32 GetWindowWidth();
+	int32 GetWindowHeight();
+	int32 GetRenderWidth();
+	int32 GetRenderHeight();
 	vec2 GetPixelScale();
 private:
 	bool _Init( LkWindow* _Window );

@@ -18,7 +18,7 @@ enum EJobState
 
 class LkJob;
 typedef std::list<LkJob*> JobList;
-typedef unsigned int JobID;
+typedef uint32 JobID;
 
 class LkJob
 {

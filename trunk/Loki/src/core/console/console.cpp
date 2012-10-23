@@ -234,7 +234,7 @@ void LkConsole::Execute( const char* _Command )
 	std::string arg;
 
 	CommandInput command;
-	int idx = str.find(' ');
+	int32 idx = str.find(' ');
 	command.m_Command = str.substr(0, idx);
 
 	if (idx > -1)	// Keep the code from adding or parsing values when no arguments are passed.
@@ -261,7 +261,7 @@ void LkConsole::Execute( const char* _Command )
 			}
 
 			val.m_Int = atoi(arg.c_str());
-			val.m_Float = (float)atof(arg.c_str());
+			val.m_Float = (f32)atof(arg.c_str());
 			val.m_String = arg;
 
 			command.m_Arguments.push_back(val);
@@ -366,7 +366,7 @@ LkConsole::Command::Command( const std::string& _Description, ConsoleCommandFunc
 
 	do 
 	{
-		type = (Command::ArgumentType)va_arg(v1, int);
+		type = (Command::ArgumentType)va_arg(v1, int32);
 		if (type != NULL)
 		{
 			char* str = NULL;
@@ -374,7 +374,7 @@ LkConsole::Command::Command( const std::string& _Description, ConsoleCommandFunc
 			{
 			case AT_INT:
 				{
-					str = "int";
+					str = "int32";
 					break;
 				}
 			case AT_BOOLEAN:
@@ -384,7 +384,7 @@ LkConsole::Command::Command( const std::string& _Description, ConsoleCommandFunc
 				}
 			case AT_FLOAT:
 				{
-					str = "float";
+					str = "f32";
 					break;
 				}
 			case AT_STRING:
@@ -415,7 +415,7 @@ LkConsole::CommandResult::CommandResult( char* _Message, ... )
 	va_list v1;
 	va_start(v1, _Message);
 
-	const unsigned int msgbuffer_size = 1024;
+	const uint32 msgbuffer_size = 1024;
 	char msgbuffer[msgbuffer_size];
 
 	vsnprintf_s(msgbuffer, msgbuffer_size, msgbuffer_size - 1, _Message, v1);

@@ -66,17 +66,17 @@ vec3 Transform::GetEulerAngles()
 	return math::gtx::quaternion::eulerAngles(m_Orientation);
 }
 
-float Transform::GetPitch() const
+f32 Transform::GetPitch() const
 {
 	return math::gtx::quaternion::pitch(m_Orientation);
 }
 
-float Transform::GetYaw() const
+f32 Transform::GetYaw() const
 {
 	return math::gtx::quaternion::yaw(m_Orientation);
 }
 
-float Transform::GetRoll() const
+f32 Transform::GetRoll() const
 {
 	return math::gtx::quaternion::roll(m_Orientation);
 }
@@ -114,49 +114,49 @@ void Transform::TranslateWorld( const vec3& _Translation )
 	m_MatrixIsDirty = true;
 }
 
-void Transform::RotateXLocal( float _Angle )
+void Transform::RotateXLocal( f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalX * m_Orientation);
 	m_MatrixIsDirty = true;
 }
 
-void Transform::RotateYLocal( float _Angle )
+void Transform::RotateYLocal( f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalY * m_Orientation);
 	m_MatrixIsDirty = true;
 }
 
-void Transform::RotateZLocal( float _Angle )
+void Transform::RotateZLocal( f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalZ * m_Orientation);
 	m_MatrixIsDirty = true;
 }
 
-void Transform::RotateLocal( vec3& _Axis, float _Angle )
+void Transform::RotateLocal( vec3& _Axis, f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, _Axis * m_Orientation);
 	m_MatrixIsDirty = true;
 }
 
-void Transform::RotateXWorld( float _Angle )
+void Transform::RotateXWorld( f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalX);
 	m_MatrixIsDirty = true;
 }
 
-void Transform::RotateYWorld( float _Angle )
+void Transform::RotateYWorld( f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalY);
 	m_MatrixIsDirty = true;
 }
 
-void Transform::RotateZWorld( float _Angle )
+void Transform::RotateZWorld( f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, GlobalZ);
 	m_MatrixIsDirty = true;
 }
 
-void Transform::RotateWorld( vec3& _Axis, float _Angle )
+void Transform::RotateWorld( vec3& _Axis, f32 _Angle )
 {
 	m_Orientation = math::gtc::quaternion::rotate(m_Orientation, _Angle, _Axis);
 	m_MatrixIsDirty = true;

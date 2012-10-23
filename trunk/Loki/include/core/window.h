@@ -13,7 +13,7 @@ class LkWindow
 public:
 	typedef long (__stdcall *WindowProc)( LkWindow* _Window, UINT, WPARAM, LPARAM );
 
-	LkWindow( int _Width, int _Height, char* _Title, int _Bits, bool _Fullscreen, WindowProc _WindowCallback, int _PositionX = 0, int _PositionY = 0 );
+	LkWindow( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fullscreen, WindowProc _WindowCallback, int32 _PositionX = 0, int32 _PositionY = 0 );
 	~LkWindow();
 
 	void MakeRenderContextCurrent();
@@ -27,24 +27,24 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	void UpdateCursorImage();
 
-	int GetWidth() const;
-	int GetHeight() const;
-	int GetX() const;
-	int GetY() const;
+	int32 GetWidth() const;
+	int32 GetHeight() const;
+	int32 GetX() const;
+	int32 GetY() const;
 
-	void SetWidth( int _Width );
-	void SetHeight( int _Height );
-	void SetDimensions( int _Width, int _Height );
-	void SetX( int _X );
-	void SetY( int _Y );
-	void SetPosition( int _X, int _Y );
+	void SetWidth( int32 _Width );
+	void SetHeight( int32 _Height );
+	void SetDimensions( int32 _Width, int32 _Height );
+	void SetX( int32 _X );
+	void SetY( int32 _Y );
+	void SetPosition( int32 _X, int32 _Y );
 
 	void SetFullscreen( bool _Fullscreen );
 
 	bool IsValid() const;
 
-	bool LoadCursor( const char* _CursorFile, unsigned int _SizeX = 26, unsigned int _SizeY = 26 );
-	bool LoadIcon( const char* _IconFile, unsigned int _SizeX = 32, unsigned int _SizeY = 32 );
+	bool LoadCursor( const char* _CursorFile, uint32 _SizeX = 26, uint32 _SizeY = 26 );
+	bool LoadIcon( const char* _IconFile, uint32 _SizeX = 32, uint32 _SizeY = 32 );
 
 	HWND GetHWND() const;
 
@@ -81,15 +81,15 @@ private:
 	// This information is kept up to date by updating it each time the window's position or dimensions change.
 	// This is done so that the data does not need to be queried each time it is request, but rather
 	// only each time it changes. _UpdateRectangleInfo() can be called to explicitely update.
-	int m_X;
-	int m_Y;
-	int m_Width;
-	int m_Height;
+	int32 m_X;
+	int32 m_Y;
+	int32 m_Width;
+	int32 m_Height;
 
 	// These two are used to set the window's dimensions back to what they were before switching to fullscreen mode from windowed mode.
 	// If the window has no history of being in windowed mode, the window will simply take on the resolution of the display.
-	int m_LastWindowedWidth;
-	int m_LastWindowedHeight;
+	int32 m_LastWindowedWidth;
+	int32 m_LastWindowedHeight;
 };
 
 }

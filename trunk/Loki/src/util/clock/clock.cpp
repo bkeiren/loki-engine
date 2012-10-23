@@ -1,6 +1,7 @@
 #include <sys/timeb.h>
 #include "util/clock/clock.h"
 
+using namespace loki;
 using namespace loki::util;
 
 #ifdef WIN32
@@ -22,12 +23,12 @@ Clock::~Clock()
 
 }
 
-int Clock::GetMilliCount()
+int32 Clock::GetMilliCount()
 {
 #ifdef WIN32
 	LARGE_INTEGER temp;
 	QueryPerformanceCounter(&temp);
-	return int((double)temp.QuadPart / (double)m_Frequency.QuadPart);
+	return int32((double)temp.QuadPart / (double)m_Frequency.QuadPart);
 #else
 	// http://www.firstobject.com/getmillicount-milliseconds-portable-c++.htm (Accessed 18-12-2011 @ 21:10 - Can be used freely)
 	// Something like GetTickCount but portable
@@ -35,19 +36,19 @@ int Clock::GetMilliCount()
 	// Use GetMilliSpan to correct for rollover
 	timeb tb;
 	ftime( &tb );
-	int nCount = tb.millitm + (tb.time & 0xfffff) * 1000;
+	int32 nCount = tb.millitm + (tb.time & 0xfffff) * 1000;
 	return nCount;
 #endif
 }
 
-int Clock::GetMilliSpan( int nTimeStart )
+int32 Clock::GetMilliSpan( int32 nTimeStart )
 {
 #ifdef WIN32
 	return (GetMilliCount() - nTimeStart);
 	//return (GetTickCount() - nTimeStart);
 #else
 	// http://www.firstobject.com/getmillicount-milliseconds-portable-c++.htm (Accessed 18-12-2011 @ 21:10 - Can be used freely)
-	int nSpan = GetMilliCount() - nTimeStart;
+	int32 nSpan = GetMilliCount() - nTimeStart;
 	if ( nSpan < 0 )
 		nSpan += 0x100000 * 1000;
 	return nSpan;
@@ -63,27 +64,27 @@ void Clock::Start()
 #endif
 }
 
-// float Clock::Stop()
+// f32 Clock::Stop()
 // {
 // 	return (Stop_ms() * 0.001f);
 // }
 // 
-// int Clock::Stop_ms()
+// int32 Clock::Stop_ms()
 // {
 // 	return GetMilliSpan(m_StartCount);
 // }
 
-float Clock::Lap() const
+f32 Clock::Lap() const
 {
 	return (Lap_ms() * 0.001f);
 }
 
-float Clock::Lap_ms() const
+f32 Clock::Lap_ms() const
 {
 #ifdef WIN32
 	LARGE_INTEGER end;
 	QueryPerformanceCounter(&end);
-	return float( end.QuadPart - m_Start.QuadPart ) / float( m_Frequency.QuadPart * 0.001f );
+	return f32( end.QuadPart - m_Start.QuadPart ) / f32( m_Frequency.QuadPart * 0.001f );
 #else
 	return GetMilliSpan(m_StartCount);
 #endif

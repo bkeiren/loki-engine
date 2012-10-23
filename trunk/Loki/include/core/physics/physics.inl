@@ -41,7 +41,7 @@ inline quat GLMQuat( const btQuaternion& _BTQuat )
 
 inline mat4 GLMMat( const btTransform& _BTTransform )
 {
-	float m[16];
+	f32 m[16];
 	_BTTransform.getOpenGLMatrix(m);
 	return mat4(m[0], m[1], m[2], m[3],
 					 m[4], m[5], m[6], m[7],

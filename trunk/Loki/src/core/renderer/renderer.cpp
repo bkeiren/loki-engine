@@ -81,8 +81,8 @@ bool LkRenderer::_Init( LkWindow* _Window )
 	// methods to their implementations.
 	_BindGLFunctions();
 
-	int WindowWidth = _Window->GetWidth();
-	int WindowHeight = _Window->GetHeight();
+	int32 WindowWidth = _Window->GetWidth();
+	int32 WindowHeight = _Window->GetHeight();
 
 	// Initialize the effect manager.
 	// NOTE: Must be done before instantiating an object of class LkMRTObject because this class accesses g_EffectManager.
@@ -225,7 +225,7 @@ void LkRenderer::_GetAPIInformation()
 	
 	while (extensions.length() > 0)
 	{
-		int next_space = extensions.find((char)32);
+		int32 next_space = extensions.find((char)32);
 		if (next_space != extensions.npos)
 		{
 			std::string extension = extensions.substr(0, next_space);
@@ -519,7 +519,7 @@ void LkRenderer::CheckGLError()
 			LOG(VL_ERROR, "CheckGLError: GL_TABLE_TOO_LARGE");
 			break;
 		default:
-			LOG(VL_ERROR, "CheckGLError: Unhandled error (%i)", (int)error);
+			LOG(VL_ERROR, "CheckGLError: Unhandled error (%i)", (int32)error);
 			break;
 		}
 	} while (error != GL_NO_ERROR);
@@ -537,35 +537,35 @@ void LkRenderer::ToggleVisualizeLightVolumes()
 }
 #endif
 
-void LkRenderer::DrawPixels( int _Width, int _Height, graphics::EInternalFormat _Format, const void* _Buffer )
+void LkRenderer::DrawPixels( int32 _Width, int32 _Height, graphics::EInternalFormat _Format, const void* _Buffer )
 {
 	glDrawPixels(_Width, _Height, graphics::GLInternalFormats[_Format], GL_UNSIGNED_BYTE, _Buffer);
 }
 
-int LkRenderer::GetWindowWidth()
+int32 LkRenderer::GetWindowWidth()
 {
 	return m_Window->GetWidth();
 }
 
-int LkRenderer::GetWindowHeight()
+int32 LkRenderer::GetWindowHeight()
 {
 	return m_Window->GetHeight();
 }
 
-int LkRenderer::GetRenderWidth()
+int32 LkRenderer::GetRenderWidth()
 {
 	return m_GBuffer->GetWidth();
 }
 
-int LkRenderer::GetRenderHeight()
+int32 LkRenderer::GetRenderHeight()
 {
 	return m_GBuffer->GetHeight();
 }
 
 vec2 LkRenderer::GetPixelScale()
 {
-	return vec2((float)renderer::g_Renderer->GetRenderWidth() / renderer::g_Renderer->GetWindowWidth(),
-					 (float)renderer::g_Renderer->GetRenderHeight() / renderer::g_Renderer->GetWindowHeight());
+	return vec2((f32)renderer::g_Renderer->GetRenderWidth() / renderer::g_Renderer->GetWindowWidth(),
+					 (f32)renderer::g_Renderer->GetRenderHeight() / renderer::g_Renderer->GetWindowHeight());
 }
 
 void LkRenderer::_RenderSky()
@@ -707,8 +707,8 @@ void LkRenderer::_RenderOpaqueGeometry()
 
 	mat4 viewmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
 	mat4 projectionmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix();
-	float zfar = m_CurrentLevelToRender->GetCurrentCamera()->GetZFar();
-	float znear = m_CurrentLevelToRender->GetCurrentCamera()->GetZNear();
+	f32 zfar = m_CurrentLevelToRender->GetCurrentCamera()->GetZFar();
+	f32 znear = m_CurrentLevelToRender->GetCurrentCamera()->GetZNear();
 
 // 	for (std::list<LkRenderComponent*>::iterator it = LkRenderComponent::m_RenderComponents.begin(); it != LkRenderComponent::m_RenderComponents.end(); ++it)
 // 	{
@@ -912,7 +912,7 @@ void LkRenderer::_RenderLightingPointLights()
 
 		// TODO: Replace this with a VBO or something. Atleast not emmediate mode.
 		static GLUquadric* quadric = gluNewQuadric();
-		int PassID = 0;
+		int32 PassID = 0;
 		while (m_LightEffect->HasNextPass())
 		{
 #ifndef DBG_VISUALIZATIONS
@@ -956,7 +956,7 @@ void LkRenderer::_RenderLightingDirectionalLights()
 	
 	glUseProgramObjectARB(m_DirectionalLightShader.GetProgramHandle());
 
-	glUniform2fARB(m_DirectionalLightShaderScreenDimensionsID, (float)m_WindowWidth, (float)m_WindowHeight);
+	glUniform2fARB(m_DirectionalLightShaderScreenDimensionsID, (f32)m_WindowWidth, (f32)m_WindowHeight);
 	// Set the input textures for the shader.
 	glActiveTextureARB(GL_TEXTURE0_ARB);
 	glBindTexture(GL_TEXTURE_2D, m_MRTObject->GetRT0());
@@ -1067,9 +1067,9 @@ void LkRenderer::_RenderGBufferTargets()
 
 #define SETCGPARAM(paramname, value)	{LkEffectParameter* param = effect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
 
-	for (int i = 0; i < 4; ++i)
+	for (int32 i = 0; i < 4; ++i)
 	{
-		float x = -1.0f + (0.5f * i);
+		f32 x = -1.0f + (0.5f * i);
 
 		static graphics::EFrameBufferAttachment Attachments[4] = { graphics::FRAMEBUFFER_COLOR_ATTACHMENT0, graphics::FRAMEBUFFER_COLOR_ATTACHMENT1, graphics::FRAMEBUFFER_COLOR_ATTACHMENT2, graphics::FRAMEBUFFER_DEPTH_STENCIL_ATTACHMENT };
 

@@ -71,7 +71,7 @@ private:
 	struct QueueItem
 	{
 		std::string m_String;
-		//int m_Type;
+		//int32 m_Type;
 	};
 
 	static SQInteger SquirrelLexRead( SQUserPointer _UserPointer );
@@ -80,7 +80,7 @@ private:
 	static void SquirrelErrorLog( HSQUIRRELVM _VM, const SQChar* _Msg, ...);
 	static void SquirrelCompilerErrorLog( HSQUIRRELVM _VM, const SQChar* _Desc, const SQChar* _Source, SQInteger _Line, SQInteger _Column );
 
-	static int Thread( void* _Arg );
+	static int32 Thread( void* _Arg );
 
 	HSQUIRRELVM m_SquirrelVM;
 	CRITICAL_SECTION m_CriticalSection;

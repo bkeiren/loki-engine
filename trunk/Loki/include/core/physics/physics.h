@@ -38,8 +38,8 @@ public:
 	void DebugDraw();
 #endif
 
-	float GetFixedTimeStep() const;
-	void SetFixedTimeStep( float _TimeStep );
+	f32 GetFixedTimeStep() const;
+	void SetFixedTimeStep( f32 _TimeStep );
 
 	void SetGravity( const vec3& _Gravity );
 	vec3 GetGravity() const;
@@ -60,7 +60,7 @@ private:
 	btSequentialImpulseConstraintSolver* m_SequentialImpulseConstraintSolver;
 	btDiscreteDynamicsWorld* m_DynamiscWorld;
 
-	float m_FixedTimeStep;
+	f32 m_FixedTimeStep;
 
 	LkRigidBody* m_WorldZPlane;
 

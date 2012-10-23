@@ -149,7 +149,7 @@ void* LkLua::LuaAlloc( void* _Ud, void* _Ptr, size_t _osize, size_t _nsize )
 	}
 }
 
-int LkLua::LuaLog( lua_State* _L )
+int32 LkLua::LuaLog( lua_State* _L )
 {
 	const char *Arg = lua_tostring(_L, 1);
 	LOG(VL_NORMAL, "Lua: %s", Arg);
@@ -157,7 +157,7 @@ int LkLua::LuaLog( lua_State* _L )
 	return 0;
 }
 
-int LkLua::Thread( void* _Arg )
+int32 LkLua::Thread( void* _Arg )
 {
 	LkLua* instance = (LkLua*)_Arg;
 

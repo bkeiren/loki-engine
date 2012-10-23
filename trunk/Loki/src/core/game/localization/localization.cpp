@@ -53,10 +53,10 @@ bool LkLocalization::LoadLocalizationTable( const std::string& _File )
 		return false;
 	}
 
-	unsigned int numrows = file->GetNumRows();
-	for (unsigned int i = 0; i < numrows; ++i)
+	uint32 numrows = file->GetNumRows();
+	for (uint32 i = 0; i < numrows; ++i)
 	{
-		unsigned int numcolumns = file->GetNumColumnsAtRow(i);
+		uint32 numcolumns = file->GetNumColumnsAtRow(i);
 
 		// Obtain the first entry on this row, this is the string name. The other entries are localized strings representing it.
 		std::string stringname;
@@ -65,11 +65,11 @@ bool LkLocalization::LoadLocalizationTable( const std::string& _File )
 			LOG(VL_ERROR, "Localization::LoadLocalizationTable: Unable to retrieve string name at row %i. Skipping to next row", i);
 			continue;
 		}
-		unsigned int hash = HASH(stringname.c_str());
+		uint32 hash = HASH(stringname.c_str());
 		m_Strings.insert(StringMapPair(hash, LocalizedStrings(numcolumns)));
 
 		// Obtain the localized strings.
-		for (unsigned int j = 1; j < numcolumns && j < LOCALE_COUNT; ++j)
+		for (uint32 j = 1; j < numcolumns && j < LOCALE_COUNT; ++j)
 		{
 			std::string output;
 			if (!file->GetDataAt(j, i, output))
@@ -99,7 +99,7 @@ const std::string& LkLocalization::GetLocalizedString( const std::string& _Strin
 
 const std::string& LkLocalization::GetLocalizedStringForLocale( const std::string& _String, ELocale _Locale )
 {
-	unsigned int hash = HASH(_String.c_str());
+	uint32 hash = HASH(_String.c_str());
 	StringMap::iterator it = m_Strings.find(hash);
 	if (it == m_Strings.end())
 	{

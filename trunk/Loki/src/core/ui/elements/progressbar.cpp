@@ -42,7 +42,7 @@ LkOverlayProgressBar::~LkOverlayProgressBar()
 	m_BarEndFilled = NULL;
 }
 
-void LkOverlayProgressBar::SetProgress( float _Progress )
+void LkOverlayProgressBar::SetProgress( f32 _Progress )
 {
 	m_Progress = math::clamp(_Progress, 0.0f, 1.0f);
 
@@ -52,7 +52,7 @@ void LkOverlayProgressBar::SetProgress( float _Progress )
 	m_BarCenterFilled->SetRelativeSize(v);
 }
 
-float LkOverlayProgressBar::GetProgress() const
+f32 LkOverlayProgressBar::GetProgress() const
 {
 	return m_Progress;
 }
@@ -149,11 +149,11 @@ void LkOverlayProgressBar::_Init()
 	}
 	else
 	{
-		float x = 0.0f;
-		float y = 0.0f;
+		f32 x = 0.0f;
+		f32 y = 0.0f;
 
-		x = (float)atof(output.c_str());
-		y = (float)atof(output2.c_str());
+		x = (f32)atof(output.c_str());
+		y = (f32)atof(output2.c_str());
 
 		LkImage::SetRelativeSize(vec2(x, y));
 	}
@@ -164,11 +164,11 @@ void LkOverlayProgressBar::_Init()
 	}
 	else
 	{
-		float x = 0.0f;
-		float y = 0.0f;
+		f32 x = 0.0f;
+		f32 y = 0.0f;
 
-		x = (float)atof(output.c_str());
-		y = (float)atof(output2.c_str());
+		x = (f32)atof(output.c_str());
+		y = (f32)atof(output2.c_str());
 
 		m_BarStartEmpty->SetRelativeSize(vec2(x, y));
 		m_BarStartFilled->SetRelativeSize(vec2(x, y));
@@ -180,11 +180,11 @@ void LkOverlayProgressBar::_Init()
 	}
 	else
 	{
-		float x = 0.0f;
-		float y = 0.0f;
+		f32 x = 0.0f;
+		f32 y = 0.0f;
 
-		x = (float)atof(output.c_str());
-		y = (float)atof(output2.c_str());
+		x = (f32)atof(output.c_str());
+		y = (f32)atof(output2.c_str());
 
 		m_BarEndEmpty->SetRelativeSize(vec2(x, y));
 		m_BarEndFilled->SetRelativeSize(vec2(x, y));

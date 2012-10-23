@@ -48,7 +48,7 @@ public:
 	/*
 		Obtain the ID of the state.
 	*/
-	const int GetID() { return m_ID; }
+	const int32 GetID() { return m_ID; }
 
 	/*
 		Obtain the name of the state.
@@ -77,7 +77,7 @@ private:
 	virtual void CleanUp() = 0;
 
 	// This counter keeps track of the number of states that have been created and is used to assign each state a unique ID.
-	static int m_StateCounter;
+	static int32 m_StateCounter;
 	
 	// This boolean keeps track of whether the state has been initialized.
 	bool m_Initialized;
@@ -85,7 +85,7 @@ private:
 	// The StateManager class is a friend so that it can access the private methods Init(), ReInit() and CleanUp(), and private member data.
 	friend class LkStateManager;
 protected:
-	const int m_ID;
+	const int32 m_ID;
 	const char* m_Name;
 };
 

@@ -48,11 +48,11 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	const Color& GetSpecular() const;
 
-	float GetConstantAttenuation() const;
+	f32 GetConstantAttenuation() const;
 
-	float GetLinearAttenuation() const;
+	f32 GetLinearAttenuation() const;
 
-	float GetQuadraticAttenuation() const;
+	f32 GetQuadraticAttenuation() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Sets the light's color.
@@ -64,11 +64,11 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	void SetSpecular( const Color& _Specular );
 
-	void SetConstantAttenuation( float _Attenuation );
+	void SetConstantAttenuation( f32 _Attenuation );
 
-	void SetLinearAttenuation( float _Attenuation );
+	void SetLinearAttenuation( f32 _Attenuation );
 	
-	void SetQuadraticAttenuation( float _Attenuation );
+	void SetQuadraticAttenuation( f32 _Attenuation );
 
 	virtual std::string ToString() const;
 
@@ -86,9 +86,9 @@ private:
 	Color m_LightSpecular;
 	bool m_CastShadows;
 	bool m_Enabled;
-	float m_ConstantAttenuation;
-	float m_LinearAttenuation;
-	float m_QuadraticAttenuation;
+	f32 m_ConstantAttenuation;
+	f32 m_LinearAttenuation;
+	f32 m_QuadraticAttenuation;
 };
 
 }	// namespace loki.

@@ -49,12 +49,12 @@ void Material::SetEffect( renderer::LkEffect* _Effect )
 	m_Effect = _Effect;
 }
 
-float Material::GetShininess() const
+f32 Material::GetShininess() const
 {
 	return m_Shininess;
 }
 
-void Material::SetShininess( float _Shininess )
+void Material::SetShininess( f32 _Shininess )
 {
 	m_Shininess = _Shininess;
 }

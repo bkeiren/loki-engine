@@ -48,17 +48,17 @@ const Color& LkLight::GetSpecular() const
 	return m_LightSpecular;
 }
 
-float LkLight::GetConstantAttenuation() const
+f32 LkLight::GetConstantAttenuation() const
 {
 	return m_ConstantAttenuation;
 }
 
-float LkLight::GetLinearAttenuation() const
+f32 LkLight::GetLinearAttenuation() const
 {
 	return m_LinearAttenuation;
 }
 
-float LkLight::GetQuadraticAttenuation() const
+f32 LkLight::GetQuadraticAttenuation() const
 {
 	return m_QuadraticAttenuation;
 }
@@ -73,17 +73,17 @@ void LkLight::SetSpecular( const Color& _Specular )
 	m_LightSpecular = _Specular;
 }
 
-void LkLight::SetConstantAttenuation( float _Attenuation )
+void LkLight::SetConstantAttenuation( f32 _Attenuation )
 {
 	m_ConstantAttenuation = _Attenuation;
 }
 
-void LkLight::SetLinearAttenuation( float _Attenuation )
+void LkLight::SetLinearAttenuation( f32 _Attenuation )
 {
 	m_LinearAttenuation = _Attenuation;
 }
 
-void LkLight::SetQuadraticAttenuation( float _Attenuation )
+void LkLight::SetQuadraticAttenuation( f32 _Attenuation )
 {
 	m_QuadraticAttenuation = _Attenuation;
 }

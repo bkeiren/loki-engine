@@ -23,8 +23,8 @@ class LkParticleSource	: public LkMovableComponent
 
 	friend class LkParticleSystem;
 public:
-	void SetQuota( int _Quota );
-	int GetQuota() const;
+	void SetQuota( int32 _Quota );
+	int32 GetQuota() const;
 
 private:
 	LkParticleSource( const LkParticleSourceDescriptor& _Descriptor );
@@ -36,8 +36,8 @@ private:
 
 	const LkParticleSourceDescriptor& m_Descriptor;
 	Particles m_Particles;
-	float m_Age;
-	float m_AgeSinceLastSpawn;
+	f32 m_Age;
+	f32 m_AgeSinceLastSpawn;
 };
 
 }

@@ -40,7 +40,7 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 	// C-functions have the following prototype:
-	// int FunctionName( lua_State *L );
+	// int32 FunctionName( lua_State *L );
 	//////////////////////////////////////////////////////////////////////////
 	void RegisterFunction( const char* _Name, lua_CFunction _Function );
 private:
@@ -53,13 +53,13 @@ private:
 	struct QueueItem
 	{
 		std::string m_String;
-		int m_Type;
+		int32 m_Type;
 	};
 
 	static void* LuaAlloc( void* _Ud, void* _Ptr, size_t _osize, size_t _nsize );
-	static int LuaLog( lua_State* _L );
+	static int32 LuaLog( lua_State* _L );
 
-	static int Thread( void* _Arg );
+	static int32 Thread( void* _Arg );
 
 	lua_State* m_State;
 	CRITICAL_SECTION m_CriticalSection;

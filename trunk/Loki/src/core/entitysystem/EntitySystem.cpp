@@ -70,7 +70,7 @@ void EntitySystem::DestroyEntity( const char* _EntityName )
 	}
 }
 
-void EntitySystem::FindEntitiesInRange( const vec3& _Center, float _Range, EntitiesList& _OutputList ) const
+void EntitySystem::FindEntitiesInRange( const vec3& _Center, f32 _Range, EntitiesList& _OutputList ) const
 {
 
 }
@@ -89,7 +89,7 @@ void EntitySystem::FindEntitiesInFrustum( const Frustum& _Frustum, const mat4& _
 	{
 		Entity* ent = (Entity*)((*it).second);
 
-		for (int i = 0; i < Frustum::_FRUSTUM_PLANE_COUNT; ++i)
+		for (int32 i = 0; i < Frustum::_FRUSTUM_PLANE_COUNT; ++i)
 		{
 			// Move plane inward (along normal) by an amount equal to the radius of the bounding sphere of the
 			// current entity.

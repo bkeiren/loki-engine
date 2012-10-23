@@ -14,10 +14,10 @@ class LkParticle	: public LkMovableComponent
 public:
 	typedef void( *ParticleCallback )( LkParticle* );
 
-	float m_Age;
-	float m_Lifetime;
+	f32 m_Age;
+	f32 m_Lifetime;
 	vec4 m_Color;	// Color adjuster (Multiplicative), including alpha.
-	float m_Size;
+	f32 m_Size;
 	
 	void* m_UserData[8];	// Custom userdata, can be used in whatever way is needed by the client.
 

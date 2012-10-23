@@ -73,7 +73,7 @@ public:
 // 	GLhandleARB GetFragmentHandle();
 	GLhandleARB GetProgramHandle();
 
-	int GetUniformLocation( const char* _Name );
+	int32 GetUniformLocation( const char* _Name );
 private:
 	//////////////////////////////////////////////////////////////////////////
 	// Binds attributes to fixed locations in the shader.
@@ -86,8 +86,8 @@ private:
 	GLhandleARB m_VertexShaders[GLSLSHADER_MAX_OBJECTS];
 	GLhandleARB m_FragmentShaders[GLSLSHADER_MAX_OBJECTS];
 	GLhandleARB m_ProgramHandle;
-	unsigned int m_NumVertexShaders;
-	unsigned int m_NumFragmentShaders;
+	uint32 m_NumVertexShaders;
+	uint32 m_NumFragmentShaders;
 	char* m_VertexPaths[GLSLSHADER_MAX_OBJECTS];
 	char* m_FragmentPaths[GLSLSHADER_MAX_OBJECTS];
 };

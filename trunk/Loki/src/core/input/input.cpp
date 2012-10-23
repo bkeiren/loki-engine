@@ -37,31 +37,31 @@ bool LkInput::_Init()
 void LkInput::_PerformMouseAcceleration()
 {
 	//2) calculate the total distance this corresponds to: dr = sqrt(dx^2+dy^2)
-	float dr = sqrtf((float)(m_MouseDelta.x * m_MouseDelta.x + m_MouseDelta.y * m_MouseDelta.y));
+	f32 dr = sqrtf((f32)(m_MouseDelta.x * m_MouseDelta.x + m_MouseDelta.y * m_MouseDelta.y));
 
 	//3) determine how much time has passed, and calculate the speed of the movement: v = dr/dt
-	float dt = g_Engine->GetFrameTime();
-	float v = dr / dt;
+	f32 dt = g_Engine->GetFrameTime();
+	f32 v = dr / dt;
 
 	//4) perform some non-linear transform on the velocity, 
 	//   eg: v_new = a * v + b * v^2 (start with a=1 and b=0 for no acceleration, and then experiment for optimal values)
-	float v_new = m_MouseAccelerationParameters.x * v + m_MouseAccelerationParameters.y * (v * v);
+	f32 v_new = m_MouseAccelerationParameters.x * v + m_MouseAccelerationParameters.y * (v * v);
 
 	//5) calculate a new distance: dr_new = v_new * dt
-	float dr_new = v_new * dt;
+	f32 dr_new = v_new * dt;
 
 	//6) calculate new distances in x / y direction: 
 	//   dx_new = dx * dr_new / dr and dy_new = dy * dr_new / dr
-	float dx_new = m_MouseDelta.x * dr_new / dr;
-	float dy_new = m_MouseDelta.y * dr_new / dr;
+	f32 dx_new = m_MouseDelta.x * dr_new / dr;
+	f32 dy_new = m_MouseDelta.y * dr_new / dr;
 
-	m_Mouse.x = (int)(m_MousePrevious.x + dx_new);
-	m_Mouse.y = (int)(m_MousePrevious.y + dy_new);
+	m_Mouse.x = (int32)(m_MousePrevious.x + dx_new);
+	m_Mouse.y = (int32)(m_MousePrevious.y + dy_new);
 	m_MouseDelta = m_Mouse - m_MousePrevious;
 	m_MouseMoved = (m_MousePrevious != m_Mouse);
 }
 
-void LkInput::_CaptureKeyState( int _Key )
+void LkInput::_CaptureKeyState( int32 _Key )
 {
 	short state = GetAsyncKeyState(_Key) >> 8;	// Shifted by 8 because the most significant bit is used to indicate the
 	// state of the key.
@@ -105,7 +105,7 @@ void LkInput::Capture()
 
 	if (!g_Console->IsVisible())
 	{
-		for (int i = 0; i < KEY_LAST; ++i)
+		for (int32 i = 0; i < KEY_LAST; ++i)
 		{
 			_CaptureKeyState(i);
 		}
@@ -114,7 +114,7 @@ void LkInput::Capture()
 	{
 		EKeyState states[2] = { m_Keys[KEY_TILDE], m_Keys[KEY_ESCAPE] };
 
-		for (int i = 0; i < KEY_LAST; ++i)
+		for (int32 i = 0; i < KEY_LAST; ++i)
 		{
 			m_Keys[i] = KEYSTATE_UP;
 		}
@@ -202,12 +202,12 @@ const int2 LkInput::GetMousePosition() const
 	return m;
 }
 
-int LkInput::GetMouseX() const
+int32 LkInput::GetMouseX() const
 {
 	return m_Mouse.x;
 }
 
-int LkInput::GetMouseY() const
+int32 LkInput::GetMouseY() const
 {
 	return m_Mouse.y;
 }
@@ -222,17 +222,17 @@ const int2& LkInput::GetMouseDelta() const
 	return m_MouseDelta;
 }
 
-int LkInput::GetMouseDeltaX() const
+int32 LkInput::GetMouseDeltaX() const
 {
 	return m_MouseDelta.x;
 }
 
-int LkInput::GetMouseDeltaY() const
+int32 LkInput::GetMouseDeltaY() const
 {
 	return m_MouseDelta.y;
 }
 
-float LkInput::GetMouseWheelDelta() const
+f32 LkInput::GetMouseWheelDelta() const
 {
 	return m_MouseWheelDelta;
 }

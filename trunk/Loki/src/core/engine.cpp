@@ -72,9 +72,9 @@ namespace loki
 // Data.
 //////////////////////////////////////////////////////////////////////////
 
-const int VersionMajor = 0;
-const int VersionMinor = 0;
-const int VersionBuild = 1;
+const int32 VersionMajor = 0;
+const int32 VersionMinor = 0;
+const int32 VersionBuild = 1;
 const char* VersionName = "Loki";
 #ifdef _DEBUG
 const char* VersionType = "Debug";
@@ -125,7 +125,7 @@ LkEngine::~LkEngine()
 	
 }
 
-void LkEngine::Go( int argc, char** argv )
+void LkEngine::Go( int32 argc, char** argv )
 {
 	m_EngineClock.Start();
 
@@ -165,22 +165,22 @@ game::LkGame* LkEngine::GetGame()
 	return m_Game;
 }
 
-float LkEngine::GetFrameTime() const
+f32 LkEngine::GetFrameTime() const
 {
 	return m_FrameTime;
 }
 
-float LkEngine::GetEngineUpTime() const
+f32 LkEngine::GetEngineUpTime() const
 {
 	return m_EngineClock.Lap();
 }
 
-float LkEngine::GetFrameRate() const
+f32 LkEngine::GetFrameRate() const
 {
 	return (1.0f / m_FrameTime);
 }
 
-void LkEngine::SetFrameRateCap( unsigned int _Cap )
+void LkEngine::SetFrameRateCap( uint32 _Cap )
 {
 	m_FrameRateCap = _Cap;
 	m_TargetFrameTime = 1.0f / m_FrameRateCap;
@@ -207,7 +207,7 @@ void LkEngine::HideBackgroundConsoleWindow() const
 // problem, however any command line arguments can not be used
 // while initializing the engine.
 //////////////////////////////////////////////////////////////////////////
-void LkEngine::ParseArguments( int argc, char** argv )
+void LkEngine::ParseArguments( int32 argc, char** argv )
 {
 	LOG(VL_ALWAYS, "Parsing command line...");
 
@@ -220,7 +220,7 @@ void LkEngine::ParseArguments( int argc, char** argv )
 //////////////////////////////////////////////////////////////////////////
 bool LkEngine::Init()
 {
-	srand((unsigned int)time(0));
+	srand((uint32)time(0));
 
 	// Collect system information.
 	util::g_SystemInfo = new util::LkSystemInfo();
@@ -511,7 +511,7 @@ void LkEngine::HandleEvents()
 			}
 		case WM_MOUSEWHEEL:
 			{
-				g_Input->m_MouseWheelDelta = (float)(GET_WHEEL_DELTA_WPARAM(msg.wParam) / 120);
+				g_Input->m_MouseWheelDelta = (f32)(GET_WHEEL_DELTA_WPARAM(msg.wParam) / 120);
 				g_EventManager->Post(LkEvent(EVENT_MOUSEWHEELMOVE));
 				break;
 			}
@@ -607,7 +607,7 @@ void LkEngine::Render()
 //////////////////////////////////////////////////////////////////////////
 // Displays the splash screen for _Duration (In milliseconds).
 //////////////////////////////////////////////////////////////////////////
-void LkEngine::DisplaySplash( float _Duration )
+void LkEngine::DisplaySplash( f32 _Duration )
 {
 	
 }
@@ -665,7 +665,7 @@ void LkEngine::_CapFrameRate()
 	// Cap the frame rate if a cap is enabled by filling spare time with a call to Sleep().
 	if ((bool)m_FrameRateCap && m_FrameTime < m_TargetFrameTime)
 	{
-		util::Sleep((unsigned int)((m_TargetFrameTime - m_FrameTime) * 1000));
+		util::Sleep((uint32)((m_TargetFrameTime - m_FrameTime) * 1000));
 		m_FrameTime = m_TargetFrameTime;
 	}
 }

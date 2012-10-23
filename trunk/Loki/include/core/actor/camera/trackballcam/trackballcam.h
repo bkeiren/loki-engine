@@ -19,8 +19,8 @@ class LkTrackBallCam	: public LkCamera
 {
 	friend LkCamera* CameraFactoryTrackBallCam( const char* _Name, game::LkLevel* _Level );
 public:
-	void SetTrackBallDistance( float _Distance );
-	float GetTrackBallDistance() const;
+	void SetTrackBallDistance( f32 _Distance );
+	f32 GetTrackBallDistance() const;
 
 	void SetTrackBallCenter( const vec3& _Center );
 	const vec3& GetTrackBallCenter() const;
@@ -31,7 +31,7 @@ private:
 
 	void _OnEvent( const LkEvent& _Event );
 
-	float m_Distance;
+	f32 m_Distance;
 	vec3 m_Center;
 };
 

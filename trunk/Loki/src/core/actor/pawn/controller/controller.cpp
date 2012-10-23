@@ -5,7 +5,7 @@ using namespace loki;
 
 namespace
 {
-	unsigned int ControllerCounter = 1;
+	uint32 ControllerCounter = 1;
 }
 
 LkController::LkController()	:
@@ -66,7 +66,7 @@ LkPawn* LkController::GetPawn()
 //////////////////////////////////////////////////////////////////////////
 // Returns the pawn's ID.
 //////////////////////////////////////////////////////////////////////////
-unsigned int LkController::GetID()
+uint32 LkController::GetID()
 {
 	return m_ID;
 }

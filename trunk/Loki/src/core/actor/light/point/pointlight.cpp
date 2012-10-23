@@ -20,22 +20,22 @@ LkPointLight::~LkPointLight()
 
 }
 
-float LkPointLight::GetRadius() const
+f32 LkPointLight::GetRadius() const
 {
 	return m_Radius;
 }
 
-float LkPointLight::GetFalloffExponent() const
+f32 LkPointLight::GetFalloffExponent() const
 {
 	return m_FalloffExponent;
 }
 
-void LkPointLight::SetRadius( float _Radius )
+void LkPointLight::SetRadius( f32 _Radius )
 {
 	m_Radius = _Radius;
 }
 
-void LkPointLight::SetFalloffExponent( float _FalloffExponent )
+void LkPointLight::SetFalloffExponent( f32 _FalloffExponent )
 {
 	m_FalloffExponent = _FalloffExponent;
 }

@@ -20,23 +20,23 @@ public:
 	const mat4& GetProjectionMatrix();
 	mat4 GetViewMatrix();
 
-	void SetFoV( float _FoV );
-	float GetFoV() const;
+	void SetFoV( f32 _FoV );
+	f32 GetFoV() const;
 
-	void SetZFar( float _ZFar );
-	float GetZFar() const;
+	void SetZFar( f32 _ZFar );
+	f32 GetZFar() const;
 
-	void SetZNear( float _ZNear );
-	float GetZNear() const;
+	void SetZNear( f32 _ZNear );
+	f32 GetZNear() const;
 
 	const int2& GetViewport() const;	
 
 	const vec4& GetOrthoViewport() const;
 
-	float GetAspectRatio() const;
+	f32 GetAspectRatio() const;
 
-	void SetOrthogonalProjection( float _Left = 0.0f, float _Right = 1.0f, float _Top = 0.0f, float _Bottom = 1.0f );
-	void SetPerspectiveProjection( float _FoV, int _Width, int _Height );
+	void SetOrthogonalProjection( f32 _Left = 0.0f, f32 _Right = 1.0f, f32 _Top = 0.0f, f32 _Bottom = 1.0f );
+	void SetPerspectiveProjection( f32 _FoV, int32 _Width, int32 _Height );
 private:
 	View( const char* _Name );
 	View();
@@ -49,9 +49,9 @@ private:
 	int2 m_Viewport;
 	vec4 m_OrthoViewport;
 	EProjectionType m_ProjectionType;
-	float m_FoV;
-	float m_ZFar;
-	float m_ZNear;
+	f32 m_FoV;
+	f32 m_ZFar;
+	f32 m_ZNear;
 	bool m_ProjectionMatrixIsDirty;
 };
 

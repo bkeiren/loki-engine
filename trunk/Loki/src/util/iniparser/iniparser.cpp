@@ -166,14 +166,14 @@ bool LkINIParser::INIFile::GetProperty( const std::string& _Name, std::string& _
 	return false;
 }
 
-int LkINIParser::INIFile::SetProperty( const char* _Section, const char* _Name, const char* _Value )
+int32 LkINIParser::INIFile::SetProperty( const char* _Section, const char* _Name, const char* _Value )
 {
 	return SetProperty(std::string(_Section), std::string(_Name), std::string(_Value));
 }
 
-int LkINIParser::INIFile::SetProperty( const std::string& _Section, const std::string& _Name, const std::string& _Value )
+int32 LkINIParser::INIFile::SetProperty( const std::string& _Section, const std::string& _Name, const std::string& _Value )
 {
-	int ret = 0;
+	int32 ret = 0;
 	Section* section = _GetSection(_Section);
 	if (!section)
 	{

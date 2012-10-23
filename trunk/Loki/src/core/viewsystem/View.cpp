@@ -41,7 +41,7 @@ const mat4& View::GetProjectionMatrix()
 	if (m_ProjectionMatrixIsDirty)
 	{
 		(m_ProjectionType == PT_PERSPECTIVE)?
-			(m_ProjectionMatrix = math::gtc::matrix_transform::perspectiveFov(m_FoV, (float)m_Viewport.x, (float)m_Viewport.y, m_ZNear, m_ZFar)):
+			(m_ProjectionMatrix = math::gtc::matrix_transform::perspectiveFov(m_FoV, (f32)m_Viewport.x, (f32)m_Viewport.y, m_ZNear, m_ZFar)):
 			(m_ProjectionMatrix = math::gtc::matrix_transform::ortho(m_OrthoViewport.x, m_OrthoViewport.y, m_OrthoViewport.z, m_OrthoViewport.w, m_ZNear, m_ZFar));
 		m_ProjectionMatrixIsDirty = false;
 	}
@@ -61,35 +61,35 @@ mat4 View::GetViewMatrix()
 					 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-void View::SetFoV( float _FoV )
+void View::SetFoV( f32 _FoV )
 {
 	m_FoV = _FoV;
 	m_ProjectionMatrixIsDirty = true;
 }
 
-float View::GetFoV() const
+f32 View::GetFoV() const
 {
 	return m_FoV;
 }
 
-void View::SetZFar( float _ZFar )
+void View::SetZFar( f32 _ZFar )
 {
 	m_ZFar = _ZFar;
 	m_ProjectionMatrixIsDirty = true;
 }
 
-float View::GetZFar() const
+f32 View::GetZFar() const
 {
 	return m_ZFar;
 }
 
-void View::SetZNear( float _ZNear )
+void View::SetZNear( f32 _ZNear )
 {
 	m_ZNear = _ZNear;
 	m_ProjectionMatrixIsDirty = true;
 }
 
-float View::GetZNear() const
+f32 View::GetZNear() const
 {
 	return m_ZNear;
 }
@@ -104,12 +104,12 @@ const vec4& View::GetOrthoViewport() const
 	return m_OrthoViewport;
 }
 
-float View::GetAspectRatio() const
+f32 View::GetAspectRatio() const
 {
-	return ((float)m_Viewport.x / (float)m_Viewport.y);
+	return ((f32)m_Viewport.x / (f32)m_Viewport.y);
 }
 
-void View::SetOrthogonalProjection( float _Left /*= 0.0f*/, float _Right /*= 1.0f*/, float _Top /*= 0.0f*/, float _Bottom /*= 1.0f*/ )
+void View::SetOrthogonalProjection( f32 _Left /*= 0.0f*/, f32 _Right /*= 1.0f*/, f32 _Top /*= 0.0f*/, f32 _Bottom /*= 1.0f*/ )
 {
 	m_OrthoViewport.x = _Left;
 	m_OrthoViewport.y = _Right;
@@ -121,7 +121,7 @@ void View::SetOrthogonalProjection( float _Left /*= 0.0f*/, float _Right /*= 1.0
 	m_ProjectionMatrixIsDirty = true;
 }
 
-void View::SetPerspectiveProjection( float _FoV, int _Width, int _Height )
+void View::SetPerspectiveProjection( f32 _FoV, int32 _Width, int32 _Height )
 {
 	SetFoV(_FoV);
 	m_Viewport.x = _Width;

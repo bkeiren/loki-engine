@@ -21,9 +21,9 @@ public:
 	vec3 GetOrientationVector();
 
 	vec3 GetEulerAngles();
-	float GetPitch() const;
-	float GetYaw() const;
-	float GetRoll() const;
+	f32 GetPitch() const;
+	f32 GetYaw() const;
+	f32 GetRoll() const;
 
 	void SetOrientation( const quat& _Orientation );
 	void SetTranslation( const vec3& _Translation );
@@ -31,14 +31,14 @@ public:
 
 	void TranslateLocal( const vec3& _Translation );
 	void TranslateWorld( const vec3& _Translation );
-	void RotateXLocal( float _Angle );
-	void RotateYLocal( float _Angle );
-	void RotateZLocal( float _Angle );
-	void RotateLocal( vec3& _Axis, float _Angle );
-	void RotateXWorld( float _Angle );
-	void RotateYWorld( float _Angle );
-	void RotateZWorld( float _Angle );
-	void RotateWorld( vec3& _Axis, float _Angle );
+	void RotateXLocal( f32 _Angle );
+	void RotateYLocal( f32 _Angle );
+	void RotateZLocal( f32 _Angle );
+	void RotateLocal( vec3& _Axis, f32 _Angle );
+	void RotateXWorld( f32 _Angle );
+	void RotateYWorld( f32 _Angle );
+	void RotateZWorld( f32 _Angle );
+	void RotateWorld( vec3& _Axis, f32 _Angle );
 
 	//////////////////////////////////////////////////////////////////////////
 	// If this returns true, it means that the next call to GetTranslation,

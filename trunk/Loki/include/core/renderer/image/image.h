@@ -57,7 +57,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Adds a texture from data in memory.
 	//////////////////////////////////////////////////////////////////////////
-	bool AddTextureFromMemory( const void* _Data, unsigned int _Width, unsigned int _Height, EInternalFormat _InternalFormat, ETextureFormat _Format, ETextureType _Type );
+	bool AddTextureFromMemory( const void* _Data, uint32 _Width, uint32 _Height, EInternalFormat _InternalFormat, ETextureFormat _Format, ETextureType _Type );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Modifies a portion of the current texture by uploading new data for it.
@@ -74,11 +74,11 @@ public:
 	//
 	// WARNING: Potentially VERY slow.
 	//////////////////////////////////////////////////////////////////////////
-	void SetSubTextureFromMemory( const void* _Data, int _XOffset, int _YOffset, unsigned int _Width, unsigned int _Height, ETextureFormat _Format, ETextureType _Type );
+	void SetSubTextureFromMemory( const void* _Data, int32 _XOffset, int32 _YOffset, uint32 _Width, uint32 _Height, ETextureFormat _Format, ETextureType _Type );
 	
-	void SetTextureIndex( unsigned int _Index );
-	unsigned int GetTextureIndex() const;
-	unsigned int GetNumTextureIndices() const;
+	void SetTextureIndex( uint32 _Index );
+	uint32 GetTextureIndex() const;
+	uint32 GetNumTextureIndices() const;
 
 	void SetFlipX( bool _Flip );
 	void SetFlipY( bool _Flip );
@@ -106,8 +106,8 @@ public:
 	//void SetTexture( const char* _Texture );
 	void SetAnchorPoint( EAnchorPoint _AnchorPoint );
 
-	int GetWidth() const;
-	int GetHeight() const;
+	int32 GetWidth() const;
+	int32 GetHeight() const;
 
 	mat4 GetModelMatrix() const;
 	mat4 Get3DModelViewProjectionMatrix() const;			// Projection * View * Model
@@ -122,7 +122,7 @@ public:
 	// width of the screen (For example, when setting the size of an image).
 	// For convenience, a macro ('FULL_WINDOW_WIDTH') is provided that simply calls this function, so it can be used as an argument or value.
 #define FULL_WINDOW_WIDTH	(loki::renderer::LkImage::GetWindowWidthValue())
-	static float GetWindowWidthValue();
+	static f32 GetWindowWidthValue();
 protected:
 	//////////////////////////////////////////////////////////////////////////
 	// These two members are just here to convenience the implementation of
@@ -138,7 +138,7 @@ private:
 	void _Init( const char* _Texture, const vec3& _Position, const vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
 
 	Textures m_Textures;
-	unsigned int m_TextureIndex;
+	uint32 m_TextureIndex;
 
 	vec3 m_Position;
 	quat m_Orientation;

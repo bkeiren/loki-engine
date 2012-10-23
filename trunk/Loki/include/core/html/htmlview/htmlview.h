@@ -165,15 +165,15 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	bool IsTransparent() const;
 
-	float GetAlphaAt( int _X, int _Y ) const;
-	float GetAlphaAtCursor() const;
+	f32 GetAlphaAt( int32 _X, int32 _Y ) const;
+	f32 GetAlphaAtCursor() const;
 
 	int2 TranslateGlobalMousePositionToLocal( const int2& _GlobalPosition ) const;
 
-	void Resize( int _Width, int _Height, bool _WaitForRepaint = true, int _RepaintTimeoutMs = 300 );
+	void Resize( int32 _Width, int32 _Height, bool _WaitForRepaint = true, int32 _RepaintTimeoutMs = 300 );
 
-	int GetWidth() const;
-	int GetHeight() const;
+	int32 GetWidth() const;
+	int32 GetHeight() const;
 
 	bool IsActive() const;
 	void SetActive( bool _Active );
@@ -183,16 +183,16 @@ public:
 	bool GetAllowHistoryBrowsing() const;
 	void SetAllowHistoryBrowsing( bool _Allow );
 
-	void GoToHistoryOffset( int _Offset );
+	void GoToHistoryOffset( int32 _Offset );
 private:
-	LkHTMLView( Awesomium::WebView* _WebView, LkHTMLCore* _ParentBrowser, int _Width, int _Height );
+	LkHTMLView( Awesomium::WebView* _WebView, LkHTMLCore* _ParentBrowser, int32 _Width, int32 _Height );
 	LkHTMLView(); // Private default c-tor.
 	~LkHTMLView(); // Private default d-tor. Clients should not have access to it.
 
 	LkHTMLViewListener* _GetListener();
 
-	void _SetLayer( int _Layer );
-	int _GetLayer() const;
+	void _SetLayer( int32 _Layer );
+	int32 _GetLayer() const;
 
 	Awesomium::WebView* m_WebView;
 	renderer::LkImage* m_RenderImage;
@@ -202,12 +202,12 @@ private:
 
 	const Awesomium::RenderBuffer* m_LastRenderbuffer;
 
-	int m_Width;
-	int m_Height;
+	int32 m_Width;
+	int32 m_Height;
 
 	bool m_Active;
 
-	int m_Layer;
+	int32 m_Layer;
 
 	bool m_AllowHistoryBrowsing;
 };

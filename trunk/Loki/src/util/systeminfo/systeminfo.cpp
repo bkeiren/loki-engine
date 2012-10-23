@@ -41,7 +41,7 @@ bool LkSystemInfo::Collect()
 	OSVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXA);
 	if (!GetVersionExA((OSVERSIONINFOA*)(&OSVersionInfo)))
 	{
-		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain OS version info (with error code %i)", (int)GetLastError());
+		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain OS version info (with error code %i)", (int32)GetLastError());
 		return false;
 	}
 	else
@@ -117,13 +117,13 @@ bool LkSystemInfo::Collect()
 	}
 
 	// Store whether the program is running on 64 bits or not.
-	IsWow64Process(GetCurrentProcess(), (int*)&m_VersionOS64Bit);
+	IsWow64Process(GetCurrentProcess(), (int32*)&m_VersionOS64Bit);
 
 	MEMORYSTATUSEX MemoryInfo;
 	MemoryInfo.dwLength = sizeof(MemoryInfo);
 	if (!GlobalMemoryStatusEx(&MemoryInfo))
 	{
-		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain memory information (with error code %i)", (int)GetLastError());
+		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain memory information (with error code %i)", (int32)GetLastError());
 		return false;
 	}
 	else
@@ -135,12 +135,12 @@ bool LkSystemInfo::Collect()
 	LARGE_INTEGER CPUFrequency;
 	if (!QueryPerformanceFrequency(&CPUFrequency))
 	{
-		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain CPU frequency information (with error code %i)", (int)GetLastError());
+		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain CPU frequency information (with error code %i)", (int32)GetLastError());
 		return false;
 	}
 	else
 	{
-		m_CPUFrequency = (unsigned int)CPUFrequency.QuadPart;
+		m_CPUFrequency = (uint32)CPUFrequency.QuadPart;
 	}
 
 
@@ -148,7 +148,7 @@ bool LkSystemInfo::Collect()
 	char UserName[UNLEN + 1];
 	if (!GetUserNameA(UserName, &UserNameLength))
 	{
-		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain user name (with error code %i)", (int)GetLastError());
+		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain user name (with error code %i)", (int32)GetLastError());
 		return false;
 	}
 	else
@@ -160,7 +160,7 @@ bool LkSystemInfo::Collect()
 	char ComputerName[MAX_COMPUTERNAME_LENGTH + 1];
 	if (!GetComputerNameA(ComputerName, &ComputerNameLength))
 	{
-		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain computer name (with error code %i)", (int)GetLastError());
+		LOG(VL_ERROR, "SystemInfo::Collect: Unable to obtain computer name (with error code %i)", (int32)GetLastError());
 		return false;
 	}
 	else
@@ -265,9 +265,9 @@ const uint32 LkSystemInfo::GetCPUFrequencyHz()
 	return m_CPUFrequency;
 }
 
-const float LkSystemInfo::GetCPUFrequencyGHz()
+const f32 LkSystemInfo::GetCPUFrequencyGHz()
 {
-	return ((float)m_CPUFrequency) / 1000000;
+	return ((f32)m_CPUFrequency) / 1000000;
 }
 
 const std::string& LkSystemInfo::GetComputerName()

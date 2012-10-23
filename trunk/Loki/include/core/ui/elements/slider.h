@@ -34,23 +34,23 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the current slider position in the range [0 .. 1].
 	//////////////////////////////////////////////////////////////////////////
-	float GetSliderValue() const;
+	f32 GetSliderValue() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Sets the current slider value. The value will be clamped to the range
 	// [0 .. 1] and if required, stepping will be resolved.
 	//////////////////////////////////////////////////////////////////////////
-	void SetSliderValue( float _Value );
+	void SetSliderValue( f32 _Value );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the number of steps in the slider range.
 	//////////////////////////////////////////////////////////////////////////
-	unsigned int GetNumSteps() const;
+	uint32 GetNumSteps() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Sets the number of steps that the slider uses.
 	//////////////////////////////////////////////////////////////////////////
-	void SetNumSteps( unsigned int _NumSteps );
+	void SetNumSteps( uint32 _NumSteps );
 
 protected:
 	virtual void Render();
@@ -62,7 +62,7 @@ private:
 	LkOverlaySlider();
 	~LkOverlaySlider();
 
-	void _SetPosition( float _Position );
+	void _SetPosition( f32 _Position );
 
 	void _ResolveStep();
 
@@ -74,9 +74,9 @@ private:
 	ESliderOrientation m_Orientation;
 
 	// Position of the slider's button. 0.0 indicates it is at the start of the slider bar and 1.0 indicates it is at the end.
-	float m_Position;
+	f32 m_Position;
 
-	unsigned int m_NumSteps;
+	uint32 m_NumSteps;
 };
 
 }

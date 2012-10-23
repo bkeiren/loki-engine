@@ -38,9 +38,9 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Return single elements of the actor's Euler angles.
 	//////////////////////////////////////////////////////////////////////////
-	float GetPitch() const;
-	float GetYaw() const;
-	float GetRoll() const;
+	f32 GetPitch() const;
+	f32 GetYaw() const;
+	f32 GetRoll() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Calculates the actor's transformation matrix if it's dirty and returns
@@ -68,15 +68,15 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Various rotation functions.
 	//////////////////////////////////////////////////////////////////////////
-	void RotateLocal( const vec3& _Axis, const float _Angle );
-	void RotateLocalX( const float _Angle );
-	void RotateLocalY( const float _Angle );
-	void RotateLocalZ( const float _Angle );
+	void RotateLocal( const vec3& _Axis, const f32 _Angle );
+	void RotateLocalX( const f32 _Angle );
+	void RotateLocalY( const f32 _Angle );
+	void RotateLocalZ( const f32 _Angle );
 
-	void Rotate( const vec3& _Axis, const float _Angle );
-	void RotateX( const float _Angle );
-	void RotateY( const float _Angle );
-	void RotateZ( const float _Angle );
+	void Rotate( const vec3& _Axis, const f32 _Angle );
+	void RotateX( const f32 _Angle );
+	void RotateY( const f32 _Angle );
+	void RotateZ( const f32 _Angle );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Translation functions.

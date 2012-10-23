@@ -107,9 +107,9 @@ const vec2& Model::GetUVScale() const
 	return m_UVScale;
 }
 
-void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat4& _ProjectionMatrix, float _ZFar, float _ZNear )
+void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat4& _ProjectionMatrix, f32 _ZFar, f32 _ZNear )
 {
-	for (unsigned int i = 0; i < m_Meshes.size(); ++i)
+	for (uint32 i = 0; i < m_Meshes.size(); ++i)
 	{
 		graphics::Mesh* mesh = m_Meshes[i];
 		const Material* material = m_Materials[i];
@@ -164,7 +164,7 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 	}
 }
 
-const Mesh* Model::GetMesh( unsigned int _Index ) const
+const Mesh* Model::GetMesh( uint32 _Index ) const
 {
 	if (_Index >= 0 && _Index < m_Meshes.size())
 	{
@@ -197,21 +197,21 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 	_Output.clear();
 
 
-	unsigned int NumMeshes = LocalScene->mNumMeshes;
+	uint32 NumMeshes = LocalScene->mNumMeshes;
 	aiMesh** m_tempMeshArray = LocalScene->mMeshes;
 
-	for (unsigned int i = 0; i < NumMeshes; ++i)
+	for (uint32 i = 0; i < NumMeshes; ++i)
 	{       
 		graphics::IndexBuffer* ibo = 0;
 		graphics::VertexBuffer* vbo = 0;
 
-		int NumFaces = m_tempMeshArray[i]->mNumFaces;
-		int NumVerts = m_tempMeshArray[i]->mNumVertices;
-		int NumIndices = NumFaces * 3;
+		int32 NumFaces = m_tempMeshArray[i]->mNumFaces;
+		int32 NumVerts = m_tempMeshArray[i]->mNumVertices;
+		int32 NumIndices = NumFaces * 3;
 		Vertex* Vertices = new Vertex[NumVerts];
-		unsigned int* Indices = new unsigned int[NumIndices];
+		uint32* Indices = new uint32[NumIndices];
 
-		for (int j = 0; j < NumFaces; ++j)
+		for (int32 j = 0; j < NumFaces; ++j)
 		{
 			Indices[j * 3] = m_tempMeshArray[i]->mFaces[j].mIndices[0];
 			Indices[j * 3 + 1] = m_tempMeshArray[i]->mFaces[j].mIndices[1];
@@ -223,7 +223,7 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 			LOG(VL_ERROR, "Model::_CreateMeshesFromGeometryFile: Failed to instantiate IndexBuffer class");
 			assert("Model::_CreateMeshesFromGeometryFile: Failed to instantiate IndexBuffer class" && 0);
 		}
-		for (int y = 0; y < NumVerts; ++y)
+		for (int32 y = 0; y < NumVerts; ++y)
 		{
 			if (m_tempMeshArray[i]->mVertices)			Vertices[y].pos			= vec3(m_tempMeshArray[i]->mVertices[y].x,			m_tempMeshArray[i]->mVertices[y].y,		m_tempMeshArray[i]->mVertices[y].z);
 			if (m_tempMeshArray[i]->mNormals)			Vertices[y].normal		= vec3(m_tempMeshArray[i]->mNormals[y].x,			m_tempMeshArray[i]->mNormals[y].y,		m_tempMeshArray[i]->mNormals[y].z);
@@ -301,7 +301,7 @@ Material* Model::_CreateMaterialFromLMAFile( const std::string& _LMAFile )
 	}
 	if (shininessString.IsDouble())
 	{
-		mtl->SetShininess((float)shininessString.AsDouble());
+		mtl->SetShininess((f32)shininessString.AsDouble());
 	}
 
 	JSON_CLOSE(doc);

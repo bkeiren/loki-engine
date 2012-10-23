@@ -18,8 +18,8 @@ namespace ui
 class LkOverlay;
 class LkOverlayStyle;
 
-typedef unsigned int	OverlayID;
-typedef unsigned int	OverlayStyleID;
+typedef uint32	OverlayID;
+typedef uint32	OverlayStyleID;
 
 class LkOverlayManager	: public LkEventListener
 {

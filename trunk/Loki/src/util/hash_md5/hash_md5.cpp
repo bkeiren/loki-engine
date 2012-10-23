@@ -10,13 +10,13 @@ MD5Hash Hash_MD5( const char* s )
 {
 #define leftrotate(x, c) ((x << c) | (x >> (32 - c)))
 
-	int r[64] = { 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 
+	int32 r[64] = { 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 
 				  12, 17, 22, 5,  9, 14, 20, 5,  9, 14, 20, 5, 9, 
 				  14, 20, 5,  9, 14, 20, 4, 11, 16, 23, 4, 11, 16, 
 				  23, 4, 11, 16, 23, 4, 11, 16, 23, 6, 10, 15, 21, 
 				  6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21 };
 
-	int k[64] = { 0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
+	int32 k[64] = { 0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 				  0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
 				  0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
 				  0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821,
@@ -33,16 +33,16 @@ MD5Hash Hash_MD5( const char* s )
 				  0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
 				  0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391 };
 
-	int h0 = 0x67452301;
-	int h1 = 0xefcdab89;
-	int h2 = 0x98badcfe;
-	int h3 = 0x10325476;
+	int32 h0 = 0x67452301;
+	int32 h1 = 0xefcdab89;
+	int32 h2 = 0x98badcfe;
+	int32 h3 = 0x10325476;
 
 	// Calculate the number of 512-bit long sequences in the input,
 	// then round this up and allocate an array for this memory.
 	// The final value is the number of BYTES (not bits) that this should take.
-	int length = strlen(s);
-	int padded_length = ((int(((float)length) / (512 / sizeof(char))) + 1) * 512) / sizeof(char);
+	int32 length = strlen(s);
+	int32 padded_length = ((int32(((f32)length) / (512 / sizeof(char))) + 1) * 512) / sizeof(char);
 
 	char* padded_array = new char[padded_length];
 
@@ -53,26 +53,26 @@ MD5Hash Hash_MD5( const char* s )
 	memset((void*)(padded_array + (length * sizeof(char))), 0, padded_length - length);
 
 	// For each 512-bit chunk.
-	for (unsigned int i = 0; i < padded_length / (512 / sizeof(char)); ++i)
+	for (uint32 i = 0; i < padded_length / (512 / sizeof(char)); ++i)
 	{
-		int* chunk_start = (int*)(padded_array + (i * (512 / sizeof(char))));
+		int32* chunk_start = (int32*)(padded_array + (i * (512 / sizeof(char))));
 
 		// Chunk has to be broken up into 16 32-bit words.
-		int w[16];
-		for (int i = 0; i < 16; ++i)
+		int32 w[16];
+		for (int32 i = 0; i < 16; ++i)
 		{
 			w[i] = *(chunk_start + i);
 		}
 
 		// Initialize hash values for the current chunk.
-		int a = h0;
-		int b = h1;
-		int c = h2;
-		int d = h3;
+		int32 a = h0;
+		int32 b = h1;
+		int32 c = h2;
+		int32 d = h3;
 
-		for (int i = 0; i < 64; ++i)
+		for (int32 i = 0; i < 64; ++i)
 		{
-			int f, g;
+			int32 f, g;
 
 			if (i >= 0 && i <= 15)
 			{
@@ -95,7 +95,7 @@ MD5Hash Hash_MD5( const char* s )
 				g = (7 * i) % 16;
 			}
 
-			int temp = d;
+			int32 temp = d;
 			d = c;
 			d = b;
 			b = b + leftrotate((a + f + k[i] + w[g]), r[i]);
@@ -123,7 +123,7 @@ void MD5HashToString( MD5Hash _Hash, std::string& _String )
 {
 	_String.clear();
 
-	int d[39] = {0}, i, j;
+	int32 d[39] = {0}, i, j;
 	for (i = 63; i > -1; i--) 
 	{
 		if ((_Hash.high >> i) & 1) d[0]++;

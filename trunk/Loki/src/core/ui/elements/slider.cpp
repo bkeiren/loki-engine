@@ -40,22 +40,22 @@ LkOverlaySlider::~LkOverlaySlider()
 	m_SliderButton = NULL;
 }
 
-float LkOverlaySlider::GetSliderValue() const
+f32 LkOverlaySlider::GetSliderValue() const
 {
 	return m_Position;
 }
 
-void LkOverlaySlider::SetSliderValue( float _Value )
+void LkOverlaySlider::SetSliderValue( f32 _Value )
 {
 	_SetPosition(_Value);
 }
 
-unsigned int LkOverlaySlider::GetNumSteps() const
+uint32 LkOverlaySlider::GetNumSteps() const
 {
 	return m_NumSteps;
 }
 
-void LkOverlaySlider::SetNumSteps( unsigned int _NumSteps )
+void LkOverlaySlider::SetNumSteps( uint32 _NumSteps )
 {
 	m_NumSteps = _NumSteps;
 	
@@ -152,11 +152,11 @@ void LkOverlaySlider::_Init()
 		}
 		else
 		{
-			float x = 0.0f;
-			float y = 0.0f;
+			f32 x = 0.0f;
+			f32 y = 0.0f;
 
-			x = (float)atof(output.c_str());
-			y = (float)atof(output2.c_str());
+			x = (f32)atof(output.c_str());
+			y = (f32)atof(output2.c_str());
 
 			LkImage::SetRelativeSize(vec2(x, y));
 			m_SliderBarCenter->SetRelativeSize(vec2(x, y));
@@ -168,11 +168,11 @@ void LkOverlaySlider::_Init()
 		}
 		else
 		{
-			float x = 0.0f;
-			float y = 0.0f;
+			f32 x = 0.0f;
+			f32 y = 0.0f;
 
-			x = (float)atof(output.c_str());
-			y = (float)atof(output2.c_str());
+			x = (f32)atof(output.c_str());
+			y = (f32)atof(output2.c_str());
 
 			m_SliderBarStart->SetRelativeSize(vec2(x, y));
 		}
@@ -183,11 +183,11 @@ void LkOverlaySlider::_Init()
 		}
 		else
 		{
-			float x = 0.0f;
-			float y = 0.0f;
+			f32 x = 0.0f;
+			f32 y = 0.0f;
 
-			x = (float)atof(output.c_str());
-			y = (float)atof(output2.c_str());
+			x = (f32)atof(output.c_str());
+			y = (f32)atof(output2.c_str());
 
 			m_SliderBarEnd->SetRelativeSize(vec2(x, y));
 		}
@@ -198,11 +198,11 @@ void LkOverlaySlider::_Init()
 		}
 		else
 		{
-			float x = 0.0f;
-			float y = 0.0f;
+			f32 x = 0.0f;
+			f32 y = 0.0f;
 
-			x = (float)atof(output.c_str());
-			y = (float)atof(output2.c_str());
+			x = (f32)atof(output.c_str());
+			y = (f32)atof(output2.c_str());
 
 			m_SliderButton->SetRelativeSize(vec2(x, y));
 		}
@@ -271,11 +271,11 @@ void LkOverlaySlider::_Init()
 		}
 		else
 		{
-			float x = 0.0f;
-			float y = 0.0f;
+			f32 x = 0.0f;
+			f32 y = 0.0f;
 
-			x = (float)atof(output.c_str());
-			y = (float)atof(output2.c_str());
+			x = (f32)atof(output.c_str());
+			y = (f32)atof(output2.c_str());
 
 			LkImage::SetRelativeSize(vec2(x, y));
 			m_SliderBarCenter->SetRelativeSize(vec2(x, y));
@@ -287,11 +287,11 @@ void LkOverlaySlider::_Init()
 		}
 		else
 		{
-			float x = 0.0f;
-			float y = 0.0f;
+			f32 x = 0.0f;
+			f32 y = 0.0f;
 
-			x = (float)atof(output.c_str());
-			y = (float)atof(output2.c_str());
+			x = (f32)atof(output.c_str());
+			y = (f32)atof(output2.c_str());
 
 			m_SliderBarStart->SetRelativeSize(vec2(x, y));
 		}
@@ -302,11 +302,11 @@ void LkOverlaySlider::_Init()
 		}
 		else
 		{
-			float x = 0.0f;
-			float y = 0.0f;
+			f32 x = 0.0f;
+			f32 y = 0.0f;
 
-			x = (float)atof(output.c_str());
-			y = (float)atof(output2.c_str());
+			x = (f32)atof(output.c_str());
+			y = (f32)atof(output2.c_str());
 
 			m_SliderBarEnd->SetRelativeSize(vec2(x, y));
 		}
@@ -317,11 +317,11 @@ void LkOverlaySlider::_Init()
 		}
 		else
 		{
-			float x = 0.0f;
-			float y = 0.0f;
+			f32 x = 0.0f;
+			f32 y = 0.0f;
 
-			x = (float)atof(output.c_str());
-			y = (float)atof(output2.c_str());
+			x = (f32)atof(output.c_str());
+			y = (f32)atof(output2.c_str());
 
 			m_SliderButton->SetRelativeSize(vec2(x, y));
 		}
@@ -339,7 +339,7 @@ void LkOverlaySlider::_OnEvent( const LkEvent& _Event )
 		{
 			if (LkOverlayButton::IsDown() || LkOverlayButton::IsPressed())
 			{
-				float pos = 0.0f;
+				f32 pos = 0.0f;
 
 				switch (m_Orientation)
 				{
@@ -383,7 +383,7 @@ void LkOverlaySlider::_OnEvent( const LkEvent& _Event )
 			{
 			case SO_HORIZONTAL:
 				{
-					float offset = m_Position * LkImage::GetRelativeSize().x * 0.5f;
+					f32 offset = m_Position * LkImage::GetRelativeSize().x * 0.5f;
 
 					SliderBarStartPos = vec2(SliderCenterPos.x - m_SliderBarStart->GetRelativeSize().x * 0.5f, SliderCenterPos.y);
 					SliderBarEndPos = vec2(SliderCenterPos.x + LkImage::GetRelativeSize().x * 0.5f, SliderCenterPos.y);
@@ -393,7 +393,7 @@ void LkOverlaySlider::_OnEvent( const LkEvent& _Event )
 				}
 			case SO_VERTICAL:
 				{
-					float offset = m_Position * LkImage::GetRelativeSize().y * 0.5f;
+					f32 offset = m_Position * LkImage::GetRelativeSize().y * 0.5f;
 
 					SliderBarStartPos = vec2(SliderCenterPos.x, SliderCenterPos.y - m_SliderBarStart->GetRelativeSize().y * 0.5f);
 					SliderBarEndPos = vec2(SliderCenterPos.x, SliderCenterPos.y + LkImage::GetRelativeSize().y * 0.5f);
@@ -426,7 +426,7 @@ void LkOverlaySlider::_OnEvent( const LkEvent& _Event )
 	}
 }
 
-void LkOverlaySlider::_SetPosition( float _Position )
+void LkOverlaySlider::_SetPosition( f32 _Position )
 {
 	m_Position = _Position;
 	m_Position = math::clamp(m_Position, 0.0f, 1.0f);
@@ -441,9 +441,9 @@ void LkOverlaySlider::_ResolveStep()
 {
 	if (m_NumSteps > 0)
 	{
-		float stepsize = 1.0f / (m_NumSteps - 1);
+		f32 stepsize = 1.0f / (m_NumSteps - 1);
 
-		m_Position = stepsize * int((m_Position / stepsize) + 0.5f);
+		m_Position = stepsize * int32((m_Position / stepsize) + 0.5f);
 	}
 }
 

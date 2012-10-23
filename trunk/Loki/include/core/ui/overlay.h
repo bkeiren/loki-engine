@@ -16,7 +16,7 @@ namespace ui
 class LkOverlayElement;
 class LkOverlayStyle;
 
-typedef unsigned int	OverlayElementID;
+typedef uint32	OverlayElementID;
 
 class LkOverlay
 {

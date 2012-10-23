@@ -61,7 +61,7 @@ void LkCamera::ApplyViewTransformation()
 
 	LkMovableComponent* comp = GetComponent<LkMovableComponent>();
 	mat4x4 mat = math::inverse(comp->GetTransformation());
-	glLoadMatrixf((float*)&mat);	// Load the camera matrix.
+	glLoadMatrixf((f32*)&mat);	// Load the camera matrix.
 }
 
 const mat4& LkCamera::GetProjectionMatrix()
@@ -83,35 +83,35 @@ mat4 LkCamera::GetViewMatrix()
 	return mat;
 }
 
-void LkCamera::SetFoVY( float _FoVY )
+void LkCamera::SetFoVY( f32 _FoVY )
 {
 	m_FoVY = _FoVY;
 	m_ProjectionMatrixIsDirty = true;
 }
 
-float LkCamera::GetFoVY() const
+f32 LkCamera::GetFoVY() const
 {
 	return m_FoVY;
 }
 
-void LkCamera::SetZFar( float _ZFar )
+void LkCamera::SetZFar( f32 _ZFar )
 {
 	m_ZFar = _ZFar;
 	m_ProjectionMatrixIsDirty = true;
 }
 
-float LkCamera::GetZFar() const
+f32 LkCamera::GetZFar() const
 {
 	return m_ZFar;
 }
 
-void LkCamera::SetZNear( float _ZNear )
+void LkCamera::SetZNear( f32 _ZNear )
 {
 	m_ZNear = _ZNear;
 	m_ProjectionMatrixIsDirty = true;
 }
 
-float LkCamera::GetZNear() const
+f32 LkCamera::GetZNear() const
 {
 	return m_ZNear;
 }
@@ -133,9 +133,9 @@ const int2& LkCamera::GetViewport() const
 	return m_Viewport;
 }
 
-float LkCamera::GetAspectRatio() const
+f32 LkCamera::GetAspectRatio() const
 {
-	return ((float)m_Viewport.x / (float)m_Viewport.y);
+	return ((f32)m_Viewport.x / (f32)m_Viewport.y);
 }
 
 void LkCamera::SetProjectionType( bool _Projection )
@@ -151,11 +151,11 @@ vec3 LkCamera::GetCameraToViewportVector( const int2& _ViewportCoordinates )
 	mat4 viewmat = GetViewMatrix();
 	mat4 projmat = GetProjectionMatrix();
 	vec4 viewport = vec4(0.0f, 0.0f, m_Viewport.x, m_Viewport.y);
-	vec3 a = math::gtc::matrix_transform::unProject(vec3((float)c.x, (float)c.y, 0.0f), 
+	vec3 a = math::gtc::matrix_transform::unProject(vec3((f32)c.x, (f32)c.y, 0.0f), 
 														viewmat, 
 														projmat, 
 														viewport);
-	vec3 b = math::gtc::matrix_transform::unProject(vec3((float)c.x, (float)c.y, 1.0f),
+	vec3 b = math::gtc::matrix_transform::unProject(vec3((f32)c.x, (f32)c.y, 1.0f),
 														viewmat,
 														projmat,
 														viewport);

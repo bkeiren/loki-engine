@@ -21,7 +21,7 @@ public:
 		_FRUSTUM_PLANE_COUNT
 	};
 	
-	Frustum( float _Left, float _Right, float _Bottom, float _Top, float _Near, float _Far );
+	Frustum( f32 _Left, f32 _Right, f32 _Bottom, f32 _Top, f32 _Near, f32 _Far );
 	Frustum( const mat4& _ProjectionMatrix );
 	~Frustum();
 

@@ -22,22 +22,22 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// _Duration is in seconds. Over this duration, _Frames will be shown.
 	//////////////////////////////////////////////////////////////////////////
-	LkAnimatedImage( float _Duration, int _Frames, const char* _Texture, const vec3& _Position, const vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
-	LkAnimatedImage( float _Duration, int _Frames, const char* _Texture, const vec2& _Position, const vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
+	LkAnimatedImage( f32 _Duration, int32 _Frames, const char* _Texture, const vec3& _Position, const vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
+	LkAnimatedImage( f32 _Duration, int32 _Frames, const char* _Texture, const vec2& _Position, const vec2& _Size, bool _PositionIsAbsolute = false, bool _SizeIsAbsolute = false );
 	~LkAnimatedImage();
 	
-	void SetAnimationSpeed( float _Speed );
-	float GetAnimationSpeed() const;
+	void SetAnimationSpeed( f32 _Speed );
+	f32 GetAnimationSpeed() const;
 
 protected:
 	void _OnEvent( const LkEvent& _Event );
 
 private:
-	float m_Duration;
-	int m_Frames;
-	int m_CurrentFrame;
-	float m_TimeElapsed;
-	float m_Speed;
+	f32 m_Duration;
+	int32 m_Frames;
+	int32 m_CurrentFrame;
+	f32 m_TimeElapsed;
+	f32 m_Speed;
 };
 
 }

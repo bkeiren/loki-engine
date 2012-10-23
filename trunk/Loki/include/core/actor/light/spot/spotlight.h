@@ -27,20 +27,20 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the inner cone angle.
 	//////////////////////////////////////////////////////////////////////////
-	float GetInnerAngle() const;
+	f32 GetInnerAngle() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the outer cone angle.
 	//////////////////////////////////////////////////////////////////////////
-	float GetOuterAngle() const;
+	f32 GetOuterAngle() const;
 private:
 	LkSpotLight( const char* _Name, game::LkLevel* _Level );
 	LkSpotLight();	// Private default c-tor.
 	~LkSpotLight();
 
 	vec3 m_Direction;
-	float m_InnerAngle;
-	float m_OuterAngle;
+	f32 m_InnerAngle;
+	f32 m_OuterAngle;
 };
 
 }

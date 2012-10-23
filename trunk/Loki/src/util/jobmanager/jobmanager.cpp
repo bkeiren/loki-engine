@@ -12,7 +12,7 @@ LkJobManager* g_JobManager = NULL;
 #define HANDLE_JOBADDED		1
 #define HANDLE_JOBFINISHED	2
 
-LkJobManager::LkJobManager( unsigned int _NumThreads, unsigned int _MaxNumJobs )	:
+LkJobManager::LkJobManager( uint32 _NumThreads, uint32 _MaxNumJobs )	:
 	m_NumThreads(_NumThreads),
 	m_MaxNumJobs(_MaxNumJobs)
 {
@@ -28,7 +28,7 @@ LkJobManager::LkJobManager( unsigned int _NumThreads, unsigned int _MaxNumJobs )
 	m_Handles[HANDLE_JOBADDED] = CreateSemaphore(NULL, 0, m_MaxNumJobs, NULL);		// Job added to the manager semaphore.
 	m_Handles[HANDLE_JOBFINISHED] = CreateSemaphore(NULL, 0, m_MaxNumJobs, NULL);	// Job finished semaphore.
 
-	for (unsigned int i = 0; i < m_NumThreads; ++i)
+	for (uint32 i = 0; i < m_NumThreads; ++i)
 	{
 		ThreadData* Data = new ThreadData();
 		Data->m_Index = i;
@@ -48,7 +48,7 @@ LkJobManager::~LkJobManager()
 {
 	StopThreads();
 
-	for (unsigned int i = 0; i < m_NumThreads; ++i)
+	for (uint32 i = 0; i < m_NumThreads; ++i)
 	{
 		CloseHandle(m_ThreadHandles[i]);
 		CloseHandle(m_ExitHandles[i]);
@@ -80,13 +80,13 @@ void LkJobManager::AddJob( LkJob* _Job )
 	ReleaseSemaphore(m_Handles[HANDLE_JOBADDED], 1, NULL);
 }
 
-int LkJobManager::GetNumPendingJobs()
+int32 LkJobManager::GetNumPendingJobs()
 {
 	// TODO: Check whether this is thread safe!
 	return m_JobList.size();
 }
 
-unsigned int LkJobManager::GetNumThreads()
+uint32 LkJobManager::GetNumThreads()
 {
 	return m_NumThreads;
 }

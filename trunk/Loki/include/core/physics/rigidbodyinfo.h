@@ -40,30 +40,30 @@ struct RigidBodyInfo
 
 	ECollisionShape m_Shape;
 
-	float m_Mass;	// A mass of zero means the object has an infinite mass and is not movable.
-	float m_Friction;
-	float m_Restitution;
+	f32 m_Mass;	// A mass of zero means the object has an infinite mass and is not movable.
+	f32 m_Friction;
+	f32 m_Restitution;
 	mat4 m_InitialTransform;
 	mat4 m_CenterOfMassOffset;
 	
 	vec3 m_LocalInertia;
-	float m_LinearDamping;
-	float m_AngularDamping;
-	float m_LinearSleepingThreshold;
-	float m_AngularSleepingThreshold;
+	f32 m_LinearDamping;
+	f32 m_AngularDamping;
+	f32 m_LinearSleepingThreshold;
+	f32 m_AngularSleepingThreshold;
 	bool m_AdditionalDamping;
-	float m_AdditionalDampingFactor;
-	float m_AdditionalLinearDampingThresholdSqr;
-	float m_AdditionalAngularDampingThresholdSqr;
-	float m_AdditionalAngularDampingFactor;
+	f32 m_AdditionalDampingFactor;
+	f32 m_AdditionalLinearDampingThresholdSqr;
+	f32 m_AdditionalAngularDampingThresholdSqr;
+	f32 m_AdditionalAngularDampingFactor;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Capsule data.
 	struct
 	{
 		EShapeAxis m_Axis;
-		float m_Radius;
-		float m_Height;
+		f32 m_Radius;
+		f32 m_Height;
 	} m_CapsuleData;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ struct RigidBodyInfo
 	// Sphere data.
 	struct  
 	{
-		float m_Radius;
+		f32 m_Radius;
 	} m_SphereData;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ struct RigidBodyInfo
 	struct  
 	{
 		vec3 m_Normal;
-		float m_Constant;	// ?Distance from the origin along the normal?
+		f32 m_Constant;	// ?Distance from the origin along the normal?
 	} m_StaticPlaneData;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -101,8 +101,8 @@ struct RigidBodyInfo
 	struct
 	{
 		EShapeAxis m_Axis;
-		float m_Radius;
-		float m_Height;
+		f32 m_Radius;
+		f32 m_Height;
 	} m_ConeData;
 
 	//////////////////////////////////////////////////////////////////////////

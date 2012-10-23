@@ -104,10 +104,10 @@ public:
 	{
 		union
 		{
-			int m_Int;
+			int32 m_Int;
 			bool m_Boolean;
 		};
-		float m_Float;	// Float must be separated because the data will be messed up if it's not. This does
+		f32 m_Float;	// Float must be separated because the data will be messed up if it's not. This does
 		// mean that the data structure occupies 4 additional bytes.
 		std::string m_String;
 	};

@@ -39,8 +39,8 @@ class LkLocalization
 	friend class LkEngine;
 
 	typedef std::vector<std::string>					LocalizedStrings;
-	typedef std::map<unsigned int, LocalizedStrings>	StringMap;
-	typedef std::pair<unsigned int, LocalizedStrings>	StringMapPair;
+	typedef std::map<uint32, LocalizedStrings>	StringMap;
+	typedef std::pair<uint32, LocalizedStrings>	StringMapPair;
 public:
 	//////////////////////////////////////////////////////////////////////////
 	// Loads a localization table.

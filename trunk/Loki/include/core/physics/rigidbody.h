@@ -26,7 +26,7 @@ public:
 
 	void ApplyCentralForce( const vec3& _Force );
 	void ApplyCentralImpulse( const vec3& _Impulse );
-	void ApplyDamping( float _TimeStep );
+	void ApplyDamping( f32 _TimeStep );
 	void ApplyForce( const vec3& _Force, const vec3& _Point );
 	void ApplyGravity();
 	void ApplyImpulse( const vec3& _Impulse, const vec3& _Point );
@@ -39,13 +39,13 @@ public:
 	vec3 GetCenterOfMass() const;
 	vec3 GetDeltaAngularVelocity() const;
 	vec3 GetDeltaLinearVelocity() const;
-	float GetFriction() const;
+	f32 GetFriction() const;
 	vec3 GetGravity() const;
-	float GetLinearDamping() const;
+	f32 GetLinearDamping() const;
 	vec3  GetLinearFactor() const;
 	vec3 GetLinearVelocity() const;
 	quat GetOrientation() const;
-	float GetRestitution() const;
+	f32 GetRestitution() const;
 	vec3 GetTotalForce() const;
 	vec3 GetTotalTorque() const;
 	vec3 GetVelocityInLocalPoint( const vec3& _Point ) const;
@@ -54,7 +54,7 @@ public:
 	bool IsActive() const;
 	void Activate( bool _ForceActivation = false );
 
-	void SetMass( float _Mass );
+	void SetMass( f32 _Mass );
 private:
 	LkRigidBody( const RigidBodyInfo& _Info );
 	LkRigidBody();

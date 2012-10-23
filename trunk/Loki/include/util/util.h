@@ -8,6 +8,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include "Types.h"
 
 #define BYTE_TO_KB(b)	(b / 1024)
 #define BYTE_TO_MB(b)	(b / 1048576)
@@ -109,7 +110,7 @@ std::string ToMultiByteString(const std::wstring& wstr);
 // Sleeps the calling thread for _ms number of milliseconds.
 // Can be implemented differently per platform.
 //////////////////////////////////////////////////////////////////////////
-inline void Sleep( unsigned int _ms );
+inline void Sleep( uint32 _ms );
 
 //////////////////////////////////////////////////////////////////////////
 // Presents the user with a dialog box with an 'OK' button.
@@ -129,7 +130,7 @@ void MessageBoxNotify( const char* _Text, const char* _Caption = NULL );
 #define CONFIRMATION_CANCEL	-1
 #define CONFIRMATION_NO		0
 #define CONFIRMATION_YES	1
-int MessageBoxConfirmation( const char* _Text, const char* _Caption = NULL, bool _CanCancel = false );
+int32 MessageBoxConfirmation( const char* _Text, const char* _Caption = NULL, bool _CanCancel = false );
 
 //////////////////////////////////////////////////////////////////////////
 // Stores a formatted time stamp in _Output.
@@ -143,7 +144,7 @@ void GetTimeStamp( std::string& _Output );
 // StringReplace returns true if something was replaced, false otherwise.
 // StringReplaceAll replaces all occurrences of _From with _To.
 //////////////////////////////////////////////////////////////////////////
-bool StringReplace( std::string& _String, const std::string& _From, const std::string& _To, int _Index = 0 );
+bool StringReplace( std::string& _String, const std::string& _From, const std::string& _To, int32 _Index = 0 );
 void StringReplaceAll( std::string& _String, const std::string& _From, const std::string& _To );
 
 //////////////////////////////////////////////////////////////////////////

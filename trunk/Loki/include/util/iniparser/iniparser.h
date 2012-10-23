@@ -55,8 +55,8 @@ public:
 	// 1 - Property did not exist, had to be created.
 	// 2 - Section (and thus property) did not exist, had to be created.
 	//////////////////////////////////////////////////////////////////////////
-	int SetProperty( const char* _Section, const char* _Name, const char* _Value );
-	int SetProperty( const std::string& _Section, const std::string& _Name, const std::string& _Value );
+	int32 SetProperty( const char* _Section, const char* _Name, const char* _Value );
+	int32 SetProperty( const std::string& _Section, const std::string& _Name, const std::string& _Value );
 
 	void RemoveSection( const char* _Section );
 	void RemoveSection( const std::string& _Section );

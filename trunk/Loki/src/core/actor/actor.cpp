@@ -36,7 +36,7 @@ LkActor::~LkActor()
 	_ClearComponents();
 }
 
-unsigned int LkActor::GetHashForName( const char* _Name )
+uint32 LkActor::GetHashForName( const char* _Name )
 {
 	return util::Hash_FNV32(_Name);
 }
@@ -46,7 +46,7 @@ const std::string& LkActor::GetName() const
 	return m_Name;
 }
 
-const unsigned int LkActor::GetID() const
+const uint32 LkActor::GetID() const
 {
 	return m_ID;
 }

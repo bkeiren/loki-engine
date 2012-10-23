@@ -30,7 +30,7 @@ public:
 	// (which might not have anything to do with the job manager) become
 	// visible. If _Sleep is set to 0 (default), the process does not sleep.
 	//////////////////////////////////////////////////////////////////////////
-	LkJobManager( unsigned int _NumThreads, unsigned int _MaxNumJobs );
+	LkJobManager( uint32 _NumThreads, uint32 _MaxNumJobs );
 
 	//////////////////////////////////////////////////////////////////////////
 	// WARNING: The destructor waits for all current job threads to finish
@@ -53,17 +53,17 @@ public:
 	// future. This is a convenience function that simply utilizes AddJob() 
 	// and adds each job in the array (up to _NumJobs) sequentially.
 	//////////////////////////////////////////////////////////////////////////
-	void AddJobs( LkJob** _JobArray, unsigned int _NumJobs );
+	void AddJobs( LkJob** _JobArray, uint32 _NumJobs );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the number of pending jobs.
 	//////////////////////////////////////////////////////////////////////////
-	int GetNumPendingJobs();
+	int32 GetNumPendingJobs();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the number of threads that the jobmanager can utilize.
 	//////////////////////////////////////////////////////////////////////////
-	unsigned int GetNumThreads();
+	uint32 GetNumThreads();
 private:
 	//////////////////////////////////////////////////////////////////////////
 	// Waits until a job is available and then returns it. Returns NULL
@@ -73,7 +73,7 @@ private:
 
 	struct ThreadData
 	{
-		int m_Index;
+		int32 m_Index;
 		LkJobManager* m_JobManager;
 	};
 
@@ -94,8 +94,8 @@ private:
 	HANDLE* m_Handles;
 	HANDLE* m_ExitHandles;
 	CRITICAL_SECTION m_JobListCritSec;
-	unsigned int m_NumThreads;
-	unsigned int m_MaxNumJobs;
+	uint32 m_NumThreads;
+	uint32 m_MaxNumJobs;
 	
 	JobList m_JobList;
 };

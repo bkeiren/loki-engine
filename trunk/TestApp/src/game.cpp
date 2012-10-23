@@ -253,7 +253,7 @@ bool MyGame::Init()
 
 	LkParticleSystem* ps = m_Level->SpawnParticleSystem(descr);
 
-/*
+
 	Entity* entity = g_EntitySystem->SpawnEntity("TestEntity");
 	entity->InstantiateComponent<loki::components::PhysicsComponent>();
 	entity->InstantiateComponent<loki::components::RenderComponent>();
@@ -274,7 +274,7 @@ bool MyGame::Init()
 	rc = entity->GetComponent<loki::components::RenderComponent>();
 
 	rc->SetModel(graphics::Model::Load("resources//lmo//cube.lmo"));
-*/
+
 // 	loki::util::JSONDocument* doc = loki::util::JSONDocument::Open("resources//test.json");
 // 	if (doc)
 // 	{

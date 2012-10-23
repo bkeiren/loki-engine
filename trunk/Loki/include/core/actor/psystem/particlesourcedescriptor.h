@@ -16,12 +16,12 @@ class LkParticleSourceDescriptor
 	friend class std::vector<LkParticleSourceDescriptor>;
 	friend void std::_Destroy<LkParticleSourceDescriptor>( LkParticleSourceDescriptor _FARQ* _Ptr );
 public:
-	float		m_SpawnRate;	// Particle spawns per second.
-	float		m_Lifetime;		// Lifetime duration.
-	float		m_Birth;		// Moment of birth after it's parent system spawns. This makes it possible to build some sort of delay
+	f32		m_SpawnRate;	// Particle spawns per second.
+	f32		m_Lifetime;		// Lifetime duration.
+	f32		m_Birth;		// Moment of birth after it's parent system spawns. This makes it possible to build some sort of delay
 								// before the particle source springs into action.
-	int			m_Quota;		// Maximum number of particles that can be alive at any one time.
-	int			m_SpawnQuota;	// Number of particles to spawn per spawning-moment.
+	int32			m_Quota;		// Maximum number of particles that can be alive at any one time.
+	int32			m_SpawnQuota;	// Number of particles to spawn per spawning-moment.
 	void*		m_DefaultUserData[8];	// Default user data.
 	vec3	m_Position;		// Source position, relative to system position.
 	LkParticle::ParticleCallback m_Callback;	// Particle callback function which is called every frame.

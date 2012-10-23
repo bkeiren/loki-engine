@@ -16,7 +16,7 @@ std::wstring ToWideString(const std::string& str)
 	// First we need to know how large the wide-string buffer needs to be.
 	// We can obtain this information by passing 0 as argument cchWideChar. According to
 	// MSDN documentation, this will make MultiByteToWideChar return the required buffer size.
-	int stringLength = MultiByteToWideChar(CP_UTF8/*CP_ACP*/, 0, str.data(), str.length(), 0, 0);
+	int32 stringLength = MultiByteToWideChar(CP_UTF8/*CP_ACP*/, 0, str.data(), str.length(), 0, 0);
 
 	// Create an appropriately sized buffer.
 	std::wstring wstr(stringLength, 0);
@@ -31,7 +31,7 @@ std::string ToMultiByteString(const std::wstring& wstr)
 	// In order to know the required buffer size later on, we need to pass 0 as the argument cbMultiByte
 	// to WideCharToMultiByte. According to MSDN documentation, this will result in WideCharToMultiByte
 	// returning the required buffer size.
-	int stringLength = WideCharToMultiByte(CP_UTF8/*CP_ACP*/, 0, wstr.data(), wstr.length(), 0, 0, 0, 0);
+	int32 stringLength = WideCharToMultiByte(CP_UTF8/*CP_ACP*/, 0, wstr.data(), wstr.length(), 0, 0, 0, 0);
 
 	// Create an appropiately sized buffer.
 	std::string str(stringLength, 0);
@@ -46,7 +46,7 @@ void MessageBoxNotify( const char* _Text, const char* _Caption /*= NULL*/ )
 	MessageBoxA(g_Engine->GetWindow()->GetHWND(), _Text, _Caption, MB_OK);
 }
 
-int MessageBoxConfirmation( const char* _Text, const char* _Caption /*= NULL*/, bool _CanCancel /*= false*/ )
+int32 MessageBoxConfirmation( const char* _Text, const char* _Caption /*= NULL*/, bool _CanCancel /*= false*/ )
 {
 	switch (MessageBoxA(g_Engine->GetWindow()->GetHWND(), _Text, _Caption, (_CanCancel)?(MB_YESNOCANCEL):(MB_YESNO) | MB_TASKMODAL))
 	{
@@ -95,14 +95,14 @@ void GetTimeStamp( std::string& _Output )
 	_Output = time_and_date;
 }
 
-bool StringReplace( std::string& _String, const std::string& _From, const std::string& _To, int _Index /*= 0*/ )
+bool StringReplace( std::string& _String, const std::string& _From, const std::string& _To, int32 _Index /*= 0*/ )
 {
 	if(_From.empty())
 	{
 		return false;
 	}
 	size_t start_pos = 0;
-	int idx = 0;
+	int32 idx = 0;
 	while((start_pos = _String.find(_From, start_pos)) != std::string::npos) 
 	{
 		if (idx == _Index)

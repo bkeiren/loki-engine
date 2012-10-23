@@ -25,23 +25,23 @@ public:
 	virtual const mat4& GetProjectionMatrix() = 0;
 	virtual mat4 GetViewMatrix() = 0;
 
-	virtual void SetFoV( float _FoV ) = 0;
-	virtual float GetFoV() const = 0;
+	virtual void SetFoV( f32 _FoV ) = 0;
+	virtual f32 GetFoV() const = 0;
 
-	virtual void SetZFar( float _ZFar ) = 0;
-	virtual float GetZFar() const = 0;
+	virtual void SetZFar( f32 _ZFar ) = 0;
+	virtual f32 GetZFar() const = 0;
 
-	virtual void SetZNear( float _ZNear ) = 0;
-	virtual float GetZNear() const = 0;
+	virtual void SetZNear( f32 _ZNear ) = 0;
+	virtual f32 GetZNear() const = 0;
 
 	virtual const int2& GetViewport() const = 0;	
 
 	virtual const vec4& GetOrthoViewport() const = 0;
 
-	virtual float GetAspectRatio() const = 0;
+	virtual f32 GetAspectRatio() const = 0;
 
-	virtual void SetOrthogonalProjection( float _Left = 0.0f, float _Right = 1.0f, float _Top = 0.0f, float _Bottom = 1.0f ) = 0;
-	virtual void SetPerspectiveProjection( float _FoV, int _Width, int _Height ) = 0;
+	virtual void SetOrthogonalProjection( f32 _Left = 0.0f, f32 _Right = 1.0f, f32 _Top = 0.0f, f32 _Bottom = 1.0f ) = 0;
+	virtual void SetPerspectiveProjection( f32 _FoV, int32 _Width, int32 _Height ) = 0;
 protected:
 	IView();
 	virtual ~IView();
