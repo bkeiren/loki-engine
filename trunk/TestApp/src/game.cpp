@@ -269,6 +269,12 @@ bool MyGame::Init()
 	info.m_Mass = 100.0f;
 	pc->CreateBodyFromInfo(info);
 
+	entity = g_EntitySystem->SpawnEntity("BoxEntity");
+	entity->InstantiateComponent<loki::components::RenderComponent>();
+	rc = entity->GetComponent<loki::components::RenderComponent>();
+
+	rc->SetModel(graphics::Model::Load("resources//lmo//cube.lmo"));
+
 // 	loki::util::JSONDocument* doc = loki::util::JSONDocument::Open("resources//test.json");
 // 	if (doc)
 // 	{
