@@ -148,17 +148,8 @@ bool LkRenderer::_Init( LkWindow* _Window )
 	if (!m_GBuffer)
 	{
 		LOG(VL_ERROR, "Renderer::Init: G-Buffer creation failed");
-		//delete m_GBuffer;
 		m_GBuffer = NULL;
 	}
-
-
-	// Initialize the texture manager.
-	//g_TextureManager = new LkTextureManager();
-
-	// Initialize the model manager.
-	//g_ModelManager = new LkModelManager();
-
 
 	m_LightEffect = g_EffectManager->CreateEffectFromFile("resources//shaders//light.cgfx", "LightEffect");
 	if (!m_LightEffect)

@@ -108,7 +108,7 @@ private:
 	void _CapFrameRate();
 
 	// An std::list of parsed command line arguments.
-	std::list<Parameter*> m_CommandLineArguments;
+	CommandLineParameters m_CommandLineArguments;
 
 	//HINSTANCE m_hInstance;		// Holds The Instance Of The Application
 	bool m_Exit;
