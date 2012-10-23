@@ -75,7 +75,11 @@ FragmentOutput mainFP( VertexOutput IN )
 {
 	FragmentOutput OUT;
 
-	float3x3 TBN = float3x3(normalize(IN.Tangent), normalize(IN.BiNormal), normalize(IN.Normal));
+	IN.Tangent = normalize(IN.Tangent);
+	IN.BiNormal = normalize(IN.BiNormal);
+	IN.Normal = normalize(IN.Normal);
+
+	float3x3 TBN = float3x3(IN.Tangent, IN.BiNormal, IN.Normal);
 	
 	//OUT.Depth = IN.Depth;
 	OUT.Color0 = float4(tex2D(DiffuseSampler, IN.Tex).rgb, tex2D(SpecularSampler, IN.Tex).r);
@@ -89,7 +93,9 @@ FragmentOutput mainFP( VertexOutput IN )
 	}
 	else
 	{
-		float4 normalpixel_vs = mul(ViewMatrix, float4(mul(ModelMatrixIT, normalize(mul(normalpixel, TBN))), 0.0));
+		float3 ModelSpace_normal = IN.Tangent * normalpixel.x + IN.BiNormal * normalpixel.y + IN.Normal * normalpixel.z;
+		//float4 normalpixel_vs = mul(ViewMatrix, float4(mul(ModelMatrixIT, normalize(mul(normalpixel, TBN))), 0.0));
+		float4 normalpixel_vs = mul(ViewMatrix, float4(mul(ModelMatrixIT, normalize(ModelSpace_normal)), 0.0));
 		OUT.Color2 = normalpixel_vs;
 	}
 	//OUT.Color2 = mul(ViewMatrix, float4(mul(ModelMatrixIT, IN.Normal), 0.0));

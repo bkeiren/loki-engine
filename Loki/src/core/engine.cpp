@@ -413,7 +413,7 @@ void LkEngine::Shutdown()
 	delete g_StateManager;
 	g_StateManager = NULL;
 
-	delete g_EntitySystem;
+	//delete g_EntitySystem;
 	g_EntitySystem = NULL;
 
 	// Same kind of story as with LkConsole::FinalizeInitialization.

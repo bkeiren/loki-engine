@@ -21,7 +21,11 @@ EntitySystem::EntitySystem()
 
 EntitySystem::~EntitySystem()
 {
-
+	for (EntitiesConstIter it = m_Entities.begin(); it != m_Entities.end(); ++it)
+	{
+		delete (*it).second;
+	}
+	m_Entities.clear();
 }
 
 Entity* EntitySystem::FindEntityByName( const char* _EntityName ) const
