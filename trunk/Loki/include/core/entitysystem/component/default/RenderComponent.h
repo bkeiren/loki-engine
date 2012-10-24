@@ -27,6 +27,8 @@ class RenderComponent	: public Component
 	
 	CONTAINER_MACRO_LIST(RenderComponent*, RenderComponents);
 public:
+	DECLARE_COMPONENT_TYPEINFO(RenderComponent)		// Required!
+
 	RenderComponent();
 	~RenderComponent();
 

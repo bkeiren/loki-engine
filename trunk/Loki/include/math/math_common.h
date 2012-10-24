@@ -21,7 +21,9 @@ extern const math::vec3 GlobalZ;
 #define SIDE	UNIT_Z
 #define UP		UNIT_Y
 
-#define ZEROVECTOR	math::vec3(0.0f, 0.0f, 0.0f)
+#define ZEROVECTOR		math::vec3(0.0f, 0.0f, 0.0f)
+#define IDENTITYMAT3	math::mat3(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f)
+#define IDENTITYMAT4	math::mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f)
 
 namespace color
 {

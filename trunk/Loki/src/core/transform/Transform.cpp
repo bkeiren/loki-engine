@@ -167,6 +167,12 @@ bool Transform::IsDirty() const
 	return (m_MatrixIsDirty || m_TranslationOrientationAreDirty);
 }
 
+void Transform::LookAt( const vec3& _Target )
+{
+	mat4 mat = math::gtc::matrix_transform::lookAt(-GetTranslation(), -_Target,	GlobalY);
+	SetMatrix(mat);
+}
+
 bool Transform::operator == ( Transform& _Transform )
 {
 	return (GetMatrix() == _Transform.GetMatrix());

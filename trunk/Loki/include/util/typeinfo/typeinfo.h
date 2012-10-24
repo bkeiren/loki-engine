@@ -32,6 +32,8 @@ public:
 	friend bool operator != ( const TypeInfo& _LHS, const TypeInfo& _RHS );
 	friend bool operator < ( const TypeInfo& _LHS, const TypeInfo& _RHS );
 	friend bool operator > ( const TypeInfo& _LHS, const TypeInfo& _RHS );
+	
+	TypeInfo& operator = ( const TypeInfo& _RHS );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Conversion operator(s). These can be useful when storing

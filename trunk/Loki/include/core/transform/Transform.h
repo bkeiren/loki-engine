@@ -49,6 +49,8 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	bool IsDirty() const;
 
+	void LookAt( const vec3& _Target );
+
 	bool operator == ( Transform& _Transform );
 	bool operator != ( Transform& _Transform );
 private:

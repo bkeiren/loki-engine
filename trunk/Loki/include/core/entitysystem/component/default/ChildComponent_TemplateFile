@@ -1,0 +1,45 @@
+//////////////////////////////////////////////////////////////////////////
+//
+// This file is provided simply to be able to quickly copy/paste the code
+// that you will want to use when defining a new component class.
+//
+//////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#define COMPONENTCLASSNAME	<INSERT_YOUR_CLASS_NAME_HERE>
+
+#ifndef 
+#define 
+
+#include "core/entitysystem/component/Component.h"
+
+namespace loki
+{
+
+namespace components
+{
+
+class COMPONENTCLASSNAME	: public Component
+{
+public:
+	DECLARE_COMPONENT_TYPEINFO(COMPONENTCLASSNAME)	// Required!
+
+	COMPONENTCLASSNAME();
+	~COMPONENTCLASSNAME();
+
+private:
+	void _OnEvent( const LkEvent& _Event );
+	void _Init();
+	void _Terminate();
+};
+
+}
+
+}
+
+#ifdef COMPONENTCLASSNAME
+#undef COMPONENTCLASSNAME
+#endif
+
+#endif

@@ -48,7 +48,7 @@ private:
 	mat4 m_ProjectionMatrix;
 	int2 m_Viewport;
 	vec4 m_OrthoViewport;
-	EProjectionType m_ProjectionType;
+	EProjType m_ProjectionType;
 	f32 m_FoV;
 	f32 m_ZFar;
 	f32 m_ZNear;
