@@ -8,7 +8,7 @@ namespace loki
 
 class Entity;
 
-enum EProjectionType
+enum EProjType
 {
 	PT_PERSPECTIVE = 0,
 	PT_ORTHO

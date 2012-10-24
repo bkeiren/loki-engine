@@ -11,7 +11,7 @@ LkCamera::LkCamera( const char* _Name, game::LkLevel* _Level )	:
 	m_ZFar(500.0f),
 	m_ZNear(0.1f),
 	m_Viewport(int2(64, 64)),
-	m_ProjectionType(PROJECTION_PERSPECTIVE),
+	m_ProjectionType(PROJ_PERSPECTIVE),
 	m_ProjectionMatrixIsDirty(true)
 {
 	AddComponent<LkMovableComponent>();
@@ -49,7 +49,7 @@ void LkCamera::ApplyProjectionMatrix()
 {
 	glMatrixMode(GL_PROJECTION);	// Deprecated.
 
-	(m_ProjectionType == PROJECTION_PERSPECTIVE)?
+	(m_ProjectionType == PROJ_PERSPECTIVE)?
 		(m_ProjectionMatrix = math::gtc::matrix_transform::perspective(m_FoVY, GetAspectRatio(), m_ZNear, m_ZFar)):
 		(m_ProjectionMatrix = math::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, m_ZNear, m_ZFar));
 	glLoadMatrixf((GLfloat*)&m_ProjectionMatrix);
@@ -68,7 +68,7 @@ const mat4& LkCamera::GetProjectionMatrix()
 {
 	if (m_ProjectionMatrixIsDirty)
 	{
-		(m_ProjectionType == PROJECTION_PERSPECTIVE)?
+		(m_ProjectionType == PROJ_PERSPECTIVE)?
 			(m_ProjectionMatrix = math::gtc::matrix_transform::perspective(m_FoVY, GetAspectRatio(), m_ZNear, m_ZFar)):
 			(m_ProjectionMatrix = math::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, m_ZNear, m_ZFar));
 		m_ProjectionMatrixIsDirty = false;

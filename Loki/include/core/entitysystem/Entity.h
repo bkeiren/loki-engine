@@ -23,7 +23,7 @@
 // to compare types of components. Either by 
 // using the typeid() operator (RTTI_TYPEID)
 // or by using dynamic_cast<>() (RTTI_DYNAMIC_CAST).
-#define RTTI_TYPE			RTTI_DYNAMIC_CAST
+#define RTTI_TYPE			RTTI_TYPEID
 
 
 namespace loki

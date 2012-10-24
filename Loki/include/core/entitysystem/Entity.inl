@@ -13,7 +13,8 @@ void Entity::InstantiateComponent()
 	//void* buffer = operator new (sizeof(_ComponentType));
 	//Component* comp = new (buffer) _ComponentType;
 #if RTTI_TYPE == RTTI_TYPEID
-	m_Components.insert(ComponentsPair(util::TypeInfo(typeid(_ComponentType)), comp));
+	//m_Components.insert(ComponentsPair(util::TypeInfo(typeid(_ComponentType)), comp));
+	m_Components.insert(ComponentsPair(_ComponentType::GetTypeInfo(), comp));
 #elif RTTI_TYPE == RTTI_DYNAMIC_CAST
 	m_Components.push_back(comp);
 #endif
@@ -26,7 +27,8 @@ void Entity::RemoveComponent()
 {
 	_ComponentType* comp = 0;
 #if RTTI_TYPE == RTTI_TYPEID
-	util::TypeInfo typeinfo = util::TypeInfo(typeid(_ComponentType));
+	//util::TypeInfo typeinfo = util::TypeInfo(typeid(_ComponentType));
+	util::TypeInfo typeinfo = _ComponentType::GetTypeInfo();
 	Components::iterator it = m_Components.find(typeinfo);
 	if (it == m_Components.end())
 	{
@@ -64,7 +66,8 @@ template< typename _ComponentType >
 bool Entity::HasComponent() const
 {
 #if RTTI_TYPE == RTTI_TYPEID
-	return (m_Components.find(util::TypeInfo(typeid(_ComponentType))) != m_Components.end());
+	//return (m_Components.find(util::TypeInfo(typeid(_ComponentType))) != m_Components.end());
+	return (m_Components.find(_ComponentType::GetTypeInfo()) != m_Components.end());
 #elif RTTI_TYPE == RTTI_DYNAMIC_CAST
 	_ComponentType* comp = 0;
 	for (ComponentsIter it = m_Components.begin(); it != m_Components.end(); ++it)
@@ -83,7 +86,8 @@ template< typename _ComponentType >
 _ComponentType* Entity::GetComponent() const
 {
 #if RTTI_TYPE == RTTI_TYPEID
-	util::TypeInfo typeinfo = util::TypeInfo(typeid(_ComponentType));
+	//util::TypeInfo typeinfo = util::TypeInfo(typeid(_ComponentType));
+	util::TypeInfo typeinfo = _ComponentType::GetTypeInfo();
 	Components::const_iterator it = m_Components.find(typeinfo);
 	if (it != m_Components.end())
 	{

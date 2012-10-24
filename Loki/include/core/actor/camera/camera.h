@@ -7,8 +7,8 @@
 
 #include "core/actor/components/movablecomponent/movablecomponent.h"
 
-#define PROJECTION_PERSPECTIVE	false
-#define PROJECTION_ORTHOGONAL	true
+#define PROJ_PERSPECTIVE	false
+#define PROJ_ORTHOGONAL		true
 
 namespace loki
 {

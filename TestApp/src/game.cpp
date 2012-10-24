@@ -27,6 +27,7 @@
 
 #include "core/entitysystem/component/default/PhysicsComponent.h"
 #include "core/entitysystem/component/default/RenderComponent.h"
+#include "core/entitysystem/component/default/CameraComponent.h"
 #include "core/graphics/Model.h"
 
 using namespace loki;
@@ -271,7 +272,9 @@ bool MyGame::Init()
 
 	entity = g_EntitySystem->SpawnEntity("BoxEntity");
 	entity->InstantiateComponent<loki::components::RenderComponent>();
+	entity->InstantiateComponent<loki::components::CameraComponent>();
 	rc = entity->GetComponent<loki::components::RenderComponent>();
+	loki::components::CameraComponent* cc = entity->GetComponent<loki::components::CameraComponent>();
 
 	rc->SetModel(graphics::Model::Load("resources//lmo//cube.lmo"));
 

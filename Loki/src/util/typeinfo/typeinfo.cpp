@@ -47,6 +47,12 @@ bool operator > ( const TypeInfo& _LHS, const TypeInfo& _RHS )
 	return (_LHS.m_Ptr < _RHS.m_Ptr); 
 }
 
+TypeInfo& TypeInfo::operator = ( const TypeInfo& _RHS )
+{
+	m_Ptr = _RHS.m_Ptr;
+	return *this;
+}
+
 }
 
 }

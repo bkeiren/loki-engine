@@ -20,6 +20,8 @@ namespace components
 class PhysicsComponent	: public Component
 {
 public:
+	DECLARE_COMPONENT_TYPEINFO(PhysicsComponent)	// Required!
+
 	PhysicsComponent();
 	~PhysicsComponent();
 
