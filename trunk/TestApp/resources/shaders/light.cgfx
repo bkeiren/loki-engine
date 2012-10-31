@@ -51,19 +51,15 @@ VertexOutput mainVP( VertexInput IN )
 	return OUT;
 }
 
-float LinearizeDepth( float _NonLinearDepth
+float LinearizeDepth( float _NonLinearDepth )
 {
 	return (2.0 * zFar * zNear / (zFar + zNear - (zFar - zNear) * (2 * _NonLinearDepth - 1.0))) / zFar;
 }
 
 float Attenuation( float3 _SurfacePosition, float3 _LightPosition )
 {
-//	float3 v = _SurfacePosition - _LightPosition;
-//	float d = dot(v, v) / (LightRadius * LightRadius);
-//	return max((1.0 - (LightConstantAttenuation + LightLinearAttenuation * d + LightQuadraticAttenuation * d * d)), 0.0);
-
 	// http://imdoingitwrong.wordpress.com/2011/01/31/light-attenuation/
-	float3 v = _SurfacePostion - _LightPosition;
+	float3 v = _SurfacePosition - _LightPosition;
 	float f = (dot(v, v) / (LightRange * LightRange)) + 1.0;
 	return clamp(LightIntensity / (f * f), 0.0, 1.0);
 }
