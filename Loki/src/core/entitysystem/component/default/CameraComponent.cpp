@@ -122,7 +122,8 @@ const mat4& CameraComponent::GetProjectionMatrix()
 
 mat4 CameraComponent::GetViewMatrix()
 {
-	return math::inverse(GetEntity()->GetTransform().GetMatrix());
+	mat4 m = math::inverse(GetEntity()->GetTransform().GetMatrix());
+	return m;
 }
 
 void CameraComponent::Activate()

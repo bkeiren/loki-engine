@@ -197,7 +197,7 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 																			aiProcess_OptimizeMeshes            |
 																			aiProcess_FindInvalidData           |
 																			/*aiProcess_FlipUVs                   |*/
-																			aiProcess_FlipWindingOrder          |
+																			/*aiProcess_FlipWindingOrder          |*/
 																			aiProcess_ImproveCacheLocality      );
 
 	if (!LocalScene)
@@ -244,6 +244,7 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 			// certain faces will have incorrect TBN matrices and will not be properly shaded.
 			if (m_tempMeshArray[i]->mTangents)			Vertices[y].tangent		= vec3(m_tempMeshArray[i]->mTangents[y].x,			m_tempMeshArray[i]->mTangents[y].y,		m_tempMeshArray[i]->mTangents[y].z);
 			if (m_tempMeshArray[i]->mTextureCoords[0])	Vertices[y].uv			= vec2(m_tempMeshArray[i]->mTextureCoords[0][y].x, m_tempMeshArray[i]->mTextureCoords[0][y].y);
+
 		}
 		vbo = graphics::VertexBuffer::Create(Vertices, NumVerts);
 		if(!vbo/*m_SubMeshes[i]->_CreateVertexBuffer(Vertices, NumVerts)*/)
