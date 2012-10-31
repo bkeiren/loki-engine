@@ -8,12 +8,12 @@ namespace components
 
 CppScript::CppScript()
 {
-
+	SubscribeToEvent(EVENT_ONUPDATE);
 }
 
 CppScript::~CppScript()
 {
-
+	UnsubscribeFromEvent(EVENT_ONUPDATE);
 }
 
 void CppScript::_OnEvent( const LkEvent& _Event )

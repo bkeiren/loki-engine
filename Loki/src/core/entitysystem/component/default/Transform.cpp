@@ -4,8 +4,6 @@ namespace loki
 {
 
 Transform::Transform()	:
-	m_LocalOrientation(quat()),
-	m_LocalPosition(vec3(0.0f, 0.0f, 0.0f)),
 	m_Orientation(quat()),
 	m_Position(vec3(0.0f, 0.0f, 0.0f)),
 	m_LocalToWorldMatrix(mat4(1.0f, 0.0f, 0.0f, 0.0f, 
@@ -16,17 +14,12 @@ Transform::Transform()	:
 								0.0f, 1.0f, 0.0f, 0.0f, 
 								0.0f, 0.0f, 1.0f, 0.0f, 
 								0.0f, 0.0, 0.0f, 1.0f)),
-	m_LocalTransformation(mat4(1.0f, 0.0f, 0.0f, 0.0f, 
-								0.0f, 1.0f, 0.0f, 0.0f, 
-								0.0f, 0.0f, 1.0f, 0.0f, 
-								0.0f, 0.0, 0.0f, 1.0f)),
 	m_Transformation(mat4(1.0f, 0.0f, 0.0f, 0.0f, 
 						   0.0f, 1.0f, 0.0f, 0.0f, 
 						   0.0f, 0.0f, 1.0f, 0.0f, 
 						   0.0f, 0.0, 0.0f, 1.0f)),
-   m_Parent(0),
    m_MatrixIsDirty(false),
-   m_LocalMatrixIsDirty(false),
+   m_PositionAndOrientationIsDirty(false),
    m_WorldToLocalMatrixIsDitry(false)
 {
 
@@ -37,24 +30,22 @@ Transform::~Transform()
 
 }
 
-const quat& Transform::GetOrientation() const
+const quat& Transform::GetOrientation()
 {
+	if (m_PositionAndOrientationIsDirty)
+	{
+		_ComputePositionAndOrientation();
+	}
 	return m_Orientation;
 }
 
-const quat& Transform::GetLocalOrientation() const
+const vec3& Transform::GetPosition()
 {
-	return m_LocalOrientation;
-}
-
-const vec3& Transform::GetPosition() const
-{
+	if (m_PositionAndOrientationIsDirty)
+	{
+		_ComputePositionAndOrientation();
+	}
 	return m_Position;
-}
-
-const vec3& Transform::GetLocalPosition() const
-{
-	return m_LocalPosition;
 }
 
 const mat4& Transform::GetMatrix()
@@ -66,154 +57,94 @@ const mat4& Transform::GetMatrix()
 	return m_Transformation;
 }
 
-const mat4& Transform::GetLocalMatrix()
-{
-	if (m_LocalMatrixIsDirty)
-	{
-		_ComputeLocalMatrix();
-	}
-	return m_LocalTransformation;
-}
-
-vec3 Transform::GetOrientationVector() const
+vec3 Transform::GetOrientationVector()
 {
 	return GetOrientation() * FORWARD;
 }
 
-vec3 Transform::GetLocalOrientationVector() const
-{
-	return GetLocalOrientation() * FORWARD;
-}
-
-vec3 Transform::GetEulerAngles() const
+vec3 Transform::GetEulerAngles()
 {
 	return math::gtx::quaternion::eulerAngles(GetOrientation());
 }
 
-vec3 Transform::GetLocalEulerAngles() const
-{
-	return math::gtx::quaternion::eulerAngles(GetLocalOrientation());
-}
-
-f32 Transform::GetPitch() const
+f32 Transform::GetPitch()
 {
 	return math::gtx::quaternion::pitch(GetOrientation());
 }
 
-f32 Transform::GetLocalPitch() const
-{
-	return math::gtx::quaternion::pitch(GetLocalOrientation());
-}
-
-f32 Transform::GetYaw() const
+f32 Transform::GetYaw()
 {
 	return math::gtx::quaternion::yaw(GetOrientation());
 }
 
-f32 Transform::GetLocalYaw() const
-{
-	return math::gtx::quaternion::yaw(GetLocalOrientation());
-}
-
-f32 Transform::GetRoll() const
+f32 Transform::GetRoll()
 {
 	return math::gtx::quaternion::roll(GetOrientation());
 }
 
-f32 Transform::GetLocalRoll() const
-{
-	return math::gtx::quaternion::roll(GetLocalOrientation());
-}
-
 void Transform::SetOrientation( const quat& _Orientation )
 {
-	// Compute new local orientation from global orientation.
+	if (m_PositionAndOrientationIsDirty)
+	{
+		_ComputePosition();
+	}
+
 	m_Orientation = _Orientation;
-	_ComputeLocalOrientationFromOrientation();
 	m_MatrixIsDirty = true;
+	m_PositionAndOrientationIsDirty = false;
 	m_WorldToLocalMatrixIsDitry = true;
-
-	// Update children.
-	_UpdateChildrenOrientation();
-}
-
-void Transform::SetLocalOrientation( const quat& _Orientation )
-{
-	// Compute new global orientation from local orientation.
-	m_LocalOrientation = _Orientation;
-	_ComputeOrientationFromLocalOrientation();
-	m_LocalMatrixIsDirty = true;
-	m_WorldToLocalMatrixIsDitry = true;
-
-	// Update children.
-	_UpdateChildrenLocalOrientation();
 }
 
 void Transform::SetPosition( const vec3& _Position )
 {
-	// Compute new local position from global position.
+	if (m_PositionAndOrientationIsDirty)
+	{
+		_ComputeOrientation();
+	}
+
 	m_Position = _Position;
-	_ComputeLocalPositionFromPosition();
 	m_MatrixIsDirty = true;
+	m_PositionAndOrientationIsDirty = false;
 	m_WorldToLocalMatrixIsDitry = true;
-
-	// Update children.
-	_UpdateChildrenPosition();
-}
-
-void Transform::SetLocalPosition( const vec3& _Position )
-{
-	// Compute new global position from local position.
-	m_LocalPosition = _Position;
-	_ComputePositionFromLocalPosition();
-	m_LocalMatrixIsDirty = true;
-	m_WorldToLocalMatrixIsDitry = true;
-
-	// Update children.
-	_UpdateChildrenLocalPosition();
 }
 
 void Transform::SetMatrix( const mat4& _Matrix )
 {
-	SetOrientation(math::gtc::quaternion::quat_cast(_Matrix));
-	SetPosition(vec3(_Matrix[3]));
+	m_Transformation = _Matrix;
+	m_PositionAndOrientationIsDirty = true;
+	m_MatrixIsDirty = false;
+	m_WorldToLocalMatrixIsDitry = true;
 }
 
-void Transform::SetLocalMatrix( const mat4& _Matrix )
+void Transform::LocalTranslate( const vec3& _Translation )
 {
-	SetLocalOrientation(math::gtc::quaternion::quat_cast(_Matrix));
-	SetLocalPosition(vec3(_Matrix[3]));
+	SetPosition(GetPosition() + (GetOrientation() * _Translation));
 }
 
-void Transform::LocalTranslate( const vec3& _Position )
+void Transform::Translate( const vec3& _Translation )
 {
-	SetLocalPosition(GetLocalPosition() + _Position);
-}
-
-void Transform::Translate( const vec3& _Position )
-{
-	SetPosition(GetPosition() + _Position);
+	SetPosition(GetPosition() + _Translation);
 }
 
 void Transform::LocalRotateX( f32 _Angle )
 {
-	SetLocalOrientation(math::gtc::quaternion::rotate(GetLocalOrientation(), _Angle, GlobalX));
+	SetOrientation(math::gtc::quaternion::rotate(GetOrientation(), _Angle, GlobalX * GetOrientation()));
 }
 
 void Transform::LocalRotateY( f32 _Angle )
 {
-	SetLocalOrientation(math::gtc::quaternion::rotate(GetLocalOrientation(), _Angle, GlobalY));
+	SetOrientation(math::gtc::quaternion::rotate(GetOrientation(), _Angle, GlobalY * GetOrientation()));
 }
 
 void Transform::LocalRotateZ( f32 _Angle )
 {
-	SetLocalOrientation(math::gtc::quaternion::rotate(GetLocalOrientation(), _Angle, GlobalZ));
+	SetOrientation(math::gtc::quaternion::rotate(GetOrientation(), _Angle, GlobalZ * GetOrientation()));
 }
 
 void Transform::LocalRotate( vec3& _Axis, f32 _Angle )
 {
-	const quat& q = GetLocalOrientation();
-	SetLocalOrientation(math::gtc::quaternion::rotate(q, _Angle, _Axis * q));
+	const quat& q = GetOrientation();
+	SetOrientation(math::gtc::quaternion::rotate(q, _Angle, _Axis * q));
 }
 
 void Transform::RotateX( f32 _Angle )
@@ -233,8 +164,7 @@ void Transform::RotateZ( f32 _Angle )
 
 void Transform::Rotate( vec3& _Axis, f32 _Angle )
 {
-	const quat& q = GetOrientation();
-	SetOrientation(math::gtc::quaternion::rotate(q, _Angle, _Axis * q));
+	SetOrientation(math::gtc::quaternion::rotate(GetOrientation(), _Angle, _Axis));
 }
 
 void Transform::LookAt( const vec3& _Target )
@@ -242,39 +172,9 @@ void Transform::LookAt( const vec3& _Target )
 	SetMatrix(math::gtc::matrix_transform::lookAt(GetPosition(), _Target, UP));
 }
 
-void Transform::SetParent( Transform& _Transform )
-{
-	vec3 GlobalPosition = GetPosition();
-
-	if (m_Parent)
-	{
-		m_Parent->_RemoveChild(this);
-	}
-
-	m_Parent = &_Transform;
-
-	SetPosition(GlobalPosition);
-
-	m_Parent->_AddChild(this);
-}
-
-Transform& Transform::GetParent() const
-{
-	return *m_Parent;
-}
-
-uint32 Transform::GetNumChildren() const
-{
-	return m_Children.size();
-}
-
 const mat4& Transform::GetLocalToWorldMatrix()
 {
-	if (m_WorldToLocalMatrixIsDitry)	// Yes, this is correct.
-	{
-		_ComputeLocalToWorldMatrix();
-	}
-	return m_LocalToWorldMatrix;
+	return m_Transformation;
 }
 
 const mat4& Transform::GetWorldToLocalMatrix()
@@ -314,107 +214,28 @@ void Transform::_ComputeMatrix()
 	m_MatrixIsDirty = false;
 }
 
-void Transform::_ComputeLocalMatrix()
+void Transform::_ComputePositionAndOrientation()
 {
-	mat4 m = math::gtc::quaternion::mat4_cast(GetLocalOrientation());
-	m[3] = vec4(GetLocalPosition(), 1.0);
-	m_LocalTransformation = m;
-	m_LocalMatrixIsDirty = false;
+	_ComputeOrientation();
+	_ComputePosition();
 }
 
-void Transform::_ComputeOrientationFromLocalOrientation()
+void Transform::_ComputeOrientation()
 {
-	m_Orientation = math::gtc::quaternion::quat_cast(m_LocalToWorldMatrix * math::gtc::quaternion::mat4_cast(GetLocalOrientation()));
-	m_MatrixIsDirty = true;
+	m_Position = vec3(m_Transformation[3]);
+	m_PositionAndOrientationIsDirty = false;
 }
 
-void Transform::_ComputeLocalOrientationFromOrientation()
+void Transform::_ComputePosition()
 {
-	m_LocalOrientation = math::gtc::quaternion::quat_cast(m_WorldToLocalMatrix * math::gtc::quaternion::mat4_cast(GetOrientation()));
-	m_LocalMatrixIsDirty = true;
+	m_Orientation = math::gtc::quaternion::quat_cast(m_Transformation);
+	m_PositionAndOrientationIsDirty = false;
 }
 
-void Transform::_ComputePositionFromLocalPosition()
+void Transform::_ComputeWorldToLocalMatrix()
 {
-	m_Position = vec3(GetLocalToWorldMatrix() * vec4(GetLocalPosition(), 1.0f));
-	m_MatrixIsDirty = true;
-}
-
-void Transform::_ComputeLocalPositionFromPosition()
-{
-	m_LocalPosition = vec3(GetWorldToLocalMatrix() * vec4(GetPosition(), 1.0f));
-	m_LocalMatrixIsDirty = true;
-}
-
-mat4 Transform::_ComputeLocalToWorldMatrix()
-{
-	if (m_Parent)
-	{
-		m_LocalToWorldMatrix = m_Parent->_ComputeLocalToWorldMatrix();
-	}
-	else
-	{
-		m_LocalToWorldMatrix = GetMatrix();
-	}
+	m_WorldToLocalMatrix = math::inverse(m_Transformation);
 	m_WorldToLocalMatrixIsDitry = false;
-	return m_LocalToWorldMatrix;
-}
-
-mat4 Transform::_ComputeWorldToLocalMatrix()
-{
-	m_WorldToLocalMatrix = math::inverse(GetLocalToWorldMatrix());
-	return m_WorldToLocalMatrix;
-}
-
-void Transform::_UpdateChildrenLocalOrientation()
-{
-	for (ChildrenConstIter it = m_Children.begin(); it != m_Children.end(); ++it)
-	{
-		Transform* child = (*it);
-
-		child->SetLocalOrientation(math::gtc::quaternion::quat_cast(GetWorldToLocalMatrix() * math::gtc::quaternion::mat4_cast(GetOrientation())));
-	}
-}
-
-void Transform::_UpdateChildrenOrientation()
-{
-	for (ChildrenConstIter it = m_Children.begin(); it != m_Children.end(); ++it)
-	{
-		Transform* child = (*it);
-
-		child->SetOrientation(math::gtc::quaternion::quat_cast(GetLocalToWorldMatrix() * math::gtc::quaternion::mat4_cast(GetLocalOrientation())));
-	}
-}
-
-void Transform::_UpdateChildrenLocalPosition()
-{
-	for (ChildrenConstIter it = m_Children.begin(); it != m_Children.end(); ++it)
-	{
-		Transform* child = (*it);
-
-		child->SetLocalPosition(vec3(GetWorldToLocalMatrix() * vec4(child->GetPosition(), 1.0f)));
-	}
-}
-
-void Transform::_UpdateChildrenPosition()
-{
-	for (ChildrenConstIter it = m_Children.begin(); it != m_Children.end(); ++it)
-	{
-		Transform* child = (*it);
-		
-		child->SetPosition(vec3(GetLocalToWorldMatrix() * vec4(child->GetLocalPosition(), 1.0f)));
-	}
-}
-
-void Transform::_AddChild( Transform* _Child )
-{
-	assert(_Child != this);
-	m_Children.push_back(_Child);
-}
-
-void Transform::_RemoveChild( Transform* _Child )
-{
-	m_Children.remove(_Child);
 }
 
 }

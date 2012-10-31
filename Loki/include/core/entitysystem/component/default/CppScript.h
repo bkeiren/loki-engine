@@ -21,13 +21,13 @@ public:
 
 protected:
 	// Called when the script awakes.
-	virtual void Awake() = 0;
+	virtual void Awake() {}
 
 	// Called on each update.
-	virtual void Update() = 0;
+	virtual void Update() {}
 
 	// Called when the script is stopped.
-	virtual void Stop() = 0;
+	virtual void Stop() {}
 
 private:
 	void _OnEvent( const LkEvent& _Event );
