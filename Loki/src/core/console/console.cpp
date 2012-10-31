@@ -14,13 +14,13 @@ namespace loki
 
 void JavascriptConsoleExecute( const JSArguments& _Args )
 {
-	std::string str = util::ToMultiByteString(_Args[0].toString());
+	std::string str = util::strings::ToMultiByteString(_Args[0].toString());
 	g_Console->Execute(str.c_str());
 }
 
 LkConsole* g_Console = NULL;
 
-LkConsole::LkConsole( LkEngine* _Engine )	:
+LkConsole::LkConsole( LokiEngine* _Engine )	:
 	m_Engine(_Engine),
 	m_ConsoleUI(0),
 	m_IsVisible(false)
@@ -127,10 +127,6 @@ void LkConsole::RegisterCommands()
 	m_Commands["win.setpos"] = Command("Sets the window position", &Console_SetWindowPos, Command::AT_INT, Command::AT_INT);
 	m_Commands["win.setsize"] = Command("Sets the window size", &Console_SetWindowSize, Command::AT_INT, Command::AT_INT);
 	m_Commands["terminate"] = Command("Signals for termination of the game and the engine", &Console_Terminate);
-	m_Commands["lvl.spawnpawn"] = Command("Spawns a pawn with the given (Unless the name is already taken) at [0, 0, 0]", &Console_PawnSpawn, Command::AT_STRING);
-	m_Commands["lvl.despawnpawn"] = Command("Despawns a pawn if it exists", &Console_PawnDespawn, Command::AT_STRING);
-	m_Commands["lvl.pawnsetpos"] = Command("Sets the position of a pawn", &Console_PawnSetPos, Command::AT_STRING, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
-	m_Commands["lvl.pawnsetori"] = Command("Sets the orientation of a pawn", &Console_PawnSetOri, Command::AT_STRING, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
 	m_Commands["renderer.tgbuffer"] = Command("Toggles the visualization of the GBuffer", &Console_GBufferTargets);
 	m_Commands["renderer.tlightvol"] = Command("Toggles the visualization of light volumes", &Console_LightVolumes);
 }
@@ -172,31 +168,31 @@ void LkConsole::Print( const char* _Message )
 	if (m_ConsoleUI)
 	{
 		std::string msg = _Message;
-		util::StringReplaceAll(msg, "\"", "&#34;");
+		util::strings::StringReplaceAll(msg, "\"", "&#34;");
 
 		// Remove characters that the javascript engine can't handle.
-		util::StringReplaceAll(msg, "á", "a");
-		util::StringReplaceAll(msg, "Á", "A");
-		util::StringReplaceAll(msg, "à", "a");
-		util::StringReplaceAll(msg, "À", "A");
-		util::StringReplaceAll(msg, "ã", "a");
-		util::StringReplaceAll(msg, "Ã", "A");
-		util::StringReplaceAll(msg, "é", "e");
-		util::StringReplaceAll(msg, "É", "E");
-		util::StringReplaceAll(msg, "è", "e");
-		util::StringReplaceAll(msg, "È", "E");
-		util::StringReplaceAll(msg, "ó", "o");
-		util::StringReplaceAll(msg, "Ó", "O");
-		util::StringReplaceAll(msg, "ò", "o");
-		util::StringReplaceAll(msg, "Ò", "O");
-		util::StringReplaceAll(msg, "õ", "o");
-		util::StringReplaceAll(msg, "Õ", "O");
-		util::StringReplaceAll(msg, "ñ", "n");
-		util::StringReplaceAll(msg, "Ñ", "N");
+		util::strings::StringReplaceAll(msg, "á", "a");
+		util::strings::StringReplaceAll(msg, "Á", "A");
+		util::strings::StringReplaceAll(msg, "à", "a");
+		util::strings::StringReplaceAll(msg, "À", "A");
+		util::strings::StringReplaceAll(msg, "ã", "a");
+		util::strings::StringReplaceAll(msg, "Ã", "A");
+		util::strings::StringReplaceAll(msg, "é", "e");
+		util::strings::StringReplaceAll(msg, "É", "E");
+		util::strings::StringReplaceAll(msg, "è", "e");
+		util::strings::StringReplaceAll(msg, "È", "E");
+		util::strings::StringReplaceAll(msg, "ó", "o");
+		util::strings::StringReplaceAll(msg, "Ó", "O");
+		util::strings::StringReplaceAll(msg, "ò", "o");
+		util::strings::StringReplaceAll(msg, "Ò", "O");
+		util::strings::StringReplaceAll(msg, "õ", "o");
+		util::strings::StringReplaceAll(msg, "Õ", "O");
+		util::strings::StringReplaceAll(msg, "ñ", "n");
+		util::strings::StringReplaceAll(msg, "Ñ", "N");
 
 		// This is a strange character that sometimes occurs (For example, when typing à, it will be inserted).
 		char minus96[] = { (char)-96, '\0' };
-		util::StringReplaceAll(msg, std::string(minus96), " ");
+		util::strings::StringReplaceAll(msg, std::string(minus96), " ");
 
 		std::string js = "var c = jQuery(\"#console_textarea\");c.append(\">";
 		js += msg;
@@ -204,10 +200,10 @@ void LkConsole::Print( const char* _Message )
 
 		// Replace certain characters because javascript and HTML have different characters-escape 
 		// requirements than C++.
-		util::StringReplaceAll(js, "\n", "\\n");
-		util::StringReplaceAll(js, "\t", "\\t");
-		util::StringReplaceAll(js, "<", "&lt;");
-		util::StringReplaceAll(js, ">", "&gt;");
+		util::strings::StringReplaceAll(js, "\n", "\\n");
+		util::strings::StringReplaceAll(js, "\t", "\\t");
+		util::strings::StringReplaceAll(js, "<", "&lt;");
+		util::strings::StringReplaceAll(js, ">", "&gt;");
 
 		EnterCriticalSection(&m_CriticalSection);
 		m_ConsoleUI->ExecuteJavascript(js);
@@ -274,7 +270,7 @@ void LkConsole::Execute( const char* _Command )
 	{
 		if (command.m_Arguments.size() >= it->second.m_RequiredArguments.size())
 		{
-			util::Clock clock;
+			util::time::Clock clock;
 			clock.Start();
 
 			CommandResult res = (*it).second.m_Function(&command);
@@ -304,7 +300,7 @@ void LkConsole::Execute( const char* _Command )
 	}
 }
 
-LkEngine* LkConsole::GetEngine()
+LokiEngine* LkConsole::GetEngine()
 {
 	return m_Engine;
 }

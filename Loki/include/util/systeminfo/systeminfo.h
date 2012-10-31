@@ -12,9 +12,12 @@ namespace loki
 namespace util
 {
 
-class LkSystemInfo
+namespace system
 {
-	friend class LkEngine;
+
+class SystemInfo
+{
+	friend class LokiEngine;
 public:
 	//////////////////////////////////////////////////////////////////////////
 	// Collects system information.
@@ -51,8 +54,8 @@ public:
 	const std::string& GetComputerName();
 	const std::string& GetUserName();
 private:
-	LkSystemInfo();
-	~LkSystemInfo();
+	SystemInfo();
+	~SystemInfo();
 
 	unsigned long m_VersionOSMajor;
 	unsigned long m_VersionOSMinor;
@@ -73,7 +76,9 @@ private:
 	std::string m_UserName;
 };
 
-extern LkSystemInfo* g_SystemInfo;
+extern SystemInfo* g_SystemInfo;
+
+}
 
 }
 

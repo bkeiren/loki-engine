@@ -6,13 +6,16 @@ namespace loki
 namespace util
 {
 
-LkJobManager* g_JobManager = NULL;
+namespace general
+{
+
+JobManager* g_JobManager = NULL;
 
 #define HANDLE_STOP			0
 #define HANDLE_JOBADDED		1
 #define HANDLE_JOBFINISHED	2
 
-LkJobManager::LkJobManager( uint32 _NumThreads, uint32 _MaxNumJobs )	:
+JobManager::JobManager( uint32 _NumThreads, uint32 _MaxNumJobs )	:
 	m_NumThreads(_NumThreads),
 	m_MaxNumJobs(_MaxNumJobs)
 {
@@ -39,12 +42,12 @@ LkJobManager::LkJobManager( uint32 _NumThreads, uint32 _MaxNumJobs )	:
 	}
 }
 
-LkJobManager::LkJobManager()
+JobManager::JobManager()
 {
 	LOG(VL_ERROR, "JobManager created with default c-tor");
 }
 
-LkJobManager::~LkJobManager()
+JobManager::~JobManager()
 {
 	StopThreads();
 
@@ -64,7 +67,7 @@ LkJobManager::~LkJobManager()
 	free(m_ExitHandles);
 }
 
-void LkJobManager::AddJob( LkJob* _Job )
+void JobManager::AddJob( Job* _Job )
 {
 	assert(_Job != NULL);
 
@@ -80,18 +83,18 @@ void LkJobManager::AddJob( LkJob* _Job )
 	ReleaseSemaphore(m_Handles[HANDLE_JOBADDED], 1, NULL);
 }
 
-int32 LkJobManager::GetNumPendingJobs()
+int32 JobManager::GetNumPendingJobs()
 {
 	// TODO: Check whether this is thread safe!
 	return m_JobList.size();
 }
 
-uint32 LkJobManager::GetNumThreads()
+uint32 JobManager::GetNumThreads()
 {
 	return m_NumThreads;
 }
 
-LkJob* LkJobManager::GetNextJob()
+Job* JobManager::GetNextJob()
 {
 	do 
 	{
@@ -108,7 +111,7 @@ LkJob* LkJobManager::GetNextJob()
 			EnterCriticalSection(&m_JobListCritSec);
 			for (JobList::iterator job_it = m_JobList.begin(); job_it != m_JobList.end(); ++job_it)
 			{
-				LkJob* job = (*job_it);
+				Job* job = (*job_it);
 				if (job->_CanStart())
 				{
 					m_JobList.remove(job);
@@ -130,7 +133,7 @@ LkJob* LkJobManager::GetNextJob()
 	return NULL;
 }
 
-void LkJobManager::StopThreads()
+void JobManager::StopThreads()
 {
 	// Set the stop event so that all threads will exit.
 	SetEvent(m_Handles[HANDLE_STOP]);
@@ -139,7 +142,7 @@ void LkJobManager::StopThreads()
 	WaitForMultipleObjects(m_NumThreads, m_ExitHandles, true, INFINITE);
 }
 
-DWORD WINAPI LkJobManager::ThreadEntry( LPVOID _Parameter )
+DWORD WINAPI JobManager::ThreadEntry( LPVOID _Parameter )
 {
 	ThreadData* Data = (ThreadData*)_Parameter;
 
@@ -148,7 +151,7 @@ DWORD WINAPI LkJobManager::ThreadEntry( LPVOID _Parameter )
 	while (1)
 	{
 		// GetNextJob() blocks until a job is available or the job manager should exit.
-		LkJob* job = Data->m_JobManager->GetNextJob();
+		Job* job = Data->m_JobManager->GetNextJob();
 
 		// If GetNextJob returns NULL, the thread should stop.
 		if (!job)
@@ -167,6 +170,8 @@ DWORD WINAPI LkJobManager::ThreadEntry( LPVOID _Parameter )
 	}
 
 	return 0;
+}
+
 }
 
 }

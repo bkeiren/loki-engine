@@ -11,7 +11,10 @@ namespace loki
 namespace util
 {
 
-class LkThread
+namespace system
+{
+
+class Thread
 {
 public:
 	// Thread creation flags.
@@ -51,7 +54,7 @@ public:
 	// THREAD_START_SUSPENDED, the thread will not start until Thread::Start()
 	// is explicitly called.
 	//////////////////////////////////////////////////////////////////////////
-	LkThread( ThreadFunc _Function, void* _Argument, uint32 _Flags );
+	Thread( ThreadFunc _Function, void* _Argument, uint32 _Flags );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Starts or resumes the thread's execution.
@@ -109,8 +112,8 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	void SetCallback( ThreadCallback _Callback );
 private:
-	LkThread();	// Private default c-tor.
-	virtual ~LkThread();	// Thread instances shouldn't be deletable
+	Thread();	// Private default c-tor.
+	virtual ~Thread();	// Thread instances shouldn't be deletable
 						// from the outside. Instead, Thread::Stop() or 
 						// Thread::Kill() should be used (Or the 
 						// thread function should return THREAD_RETURN_EXIT.
@@ -127,6 +130,8 @@ private:
 	uint32	m_Flags;
 	ThreadID		m_ID;
 };
+
+}
 
 }
 

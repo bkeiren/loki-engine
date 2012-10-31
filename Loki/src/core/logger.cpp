@@ -115,7 +115,7 @@ void LkLogger::Log( const VerbosityLevel _Level, const char* _Message, va_list _
 		std::string str("");
 
 		std::string time_and_date;
-		util::GetTimeStamp(time_and_date);
+		util::time::GetTimeStamp(time_and_date);
 
 		str += time_and_date;
 
@@ -235,7 +235,7 @@ void LkLogger::Flush()
 {
 	LOG(VL_NORMAL, "Logger::Flush: Flushing log buffer.");
 
-	CleanSTLList(m_Buffer);
+	util::general::CleanSTLList(m_Buffer);
 
 	m_BufferSize = 0;
 }

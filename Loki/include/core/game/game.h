@@ -13,7 +13,7 @@ class LkLevel;
 
 class LkGame
 {
-	friend class LkEngine;
+	friend class LokiEngine;
 public:
 	LkGame();
 	virtual ~LkGame() = 0;

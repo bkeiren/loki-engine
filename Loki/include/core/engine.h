@@ -36,20 +36,20 @@ namespace game
 	class LkGame;
 }
 
-class LkWindow;
+class Window;
 
 //////////////////////////////////////////////////////////////////////////
 // Static functions
 //////////////////////////////////////////////////////////////////////////
-class LkEngine
+class LokiEngine
 {
 public:
-	LkEngine( game::LkGame* _Game );
-	~LkEngine();
+	LokiEngine( game::LkGame* _Game );
+	~LokiEngine();
 
 	void Go( int32 argc, char** argv );
 
-	LkWindow* GetWindow() const;
+	Window* GetWindow() const;
 	game::LkGame* GetGame();
 
 	//////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ public:
 	
 	void RequestExit();
 private:
-	LkEngine();
+	LokiEngine();
 
 	/*
 		ParseArguments parses the command line arguments and stores them in a more easily accessible format in m_CommandLineArguments.
@@ -95,7 +95,7 @@ private:
 
 	void DisplaySplash( f32 _Duration );
 
-	static long __stdcall WindowProc( LkWindow* _Window, UINT _uMsg, WPARAM _wParam, LPARAM _lParam );
+	static long __stdcall WindowProc( Window* _Window, UINT _uMsg, WPARAM _wParam, LPARAM _lParam );
 
 	//////////////////////////////////////////////////////////////////////////
 	// To be called at start of frame.
@@ -112,12 +112,12 @@ private:
 
 	//HINSTANCE m_hInstance;		// Holds The Instance Of The Application
 	bool m_Exit;
-	LkWindow* m_Window;
+	Window* m_Window;
 
 	game::LkGame* m_Game;
 
-	util::Clock m_EngineClock;
-	util::Clock m_FrameClock;
+	util::time::Clock m_EngineClock;
+	util::time::Clock m_FrameClock;
 	f32 m_FrameTime;	// Seconds.
 
 	//////////////////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ private:
 	f32 m_TargetFrameTime;
 };
 
-extern LkEngine* g_Engine;
+extern LokiEngine* g_Engine;
 
 }
 

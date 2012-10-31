@@ -9,14 +9,17 @@ namespace loki
 namespace util
 {
 
+namespace time
+{
+
 class Clock
 {
 public:
 	Clock();
 	~Clock();
 
-	static int32 GetMilliCount();
-	static int32 GetMilliSpan( int32 nTimeStart );
+	int32 GetMilliCount();
+	int32 GetMilliSpan( int32 nTimeStart );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Starts the timer.
@@ -44,6 +47,8 @@ private:
 	int32 m_StartCount;
 #endif
 };
+
+}
 
 }
 

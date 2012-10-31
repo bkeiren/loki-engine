@@ -36,7 +36,7 @@ enum ELocale
 
 class LkLocalization
 {
-	friend class LkEngine;
+	friend class LokiEngine;
 
 	typedef std::vector<std::string>					LocalizedStrings;
 	typedef std::map<uint32, LocalizedStrings>	StringMap;

@@ -13,7 +13,7 @@ LkOverlayStyle::LkOverlayStyle( const char* _Name, const char* _File, bool& _Suc
 {
 	_SuccessOutput = false;
 	
-	util::LkINIParser::INIFile* file = util::LkINIParser::ParseFile(_File);
+	util::general::INIParser::INIFile* file = util::general::INIParser::ParseFile(_File);
 	if (!file)
 	{
 		return;
@@ -26,10 +26,10 @@ LkOverlayStyle::LkOverlayStyle( const char* _Name, const char* _File, bool& _Suc
 	// string data.
 	//////////////////////////////////////////////////////////////////////////
 
-	const util::LkINIParser::INIFile::SectionsMap& data = file->GetData();
-	for (util::LkINIParser::INIFile::SectionsMap::const_iterator it = data.begin(); it != data.end(); ++it)
+	const util::general::INIParser::INIFile::SectionsMap& data = file->GetData();
+	for (util::general::INIParser::INIFile::SectionsMap::const_iterator it = data.begin(); it != data.end(); ++it)
 	{
-		const util::LkINIParser::INIFile::Section* section = &((*it).second);
+		const util::general::INIParser::INIFile::Section* section = &((*it).second);
 
 		std::pair<Sections::iterator, bool> p = m_Data.insert(SectionsPair((*it).first, Properties()));
 		
@@ -39,7 +39,7 @@ LkOverlayStyle::LkOverlayStyle( const char* _Name, const char* _File, bool& _Suc
 			// TODO: Maybe output a warning because it's probably not intended.
 		}
 
-		for (util::LkINIParser::INIFile::Section::const_iterator it2 = section->begin(); it2 != section->end(); ++it2)
+		for (util::general::INIParser::INIFile::Section::const_iterator it2 = section->begin(); it2 != section->end(); ++it2)
 		{
 			(*p.first).second.insert(PropertiesPair((*it2).first, (*it2).second));
 		}

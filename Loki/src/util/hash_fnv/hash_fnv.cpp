@@ -10,6 +10,9 @@ namespace loki
 namespace util
 {
 
+namespace hash
+{
+
 uint32_t Hash_FNV32( const char* s )
 {
 	uint32_t hash = FNV_OFFSET_32;
@@ -22,6 +25,8 @@ uint32_t Hash_FNV32( const char* s )
 
 	return hash;
 } 
+
+}
 
 }
 

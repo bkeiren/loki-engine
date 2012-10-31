@@ -6,9 +6,12 @@ namespace loki
 namespace util
 {
 
-LkSystemInfo* g_SystemInfo = NULL;
+namespace system
+{
 
-LkSystemInfo::LkSystemInfo()	:
+SystemInfo* g_SystemInfo = NULL;
+
+SystemInfo::SystemInfo()	:
 	m_VersionOSMajor(0),
 	m_VersionOSMinor(0),
 	m_VersionOSBuild(0),
@@ -30,12 +33,12 @@ LkSystemInfo::LkSystemInfo()	:
 	Collect();
 }
 
-LkSystemInfo::~LkSystemInfo()
+SystemInfo::~SystemInfo()
 {
 
 }
 
-bool LkSystemInfo::Collect()
+bool SystemInfo::Collect()
 {
 	OSVERSIONINFOEXA OSVersionInfo;
 	OSVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXA);
@@ -178,7 +181,7 @@ bool LkSystemInfo::Collect()
 	return true;
 }
 
-void LkSystemInfo::LogSystemInformation()
+void SystemInfo::LogSystemInformation()
 {
 	LOG(VL_ALWAYS, "System Information:\n\tOS: %u.%u.%u %s SP%u.%u (%s %s)\n\tCPU: %u cores @ %.2f GHz\n\tRAM: %I64d MB Physical\t%I64d MB Virtual", 
 				   m_VersionOSMajor, 
@@ -195,89 +198,91 @@ void LkSystemInfo::LogSystemInformation()
 				   BYTE_TO_MB(m_MemoryAmountTotalVirtual));
 }
 
-const unsigned long LkSystemInfo::GetVersionOSMajor()
+const unsigned long SystemInfo::GetVersionOSMajor()
 {
 	return m_VersionOSMajor;
 }
 
-const unsigned long LkSystemInfo::GetVersionOSMinor()
+const unsigned long SystemInfo::GetVersionOSMinor()
 {
 	return m_VersionOSMinor;
 }
 
-const unsigned long LkSystemInfo::GetVersionOSBuild()
+const unsigned long SystemInfo::GetVersionOSBuild()
 {
 	return m_VersionOSBuild;
 }
 
-const unsigned long LkSystemInfo::GetVersionOSServicePackMajor()
+const unsigned long SystemInfo::GetVersionOSServicePackMajor()
 {
 	return m_VersionOSServicePackMajor;
 }
 
-const unsigned long LkSystemInfo::GetVersionOSServicePackMinor()
+const unsigned long SystemInfo::GetVersionOSServicePackMinor()
 {
 	return m_VersionOSServicePackMinor;
 }
 
-const bool LkSystemInfo::GetVersionOS64Bit()
+const bool SystemInfo::GetVersionOS64Bit()
 {
 	return m_VersionOS64Bit;
 }
 
-const std::string& LkSystemInfo::GetVersionOSString()
+const std::string& SystemInfo::GetVersionOSString()
 {
 	return m_VersionOSString;
 }
 
-const std::string& LkSystemInfo::GetVersionOSServicePackString()
+const std::string& SystemInfo::GetVersionOSServicePackString()
 {
 	return m_VersionOSServicePackString;
 }
 
-const unsigned long LkSystemInfo::GetNumProcessors()
+const unsigned long SystemInfo::GetNumProcessors()
 {
 	return m_NumProcessors;
 }
 
-const unsigned long LkSystemInfo::GetProcessorType()
+const unsigned long SystemInfo::GetProcessorType()
 {
 	return m_ProcessorType;
 }
 
-const unsigned short LkSystemInfo::GetProcessorArchitecture()
+const unsigned short SystemInfo::GetProcessorArchitecture()
 {
 	return m_ProcessorArchitecture;
 }
 
-const uint64 LkSystemInfo::GetMemoryAmountTotalPhysical()
+const uint64 SystemInfo::GetMemoryAmountTotalPhysical()
 {
 	return m_MemoryAmountTotalPhysical;
 }
 
-const uint64 LkSystemInfo::GetMemoryAmountTotalVirtual()
+const uint64 SystemInfo::GetMemoryAmountTotalVirtual()
 {
 	return m_MemoryAmountTotalVirtual;
 }
 
-const uint32 LkSystemInfo::GetCPUFrequencyHz()
+const uint32 SystemInfo::GetCPUFrequencyHz()
 {
 	return m_CPUFrequency;
 }
 
-const f32 LkSystemInfo::GetCPUFrequencyGHz()
+const f32 SystemInfo::GetCPUFrequencyGHz()
 {
 	return ((f32)m_CPUFrequency) / 1000000;
 }
 
-const std::string& LkSystemInfo::GetComputerName()
+const std::string& SystemInfo::GetComputerName()
 {
 	return m_ComputerName;
 }
 
-const std::string& LkSystemInfo::GetUserName()
+const std::string& SystemInfo::GetUserName()
 {
 	return m_UserName;
+}
+
 }
 
 }	// Namespace util.

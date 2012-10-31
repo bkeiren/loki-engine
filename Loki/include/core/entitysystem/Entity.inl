@@ -7,19 +7,20 @@ namespace loki
 {
 
 template< typename _ComponentType >
-void Entity::InstantiateComponent()
+_ComponentType* Entity::InstantiateComponent()
 {
 	Component* comp = (Component*)new _ComponentType();
 	//void* buffer = operator new (sizeof(_ComponentType));
 	//Component* comp = new (buffer) _ComponentType;
 #if RTTI_TYPE == RTTI_TYPEID
-	//m_Components.insert(ComponentsPair(util::TypeInfo(typeid(_ComponentType)), comp));
+	//m_Components.insert(ComponentsPair(util::general::TypeInfo(typeid(_ComponentType)), comp));
 	m_Components.insert(ComponentsPair(_ComponentType::GetTypeInfo(), comp));
 #elif RTTI_TYPE == RTTI_DYNAMIC_CAST
 	m_Components.push_back(comp);
 #endif
 	comp->SetEntity(this);
 	comp->_Init();
+	return (_ComponentType*)comp;
 }
 
 template< typename _ComponentType >
@@ -27,8 +28,8 @@ void Entity::RemoveComponent()
 {
 	_ComponentType* comp = 0;
 #if RTTI_TYPE == RTTI_TYPEID
-	//util::TypeInfo typeinfo = util::TypeInfo(typeid(_ComponentType));
-	util::TypeInfo typeinfo = _ComponentType::GetTypeInfo();
+	//util::general::TypeInfo typeinfo = util::general::TypeInfo(typeid(_ComponentType));
+	util::general::TypeInfo typeinfo = _ComponentType::GetTypeInfo();
 	Components::iterator it = m_Components.find(typeinfo);
 	if (it == m_Components.end())
 	{
@@ -50,7 +51,7 @@ void Entity::RemoveComponent()
 	}
 	if (!comp)
 	{
-		std::string t(util::TypeInfo(typeid(_ComponentType)).GetTypeName());
+		std::string t(util::general::TypeInfo(typeid(_ComponentType)).GetTypeName());
 		LOG(VL_ERROR, "Entity::RemoveComponent: Entity does not have a component of type %s.", t.c_str());
 		return;
 	}
@@ -62,11 +63,17 @@ void Entity::RemoveComponent()
 	//free(comp);
 }
 
+template<>
+void Entity::RemoveComponent<Transform>()
+{
+	LOG(VL_WARN, "Entity::RemoveComponent: It is not possible to remove the Transform component.");
+}
+
 template< typename _ComponentType >
 bool Entity::HasComponent() const
 {
 #if RTTI_TYPE == RTTI_TYPEID
-	//return (m_Components.find(util::TypeInfo(typeid(_ComponentType))) != m_Components.end());
+	//return (m_Components.find(util::general::TypeInfo(typeid(_ComponentType))) != m_Components.end());
 	return (m_Components.find(_ComponentType::GetTypeInfo()) != m_Components.end());
 #elif RTTI_TYPE == RTTI_DYNAMIC_CAST
 	_ComponentType* comp = 0;
@@ -86,8 +93,8 @@ template< typename _ComponentType >
 _ComponentType* Entity::GetComponent() const
 {
 #if RTTI_TYPE == RTTI_TYPEID
-	//util::TypeInfo typeinfo = util::TypeInfo(typeid(_ComponentType));
-	util::TypeInfo typeinfo = _ComponentType::GetTypeInfo();
+	//util::general::TypeInfo typeinfo = util::general::TypeInfo(typeid(_ComponentType));
+	util::general::TypeInfo typeinfo = _ComponentType::GetTypeInfo();
 	Components::const_iterator it = m_Components.find(typeinfo);
 	if (it != m_Components.end())
 	{
@@ -102,11 +109,17 @@ _ComponentType* Entity::GetComponent() const
 			return comp;
 		}
 	}
-//	util::TypeInfo typeinfo = util::TypeInfo(typeid(_ComponentType));
+//	util::general::TypeInfo typeinfo = util::general::TypeInfo(typeid(_ComponentType));
 #endif
 // 	std::string t(typeinfo.GetTypeName());
 // 	LOG(VL_ERROR, "Entity::GetComponent: Entity does not have a component of type %s.", t.c_str());
 	return 0;
+}
+
+template<>
+Transform* Entity::GetComponent<Transform>() const
+{
+	return m_Transform;
 }
 
 }

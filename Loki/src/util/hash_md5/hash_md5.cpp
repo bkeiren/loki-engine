@@ -6,6 +6,9 @@ namespace loki
 namespace util
 {
 
+namespace hash
+{
+
 MD5Hash Hash_MD5( const char* s )
 {
 #define leftrotate(x, c) ((x << c) | (x >> (32 - c)))
@@ -138,6 +141,8 @@ void MD5HashToString( MD5Hash _Hash, std::string& _String )
 	}
 	for (i = 38; i > 0; i--) if (d[i] > 0) break;
 	for (; i > -1; i--) _String.append(1, '0' + d[i]);
+}
+
 }
 
 }

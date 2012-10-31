@@ -9,9 +9,9 @@
 namespace loki
 {
 
-typedef vec3 ColorRGB;
-typedef vec4 ColorRGBA;
-typedef ColorRGB Color;	// Color defaults to color without alpha.
+typedef math::vec3 ColorRGB;
+typedef math::vec4 ColorRGBA;
+typedef ColorRGB Color;	// 'Color' defaults to color without alpha.
 
 }
 

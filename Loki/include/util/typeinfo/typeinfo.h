@@ -11,6 +11,9 @@ namespace loki
 namespace util
 {
 
+namespace general
+{
+
 //////////////////////////////////////////////////////////////////////////
 // Small and simple wrapper around std::type_info because we can't
 // store those directly (because there is no public constructor), and 
@@ -54,6 +57,8 @@ bool operator == ( const TypeInfo& _LHS, const TypeInfo& _RHS );
 bool operator != ( const TypeInfo& _LHS, const TypeInfo& _RHS );
 bool operator < ( const TypeInfo& _LHS, const TypeInfo& _RHS );
 bool operator > ( const TypeInfo& _LHS, const TypeInfo& _RHS );
+
+}
 
 }
 

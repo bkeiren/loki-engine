@@ -11,11 +11,16 @@ namespace loki
 namespace util
 {
 
+namespace hash
+{
+
 typedef uint128 MD5Hash;
 
 MD5Hash Hash_MD5( const char* s ); 
 
 void MD5HashToString( MD5Hash _Hash, std::string& _String );
+
+}
 
 }
 

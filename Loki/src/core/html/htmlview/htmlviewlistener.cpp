@@ -96,7 +96,7 @@ void LkHTMLViewListener::onCallback(Awesomium::WebView* caller,
 			str += (*it).toString();
 		}
 		str += L" );";
-		LOG(VL_NORMAL, util::ToMultiByteString(str).c_str());
+		LOG(VL_NORMAL, util::strings::ToMultiByteString(str).c_str());
 	}
 }
 
@@ -198,13 +198,13 @@ void LkHTMLViewListener::onJavascriptConsoleMessage(Awesomium::WebView* caller,
 										const std::wstring& source)
 {
 	std::string str = "Awesomium JS: ";
-	str += util::ToMultiByteString(message);
+	str += util::strings::ToMultiByteString(message);
 	str += " - Line: ";
 	str += lineNumber;
 	if (source.length() > 0)
 	{
 		str += " (Source: ";
-		str += util::ToMultiByteString(source);
+		str += util::strings::ToMultiByteString(source);
 	}
 	LOG(VL_NORMAL, str.c_str());
 }

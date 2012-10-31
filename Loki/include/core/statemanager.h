@@ -13,7 +13,7 @@ class LkIState;
 
 class LkStateManager
 {
-	friend class LkEngine;
+	friend class LokiEngine;
 public:
 	/*
 		Registers a new state with the state-manager.

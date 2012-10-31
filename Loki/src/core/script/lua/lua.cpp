@@ -44,7 +44,7 @@ bool LkLua::_Init()
 	RegisterFunction("LOG", LuaLog);
 
 	// Start thread function.
-	m_Thread = new util::LkThread(Thread, (void*)this, 0);
+	m_Thread = new util::system::Thread(Thread, (void*)this, 0);
 
 	LOG(VL_ALWAYS, "Lua::Init: State initialized");
 	return true;

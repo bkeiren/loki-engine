@@ -22,7 +22,10 @@ namespace loki
 
 namespace util
 {
-	class LkThread;
+	namespace system
+	{
+		class Thread;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -30,7 +33,7 @@ namespace util
 //////////////////////////////////////////////////////////////////////////
 class LkLua
 {
-	friend class LkEngine;
+	friend class LokiEngine;
 public:
 	void RunScript( const char* _File );
 	void RunString( const char* _String );
@@ -67,7 +70,7 @@ private:
 	HANDLE m_QueueSemaphoreHandle;
 	HANDLE m_ThreadStopEventHandle;
 	HANDLE m_ThreadExittedHandle;
-	util::LkThread* m_Thread;
+	util::system::Thread* m_Thread;
 };
 
 extern LkLua* g_Lua;

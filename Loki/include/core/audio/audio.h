@@ -19,7 +19,7 @@ namespace loki
 
 class LkAudio
 {
-	friend class LkEngine;
+	friend class LokiEngine;
 public:
 	void Update();
 

@@ -1,14 +1,6 @@
 #include "game.h"
-#include "core/actor/camera/camera.h"
-#include "core/game/level/level.h"
-#include "core/actor/light/point/pointlight.h"
-#include "core/actor/light/spot/spotlight.h"
-#include "core/actor/light/directional/directionallight.h"
-#include "core/actor/handle/handle.h"
 #include "core/game/localization/localization.h"
 #include "core/renderer/renderer.h"
-#include "core/actor/pawn/pawn.h"
-#include "mycontroller.h"
 #include "core/script/squirrel/squirrel.h"
 #include "core/renderer/effect/effectmanager.h"
 
@@ -34,11 +26,6 @@ using namespace loki;
 
 physics::LkRigidBody* body = NULL;
 
-void testcb( LkParticle* _Particle )
-{
-	//LOG(VL_NORMAL, "LOL");
-}
-
 MyGame::MyGame()
 {
 	
@@ -54,17 +41,6 @@ void MyGame::PreInit()
 
 }
 
-void testcallback1( const loki::ui::LkOverlayElement* _button )
-{
-	//LOG(VL_NORMAL, "MOVING");
-	loki::g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->SetFoVY( (((loki::ui::LkOverlaySlider*)_button)->GetSliderValue() * 130) + 30 );
-}
-
-void testcallback2( const loki::ui::LkOverlayElement* _button )
-{
-	LOG(VL_NORMAL, "RELEASED");
-}
-
 bool MyGame::Init()
 {
 	// Load a localization table.
@@ -77,55 +53,46 @@ bool MyGame::Init()
 	//std::string str2 = game::g_Localization->GetLocalizedString("p1wins");
 
 
-	m_Level = new loki::game::LkLevel();
-	m_Level->SetCurrentCamera(m_Level->SpawnCamera("Cam0", CAM_FREE));
-
-	loki::LkCamera* cam = m_Level->GetCurrentCamera();
-	loki::LkMovableComponent* cam_movcomp = cam->GetComponent<LkMovableComponent>();
-
-	//cam_movcomp->SetPosition(vec3(0.0f, 0.0f, -40.0f));
-	cam_movcomp->RotateY(180.0f);
-
-	{
-		// TODO: Remove this.
-
-		LkPointLight* pointlight1 = m_Level->SpawnPointLight("PointLight1");
-		pointlight1->SetRadius(20.0f);
-		//pointlight1->SetPosition(vec3(-3.5f, -3.0f, -12.0f));
-		LkMovableComponent* light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 0.0f));
-		pointlight1->SetColor(Color(0.2f, 0.2f, 1.0f));
-		pointlight1->Disable();
-
-		LkHandle<LkPointLight> handle = LkHandle<LkPointLight>(pointlight1);
-
-		pointlight1 = m_Level->SpawnPointLight("PointLight2");
-		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-		pointlight1->SetRadius(50.0f);
-		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 10.0f));
-		pointlight1->SetColor(Color(1.0f, 0.2f, 0.2f));
-		//pointlight1->Disable();
-		
-
-		pointlight1 = m_Level->SpawnPointLight("MassivePointLight");
-		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-		pointlight1->SetRadius(60.0f);
-		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 0.0f));
-		pointlight1->SetColor(Color(1.0f, 1.0f, 1.0f));
-		//pointlight1->Disable();
-
-		pointlight1 = m_Level->SpawnPointLight("PointLight3");
-		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-		pointlight1->SetRadius(50.0f);
-		light_movcomp->SetPosition(vec3(5.0f, 0.0f, 0.0f));
-		pointlight1->SetColor(Color(0.0f, 1.0f, 0.2f));
-		//pointlight1->Disable();
-	}
+// 	{
+// 		// TODO: Remove this.
+// 
+// 		LkPointLight* pointlight1 = m_Level->SpawnPointLight("PointLight1");
+// 		pointlight1->SetRadius(20.0f);
+// 		//pointlight1->SetPosition(vec3(-3.5f, -3.0f, -12.0f));
+// 		LkMovableComponent* light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
+// 		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 0.0f));
+// 		pointlight1->SetColor(Color(0.2f, 0.2f, 1.0f));
+// 		pointlight1->Disable();
+// 
+// 		LkHandle<LkPointLight> handle = LkHandle<LkPointLight>(pointlight1);
+// 
+// 		pointlight1 = m_Level->SpawnPointLight("PointLight2");
+// 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
+// 		pointlight1->SetRadius(50.0f);
+// 		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 10.0f));
+// 		pointlight1->SetColor(Color(1.0f, 0.2f, 0.2f));
+// 		//pointlight1->Disable();
+// 		
+// 
+// 		pointlight1 = m_Level->SpawnPointLight("MassivePointLight");
+// 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
+// 		pointlight1->SetRadius(60.0f);
+// 		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 0.0f));
+// 		pointlight1->SetColor(Color(1.0f, 1.0f, 1.0f));
+// 		//pointlight1->Disable();
+// 
+// 		pointlight1 = m_Level->SpawnPointLight("PointLight3");
+// 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
+// 		pointlight1->SetRadius(50.0f);
+// 		light_movcomp->SetPosition(vec3(5.0f, 0.0f, 0.0f));
+// 		pointlight1->SetColor(Color(0.0f, 1.0f, 0.2f));
+// 		//pointlight1->Disable();
+// 	}
 
 	// Load an effect.
 	loki::renderer::g_EffectManager->CreateEffectFromFile("resources//shaders//testshader.cgfx", "TestEffect");
 	{
-		LkPawn* pawn = NULL;
+		//LkPawn* pawn = NULL;
 		//loki::renderer::LkMaterial* mtl = NULL;
 
 // 		{
@@ -244,22 +211,22 @@ bool MyGame::Init()
 		}
 	}*/
 
-	LkParticleSystemDescriptor descr;
-	LkParticleSourceDescriptor& srcdescr = descr.AddSource();
-	
-	srcdescr.m_Lifetime = 2.0f;
-	srcdescr.m_Quota = 256;
-	srcdescr.m_SpawnRate = 128;
-	srcdescr.m_Callback = &testcb;
+// 	LkParticleSystemDescriptor descr;
+// 	LkParticleSourceDescriptor& srcdescr = descr.AddSource();
+// 	
+// 	srcdescr.m_Lifetime = 2.0f;
+// 	srcdescr.m_Quota = 256;
+// 	srcdescr.m_SpawnRate = 128;
+// 	srcdescr.m_Callback = &testcb;
+// 
+// 	LkParticleSystem* ps = m_Level->SpawnParticleSystem(descr);
 
-	LkParticleSystem* ps = m_Level->SpawnParticleSystem(descr);
 
-
-	Entity* entity = g_EntitySystem->SpawnEntity("TestEntity");
-	entity->InstantiateComponent<loki::components::PhysicsComponent>();
-	entity->InstantiateComponent<loki::components::RenderComponent>();
-	loki::components::PhysicsComponent* pc = entity->GetComponent<loki::components::PhysicsComponent>();
-	loki::components::RenderComponent* rc = entity->GetComponent<loki::components::RenderComponent>();
+	Entity* entity0 = g_EntitySystem->SpawnEntity("TestEntity");
+	entity0->InstantiateComponent<loki::components::PhysicsComponent>();
+	entity0->InstantiateComponent<loki::components::RenderComponent>();
+	loki::components::PhysicsComponent* pc = entity0->GetComponent<loki::components::PhysicsComponent>();
+	loki::components::RenderComponent* rc = entity0->GetComponent<loki::components::RenderComponent>();
 	
 	rc->SetModel(graphics::Model::Load("resources//lmo//test.lmo"));
 
@@ -270,18 +237,23 @@ bool MyGame::Init()
 	info.m_Mass = 100.0f;
 	pc->CreateBodyFromInfo(info);
 
-	entity = g_EntitySystem->SpawnEntity("BoxEntity");
-	entity->InstantiateComponent<loki::components::RenderComponent>();
-	entity->InstantiateComponent<loki::components::CameraComponent>();
-	rc = entity->GetComponent<loki::components::RenderComponent>();
-	loki::components::CameraComponent* cc = entity->GetComponent<loki::components::CameraComponent>();
+	Entity* entity1 = g_EntitySystem->SpawnEntity("BoxEntity");
+	entity1->InstantiateComponent<loki::components::RenderComponent>();
+	entity1->InstantiateComponent<loki::components::CameraComponent>();
+	rc = entity1->GetComponent<loki::components::RenderComponent>();
+	loki::components::CameraComponent* cc = entity1->GetComponent<loki::components::CameraComponent>();
+	cc->Activate();
 
 	rc->SetModel(graphics::Model::Load("resources//lmo//cube.lmo"));
 
-// 	loki::util::JSONDocument* doc = loki::util::JSONDocument::Open("resources//test.json");
+	entity0->GetTransform().SetParent(entity1->GetTransform());
+	entity0->GetTransform().SetOrientation(math::gtc::quaternion::rotate(quat(), 45.0f, UP));
+	entity1->GetTransform().SetLocalPosition(vec3(10.0f, 0.0f, 0.0f));
+
+// 	loki::util::general::JSONDocument* doc = loki::util::general::JSONDocument::Open("resources//test.json");
 // 	if (doc)
 // 	{
-// 		loki::util::JSONValue& root = doc->GetRoot();
+// 		loki::util::general::JSONValue& root = doc->GetRoot();
 // 
 // 		std::string test = root["jeoma"].AsString();
 // 
@@ -326,10 +298,10 @@ void MyGame::Update()
 // 		loki::renderer::g_Renderer->ToggleWireframe();
 // 	}
 
-	if (KEY_RELEASED(KEY_R))
-	{
-		m_Level->GetPawn("StanfordDragon")->GetComponent<LkMovableComponent>()->SetPosition(vec3(0.0f, 0.0f, 0.0f));
-	}
+// 	if (KEY_RELEASED(KEY_R))
+// 	{
+// 		m_Level->GetPawn("StanfordDragon")->GetComponent<LkMovableComponent>()->SetPosition(vec3(0.0f, 0.0f, 0.0f));
+// 	}
 	
 	if (KEY_RELEASED(KEY_G))
 	{
@@ -337,23 +309,23 @@ void MyGame::Update()
 		info.m_Shape = physics::CS_SPHERE;
 		info.m_Mass = 10.0f;
 		info.m_SphereData.m_Radius = 0.5f;
-		info.m_InitialTransform = m_Level->GetCurrentCamera()->GetComponent<LkMovableComponent>()->GetTransformation();
+		info.m_InitialTransform = components::CameraComponent::GetActiveCamera()->GetEntity()->GetTransform().GetMatrix();
 		physics::LkRigidBody* b = physics::g_Physics->AddRigidBody(info);
 		vec3 force = vec3(-info.m_InitialTransform[2]) * 200.0f;
 		b->ApplyCentralImpulse(force);
 	}
 
 	
-	{
-		LkPointLight* p0 = m_Level->GetPointLight("PointLight3");
-		LkMovableComponent* comp0 = p0->GetComponent<LkMovableComponent>();
-		LkPointLight* p1 = m_Level->GetPointLight("PointLight2");
-		LkMovableComponent* comp1 = p1->GetComponent<LkMovableComponent>();
-		static float f = 0.0f;
-		f += 0.01f;
-		comp0->SetPosition( vec3(cos(f) * 10, cos(f) * 10, sin(f) * 10) );
-		comp1->SetPosition( vec3(cos(-f) * 10, sin(f) * 10, sin(-f) * 10) );
-	}
+// 	{
+// 		LkPointLight* p0 = m_Level->GetPointLight("PointLight3");
+// 		LkMovableComponent* comp0 = p0->GetComponent<LkMovableComponent>();
+// 		LkPointLight* p1 = m_Level->GetPointLight("PointLight2");
+// 		LkMovableComponent* comp1 = p1->GetComponent<LkMovableComponent>();
+// 		static float f = 0.0f;
+// 		f += 0.01f;
+// 		comp0->SetPosition( vec3(cos(f) * 10, cos(f) * 10, sin(f) * 10) );
+// 		comp1->SetPosition( vec3(cos(-f) * 10, sin(f) * 10, sin(-f) * 10) );
+// 	}
 
 	/*
 	static vec3 p0 = vec3(0.0f, 0.0f, 0.0f);

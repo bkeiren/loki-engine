@@ -35,19 +35,19 @@ Model::~Model()
 
 Model* Model::Load( const std::string& _LMOFile )
 {
-	util::JSONDocument* doc = util::JSONDocument::Open(_LMOFile);
+	util::general::JSONDocument* doc = util::general::JSONDocument::Open(_LMOFile);
 	if (!doc)
 	{
 		LOG(VL_ERROR, "Model::Load: Failed to load LMO file '%s'", _LMOFile.c_str());
 		return 0;
 	}
-
-	util::JSONValue& root = doc->GetRoot();
 	
-	util::JSONValue meshValue = root["mesh"];
-	util::JSONValue materialsValue = root["materials"];
-	util::JSONValue uscale = root["uscale"];
-	util::JSONValue vscale = root["vscale"];
+	util::general::JSONValue& root = doc->GetRoot();
+	
+	util::general::JSONValue meshValue = root["mesh"];
+	util::general::JSONValue materialsValue = root["materials"];
+	util::general::JSONValue uscale = root["uscale"];
+	util::general::JSONValue vscale = root["vscale"];
 
 	std::string MeshFile;
 	std::list<std::string> MaterialsList;
@@ -60,7 +60,7 @@ Model* Model::Load( const std::string& _LMOFile )
 	// Read all material strings.
 	for (uint32 i = 0; i < materialsValue.Size(); ++i)
 	{
-		util::JSONValue material = materialsValue[i];
+		util::general::JSONValue material = materialsValue[i];
 		if (material.IsString())
 		{
 			MaterialsList.push_back(material.AsString());
@@ -269,21 +269,21 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 
 Material* Model::_CreateMaterialFromLMAFile( const std::string& _LMAFile )
 {
-	util::JSONDocument* doc = util::JSONDocument::Open(_LMAFile);
+	util::general::JSONDocument* doc = util::general::JSONDocument::Open(_LMAFile);
 	if (!doc)
 	{
 		LOG(VL_ERROR, "Model::_CreateMaterialFromLMAFile: Failed to open LMA file '%s'", _LMAFile.c_str());
 		return 0;
 	}
 
-	util::JSONValue& root = doc->GetRoot();
+	util::general::JSONValue& root = doc->GetRoot();
 	
-	util::JSONValue diffuseTexString = root["diffuse"];
-	util::JSONValue specularTexString = root["specular"];
-	util::JSONValue normalTexString = root["normal"];
-	util::JSONValue emissiveTexString = root["emissive"];
-	util::JSONValue effectString = root["effect"];
-	util::JSONValue shininessString = root["shininess"];
+	util::general::JSONValue diffuseTexString = root["diffuse"];
+	util::general::JSONValue specularTexString = root["specular"];
+	util::general::JSONValue normalTexString = root["normal"];
+	util::general::JSONValue emissiveTexString = root["emissive"];
+	util::general::JSONValue effectString = root["effect"];
+	util::general::JSONValue shininessString = root["shininess"];
 
 	Material* mtl = new Material();
 

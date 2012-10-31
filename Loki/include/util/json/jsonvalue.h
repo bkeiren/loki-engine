@@ -13,6 +13,9 @@ namespace loki
 namespace util
 {
 
+namespace general
+{
+
 class JSONValue
 {
 public:
@@ -79,6 +82,8 @@ private:
 	Json::Value* m_Value;
 	bool m_ValueIsOwned;
 };
+
+}
 
 }
 

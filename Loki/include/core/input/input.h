@@ -124,7 +124,7 @@ enum EKeyState
 
 class LkInput
 {
-	friend class LkEngine;
+	friend class LokiEngine;
 public:
 	//////////////////////////////////////////////////////////////////////////
 	// Captures key input and sets the key states. Must be called by the engine 

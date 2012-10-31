@@ -5,12 +5,10 @@
 #include "core/game/game.h"
 #include "core/script/squirrel/squirrel.h"
 #include "core/script/lua/lua.h"
-#include "core/game/level/level.h"
-#include "core/actor/components/movablecomponent/movablecomponent.h"
-#include "core/actor/camera/camera.h"
 #include "core/window.h"
-#include "core/actor/pawn/pawn.h"
 #include "core/renderer/renderer.h"
+#include "core/entitysystem/component/default/CameraComponent.h"
+#include "core/entitysystem/Entity.h"
 
 namespace loki
 {
@@ -143,7 +141,7 @@ CONSOLE_FUNCTION(Console_GetFrameRate)
 CONSOLE_FUNCTION(Console_GetTimeStamp)
 {
 	std::string s;
-	util::GetTimeStamp(s);
+	util::time::GetTimeStamp(s);
 	LkConsole::CommandResult res("Timestamp: %s", s.c_str());
 	return res;
 }
@@ -220,13 +218,13 @@ CONSOLE_FUNCTION(Console_CamSetPos)
 	f32 x = _Command->m_Arguments[0].m_Float;
 	f32 y = _Command->m_Arguments[1].m_Float;
 	f32 z = _Command->m_Arguments[2].m_Float;
-	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->SetPosition(vec3(x, y, z));
+	components::CameraComponent::GetActiveCamera()->GetEntity()->GetTransform().SetPosition(vec3(x, y, z));
 	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_CamGetPos)
 {
-	vec3 p = g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->GetPosition();
+	vec3 p = components::CameraComponent::GetActiveCamera()->GetEntity()->GetTransform().GetPosition();
 	return LkConsole::CommandResult("CamPos: [%f, %f, %f]", p.x, p.y, p.z);
 }
 
@@ -236,46 +234,47 @@ CONSOLE_FUNCTION(Console_CamSetOrientation)
 	f32 y = _Command->m_Arguments[1].m_Float;
 	f32 z = _Command->m_Arguments[2].m_Float;
 	f32 w = _Command->m_Arguments[3].m_Float;
-	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->SetOrientation(quat(x, y, z, w));
+	components::CameraComponent::GetActiveCamera()->GetEntity()->GetTransform().SetOrientation(quat(x, y, z, w));
 	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_CamGetOrientation)
 {
-	quat o = g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetComponent<LkMovableComponent>()->GetOrientation();
+	quat o = components::CameraComponent::GetActiveCamera()->GetEntity()->GetTransform().GetOrientation();
 	return LkConsole::CommandResult("CamOrientation: [%f, %f, %f, %f]", o.x, o.y, o.z, o.w);	
 }
 
 CONSOLE_FUNCTION(Console_CamSetFoV)
 {
-	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->SetFoVY(_Command->m_Arguments[0].m_Float);
+	components::CameraComponent::GetActiveCamera()->SetFieldOfView(_Command->m_Arguments[0].m_Float);
 	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_CamGetFoV)
 {
-	return LkConsole::CommandResult("CamFoV: %f", g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetFoVY());
+	return LkConsole::CommandResult("CamFoV: %f", components::CameraComponent::GetActiveCamera()->GetFieldOfView());
 }
 
 CONSOLE_FUNCTION(Console_CamSetZNear)
 {
-	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->SetZNear(_Command->m_Arguments[0].m_Float);
+	components::CameraComponent::GetActiveCamera()->SetNearPlane(_Command->m_Arguments[0].m_Float);
 	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_CamSetZFar)
 {
-	g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->SetZFar(_Command->m_Arguments[0].m_Float);
+	components::CameraComponent::GetActiveCamera()->SetFarPlane(_Command->m_Arguments[0].m_Float);
 	return LkConsole::CommandResult("");
 }
 CONSOLE_FUNCTION(Console_CamGetZPlanes)
 {
-	return LkConsole::CommandResult("Cam ZNear: %f\tZFar: %f", g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetZNear(), g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetZFar());
+	return LkConsole::CommandResult("Cam ZNear: %f\tZFar: %f", components::CameraComponent::GetActiveCamera()->GetNearPlane(), 
+															   components::CameraComponent::GetActiveCamera()->GetFarPlane());
 }
 
 CONSOLE_FUNCTION(Console_SetFullscreen)
 {
-	LkWindow* window = g_Engine->GetWindow();
+	Window* window = g_Engine->GetWindow();
 	bool o = window->IsFullscreen();
 	bool b = ScanValueForBoolean(_Command->m_Arguments[0]);
 	window->SetFullscreen(b);
@@ -289,7 +288,7 @@ CONSOLE_FUNCTION(Console_SetFullscreen)
 
 CONSOLE_FUNCTION(Console_SetWindowPos)
 {
-	LkWindow* window = g_Engine->GetWindow();
+	Window* window = g_Engine->GetWindow();
 	int32 x = _Command->m_Arguments[0].m_Int;
 	int32 y = _Command->m_Arguments[1].m_Int;
 	window->SetPosition(x, y);
@@ -298,7 +297,7 @@ CONSOLE_FUNCTION(Console_SetWindowPos)
 
 CONSOLE_FUNCTION(Console_SetWindowSize)
 {
-	LkWindow* window = g_Engine->GetWindow();
+	Window* window = g_Engine->GetWindow();
 	int32 x = _Command->m_Arguments[0].m_Int;
 	int32 y = _Command->m_Arguments[1].m_Int;
 	window->SetDimensions(x, y);
@@ -309,51 +308,6 @@ CONSOLE_FUNCTION(Console_Terminate)
 {
 	g_Engine->RequestExit();
 	return LkConsole::CommandResult("Requested termination...");
-}
-
-CONSOLE_FUNCTION(Console_PawnSpawn)
-{
-	if (g_Engine->GetGame()->GetLevel()->SpawnPawn(_Command->m_Arguments[0].m_String.c_str()))
-	{
-		return LkConsole::CommandResult("Spawned pawn '%s'", _Command->m_Arguments[0].m_String.c_str());
-	}
-	return LkConsole::CommandResult("Unable to spawn pawn '%s'", _Command->m_Arguments[0].m_String.c_str());
-}
-
-CONSOLE_FUNCTION(Console_PawnDespawn)
-{
-	LkPawn* pawn = g_Engine->GetGame()->GetLevel()->GetPawn(_Command->m_Arguments[0].m_String.c_str());
-	if (!pawn)
-	{
-		return LkConsole::CommandResult("Pawn '%s' does not exist", _Command->m_Arguments[0].m_String.c_str());
-	}
-	g_Engine->GetGame()->GetLevel()->DespawnPawn(pawn);
-	
-	return LkConsole::CommandResult("Despawned pawn '%s'", _Command->m_Arguments[0].m_String.c_str());
-}
-
-CONSOLE_FUNCTION(Console_PawnSetPos)
-{
-	LkPawn* pawn = g_Engine->GetGame()->GetLevel()->GetPawn(_Command->m_Arguments[0].m_String.c_str());
-	if (!pawn)
-	{
-		return LkConsole::CommandResult("Pawn '%s' does not exist", _Command->m_Arguments[0].m_String.c_str());
-	}
-	LkMovableComponent* comp = pawn->GetComponent<LkMovableComponent>();
-	comp->SetPosition(vec3(_Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float, _Command->m_Arguments[3].m_Float));
-	return LkConsole::CommandResult("");
-}
-
-CONSOLE_FUNCTION(Console_PawnSetOri)
-{
-	LkPawn* pawn = g_Engine->GetGame()->GetLevel()->GetPawn(_Command->m_Arguments[0].m_String.c_str());
-	if (!pawn)
-	{
-		return LkConsole::CommandResult("Pawn '%s' does not exist", _Command->m_Arguments[0].m_String.c_str());
-	}
-	LkMovableComponent* comp = pawn->GetComponent<LkMovableComponent>();
-	comp->SetOrientation(quat(_Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float, _Command->m_Arguments[3].m_Float, _Command->m_Arguments[4].m_Float));
-	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_GBufferTargets)

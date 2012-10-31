@@ -8,6 +8,9 @@ namespace loki
 namespace util
 {
 
+namespace hash
+{
+
 namespace
 {
 
@@ -34,6 +37,8 @@ uint128 Hash_MurmurHash3_128_x64( const char* s )
 	uint128 out;
 	MurmurHash3_x64_128((void*)s, strlen(s), seed, (void*)&out);
 	return out;
+}
+
 }
 
 }

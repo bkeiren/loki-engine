@@ -9,6 +9,9 @@ namespace loki
 namespace util
 {
 
+namespace general
+{
+
 enum EJobState
 {
 	JS_PENDING = 0,
@@ -16,21 +19,21 @@ enum EJobState
 	JS_DONE
 };
 
-class LkJob;
-typedef std::list<LkJob*> JobList;
+class Job;
+typedef std::list<Job*> JobList;
 typedef uint32 JobID;
 
-class LkJob
+class Job
 {
 public:
-	LkJob();
-	virtual ~LkJob();
+	Job();
+	virtual ~Job();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Adds a dependency to the job. Jobs that have dependencies will not
 	// be started until all dependencies have completed.
 	//////////////////////////////////////////////////////////////////////////
-	void AddDependency( LkJob* _Dependency );
+	void AddDependency( Job* _Dependency );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Reset the state of the job so that it can be re-submitted to the job-
@@ -55,7 +58,7 @@ protected:
 	//////////////////////////////////////////////////////////////////////////
 	JobID GetJobID();
 private:
-	friend class LkJobManager;
+	friend class JobManager;
 
 	//////////////////////////////////////////////////////////////////////////
 	// The JobMain function is the function that should contain the code
@@ -80,6 +83,8 @@ private:
 	JobID m_ID;
 	HANDLE m_EventDone;
 };
+
+}
 
 }
 

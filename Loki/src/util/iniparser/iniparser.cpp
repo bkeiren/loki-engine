@@ -25,20 +25,23 @@ namespace loki
 namespace util
 {
 
-LkINIParser::INIFile* LkINIParser::m_OutputFile = NULL;
-std::string LkINIParser::m_CurrentSection;
+namespace general
+{
 
-LkINIParser::LkINIParser()
+INIParser::INIFile* INIParser::m_OutputFile = NULL;
+std::string INIParser::m_CurrentSection;
+
+INIParser::INIParser()
 {
 
 }
 
-LkINIParser::~LkINIParser()
+INIParser::~INIParser()
 {
 
 }
 
-LkINIParser::INIFile* LkINIParser::ParseFile( const char* _File )
+INIParser::INIFile* INIParser::ParseFile( const char* _File )
 {
 	iniparser::_ParseSection = &_ParseSection;
 	iniparser::_ParseProperty = &_ParseProperty;
@@ -64,7 +67,7 @@ LkINIParser::INIFile* LkINIParser::ParseFile( const char* _File )
 	return temp;
 }
 
-void LkINIParser::_ParseSection( const char* _Str )
+void INIParser::_ParseSection( const char* _Str )
 {
 	m_CurrentSection = (_Str + 1);
 	m_CurrentSection.erase(m_CurrentSection.length() - 1);
@@ -72,7 +75,7 @@ void LkINIParser::_ParseSection( const char* _Str )
 																													// Due to the way insert works, if a section with the same name exists, nothing will change.
 }
 
-void LkINIParser::_ParseProperty( const char* _Str )
+void INIParser::_ParseProperty( const char* _Str )
 {
 	std::string str = _Str;
 	std::string name;
@@ -106,22 +109,22 @@ void LkINIParser::_ParseProperty( const char* _Str )
 	(m_OutputFile->m_Data[m_CurrentSection])[name] = value;
 }
 
-LkINIParser::INIFile::INIFile()
+INIParser::INIFile::INIFile()
 {
 
 }
 
-LkINIParser::INIFile::~INIFile()
+INIParser::INIFile::~INIFile()
 {
 
 }
 
-bool LkINIParser::INIFile::GetProperty( const char* _Section, const char* _Name, std::string& _Output )
+bool INIParser::INIFile::GetProperty( const char* _Section, const char* _Name, std::string& _Output )
 {
 	return GetProperty(std::string(_Section), std::string(_Name), _Output);
 }
 
-bool LkINIParser::INIFile::GetProperty( const std::string& _Section, const std::string& _Name, std::string& _Output )
+bool INIParser::INIFile::GetProperty( const std::string& _Section, const std::string& _Name, std::string& _Output )
 {
 	Section* section = _GetSection(_Section);
 	if (!section)
@@ -143,12 +146,12 @@ bool LkINIParser::INIFile::GetProperty( const std::string& _Section, const std::
 	return true;
 }
 
-bool LkINIParser::INIFile::GetProperty( const char* _Name, std::string& _Output )
+bool INIParser::INIFile::GetProperty( const char* _Name, std::string& _Output )
 {
 	return GetProperty(std::string(_Name), _Output);
 }
 
-bool LkINIParser::INIFile::GetProperty( const std::string& _Name, std::string& _Output )
+bool INIParser::INIFile::GetProperty( const std::string& _Name, std::string& _Output )
 {
 	for (SectionsMap::iterator it = m_Data.begin(); it != m_Data.end(); ++it)
 	{
@@ -166,12 +169,12 @@ bool LkINIParser::INIFile::GetProperty( const std::string& _Name, std::string& _
 	return false;
 }
 
-int32 LkINIParser::INIFile::SetProperty( const char* _Section, const char* _Name, const char* _Value )
+int32 INIParser::INIFile::SetProperty( const char* _Section, const char* _Name, const char* _Value )
 {
 	return SetProperty(std::string(_Section), std::string(_Name), std::string(_Value));
 }
 
-int32 LkINIParser::INIFile::SetProperty( const std::string& _Section, const std::string& _Name, const std::string& _Value )
+int32 INIParser::INIFile::SetProperty( const std::string& _Section, const std::string& _Name, const std::string& _Value )
 {
 	int32 ret = 0;
 	Section* section = _GetSection(_Section);
@@ -200,22 +203,22 @@ int32 LkINIParser::INIFile::SetProperty( const std::string& _Section, const std:
 	return ret;
 }
 
-void LkINIParser::INIFile::RemoveSection( const char* _Section )
+void INIParser::INIFile::RemoveSection( const char* _Section )
 {
 	RemoveSection(std::string(_Section));
 }
 
-void LkINIParser::INIFile::RemoveSection( const std::string& _Section )
+void INIParser::INIFile::RemoveSection( const std::string& _Section )
 {
 	m_Data.erase(_Section);
 }
 
-void LkINIParser::INIFile::RemoveProperty( const char* _Section, const char* _Name )
+void INIParser::INIFile::RemoveProperty( const char* _Section, const char* _Name )
 {
 	RemoveProperty(std::string(_Section), std::string(_Name));
 }
 
-void LkINIParser::INIFile::RemoveProperty( const std::string& _Section, const std::string& _Name )
+void INIParser::INIFile::RemoveProperty( const std::string& _Section, const std::string& _Name )
 {
 	Section* section = _GetSection(_Section);
 	if (!section)
@@ -228,7 +231,7 @@ void LkINIParser::INIFile::RemoveProperty( const std::string& _Section, const st
 	section->erase(_Name);
 }
 
-bool LkINIParser::INIFile::Export( const char* _File )
+bool INIParser::INIFile::Export( const char* _File )
 {
 	std::ofstream file = std::ofstream(_File);
 	if (!file.is_open())
@@ -246,7 +249,7 @@ bool LkINIParser::INIFile::Export( const char* _File )
 	// automatically.
 	//////////////////////////////////////////////////////////////////////////
 	std::string timestamp;
-	GetTimeStamp(timestamp);
+	time::GetTimeStamp(timestamp);
 	file << ";\n; This file was exported by code @ ";
 	file << timestamp;
 	file << "\n; by function '";
@@ -278,12 +281,12 @@ bool LkINIParser::INIFile::Export( const char* _File )
 	return true;
 }
 
-const LkINIParser::INIFile::SectionsMap& LkINIParser::INIFile::GetData() const
+const INIParser::INIFile::SectionsMap& INIParser::INIFile::GetData() const
 {
 	return m_Data;
 }
 
-LkINIParser::INIFile::Section* LkINIParser::INIFile::_GetSection( const std::string& _Section )
+INIParser::INIFile::Section* INIParser::INIFile::_GetSection( const std::string& _Section )
 {
 	SectionsMap::iterator it = m_Data.find(_Section);
 	if (it == m_Data.end())
@@ -292,6 +295,8 @@ LkINIParser::INIFile::Section* LkINIParser::INIFile::_GetSection( const std::str
 		return 0;
 	}
 	return &(*it).second;
+}
+
 }
 
 }

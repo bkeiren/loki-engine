@@ -44,10 +44,6 @@ CONSOLE_FUNCTION(Console_SetFullscreen);
 CONSOLE_FUNCTION(Console_SetWindowPos);
 CONSOLE_FUNCTION(Console_SetWindowSize);
 CONSOLE_FUNCTION(Console_Terminate);
-CONSOLE_FUNCTION(Console_PawnSpawn);
-CONSOLE_FUNCTION(Console_PawnDespawn);
-CONSOLE_FUNCTION(Console_PawnSetPos);
-CONSOLE_FUNCTION(Console_PawnSetOri);
 CONSOLE_FUNCTION(Console_GBufferTargets);
 CONSOLE_FUNCTION(Console_LightVolumes);
 

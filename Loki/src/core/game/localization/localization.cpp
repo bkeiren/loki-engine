@@ -46,7 +46,7 @@ LkLocalization::~LkLocalization()
 
 bool LkLocalization::LoadLocalizationTable( const std::string& _File )
 {
-	util::LkCSVParser::LkCSVDataTable* file = util::g_CSVParser->ParseFile(_File.c_str());
+	util::general::CSVParser::CSVDataTable* file = util::general::g_CSVParser->ParseFile(_File.c_str());
 	if (!file)
 	{
 		LOG(VL_ERROR, "Localization::LoadLocalizationTable: Could not load file");

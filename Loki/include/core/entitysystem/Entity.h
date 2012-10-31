@@ -3,7 +3,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "core/transform/Transform.h"
+#include "core/entitysystem/component/default/Transform.h"
 #include "util/typeinfo/typeinfo.h"
 
 #define USE_HASH_MAP
@@ -52,8 +52,8 @@ class Entity
 	friend class EntitySystem;
 	
 #if RTTI_TYPE == RTTI_TYPEID
-	typedef MAP_TYPE<util::TypeInfo, Component*>	Components;	// Pointers to std::type_info are safe because they are valid throughout the entire application lifetime.
-	typedef std::pair<util::TypeInfo, Component*>	ComponentsPair;	// ^
+	typedef MAP_TYPE<util::general::TypeInfo, Component*>	Components;	// Pointers to std::type_info are safe because they are valid throughout the entire application lifetime.
+	typedef std::pair<util::general::TypeInfo, Component*>	ComponentsPair;	// ^
 #elif RTTI_TYPE == RTTI_DYNAMIC_CAST
 	CONTAINER_MACRO_LIST(Component*, Components);
 #endif
@@ -62,6 +62,13 @@ public:
 
 	const std::string& GetName() const;
 
+	//////////////////////////////////////////////////////////////////////////
+	// Synonymous to GetComponent<Transform>(), except
+	// that GetComponent<>() searches for the Transform component in the 
+	// component map, while GetTransform simply returns the already cached
+	// Transform. This means that these functions are faster than
+	// GetComponent<>().
+	//////////////////////////////////////////////////////////////////////////
 	const Transform& GetTransform() const;
 	Transform& GetTransform();
 
@@ -73,13 +80,19 @@ public:
 	// entity::InstantiateComponent<MoveableComponent>();
 	//////////////////////////////////////////////////////////////////////////
 	template< typename _ComponentType >
-	void InstantiateComponent();
+	_ComponentType* InstantiateComponent();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Removes a component from the entity.
 	//////////////////////////////////////////////////////////////////////////
 	template< typename _ComponentType >
 	void RemoveComponent();
+
+	//////////////////////////////////////////////////////////////////////////
+	// Transform specialization.
+	//////////////////////////////////////////////////////////////////////////
+	template<>
+	inline void RemoveComponent<Transform>();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Checks whether the entity has a component of a certain type.
@@ -93,6 +106,12 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	template< typename _ComponentType >
 	_ComponentType* GetComponent() const;
+
+	//////////////////////////////////////////////////////////////////////////
+	// Transform specialization.
+	//////////////////////////////////////////////////////////////////////////
+	template<>
+	inline Transform* GetComponent<Transform>() const;
 private:
 	Entity();
 	~Entity();
@@ -109,7 +128,7 @@ private:
 	EntityID m_EntityID;
 	std::string m_Name;
 
-	Transform m_Transform;
+	Transform* m_Transform;
 
 	Components m_Components;
 };

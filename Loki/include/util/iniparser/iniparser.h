@@ -12,13 +12,16 @@ namespace loki
 namespace util
 {
 
-class LkINIParser
+namespace general
+{
+
+class INIParser
 {
 public:
 	class INIFile;
 
-	LkINIParser();
-	~LkINIParser();
+	INIParser();
+	~INIParser();
 
 	static INIFile* ParseFile( const char* _File );
 private:
@@ -32,9 +35,9 @@ private:
 	static std::string m_CurrentSection;
 };
 
-class LkINIParser::INIFile
+class INIParser::INIFile
 {
-	friend class LkINIParser;
+	friend class INIParser;
 public:
 	typedef std::map<std::string, std::string>		Section;	// A section maps strings to strings (property names to values).
 	typedef std::map<std::string, Section>			SectionsMap;
@@ -75,6 +78,8 @@ private:
 
 	SectionsMap	m_Data;	// The data is organized as a map that maps strings (section names) to Section maps.
 };
+
+}
 
 }
 

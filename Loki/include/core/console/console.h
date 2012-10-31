@@ -15,7 +15,7 @@ namespace loki
 {
 
 class LkHTMLView;
-class LkEngine;
+class LokiEngine;
 
 class LkConsole	: public LkEventListener, public LkHTMLViewListener
 {
@@ -26,7 +26,7 @@ public:
 
 	typedef CommandResult (*ConsoleCommandFunction)( CommandInput* _Command );
 
-	LkConsole( LkEngine* _Engine );
+	LkConsole( LokiEngine* _Engine );
 	~LkConsole();
 
 	//////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	void Execute( const char* _Command );
 
-	LkEngine* GetEngine();
+	LokiEngine* GetEngine();
 
 	void ReloadUI();
 
@@ -156,7 +156,7 @@ private:
 
 	void _OnEvent( const LkEvent& _Event );
 
-	LkEngine* m_Engine;
+	LokiEngine* m_Engine;
 	//std::list<std::string> m_Buffer;
 	//std::string	m_InputBuffer;
 	std::map<std::string, Command> m_Commands;

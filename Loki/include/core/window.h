@@ -8,13 +8,13 @@
 namespace loki
 {
 
-class LkWindow
+class Window
 {
 public:
-	typedef long (__stdcall *WindowProc)( LkWindow* _Window, UINT, WPARAM, LPARAM );
+	typedef long (__stdcall *WindowProc)( Window* _Window, UINT, WPARAM, LPARAM );
 
-	LkWindow( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fullscreen, WindowProc _WindowCallback, int32 _PositionX = 0, int32 _PositionY = 0 );
-	~LkWindow();
+	Window( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fullscreen, WindowProc _WindowCallback, int32 _PositionX = 0, int32 _PositionY = 0 );
+	~Window();
 
 	void MakeRenderContextCurrent();
 
@@ -52,7 +52,7 @@ public:
 
 	bool HasFocus() const;
 private:
-	LkWindow();
+	Window();
 
 	void _Destroy();
 

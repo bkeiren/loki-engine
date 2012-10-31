@@ -6,6 +6,9 @@ namespace loki
 namespace util
 {
 
+namespace general
+{
+
 TypeInfo::TypeInfo( const std::type_info& _TypeInfo )	:
 	m_Ptr(&_TypeInfo)
 {
@@ -51,6 +54,8 @@ TypeInfo& TypeInfo::operator = ( const TypeInfo& _RHS )
 {
 	m_Ptr = _RHS.m_Ptr;
 	return *this;
+}
+
 }
 
 }

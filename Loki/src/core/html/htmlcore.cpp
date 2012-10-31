@@ -4,10 +4,8 @@
 #include "core/renderer/renderer.h"
 #include "core/renderer/image/image.h"
 
-#include "core/actor/camera/camera.h"
 #include "core/engine.h"
 #include "core/game/game.h"
-#include "core/game/level/level.h"
 #include "core/input/input.h"
 #include "core/renderer/debugrenderer.h"
 
@@ -183,65 +181,65 @@ void LkHTMLCore::_OnEvent( const LkEvent& _Event )
 				{
 					LkHTMLView* view = (*it);
 
-					// NOTE: EXPERIMENTAL!
 					if (!view->m_RenderImage->Is3D())
 					{
 						int2 mousepos = view->TranslateGlobalMousePositionToLocal(g_Input->GetMousePosition());
 
 						view->m_WebView->injectMouseMove(mousepos.x, mousepos.y);
 					}
-					else
-					{
-						int2 mousepos = g_Input->GetMousePosition();
-
-						// NOTE: injectMouseMove expects x and y coordinates relative to the webtab.
-
-						vec3 pos = view->m_RenderImage->GetRelativePosition();
-						pos = ((vec3(pos.x, 1.0f - pos.y, pos.z) + vec3(view->m_RenderImage->GetRelativeAnchorOffset(), 0.0f)) * 2.0f) - 1.0f;
-
-						vec2 size = view->m_RenderImage->GetRelativeSize() * 2.0f;			
-
-						// Calculate the world-space position of the mouse cursor (On the near plane).
-						LkCamera* cam = g_Engine->GetGame()->GetLevel()->GetCurrentCamera();
-						LkMovableComponent* comp = cam->GetComponent<LkMovableComponent>();
-
-						// Normalized vector indicating the direction from the camera origin to the cursor's position on the near-plane.
-						vec3 r = cam->GetCameraToViewportVector(mousepos);
-						vec3 r_origin = comp->GetPosition();
-
-						// 3 corner points in model space of the quad.
-						vec3 PA = vec3(pos.x, pos.y + size.y, pos.z);
-						vec3 PC = vec3(pos.x + size.x, pos.y, pos.z);
-						vec3 PD = vec3(pos.x, pos.y, pos.z);
-
-						// The quad's normal and position in world-space.
-						vec3 planenormal = vec3(view->m_RenderImage->GetModelMatrix() * vec4(math::cross(PC - PD, PA - PD), 1.0f));
-						vec3 planepos = vec3(view->m_RenderImage->GetModelMatrix() * vec4(pos, 1.0f));
-
-						// Intersect the ray with the quad to find the intersection distance.
-						f32 rayDirDotNormal = math::dot(r, planenormal);
-						if (rayDirDotNormal != 0) 
-						{
-							// Intersection.
-							f32 dist = math::dot(planepos - r_origin, planenormal) / rayDirDotNormal;
-
-							vec3 intersectpos = r_origin + (r * dist);
-
-							//renderer::debug::DrawAxes(point3D, quat(), 1.0f, false);
-							renderer::debug::DrawLine3D(r_origin, r_origin + (r * dist), false, vec3(1.0f, 0.0f, 0.0f));
-
-							// Now transform intersectpos to model space by multiplying the inverse model matrix with intersectpos.
-							vec3 modelspacepos = vec3(math::inverse(view->m_RenderImage->GetModelMatrix()) * vec4(intersectpos, 1.0f));
-
-							// Yay.
-
-							int32 x = int32(math::clamp(modelspacepos.x / size.x, 0.0f, 1.0f) * view->m_RenderImage->GetWidth());
-							int32 y = int32(math::clamp(modelspacepos.y / size.y, 0.0f, 1.0f) * view->m_RenderImage->GetHeight());
-							view->m_WebView->injectMouseMove(x, y);
-							LOG(VL_NORMAL, "x: %i\ty: %i", x, y);
-						}
-						// No intersection.
-					}
+//					// NOTE: EXPERIMENTAL!
+// 					else
+// 					{
+// 						int2 mousepos = g_Input->GetMousePosition();
+// 
+// 						// NOTE: injectMouseMove expects x and y coordinates relative to the webtab.
+// 
+// 						vec3 pos = view->m_RenderImage->GetRelativePosition();
+// 						pos = ((vec3(pos.x, 1.0f - pos.y, pos.z) + vec3(view->m_RenderImage->GetRelativeAnchorOffset(), 0.0f)) * 2.0f) - 1.0f;
+// 
+// 						vec2 size = view->m_RenderImage->GetRelativeSize() * 2.0f;			
+// 
+// 						// Calculate the world-space position of the mouse cursor (On the near plane).
+// 						CameraComponent* cam = CameraComponent::GetActiveCamera();
+// 						Transform& comp = cam->GetEntity()->GetTransform();
+// 
+// 						// Normalized vector indicating the direction from the camera origin to the cursor's position on the near-plane.
+// 						vec3 r = cam->GetCameraToViewportVector(mousepos);
+// 						vec3 r_origin = comp->GetPosition();
+// 
+// 						// 3 corner points in model space of the quad.
+// 						vec3 PA = vec3(pos.x, pos.y + size.y, pos.z);
+// 						vec3 PC = vec3(pos.x + size.x, pos.y, pos.z);
+// 						vec3 PD = vec3(pos.x, pos.y, pos.z);
+// 
+// 						// The quad's normal and position in world-space.
+// 						vec3 planenormal = vec3(view->m_RenderImage->GetModelMatrix() * vec4(math::cross(PC - PD, PA - PD), 1.0f));
+// 						vec3 planepos = vec3(view->m_RenderImage->GetModelMatrix() * vec4(pos, 1.0f));
+// 
+// 						// Intersect the ray with the quad to find the intersection distance.
+// 						f32 rayDirDotNormal = math::dot(r, planenormal);
+// 						if (rayDirDotNormal != 0) 
+// 						{
+// 							// Intersection.
+// 							f32 dist = math::dot(planepos - r_origin, planenormal) / rayDirDotNormal;
+// 
+// 							vec3 intersectpos = r_origin + (r * dist);
+// 
+// 							//renderer::debug::DrawAxes(point3D, quat(), 1.0f, false);
+// 							renderer::debug::DrawLine3D(r_origin, r_origin + (r * dist), false, vec3(1.0f, 0.0f, 0.0f));
+// 
+// 							// Now transform intersectpos to model space by multiplying the inverse model matrix with intersectpos.
+// 							vec3 modelspacepos = vec3(math::inverse(view->m_RenderImage->GetModelMatrix()) * vec4(intersectpos, 1.0f));
+// 
+// 							// Yay.
+// 
+// 							int32 x = int32(math::clamp(modelspacepos.x / size.x, 0.0f, 1.0f) * view->m_RenderImage->GetWidth());
+// 							int32 y = int32(math::clamp(modelspacepos.y / size.y, 0.0f, 1.0f) * view->m_RenderImage->GetHeight());
+// 							view->m_WebView->injectMouseMove(x, y);
+// 							LOG(VL_NORMAL, "x: %i\ty: %i", x, y);
+// 						}
+// 						// No intersection.
+// 					}
 				}
 			}
 

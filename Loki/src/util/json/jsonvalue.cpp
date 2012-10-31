@@ -7,6 +7,9 @@ namespace loki
 namespace util
 {
 
+namespace general
+{
+
 namespace
 {
 
@@ -246,6 +249,8 @@ JSONValue& JSONValue::operator =( bool _Bool )
 {
 	m_Value->operator = (_Bool);
 	return *this;
+}
+
 }
 
 }

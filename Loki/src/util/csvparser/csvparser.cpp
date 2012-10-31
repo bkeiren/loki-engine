@@ -7,19 +7,22 @@ namespace loki
 namespace util
 {
 
-LkCSVParser* g_CSVParser = new LkCSVParser();
+namespace general
+{
 
-LkCSVParser::LkCSVParser()
+CSVParser* g_CSVParser = new CSVParser();
+
+CSVParser::CSVParser()
 {
 
 }
 
-LkCSVParser::~LkCSVParser()
+CSVParser::~CSVParser()
 {
 
 }
 
-LkCSVParser::LkCSVDataTable* LkCSVParser::ParseFile( const char* _File )
+CSVParser::CSVDataTable* CSVParser::ParseFile( const char* _File )
 {
 	std::ifstream file = std::ifstream(_File);
 	if (!file.is_open())
@@ -28,7 +31,7 @@ LkCSVParser::LkCSVDataTable* LkCSVParser::ParseFile( const char* _File )
 		LOG(VL_ERROR, "CSVParser::ParseFile: Could not open file '%s'", _File);
 		return NULL;
 	}
-	LkCSVDataTable* table = new LkCSVDataTable();
+	CSVDataTable* table = new CSVDataTable();
 	std::string str;
 	std::string value;
 	uint32 row = 0;
@@ -57,17 +60,17 @@ LkCSVParser::LkCSVDataTable* LkCSVParser::ParseFile( const char* _File )
 	return table;
 }
 
-LkCSVParser::LkCSVDataTable::LkCSVDataTable()
+CSVParser::CSVDataTable::CSVDataTable()
 {
 
 }
 
-LkCSVParser::LkCSVDataTable::~LkCSVDataTable()
+CSVParser::CSVDataTable::~CSVDataTable()
 {
 
 }
 
-bool LkCSVParser::LkCSVDataTable::GetDataAt( uint32 _Column, uint32 _Row, std::string& _Output )
+bool CSVParser::CSVDataTable::GetDataAt( uint32 _Column, uint32 _Row, std::string& _Output )
 {
 	if (m_Data.size() > _Row && m_Data[_Row].size() > _Column)
 	{
@@ -77,7 +80,7 @@ bool LkCSVParser::LkCSVDataTable::GetDataAt( uint32 _Column, uint32 _Row, std::s
 	return false;
 }
 
-void LkCSVParser::LkCSVDataTable::SetDataAt( uint32 _Column, uint32 _Row, std::string& _Data )
+void CSVParser::CSVDataTable::SetDataAt( uint32 _Column, uint32 _Row, std::string& _Data )
 {
 	// Resize the number of rows if required.
 	if (_Row > m_Data.size())
@@ -95,19 +98,19 @@ void LkCSVParser::LkCSVDataTable::SetDataAt( uint32 _Column, uint32 _Row, std::s
 	m_Data[_Row][_Column] = _Data;
 }
 
-uint32 LkCSVParser::LkCSVDataTable::GetNumRows()
+uint32 CSVParser::CSVDataTable::GetNumRows()
 {
 	return m_Data.size();
 }
 
-uint32 LkCSVParser::LkCSVDataTable::GetNumColumnsAtRow( uint32 _Row )
+uint32 CSVParser::CSVDataTable::GetNumColumnsAtRow( uint32 _Row )
 {
 	assert(_Row < m_Data.size());
 
 	return m_Data[_Row].size();
 }
 
-uint32 LkCSVParser::LkCSVDataTable::GetNumEntries()
+uint32 CSVParser::CSVDataTable::GetNumEntries()
 {
 	uint32 entries = 0;
 	uint32 rows = GetNumRows();
@@ -118,7 +121,7 @@ uint32 LkCSVParser::LkCSVDataTable::GetNumEntries()
 	return entries;
 }
 
-void LkCSVParser::LkCSVDataTable::Clear()
+void CSVParser::CSVDataTable::Clear()
 {
 	for (std::vector<std::vector<std::string>>::iterator it = m_Data.begin(); it != m_Data.end(); ++it)
 	{
@@ -127,7 +130,7 @@ void LkCSVParser::LkCSVDataTable::Clear()
 	m_Data.clear();
 }
 
-bool LkCSVParser::LkCSVDataTable::IsEmpty()
+bool CSVParser::CSVDataTable::IsEmpty()
 {
 	// Zero-sized lists might be present, which is why we need to 
 	// check all lists (if there are any). We can return false if 
@@ -145,7 +148,7 @@ bool LkCSVParser::LkCSVDataTable::IsEmpty()
 	return true;
 }
 
-bool LkCSVParser::LkCSVDataTable::Export( const char* _File, bool _AllowIfEmpty /*= false*/ )
+bool CSVParser::CSVDataTable::Export( const char* _File, bool _AllowIfEmpty /*= false*/ )
 {
 	if (!_AllowIfEmpty && IsEmpty())
 	{
@@ -176,6 +179,8 @@ bool LkCSVParser::LkCSVDataTable::Export( const char* _File, bool _AllowIfEmpty 
 	}
 	file.close();
 	return true;
+}
+
 }
 
 }

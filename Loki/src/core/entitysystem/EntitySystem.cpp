@@ -104,7 +104,7 @@ EntityID EntitySystem::GenerateEntityIDFromName( const char* _EntityName ) const
 {
 	EntityID ID;
 	
-	ID.m_ID = util::Hash_FNV32(_EntityName);
+	ID.m_ID = util::hash::Hash_FNV32(_EntityName);
 	
 	return ID;
 }

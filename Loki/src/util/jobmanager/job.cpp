@@ -6,12 +6,15 @@ namespace loki
 namespace util
 {
 
+namespace general
+{
+
 namespace
 {
 	JobID JobIDCounter = 0;	
 }
 
-LkJob::LkJob()	:
+Job::Job()	:
 	m_State(JS_PENDING),
 	m_ID(++JobIDCounter),
 	m_EventDone(CreateEventA(NULL, true, false, NULL))
@@ -19,12 +22,12 @@ LkJob::LkJob()	:
 
 }
 
-LkJob::~LkJob()
+Job::~Job()
 {
 	CloseHandle(m_EventDone);
 }
 
-void LkJob::AddDependency( LkJob* _Dependency )
+void Job::AddDependency( Job* _Dependency )
 {
 	assert(_Dependency != NULL);
 
@@ -36,28 +39,28 @@ void LkJob::AddDependency( LkJob* _Dependency )
 	m_Dependencies.push_back(_Dependency);
 }
 
-void LkJob::Reset()
+void Job::Reset()
 {
 	ResetEvent(m_EventDone);
 	m_State = JS_PENDING;
 }
 
-EJobState LkJob::GetState()
+EJobState Job::GetState()
 {
 	return m_State;
 }
 
-void LkJob::WaitForJob( unsigned long _Ms /*= INFINITE*/ )
+void Job::WaitForJob( unsigned long _Ms /*= INFINITE*/ )
 {
 	WaitForSingleObject(m_EventDone, _Ms);
 }
 
-JobID LkJob::GetJobID()
+JobID Job::GetJobID()
 {
 	return m_ID;
 }
 
-void LkJob::_JobMainWrapper()
+void Job::_JobMainWrapper()
 {
 	LOG(VL_NORMAL, "Job::_JobMainWrapper: Starting job...");
 
@@ -73,7 +76,7 @@ void LkJob::_JobMainWrapper()
 	LOG(VL_NORMAL, "Job::_JobMainWrapper: Job done.");
 }
 
-bool LkJob::_CanStart()
+bool Job::_CanStart()
 {
 	if (m_State != JS_PENDING)
 	{
@@ -82,7 +85,7 @@ bool LkJob::_CanStart()
 
 	for (JobList::iterator job_it = m_Dependencies.begin(); job_it != m_Dependencies.end(); ++job_it)
 	{
-		LkJob* job = (*job_it);
+		Job* job = (*job_it);
 
 		// If any of the dependencies is not done yet, the job can't be started.
 		if (job->GetState() != JS_DONE)
@@ -91,6 +94,8 @@ bool LkJob::_CanStart()
 		}
 	}
 	return true;
+}
+
 }
 
 }
