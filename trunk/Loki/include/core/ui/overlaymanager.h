@@ -29,7 +29,7 @@ class LkOverlayManager	: public LkEventListener
 	typedef stdext::hash_map<OverlayStyleID, LkOverlayStyle*>	OverlayStyles;
 	typedef std::pair<OverlayStyleID, LkOverlayStyle*>			OverlayStylesPair;
 	
-	friend class LkEngine;
+	friend class LokiEngine;
 public:
 	LkOverlay* GetOverlay( const char* _Overlay );
 

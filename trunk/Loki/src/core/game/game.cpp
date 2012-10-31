@@ -1,11 +1,4 @@
 #include "core/game/game.h"
-#include "core/game/level/level.h"
-
-#include "core/actor/camera/camera.h"
-#include "core/actor/light/point/pointlight.h"
-#include "core/actor/light/spot/spotlight.h"
-#include "core/actor/light/directional/directionallight.h"
-#include "core/actor/handle/handle.h"
 
 namespace loki
 {

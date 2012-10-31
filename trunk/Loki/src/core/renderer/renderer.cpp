@@ -1,34 +1,26 @@
 #include <Windows.h>	// Required for wglGetProcAddress
 #include <GLEW\\glew.h>
 #include <GL\\glut.h>
-#include "core/actor/camera/camera.h"
 #include "core/renderer/renderer.h"
 #include "core/renderer/scene/scene.h"
 #include "core/renderer/GLSLShader/glslshader.h"
-#include "core/actor/light/point/pointlight.h"
-#include "core/actor/light/spot/spotlight.h"
-#include "core/actor/light/directional/directionallight.h"
 #include "core/graphics/Texture.h"
 #include "core/resourcemanager/texturemanager.h"
 #include "core/resourcemanager/modelmanager.h"
 #include "core/renderer/effect/effectmanager.h"
 #include "core/renderer/debugrenderer.h"
-#include "core/actor/components/rendercomponent/rendercomponent_old.h"
 #include "core/renderer/effect/effectmanager.h"
 #include "core/window.h"
-
-#include "core/actor/handle/handle.h"
-
-#include "core/game/level/level.h"
-#include "core/game/level/skybox/skybox.h"
-
-#include "core/actor/psystem/particlesystem.h"
 
 #include "core/graphics/Model.h"
 
 #include "core/graphics/FrameBuffer.h"
 
 #include "core/entitysystem/component/default/RenderComponent.h"
+#include "core/entitysystem/component/default/Light.h"
+#include "core/entitysystem/component/default/Transform.h"
+#include "core/entitysystem/component/default/CameraComponent.h"
+#include "core/entitysystem/Entity.h"
 
 using namespace loki;
 using namespace loki::renderer;
@@ -47,8 +39,7 @@ LkRenderer* g_Renderer = NULL;
 
 }
 
-LkRenderer::LkRenderer( LkWindow* _Window )	:
-	m_CurrentLevelToRender(NULL),
+LkRenderer::LkRenderer( Window* _Window )	:
 	m_LightEffect(0),
 	m_GBuffer(0),
 #ifdef DBG_VISUALIZATIONS
@@ -72,7 +63,7 @@ LkRenderer::~LkRenderer()
 	_Shutdown();
 }
 
-bool LkRenderer::_Init( LkWindow* _Window )
+bool LkRenderer::_Init( Window* _Window )
 {
 	_GetAPIInformation();
 	_LogAPIInformation();
@@ -247,9 +238,9 @@ void LkRenderer::_LogAPIInformation()
 // The rendering system should not need to know anything about the set-up of levels.
 void LkRenderer::Render( game::LkLevel* _Level )
 {
-	m_CurrentLevelToRender = _Level;
+	//m_CurrentLevelToRender = _Level;
 
-	m_CurrentLevelToRender->GetCurrentCamera()->ApplyViewport();
+	//m_CurrentLevelToRender->GetCurrentCamera()->ApplyViewport();
 	//m_CurrentLevelToRender->GetCurrentCamera()->ApplyProjectionMatrix();
 	//m_CurrentLevelToRender->GetCurrentCamera()->ApplyViewTransformation();
 
@@ -309,7 +300,8 @@ void LkRenderer::Render( game::LkLevel* _Level )
 		_RenderParticles();
 
 		// Draw debug stuff.
-		debug::DrawItems(m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix(), m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix());
+		debug::DrawItems(components::CameraComponent::GetActiveCamera()->GetProjectionMatrix(), 
+						 components::CameraComponent::GetActiveCamera()->GetViewMatrix());
 
 		//m_MRTObject->StartLightAccumulation();
 		m_GBuffer->SetDrawBuffer(graphics::FRAMEBUFFER_COLOR_ATTACHMENT3);
@@ -570,132 +562,132 @@ vec2 LkRenderer::GetPixelScale()
 
 void LkRenderer::_RenderSky()
 {
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf((GLfloat*)&(m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix()));
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	mat4 m = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
-	m[3] = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-	glLoadMatrixf(math::value_ptr(m));
-
-	glDisable(GL_CULL_FACE);
-	glDepthMask( GL_FALSE );  // Don't write to the depth buffer
-	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_TEXTURE_2D);
-	
-	const game::LkSkyBox* skybox = m_CurrentLevelToRender->GetSkyBox();
-	//glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); // Don't do any blending on the cube map textures
-
-	{
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_WEST)->GetTextureHandle());
-		glBegin( GL_QUADS );
-		// +X
-		glTexCoord2f(  0.0f, 0.0f );
-		glVertex3f(    1.0f, -1.0f, -1.0f );
-
-		glTexCoord2f(  0.0f,  1.0f );
-		glVertex3f(    1.0f,  1.0f, -1.0f );
-
-		glTexCoord2f(  1.0f,  1.0f );
-		glVertex3f(    1.0f,  1.0f,  1.0f );
-
-		glTexCoord2f(  1.0f, 0.0f );
-		glVertex3f(    1.0f, -1.0f,  1.0f );
-
-		glEnd();
-		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_EAST)->GetTextureHandle() );
-		glBegin( GL_QUADS );
-		// -X
-		glTexCoord2f(  1.0f, 0.0f );
-		glVertex3f(   -1.0f, -1.0f, -1.0f );
-
-		glTexCoord2f(  1.0f,  1.0f );
-		glVertex3f(   -1.0f,  1.0f, -1.0f );
-
-		glTexCoord2f(  0.0f,  1.0f );
-		glVertex3f(   -1.0f,  1.0f,  1.0f );
-
-		glTexCoord2f(  0.0f, 0.0f );
-		glVertex3f(   -1.0f, -1.0f,  1.0f );
-
-		glEnd();
-		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_UP)->GetTextureHandle() );
-		glBegin( GL_QUADS );
-		// +Y
-		glTexCoord2f(  0.0f, 0.0f );
-		glVertex3f(   -1.0f,  1.0f, -1.0f );
-
-		glTexCoord2f(  1.0f, 0.0f );
-		glVertex3f(    1.0f,  1.0f, -1.0f );
-
-		glTexCoord2f(  1.0f,  1.0f );
-		glVertex3f(    1.0f,  1.0f,  1.0f );
-
-		glTexCoord2f(  0.0f,  1.0f );
-		glVertex3f(   -1.0f, 1.0f,  1.0f );
-
-		glEnd();
-		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_DOWN)->GetTextureHandle() );
-		glBegin( GL_QUADS );
-		// -Y
-		glTexCoord2f(  0.0f,  1.0f );
-		glVertex3f(   -1.0f, -1.0f, -1.0f );
-
-		glTexCoord2f(  1.0f,  1.0f );
-		glVertex3f(    1.0f, -1.0f, -1.0f );
-
-		glTexCoord2f(  1.0f, 0.0f );
-		glVertex3f(    1.0f, -1.0f,  1.0f );
-
-		glTexCoord2f(  0.0f, 0.0f );
-		glVertex3f(   -1.0f, -1.0f,  1.0f );
-
-		glEnd();
-		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_NORTH)->GetTextureHandle() );
-		glBegin( GL_QUADS );
-		// +Z
-		glTexCoord2f(  1.0f, 0.0f );
-		glVertex3f(   -1.0f, -1.0f,  1.0f );
-
-		glTexCoord2f(  0.0f, 0.0f );
-		glVertex3f(    1.0f, -1.0f,  1.0f );
-
-		glTexCoord2f(  0.0f,  1.0f );
-		glVertex3f(    1.0f,  1.0f,  1.0f );
-
-		glTexCoord2f(  1.0f,  1.0f );
-		glVertex3f(   -1.0f,  1.0f,  1.0f );
-
-		glEnd();
-		
-		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_SOUTH)->GetTextureHandle() );
-		glBegin( GL_QUADS );
-		// -Z
-		glTexCoord2f(  0.0f, 0.0f );
-		glVertex3f(   -1.0f, -1.0f, -1.0f );
-
-		glTexCoord2f(  1.0f, 0.0f );
-		glVertex3f(    1.0f, -1.0f, -1.0f );
-
-		glTexCoord2f(  1.0f,  1.0f );
-		glVertex3f(    1.0f,  1.0f, -1.0f );
-
-		glTexCoord2f(  0.0f,  1.0f );
-		glVertex3f(   -1.0f,  1.0f, -1.0f );
-
-		glEnd();
-	}
-
-	glBindTexture( GL_TEXTURE_2D, 0 );
-	glDepthMask( GL_TRUE );
-	glEnable(GL_CULL_FACE);
-	glDisable(GL_TEXTURE_2D);
-	glPopMatrix();
+// 	glMatrixMode(GL_PROJECTION);
+// 	glLoadMatrixf((GLfloat*)&(m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix()));
+// 
+// 	glMatrixMode(GL_MODELVIEW);
+// 	glPushMatrix();
+// 	mat4 m = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
+// 	m[3] = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+// 	glLoadMatrixf(math::value_ptr(m));
+// 
+// 	glDisable(GL_CULL_FACE);
+// 	glDepthMask( GL_FALSE );  // Don't write to the depth buffer
+// 	glDisable(GL_DEPTH_TEST);
+// 	glEnable(GL_TEXTURE_2D);
+// 	
+// 	const game::LkSkyBox* skybox = m_CurrentLevelToRender->GetSkyBox();
+// 	//glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); // Don't do any blending on the cube map textures
+// 
+// 	{
+// 		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_WEST)->GetTextureHandle());
+// 		glBegin( GL_QUADS );
+// 		// +X
+// 		glTexCoord2f(  0.0f, 0.0f );
+// 		glVertex3f(    1.0f, -1.0f, -1.0f );
+// 
+// 		glTexCoord2f(  0.0f,  1.0f );
+// 		glVertex3f(    1.0f,  1.0f, -1.0f );
+// 
+// 		glTexCoord2f(  1.0f,  1.0f );
+// 		glVertex3f(    1.0f,  1.0f,  1.0f );
+// 
+// 		glTexCoord2f(  1.0f, 0.0f );
+// 		glVertex3f(    1.0f, -1.0f,  1.0f );
+// 
+// 		glEnd();
+// 		
+// 		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_EAST)->GetTextureHandle() );
+// 		glBegin( GL_QUADS );
+// 		// -X
+// 		glTexCoord2f(  1.0f, 0.0f );
+// 		glVertex3f(   -1.0f, -1.0f, -1.0f );
+// 
+// 		glTexCoord2f(  1.0f,  1.0f );
+// 		glVertex3f(   -1.0f,  1.0f, -1.0f );
+// 
+// 		glTexCoord2f(  0.0f,  1.0f );
+// 		glVertex3f(   -1.0f,  1.0f,  1.0f );
+// 
+// 		glTexCoord2f(  0.0f, 0.0f );
+// 		glVertex3f(   -1.0f, -1.0f,  1.0f );
+// 
+// 		glEnd();
+// 		
+// 		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_UP)->GetTextureHandle() );
+// 		glBegin( GL_QUADS );
+// 		// +Y
+// 		glTexCoord2f(  0.0f, 0.0f );
+// 		glVertex3f(   -1.0f,  1.0f, -1.0f );
+// 
+// 		glTexCoord2f(  1.0f, 0.0f );
+// 		glVertex3f(    1.0f,  1.0f, -1.0f );
+// 
+// 		glTexCoord2f(  1.0f,  1.0f );
+// 		glVertex3f(    1.0f,  1.0f,  1.0f );
+// 
+// 		glTexCoord2f(  0.0f,  1.0f );
+// 		glVertex3f(   -1.0f, 1.0f,  1.0f );
+// 
+// 		glEnd();
+// 		
+// 		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_DOWN)->GetTextureHandle() );
+// 		glBegin( GL_QUADS );
+// 		// -Y
+// 		glTexCoord2f(  0.0f,  1.0f );
+// 		glVertex3f(   -1.0f, -1.0f, -1.0f );
+// 
+// 		glTexCoord2f(  1.0f,  1.0f );
+// 		glVertex3f(    1.0f, -1.0f, -1.0f );
+// 
+// 		glTexCoord2f(  1.0f, 0.0f );
+// 		glVertex3f(    1.0f, -1.0f,  1.0f );
+// 
+// 		glTexCoord2f(  0.0f, 0.0f );
+// 		glVertex3f(   -1.0f, -1.0f,  1.0f );
+// 
+// 		glEnd();
+// 		
+// 		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_NORTH)->GetTextureHandle() );
+// 		glBegin( GL_QUADS );
+// 		// +Z
+// 		glTexCoord2f(  1.0f, 0.0f );
+// 		glVertex3f(   -1.0f, -1.0f,  1.0f );
+// 
+// 		glTexCoord2f(  0.0f, 0.0f );
+// 		glVertex3f(    1.0f, -1.0f,  1.0f );
+// 
+// 		glTexCoord2f(  0.0f,  1.0f );
+// 		glVertex3f(    1.0f,  1.0f,  1.0f );
+// 
+// 		glTexCoord2f(  1.0f,  1.0f );
+// 		glVertex3f(   -1.0f,  1.0f,  1.0f );
+// 
+// 		glEnd();
+// 		
+// 		glBindTexture( GL_TEXTURE_2D, skybox->GetTexture(game::SBS_SOUTH)->GetTextureHandle() );
+// 		glBegin( GL_QUADS );
+// 		// -Z
+// 		glTexCoord2f(  0.0f, 0.0f );
+// 		glVertex3f(   -1.0f, -1.0f, -1.0f );
+// 
+// 		glTexCoord2f(  1.0f, 0.0f );
+// 		glVertex3f(    1.0f, -1.0f, -1.0f );
+// 
+// 		glTexCoord2f(  1.0f,  1.0f );
+// 		glVertex3f(    1.0f,  1.0f, -1.0f );
+// 
+// 		glTexCoord2f(  0.0f,  1.0f );
+// 		glVertex3f(   -1.0f,  1.0f, -1.0f );
+// 
+// 		glEnd();
+// 	}
+// 
+// 	glBindTexture( GL_TEXTURE_2D, 0 );
+// 	glDepthMask( GL_TRUE );
+// 	glEnable(GL_CULL_FACE);
+// 	glDisable(GL_TEXTURE_2D);
+// 	glPopMatrix();
 }
 
 void LkRenderer::_RenderOpaqueGeometry()
@@ -705,10 +697,10 @@ void LkRenderer::_RenderOpaqueGeometry()
 	glColorMask(true, true, true, true);
 	glDepthMask(true);
 
-	mat4 viewmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
-	mat4 projectionmatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix();
-	f32 zfar = m_CurrentLevelToRender->GetCurrentCamera()->GetZFar();
-	f32 znear = m_CurrentLevelToRender->GetCurrentCamera()->GetZNear();
+	mat4 viewmatrix = components::CameraComponent::GetActiveCamera()->GetViewMatrix();
+	mat4 projectionmatrix = components::CameraComponent::GetActiveCamera()->GetProjectionMatrix();
+	f32 zfar = components::CameraComponent::GetActiveCamera()->GetFarPlane();
+	f32 znear = components::CameraComponent::GetActiveCamera()->GetNearPlane();
 
 // 	for (std::list<LkRenderComponent*>::iterator it = LkRenderComponent::m_RenderComponents.begin(); it != LkRenderComponent::m_RenderComponents.end(); ++it)
 // 	{
@@ -863,19 +855,19 @@ void LkRenderer::_RenderUI()
 
 void LkRenderer::_RenderParticles()
 {
-	const game::LkLevel::ParticleSystems* systems = m_CurrentLevelToRender->GetParticleSystems();
-	for (game::LkLevel::ParticleSystems::const_iterator it = systems->begin(); it != systems->end(); ++it)
-	{
-		(*it).second->Render(m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix(), m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix());
-	}
+// 	const game::LkLevel::ParticleSystems* systems = m_CurrentLevelToRender->GetParticleSystems();
+// 	for (game::LkLevel::ParticleSystems::const_iterator it = systems->begin(); it != systems->end(); ++it)
+// 	{
+// 		(*it).second->Render(m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix(), m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix());
+// 	}
 }
 
 void LkRenderer::_RenderLightingPointLights()
 {
 #define SETCGPARAM(paramname, value)	{LkEffectParameter* param = m_LightEffect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
 
-	mat4 _ProjectionMatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix();
-	mat4 _ViewMatrix = m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix();
+	mat4 _ProjectionMatrix = components::CameraComponent::GetActiveCamera()->GetProjectionMatrix();
+	mat4 _ViewMatrix = components::CameraComponent::GetActiveCamera()->GetViewMatrix();
 	mat4 _ViewProjectionMatrix = _ProjectionMatrix * _ViewMatrix;
 	vec3 _EyePosition = vec3(math::inverse(_ViewMatrix)[3]);
 
@@ -885,51 +877,58 @@ void LkRenderer::_RenderLightingPointLights()
 	SETCGPARAM("LKRT2", m_GBuffer->GetAttachmentTexture(graphics::FRAMEBUFFER_COLOR_ATTACHMENT2));
 	//SETCGPARAM("LKRT3", m_GBuffer->GetRenderbufferTexture(3));
 
-	for (game::LkLevel::PointLights::const_iterator it = m_CurrentLevelToRender->GetPointLights()->begin(); it != m_CurrentLevelToRender->GetPointLights()->end(); ++it)
+	components::Light::Lights& lights = components::Light::GetAllLights();
+	for (components::Light::LightsConstIter it = lights.begin(); it != lights.end(); ++it)
 	{
-		const LkPointLight* pointlight = (*it).second;
+		components::Light* light = (*it);
 
-		if (!pointlight->IsEnabled())
-		{
-			continue;
-		}
-
-		LkMovableComponent* comp = pointlight->GetComponent<LkMovableComponent>();
-		mat4 _ModelMatrix = comp->GetTransformation();
-		bool CameraInsideVolume = math::length(_EyePosition - comp->GetPosition()) < pointlight->GetRadius();
+		Transform& transform = light->GetEntity()->GetTransform();
+		mat4 _ModelMatrix = transform.GetMatrix();
+		bool CameraInsideVolume = math::length(_EyePosition - transform.GetPosition()) < light->GetRange();
 		_ModelMatrix = math::gtc::matrix_transform::rotate(_ModelMatrix, 90.0f, vec3(1.0f, 0.0f, 0.0f));
 		SETCGPARAM("LKMODELVIEWPROJ", _ViewProjectionMatrix * _ModelMatrix);		// Set the model view projection matrix.
 		SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
 		SETCGPARAM("LKMODELMATRIXIT", mat3(math::transpose(math::inverse(_ModelMatrix))));		// Set the inverse transpose of the model matrix.	
 		SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
-		SETCGPARAM("LKLIGHTPOSITION", comp->GetPosition());
-		SETCGPARAM("LKLIGHTRADIUS", pointlight->GetRadius());
-		SETCGPARAM("LKLIGHTCOLOR", pointlight->GetColor());
-		SETCGPARAM("LKLIGHTSPECULAR", pointlight->GetSpecular());
-		SETCGPARAM("LKLIGHTCONSTANTATTENUATION", pointlight->GetConstantAttenuation());
-		SETCGPARAM("LKLIGHTLINEARATTENUATION", pointlight->GetLinearAttenuation());
-		SETCGPARAM("LKLIGHTQUADRATICATTENUATION", pointlight->GetQuadraticAttenuation());
+		SETCGPARAM("LKLIGHTPOSITION", transform.GetPosition());
+		SETCGPARAM("LKLIGHTRANGE", light->GetRange());
+		SETCGPARAM("LKLIGHTCOLOR", light->GetColor());
+		SETCGPARAM("LKLIGHTINTENSITY", light->GetIntensity());
+		SETCGPARAM("LKLIGHTTYPE", light->GetLightType());
+		SETCGPARAM("LKLIGHTVECTOR", light->GetEntity()->GetTransform().GetOrientationVector());
 
-		// TODO: Replace this with a VBO or something. Atleast not emmediate mode.
-		static GLUquadric* quadric = gluNewQuadric();
-		int32 PassID = 0;
-		while (m_LightEffect->HasNextPass())
+		switch (light->GetLightType())
 		{
+		case components::Light::LIGHT_POINT:
+			{
+				// TODO: Replace this with a VBO or something. Atleast not emmediate mode.
+				static GLUquadric* quadric = gluNewQuadric();
+				int32 PassID = 0;
+				while (m_LightEffect->HasNextPass())
+				{
 #ifndef DBG_VISUALIZATIONS
-			if (PassID == 4)
-			{
-				continue;
-			}
+					if (PassID == 4)
+					{
+						continue;
+					}
 #else
-			if (!m_DBG_VisualizeLightVolumes && PassID == 4)
-			{
-				continue;				
-			}
+					if (!m_DBG_VisualizeLightVolumes && PassID == 4)
+					{
+						continue;				
+					}
 #endif
-			
-			// Awesomely condensed code...
-			(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(gluSphere(quadric, pointlight->GetRadius(), 20, 15));
-			++PassID;
+
+					// Awesomely condensed code...
+					(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(gluSphere(quadric, light->GetRange(), 20, 15));
+					++PassID;
+				}
+
+				break;
+			}
+		default:
+			{
+				break;
+			}
 		}
 
 		//glClear(GL_STENCIL_BUFFER_BIT);
@@ -1078,8 +1077,8 @@ void LkRenderer::_RenderGBufferTargets()
 
 		if (i == 3)
 		{
-			SETCGPARAM("LKZFAR", m_CurrentLevelToRender->GetCurrentCamera()->GetZFar());
-			SETCGPARAM("LKZNEAR", m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
+			SETCGPARAM("LKZFAR", components::CameraComponent::GetActiveCamera()->GetFarPlane());
+			SETCGPARAM("LKZNEAR", components::CameraComponent::GetActiveCamera()->GetNearPlane());
 		}
 
 		while (effect->HasNextPass())

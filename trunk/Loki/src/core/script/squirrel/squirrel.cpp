@@ -6,7 +6,7 @@
 namespace loki
 {
 
-LkSquirrel* g_Squirrel = NULL;
+Squirrel* g_Squirrel = NULL;
 
 // HSQUIRRELVM Squirrel::m_SquirrelVM;
 // CRITICAL_SECTION Squirrel::m_CriticalSection;
@@ -16,18 +16,18 @@ LkSquirrel* g_Squirrel = NULL;
 // HANDLE Squirrel::m_ThreadExittedHandle;
 // util::Thread* Squirrel::m_Thread = NULL;
 
-LkSquirrel::LkSquirrel()	:
+Squirrel::Squirrel()	:
 	m_Thread(NULL)
 {
 	_Init();
 }
 
-LkSquirrel::~LkSquirrel()
+Squirrel::~Squirrel()
 {
 	_Shutdown();
 }
 
-bool LkSquirrel::_Init()
+bool Squirrel::_Init()
 {
 	InitializeCriticalSection(&m_CriticalSection);
 	m_QueueSemaphoreHandle = CreateSemaphore(NULL, 0, 512, NULL);
@@ -51,7 +51,7 @@ bool LkSquirrel::_Init()
 	RegisterFunction("LOG", SquirrelLog);
 
 	// Start thread function.
-	m_Thread = new util::LkThread(Thread, (void*)this, 0);
+	m_Thread = new util::system::Thread(Thread, (void*)this, 0);
 
 	//////////////////////////////////////////////////////////////////////////
 	// Run the squirrel base script. This base script defines global functions
@@ -64,7 +64,7 @@ bool LkSquirrel::_Init()
 	return true;
 }
 
-void LkSquirrel::_Shutdown()
+void Squirrel::_Shutdown()
 {
 	// Indicate that the script thread should stop.
 	SetEvent(m_ThreadStopEventHandle);
@@ -139,7 +139,7 @@ void LkSquirrel::_Shutdown()
 // 	//sq_call(m_SquirrelVM, SQInteger params, SQBool retval, true);
 // }
 
-void LkSquirrel::RunScript( const char* _File )
+void Squirrel::RunScript( const char* _File )
 {
 	sq_pushroottable(m_SquirrelVM);
 	//SQRESULT res = sqstd_dofile(m_SquirrelVM, util::ToWideString(std::string(_File)).c_str(), false, true);
@@ -151,7 +151,7 @@ void LkSquirrel::RunScript( const char* _File )
 	sq_pop(m_SquirrelVM, 1);
 }
 
-void LkSquirrel::RunScriptAsync( const char* _File )
+void Squirrel::RunScriptAsync( const char* _File )
 {
 	QueueItem* item = new QueueItem();
 	item->m_String = std::string(_File);
@@ -165,7 +165,7 @@ void LkSquirrel::RunScriptAsync( const char* _File )
 	ReleaseSemaphore(m_QueueSemaphoreHandle, 1, NULL);
 }
 
-void LkSquirrel::RegisterFunction( const char* _Name, SQFUNCTION _Function )
+void Squirrel::RegisterFunction( const char* _Name, SQFUNCTION _Function )
 {
 	sq_pushroottable(m_SquirrelVM);
 	//sq_pushstring(m_SquirrelVM, util::ToWideString(std::string(_Name)).c_str(), -1);
@@ -175,7 +175,7 @@ void LkSquirrel::RegisterFunction( const char* _Name, SQFUNCTION _Function )
 	sq_pop(m_SquirrelVM, 1);
 }
 
-SQInteger LkSquirrel::SquirrelLexRead( SQUserPointer _UserPointer )
+SQInteger Squirrel::SquirrelLexRead( SQUserPointer _UserPointer )
 {
 	// Code obtained from http://squirrel-lang.org/doc/squirrel3.html#d0e3733.
 	// Accessed 02-03-2012 @ 16:10.
@@ -188,7 +188,7 @@ SQInteger LkSquirrel::SquirrelLexRead( SQUserPointer _UserPointer )
 	return 0;
 }
 
-SQInteger LkSquirrel::SquirrelLog( HSQUIRRELVM _VM )
+SQInteger Squirrel::SquirrelLog( HSQUIRRELVM _VM )
 {
 	const char *str;
 	sq_tostring(_VM, 2);
@@ -204,7 +204,7 @@ SQInteger LkSquirrel::SquirrelLog( HSQUIRRELVM _VM )
 	return 0;
 }
 
-void LkSquirrel::SquirrelRegularLog( HSQUIRRELVM _VM, const SQChar* _Msg, ... )
+void Squirrel::SquirrelRegularLog( HSQUIRRELVM _VM, const SQChar* _Msg, ... )
 {
 	va_list v1;
 	va_start(v1, _Msg);
@@ -218,7 +218,7 @@ void LkSquirrel::SquirrelRegularLog( HSQUIRRELVM _VM, const SQChar* _Msg, ... )
 	va_end(v1);
 }
 
-void LkSquirrel::SquirrelErrorLog( HSQUIRRELVM _VM, const SQChar* _Msg, ...)
+void Squirrel::SquirrelErrorLog( HSQUIRRELVM _VM, const SQChar* _Msg, ...)
 {
 	va_list v1;
 	va_start(v1, _Msg);
@@ -232,14 +232,14 @@ void LkSquirrel::SquirrelErrorLog( HSQUIRRELVM _VM, const SQChar* _Msg, ...)
 	va_end(v1);
 }
 
-void LkSquirrel::SquirrelCompilerErrorLog( HSQUIRRELVM _VM, const SQChar* _Desc, const SQChar* _Source, SQInteger _Line, SQInteger _Column )
+void Squirrel::SquirrelCompilerErrorLog( HSQUIRRELVM _VM, const SQChar* _Desc, const SQChar* _Source, SQInteger _Line, SQInteger _Column )
 {
 	LOG(VL_ERROR, "Squirrel (COMPILER %i:%i):\nDesc: %s\nFile: %s", _Line, _Column, _Desc, _Source);
 }
 
-int32 LkSquirrel::Thread( void* _Arg )
+int32 Squirrel::Thread( void* _Arg )
 {
-	LkSquirrel* instance = (LkSquirrel*)_Arg;
+	Squirrel* instance = (Squirrel*)_Arg;
 
 	// Wait for a script or string to be available in the queue.
 	WaitForSingleObject(instance->m_QueueSemaphoreHandle, INFINITE);

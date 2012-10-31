@@ -17,7 +17,12 @@ namespace loki
 namespace util
 {
 
+namespace hash
+{
+
 uint32_t Hash_FNV32( const char* s ); 
+
+}
 
 }
 

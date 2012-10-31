@@ -6,16 +6,9 @@
 #include "core/engine.h"
 #include "core/window.h"
 
-#include "core/renderer/scene/scene.h"		// TODO: Remove.
-#include "core/actor/camera/camera.h"	// TODO: Remove.
-
 #include "util/util.h"
 
-#include "core/actor/actor.h"
-
 #include "core/console/console.h"
-
-//#include "math/glm/gtx/rotate_vector.hpp"
 
 #include "util/thread/thread.h"
 #include "util/jobmanager/jobmanager.h"
@@ -82,14 +75,14 @@ const char* VersionType = "Debug";
 const char* VersionType = "Release";
 #endif
 
-LkEngine* g_Engine = NULL;
+LokiEngine* g_Engine = NULL;
 
 loki::LkHTMLView* webtab = NULL;	// REMOVE.
 
 //////////////////////////////////////////////////////////////////////////
 // C-tor.
 //////////////////////////////////////////////////////////////////////////
-LkEngine::LkEngine( game::LkGame* _Game )	:
+LokiEngine::LokiEngine( game::LkGame* _Game )	:
 	m_Exit(false),
 	m_Game(_Game),
 	m_FrameTime(1.0f),
@@ -112,7 +105,7 @@ LkEngine::LkEngine( game::LkGame* _Game )	:
 	g_Engine = this;
 }
 
-LkEngine::LkEngine()
+LokiEngine::LokiEngine()
 {
 	ILLEGAL_CTOR_ERROR("Engine");
 }
@@ -120,12 +113,12 @@ LkEngine::LkEngine()
 //////////////////////////////////////////////////////////////////////////
 // D-tor.
 //////////////////////////////////////////////////////////////////////////
-LkEngine::~LkEngine()
+LokiEngine::~LokiEngine()
 {
 	
 }
 
-void LkEngine::Go( int32 argc, char** argv )
+void LokiEngine::Go( int32 argc, char** argv )
 {
 	m_EngineClock.Start();
 
@@ -143,60 +136,60 @@ void LkEngine::Go( int32 argc, char** argv )
 #endif
 
 	// Parse command line arguments.
-	loki::LkEngine::ParseArguments(argc, argv);
-	if (loki::LkEngine::Init())	// Call init.
+	loki::LokiEngine::ParseArguments(argc, argv);
+	if (loki::LokiEngine::Init())	// Call init.
 	{
-		loki::LkEngine::Run();	// Run the engine.
+		loki::LokiEngine::Run();	// Run the engine.
 	}
 	else
 	{
 		LOG(VL_ERROR, "Engine::Init: Failed");
 	}
-	loki::LkEngine::Shutdown();	// Shutdown.
+	loki::LokiEngine::Shutdown();	// Shutdown.
 }
 
-LkWindow* LkEngine::GetWindow() const
+Window* LokiEngine::GetWindow() const
 {
 	return m_Window;
 }
 
-game::LkGame* LkEngine::GetGame()
+game::LkGame* LokiEngine::GetGame()
 {
 	return m_Game;
 }
 
-f32 LkEngine::GetFrameTime() const
+f32 LokiEngine::GetFrameTime() const
 {
 	return m_FrameTime;
 }
 
-f32 LkEngine::GetEngineUpTime() const
+f32 LokiEngine::GetEngineUpTime() const
 {
 	return m_EngineClock.Lap();
 }
 
-f32 LkEngine::GetFrameRate() const
+f32 LokiEngine::GetFrameRate() const
 {
 	return (1.0f / m_FrameTime);
 }
 
-void LkEngine::SetFrameRateCap( uint32 _Cap )
+void LokiEngine::SetFrameRateCap( uint32 _Cap )
 {
 	m_FrameRateCap = _Cap;
 	m_TargetFrameTime = 1.0f / m_FrameRateCap;
 }
 
-bool LkEngine::GetFrameCapEnabled() const
+bool LokiEngine::GetFrameCapEnabled() const
 {
 	return (m_FrameRateCap <= 0);
 }
 
-void LkEngine::ShowBackgroundConsoleWindow() const
+void LokiEngine::ShowBackgroundConsoleWindow() const
 {
 	ShowWindow(GetConsoleWindow(), SW_RESTORE);
 }
 
-void LkEngine::HideBackgroundConsoleWindow() const
+void LokiEngine::HideBackgroundConsoleWindow() const
 {
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 }
@@ -207,7 +200,7 @@ void LkEngine::HideBackgroundConsoleWindow() const
 // problem, however any command line arguments can not be used
 // while initializing the engine.
 //////////////////////////////////////////////////////////////////////////
-void LkEngine::ParseArguments( int32 argc, char** argv )
+void LokiEngine::ParseArguments( int32 argc, char** argv )
 {
 	LOG(VL_ALWAYS, "Parsing command line...");
 
@@ -218,21 +211,21 @@ void LkEngine::ParseArguments( int32 argc, char** argv )
 // Initializes the render window and other things required to run
 // the engine. This function should be called after Engine::ProcessArguments.
 //////////////////////////////////////////////////////////////////////////
-bool LkEngine::Init()
+bool LokiEngine::Init()
 {
 	srand((uint32)time(0));
 
 	// Collect system information.
-	util::g_SystemInfo = new util::LkSystemInfo();
+	util::system::g_SystemInfo = new util::system::SystemInfo();
 #ifdef _DEBUG
-	util::g_SystemInfo->LogSystemInformation();
+	util::system::g_SystemInfo->LogSystemInformation();
 #endif
 
 	// Initialize localization object.
 	game::g_Localization = new game::LkLocalization();
 
 	// Initialize job manager.
-	util::g_JobManager = new util::LkJobManager(util::g_SystemInfo->GetNumProcessors(), 128);
+	util::general::g_JobManager = new util::general::JobManager(util::system::g_SystemInfo->GetNumProcessors(), 128);
 
 	// Initialize event manager.
 	g_EventManager = new LkEventManager();
@@ -247,7 +240,7 @@ bool LkEngine::Init()
 	g_Lua = new LkLua();
 
 	// Initialize Squirrel state.
-	g_Squirrel = new LkSquirrel();
+	g_Squirrel = new Squirrel();
 
 	// Initialize input.
 	g_Input = new LkInput();
@@ -272,7 +265,7 @@ bool LkEngine::Init()
 	// TODO: Implement config loader
 
 	// Initialize the renderer.
-	m_Window = new LkWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_CAPTION, WINDOW_BITDEPTH, WINDOW_FULLSCREEN, LkEngine::WindowProc, WINDOW_X, WINDOW_Y);
+	m_Window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_CAPTION, WINDOW_BITDEPTH, WINDOW_FULLSCREEN, LokiEngine::WindowProc, WINDOW_X, WINDOW_Y);
 	m_Window->MakeRenderContextCurrent();
 	/*if (!LkEngine::CreateGLWindow(WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_BITDEPTH, WINDOW_FULLSCREEN))*/
 	if (!m_Window->IsValid())
@@ -346,7 +339,7 @@ bool LkEngine::Init()
 // Starts the main application loop.
 // This is the function that should be called after Engine::Init.
 //////////////////////////////////////////////////////////////////////////
-void LkEngine::Run()
+void LokiEngine::Run()
 {
 	Loop();
 }
@@ -354,7 +347,7 @@ void LkEngine::Run()
 //////////////////////////////////////////////////////////////////////////
 // The main application loop. Is called by Engine::Run.
 //////////////////////////////////////////////////////////////////////////
-void LkEngine::Loop()
+void LokiEngine::Loop()
 {
 	while (/*g_RenderWindow.IsOpened() ||*/ !m_Exit)
 	{
@@ -387,7 +380,7 @@ void LkEngine::Loop()
 //////////////////////////////////////////////////////////////////////////
 // Cleans up certain things.
 //////////////////////////////////////////////////////////////////////////
-void LkEngine::Shutdown()
+void LokiEngine::Shutdown()
 {
 	m_Game->PreShutdown();
 	m_Game->Shutdown();
@@ -448,8 +441,8 @@ void LkEngine::Shutdown()
 	g_EventManager = NULL;
 
 	// Delete job manager.
-	delete util::g_JobManager;
-	util::g_JobManager = NULL;
+	delete util::general::g_JobManager;
+	util::general::g_JobManager = NULL;
 
 	// Delete localization object.
 	delete game::g_Localization;
@@ -468,7 +461,7 @@ void LkEngine::Shutdown()
 //////////////////////////////////////////////////////////////////////////
 // Handles window input events.
 //////////////////////////////////////////////////////////////////////////
-void LkEngine::HandleEvents()
+void LokiEngine::HandleEvents()
 {
 	/*
 	case sf::Key::F12:
@@ -540,7 +533,7 @@ void LkEngine::HandleEvents()
 // The main update function. 
 // Updates logic, but does NOT perform render calls.
 //////////////////////////////////////////////////////////////////////////
-void LkEngine::Update()
+void LokiEngine::Update()
 {
 	m_Window->UpdateCursorImage();
 
@@ -579,7 +572,7 @@ void LkEngine::Update()
 //////////////////////////////////////////////////////////////////////////
 // The main render function.
 //////////////////////////////////////////////////////////////////////////
-void LkEngine::Render()
+void LokiEngine::Render()
 {
 	// Render the currently active state.
 	//StateManager::GetActiveState()->Render();
@@ -607,7 +600,7 @@ void LkEngine::Render()
 //////////////////////////////////////////////////////////////////////////
 // Displays the splash screen for _Duration (In milliseconds).
 //////////////////////////////////////////////////////////////////////////
-void LkEngine::DisplaySplash( f32 _Duration )
+void LokiEngine::DisplaySplash( f32 _Duration )
 {
 	
 }
@@ -615,7 +608,7 @@ void LkEngine::DisplaySplash( f32 _Duration )
 //////////////////////////////////////////////////////////////////////////
 // The Window callback function to handle window messages.
 //////////////////////////////////////////////////////////////////////////
-long __stdcall LkEngine::WindowProc( LkWindow* _Window, UINT _uMsg, WPARAM _wParam, LPARAM _lParam )
+long __stdcall LokiEngine::WindowProc( Window* _Window, UINT _uMsg, WPARAM _wParam, LPARAM _lParam )
 {
 	switch (_uMsg)									// Check For Windows Messages
 	{
@@ -645,27 +638,27 @@ long __stdcall LkEngine::WindowProc( LkWindow* _Window, UINT _uMsg, WPARAM _wPar
 	return -1;
 }
 
-void LkEngine::RequestExit()
+void LokiEngine::RequestExit()
 {
 	m_Exit = true;
 }
 
-void LkEngine::_PrepareFrameTime()
+void LokiEngine::_PrepareFrameTime()
 {
 	m_FrameClock.Start();
 }
 
-void LkEngine::_CalculateFrameTime()
+void LokiEngine::_CalculateFrameTime()
 {
 	m_FrameTime = m_FrameClock.Lap();
 }
 
-void LkEngine::_CapFrameRate()
+void LokiEngine::_CapFrameRate()
 {
 	// Cap the frame rate if a cap is enabled by filling spare time with a call to Sleep().
 	if ((bool)m_FrameRateCap && m_FrameTime < m_TargetFrameTime)
 	{
-		util::Sleep((uint32)((m_TargetFrameTime - m_FrameTime) * 1000));
+		util::system::Sleep((uint32)((m_TargetFrameTime - m_FrameTime) * 1000));
 		m_FrameTime = m_TargetFrameTime;
 	}
 }

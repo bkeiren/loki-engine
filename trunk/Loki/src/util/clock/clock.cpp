@@ -3,6 +3,7 @@
 
 using namespace loki;
 using namespace loki::util;
+using namespace loki::util::time;
 
 #ifdef WIN32
 LARGE_INTEGER Clock::m_Frequency;

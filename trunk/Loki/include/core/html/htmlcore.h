@@ -17,7 +17,7 @@ namespace loki
 
 class LkHTMLCore	: public LkEventListener
 {
-	friend class LkEngine;
+	friend class LokiEngine;
 
 	typedef std::list<LkHTMLView*>				HTMLViews;
 	typedef HTMLViews::iterator					HTMLViewsIter;

@@ -8,6 +8,9 @@ namespace loki
 namespace util
 {
 
+namespace general
+{
+
 Json::Reader JSONDocument::m_JSONReader;
 Json::StyledWriter JSONDocument::m_JSONStyledWriter;
 Json::FastWriter JSONDocument::m_JSONFastWriter;
@@ -88,6 +91,8 @@ void JSONDocument::WriteToString( std::string& _Output, EJSONOutputType _OutputT
 			break;
 		}
 	}
+}
+
 }
 
 }

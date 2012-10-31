@@ -13,6 +13,9 @@ namespace loki
 namespace util
 {
 
+namespace general
+{
+
 #define JSON_CLOSE( doc )	{ doc->Close(); doc = 0; }
 
 class JSONDocument
@@ -62,6 +65,8 @@ private:
 	static Json::FastWriter m_JSONFastWriter;
 	JSONValue* m_Root;
 };
+
+}
 
 }
 

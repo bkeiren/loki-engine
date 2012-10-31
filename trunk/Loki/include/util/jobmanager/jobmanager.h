@@ -13,12 +13,15 @@ namespace loki
 namespace util
 {
 
-class LkThread;
-class LkJob;
+namespace general
+{
 
-typedef std::list<LkJob*> JobList;
+class Thread;
+class Job;
 
-class LkJobManager
+typedef std::list<Job*> JobList;
+
+class JobManager
 {
 public:
 	//////////////////////////////////////////////////////////////////////////
@@ -30,7 +33,7 @@ public:
 	// (which might not have anything to do with the job manager) become
 	// visible. If _Sleep is set to 0 (default), the process does not sleep.
 	//////////////////////////////////////////////////////////////////////////
-	LkJobManager( uint32 _NumThreads, uint32 _MaxNumJobs );
+	JobManager( uint32 _NumThreads, uint32 _MaxNumJobs );
 
 	//////////////////////////////////////////////////////////////////////////
 	// WARNING: The destructor waits for all current job threads to finish
@@ -41,19 +44,19 @@ public:
 	// The stalling might be avoided by calling this function in it's own thread
 	// entirely.
 	//////////////////////////////////////////////////////////////////////////
-	~LkJobManager();
+	~JobManager();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Adds a job to be executed in the future.
 	//////////////////////////////////////////////////////////////////////////
-	void AddJob( LkJob* _Job );
+	void AddJob( Job* _Job );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Adds a number of jobs from an array of pointers to be executed in the 
 	// future. This is a convenience function that simply utilizes AddJob() 
 	// and adds each job in the array (up to _NumJobs) sequentially.
 	//////////////////////////////////////////////////////////////////////////
-	void AddJobs( LkJob** _JobArray, uint32 _NumJobs );
+	void AddJobs( Job** _JobArray, uint32 _NumJobs );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the number of pending jobs.
@@ -69,15 +72,15 @@ private:
 	// Waits until a job is available and then returns it. Returns NULL
 	// if the thread that asked for a job has to stop.
 	//////////////////////////////////////////////////////////////////////////
-	LkJob* GetNextJob();
+	Job* GetNextJob();
 
 	struct ThreadData
 	{
 		int32 m_Index;
-		LkJobManager* m_JobManager;
+		JobManager* m_JobManager;
 	};
 
-	LkJobManager();	// Default c-tor.
+	JobManager();	// Default c-tor.
 
 	//////////////////////////////////////////////////////////////////////////
 	// For internal use. Stops all job-threads and waits for all of them to
@@ -100,7 +103,9 @@ private:
 	JobList m_JobList;
 };
 
-extern LkJobManager* g_JobManager;
+extern JobManager* g_JobManager;
+
+}
 
 }
 

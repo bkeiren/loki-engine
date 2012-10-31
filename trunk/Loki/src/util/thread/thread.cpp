@@ -6,19 +6,22 @@ namespace loki
 namespace util
 {
 
+namespace system
+{
+
 namespace	// Anonymous namespace.
 {
 
-	LkThread::ThreadID GetNextThreadID()
+	Thread::ThreadID GetNextThreadID()
 	{
-		static LkThread::ThreadID IDCounter = 0;
+		static Thread::ThreadID IDCounter = 0;
 		InterlockedIncrement((long*)&IDCounter);
 		return IDCounter;
 	}
 
 }
 
-LkThread::LkThread( ThreadFunc _Function, void* _Argument, uint32 _Flags )	:
+Thread::Thread( ThreadFunc _Function, void* _Argument, uint32 _Flags )	:
 	m_Function(_Function),
 	m_Callback(0),
 	m_Argument(_Argument),
@@ -38,57 +41,57 @@ LkThread::LkThread( ThreadFunc _Function, void* _Argument, uint32 _Flags )	:
 	m_StopEventHandle = CreateEvent(NULL, true, false, NULL);
 }
 
-LkThread::LkThread()
+Thread::Thread()
 {
 
 }
 
-LkThread::~LkThread()
+Thread::~Thread()
 {
 	CloseHandle(m_Handle);
 	CloseHandle(m_StopEventHandle);
 }
 
-void LkThread::Start()
+void Thread::Start()
 {
 	LOG(VL_NORMAL, "Started thread with id %i", m_ID);
 
 	ResumeThread(m_Handle);
 }
 
-void LkThread::Pause()
+void Thread::Pause()
 {
 	LOG(VL_NORMAL, "Paused thread with id %i", m_ID);
 
 	SuspendThread(m_Handle);
 }
 
-void LkThread::Stop()
+void Thread::Stop()
 {
 	LOG(VL_NORMAL, "Stopped thread with id %i", m_ID);
 
 	SetEvent(m_StopEventHandle);
 }
 
-void LkThread::Kill()
+void Thread::Kill()
 {
 	TerminateThread(m_Handle, 0);	// Dangerous.
 	delete this;
 }
 
-const LkThread::ThreadID LkThread::GetID()
+const Thread::ThreadID Thread::GetID()
 {
 	return m_ID;
 }
 
-void LkThread::SetCallback( ThreadCallback _Callback )
+void Thread::SetCallback( ThreadCallback _Callback )
 {
 	m_Callback = _Callback;
 }
 
-DWORD WINAPI LkThread::EntryPoint( LPVOID _Argument )
+DWORD WINAPI Thread::EntryPoint( LPVOID _Argument )
 {
-	LkThread* threadInstance = (LkThread*)_Argument;
+	Thread* threadInstance = (Thread*)_Argument;
 
 	while (1)
 	{
@@ -131,6 +134,8 @@ DWORD WINAPI LkThread::EntryPoint( LPVOID _Argument )
 	ExitThread(0);
 	delete threadInstance;
 	return 0;
+}
+
 }
 
 }

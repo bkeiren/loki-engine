@@ -30,7 +30,7 @@
 // To be used within initalization functions for classes.
 // When initialization fails, this can be used to throw an assertion error.
 //////////////////////////////////////////////////////////////////////////
-#define INIT_FAIL(classname)		{util::MessageBoxNotify(classname##": Failed to initialize (Check log for error messages)", "Initialization error"); __debugbreak();}
+#define INIT_FAIL(classname)		{util::system::MessageBoxNotify(classname##": Failed to initialize (Check log for error messages)", "Initialization error"); __debugbreak();}
 
 //////////////////////////////////////////////////////////////////////////
 // Tests whether a c-string (char*) is empty by checking whether the first 
@@ -82,7 +82,9 @@ namespace loki
 namespace util
 {
 
-/*
+namespace general
+{
+	/*
 	Removes each element in an std::list and deletes each element.
 	This function works by utilizing the remove_if() method of the
 	std::list class. The function DeleteAll (class ClassDeleteAll, 
@@ -94,64 +96,82 @@ namespace util
 template< class T >
 static void CleanSTLList( std::list<T>* _List );
 
-//////////////////////////////////////////////////////////////////////////
-// Converts a multibyte string to a wide string 
-// (Which contains the wchar_t type).
-//////////////////////////////////////////////////////////////////////////
-std::wstring ToWideString(const std::string& str);
+}
 
-//////////////////////////////////////////////////////////////////////////
-// Converts a wide string to a multibyte string
-// (Which contains the char type).
-//////////////////////////////////////////////////////////////////////////
-std::string ToMultiByteString(const std::wstring& wstr);
+namespace strings
+{
 
-//////////////////////////////////////////////////////////////////////////
-// Sleeps the calling thread for _ms number of milliseconds.
-// Can be implemented differently per platform.
-//////////////////////////////////////////////////////////////////////////
-inline void Sleep( uint32 _ms );
+	//////////////////////////////////////////////////////////////////////////
+	// Converts a multibyte string to a wide string 
+	// (Which contains the wchar_t type).
+	//////////////////////////////////////////////////////////////////////////
+	std::wstring ToWideString(const std::string& str);
 
-//////////////////////////////////////////////////////////////////////////
-// Presents the user with a dialog box with an 'OK' button.
-//////////////////////////////////////////////////////////////////////////
-void MessageBoxNotify( const char* _Text, const char* _Caption = NULL );
+	//////////////////////////////////////////////////////////////////////////
+	// Converts a wide string to a multibyte string
+	// (Which contains the char type).
+	//////////////////////////////////////////////////////////////////////////
+	std::string ToMultiByteString(const std::wstring& wstr);
 
-//////////////////////////////////////////////////////////////////////////
-// Presents the user with a dialog box asking for confirmation.
-// The _CanCanel argument specifies whether the user can press a 'cancel'
-// button in addition to 'yes' and 'no' buttons.
-// The functions returns an integer value depending on which button is
-// pressed:
-// -1 = 'cancel' (CONFIRMATION_CANCEL define)
-// 0 = 'no'		 (CONFIRMATION_NO define)
-// 1 = 'yes'	 (CONFIRMATION_YES define)
-//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	// StringReplace replaces the an occurrence of _From with _To, _Index 
+	// specifies which occurence. By default this is the first occurence.
+	// StringReplace returns true if something was replaced, false otherwise.
+	// StringReplaceAll replaces all occurrences of _From with _To.
+	//////////////////////////////////////////////////////////////////////////
+	bool StringReplace( std::string& _String, const std::string& _From, const std::string& _To, int32 _Index = 0 );
+	void StringReplaceAll( std::string& _String, const std::string& _From, const std::string& _To );
+
+	//////////////////////////////////////////////////////////////////////////
+	// Function provides functionality similar to boost::lexical_cast.
+	//////////////////////////////////////////////////////////////////////////
+	template< typename _T >
+	std::string LexicalCast( _T _Argument );
+}
+
+namespace system
+{
+
+
+	//////////////////////////////////////////////////////////////////////////
+	// Sleeps the calling thread for _ms number of milliseconds.
+	// Can be implemented differently per platform.
+	//////////////////////////////////////////////////////////////////////////
+	inline void Sleep( uint32 _ms );
+
+	//////////////////////////////////////////////////////////////////////////
+	// Presents the user with a dialog box with an 'OK' button.
+	//////////////////////////////////////////////////////////////////////////
+	void MessageBoxNotify( const char* _Text, const char* _Caption = NULL );
+
+	//////////////////////////////////////////////////////////////////////////
+	// Presents the user with a dialog box asking for confirmation.
+	// The _CanCanel argument specifies whether the user can press a 'cancel'
+	// button in addition to 'yes' and 'no' buttons.
+	// The functions returns an integer value depending on which button is
+	// pressed:
+	// -1 = 'cancel' (CONFIRMATION_CANCEL define)
+	// 0 = 'no'		 (CONFIRMATION_NO define)
+	// 1 = 'yes'	 (CONFIRMATION_YES define)
+	//////////////////////////////////////////////////////////////////////////
 #define CONFIRMATION_CANCEL	-1
 #define CONFIRMATION_NO		0
 #define CONFIRMATION_YES	1
-int32 MessageBoxConfirmation( const char* _Text, const char* _Caption = NULL, bool _CanCancel = false );
+	int32 MessageBoxConfirmation( const char* _Text, const char* _Caption = NULL, bool _CanCancel = false );
 
-//////////////////////////////////////////////////////////////////////////
-// Stores a formatted time stamp in _Output.
-// Format: [DD/MM//YY hh:mm:ss]
-//////////////////////////////////////////////////////////////////////////
-void GetTimeStamp( std::string& _Output );
+}
 
-//////////////////////////////////////////////////////////////////////////
-// StringReplace replaces the an occurrence of _From with _To, _Index 
-// specifies which occurence. By default this is the first occurence.
-// StringReplace returns true if something was replaced, false otherwise.
-// StringReplaceAll replaces all occurrences of _From with _To.
-//////////////////////////////////////////////////////////////////////////
-bool StringReplace( std::string& _String, const std::string& _From, const std::string& _To, int32 _Index = 0 );
-void StringReplaceAll( std::string& _String, const std::string& _From, const std::string& _To );
+namespace time
+{
 
-//////////////////////////////////////////////////////////////////////////
-// Function provides functionality similar to boost::lexical_cast.
-//////////////////////////////////////////////////////////////////////////
-template< typename _T >
-std::string LexicalCast( _T _Argument );
+
+	//////////////////////////////////////////////////////////////////////////
+	// Stores a formatted time stamp in _Output.
+	// Format: [DD/MM//YY hh:mm:ss]
+	//////////////////////////////////////////////////////////////////////////
+	void GetTimeStamp( std::string& _Output );
+
+}
 
 }	// Namespace util.
 

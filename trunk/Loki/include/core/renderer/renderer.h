@@ -25,7 +25,7 @@ namespace game
 	class LkLevel;
 }
 
-class LkWindow;
+class Window;
 
 namespace graphics
 {
@@ -44,7 +44,7 @@ class LkEffect;
 class LkRenderer
 {
 public:
-	LkRenderer( LkWindow* _Window );
+	LkRenderer( Window* _Window );
 	LkRenderer();
 	virtual ~LkRenderer();
 
@@ -75,7 +75,7 @@ public:
 	int32 GetRenderHeight();
 	vec2 GetPixelScale();
 private:
-	bool _Init( LkWindow* _Window );
+	bool _Init( Window* _Window );
 	void _Shutdown();
 
 	void _GetAPIInformation();
@@ -118,9 +118,9 @@ private:
 	GLint m_DirectionalLightShaderRTDepthID;
 
 	//static Scene* m_Scene;
-	LkWindow* m_Window;
+	Window* m_Window;
 
-	game::LkLevel* m_CurrentLevelToRender;	// TODO: Probably don't want to do things this way...
+	//game::LkLevel* m_CurrentLevelToRender;	// TODO: Probably don't want to do things this way...
 
 	aiLogStream m_AssImpLogStream;
 

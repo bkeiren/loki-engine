@@ -4,7 +4,7 @@
 int main( int argc, char** argv )
 {
 	loki::game::LkGame* game = new MyGame();
-	loki::LkEngine* engine = new loki::LkEngine(game);
+	loki::LokiEngine* engine = new loki::LokiEngine(game);
 	engine->SetFrameRateCap(60);
 	engine->Go(argc, argv);
 	delete engine;

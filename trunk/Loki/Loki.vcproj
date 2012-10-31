@@ -167,30 +167,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\actor\actor.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\actor.h"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\actor.inl"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\actor\components\base\actorcomponent.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\components\base\actorcomponent.h"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\pawn\controller\aicontroller\aicontroller.h"
-			>
-		</File>
-		<File
 			RelativePath=".\src\core\renderer\image\animatedimage.cpp"
 			>
 		</File>
@@ -240,14 +216,6 @@
 		</File>
 		<File
 			RelativePath=".\include\core\ui\elements\button.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\actor\camera\camera.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\camera\camera.h"
 			>
 		</File>
 		<File
@@ -371,11 +339,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\console\console.h"
+			RelativePath=".\include\console\console.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\console\console.h"
+			RelativePath=".\include\core\console\console.h"
 			>
 		</File>
 		<File
@@ -387,11 +355,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\actor\pawn\controller\controller.cpp"
+			RelativePath=".\src\core\entitysystem\component\default\CppScript.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\actor\pawn\controller\controller.h"
+			RelativePath=".\include\core\entitysystem\component\default\CppScript.h"
 			>
 		</File>
 		<File
@@ -415,19 +383,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\dev_notes.txt"
-			>
-		</File>
-		<File
 			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\actor\light\directional\directionallight.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\light\directional\directionallight.h"
+			RelativePath=".\src\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -607,14 +567,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\actor\camera\freecam\freecam.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\camera\freecam\freecam.h"
-			>
-		</File>
-		<File
 			RelativePath=".\src\core\frustum\Frustum.cpp"
 			>
 		</File>
@@ -748,14 +700,6 @@
 		</File>
 		<File
 			RelativePath=".\include\math\glm\gtx\handed_coordinate_space.inl"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\handle\handle.h"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\handle\handle.inl"
 			>
 		</File>
 		<File
@@ -935,10 +879,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\actor\pawn\inventory\inventory.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\core\graphics\IRenderer.h"
 			>
 		</File>
@@ -951,11 +891,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\baseclass\istate.h"
+			RelativePath=".\include\core\states\baseclass\istate.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\baseclass\istate.h"
+			RelativePath=".\include\states\baseclass\istate.h"
 			>
 		</File>
 		<File
@@ -1003,19 +943,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\game\level\level.cpp"
+			RelativePath=".\src\core\entitysystem\component\default\Light.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\game\level\level.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\actor\light\light.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\light\light.h"
+			RelativePath=".\include\core\entitysystem\component\default\Light.h"
 			>
 		</File>
 		<File
@@ -1047,11 +979,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\logger.h"
+			RelativePath=".\include\core\logger.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\logger.h"
+			RelativePath=".\include\logger.h"
 			>
 		</File>
 		<File
@@ -1179,14 +1111,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\actor\components\movablecomponent\movablecomponent.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\components\movablecomponent\movablecomponent.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\math\glm\gtx\multiple.hpp"
 			>
 		</File>
@@ -1299,62 +1223,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\actor\psystem\particle.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\psystem\particle.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\actor\psystem\particlesource.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\psystem\particlesource.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\actor\psystem\particlesourcedescriptor.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\psystem\particlesourcedescriptor.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\actor\psystem\particlesystem.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\psystem\particlesystem.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\actor\psystem\particlesystemdescriptor.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\psystem\particlesystemdescriptor.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\actor\camera\pathcam\pathcam.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\camera\pathcam\pathcam.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\actor\pawn\pawn.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\pawn\pawn.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\math\glm\gtx\perpendicular.hpp"
 			>
 		</File>
@@ -1383,14 +1251,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\actor\components\physicscomponent\physicscomponent_old.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\components\physicscomponent\physicscomponent_old.h"
-			>
-		</File>
-		<File
 			RelativePath=".\src\core\physics\physicsdebugdrawer.cpp"
 			>
 		</File>
@@ -1404,18 +1264,6 @@
 		</File>
 		<File
 			RelativePath=".\include\core\graphics\PixelBuffer.h"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\pawn\controller\playercontroller\playercontroller.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\actor\light\point\pointlight.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\light\point\pointlight.h"
 			>
 		</File>
 		<File
@@ -1451,11 +1299,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtx\quaternion.inl"
+			RelativePath=".\include\math\glm\gtc\quaternion.inl"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.inl"
+			RelativePath=".\include\math\glm\gtx\quaternion.inl"
 			>
 		</File>
 		<File
@@ -1496,14 +1344,6 @@
 		</File>
 		<File
 			RelativePath=".\include\core\entitysystem\component\default\RenderComponent.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\actor\components\rendercomponent\rendercomponent_old.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\components\rendercomponent\rendercomponent_old.h"
 			>
 		</File>
 		<File
@@ -1611,19 +1451,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\game\level\skybox\skybox.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\game\level\skybox\skybox.h"
+			RelativePath=".\include\core\singleton.h"
 			>
 		</File>
 		<File
@@ -1667,14 +1499,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\actor\light\spot\spotlight.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\actor\light\spot\spotlight.h"
-			>
-		</File>
-		<File
 			RelativePath=".\src\core\script\squirrel\squirrel.cpp"
 			>
 		</File>
@@ -1695,11 +1519,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\statemanager.h"
+			RelativePath=".\include\core\statemanager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\statemanager.h"
+			RelativePath=".\include\statemanager.h"
 			>
 		</File>
 		<File
@@ -1803,19 +1627,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\actor\camera\trackballcam\trackballcam.cpp"
+			RelativePath=".\src\core\entitysystem\component\default\Transform.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\actor\camera\trackballcam\trackballcam.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\transform\Transform.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\transform\Transform.h"
+			RelativePath=".\include\core\entitysystem\component\default\Transform.h"
 			>
 		</File>
 		<File
@@ -2051,11 +1867,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.inline.h"
+			RelativePath=".\include\util\util.inline.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.inline.h"
+			RelativePath=".\include\util.inline.h"
 			>
 		</File>
 		<File

@@ -30,7 +30,7 @@ class LkRigidBody;
 
 class LkPhysics
 {
-	friend class LkEngine;
+	friend class LokiEngine;
 public:
 	void Update();
 

@@ -5,7 +5,7 @@
 namespace loki
 {
 
-LkWindow::LkWindow( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fullscreen, WindowProc _WindowCallback, int32 _PositionX /*= 0*/, int32 _PositionY /*= 0*/ )	:
+Window::Window( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fullscreen, WindowProc _WindowCallback, int32 _PositionX /*= 0*/, int32 _PositionY /*= 0*/ )	:
 	m_Fullscreen(_Fullscreen),
 	m_hDC(0),
 	m_hRC(0),
@@ -97,7 +97,7 @@ LkWindow::LkWindow( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool
 	// Create The Window
 	if (!(m_hWnd = CreateWindowEx(	dwExStyle,							// Extended Style For The Window
 									L"OpenGL",							// Class Name
-									loki::util::ToWideString(_Title).c_str(),								// Window Title
+									loki::util::strings::ToWideString(_Title).c_str(),								// Window Title
 									dwStyle |							// Defined Window Style
 									WS_CLIPSIBLINGS |					// Required Window Style
 									WS_CLIPCHILDREN,					// Required Window Style
@@ -172,17 +172,17 @@ LkWindow::LkWindow( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool
 	_UpdateRectangleInfo();
 }
 
-LkWindow::LkWindow()
+Window::Window()
 {
 	ILLEGAL_CTOR_ERROR("Window");
 }
 
-LkWindow::~LkWindow()
+Window::~Window()
 {
 	_Destroy();
 }
 
-void LkWindow::MakeRenderContextCurrent()
+void Window::MakeRenderContextCurrent()
 {
 	if (m_hRC == 0)
 	{
@@ -197,12 +197,12 @@ void LkWindow::MakeRenderContextCurrent()
 	}
 }
 
-void LkWindow::SwapBuffers() const
+void Window::SwapBuffers() const
 {
 	::SwapBuffers(m_hDC);	// Swap Buffers (Double Buffering)
 }
 
-void LkWindow::UpdateCursorImage()
+void Window::UpdateCursorImage()
 {
 	// Update the cursor image if the cursor has left the window and re-entered it.
 	static bool MouseHasLeft = false;
@@ -221,37 +221,37 @@ void LkWindow::UpdateCursorImage()
 	}
 }
 
-int32 LkWindow::GetWidth() const
+int32 Window::GetWidth() const
 {
 	return m_Width;
 }
 
-int32 LkWindow::GetHeight() const
+int32 Window::GetHeight() const
 {
 	return m_Height;
 }
 
-int32 LkWindow::GetX() const
+int32 Window::GetX() const
 {
 	return m_X;
 }
 
-int32 LkWindow::GetY() const
+int32 Window::GetY() const
 {
 	return m_Y;
 }
 
-void LkWindow::SetWidth( int32 _Width )
+void Window::SetWidth( int32 _Width )
 {
 	SetDimensions(_Width, GetHeight());
 }
 
-void LkWindow::SetHeight( int32 _Height )
+void Window::SetHeight( int32 _Height )
 {
 	SetDimensions(GetWidth(), _Height);
 }
 
-void LkWindow::SetDimensions( int32 _Width, int32 _Height )
+void Window::SetDimensions( int32 _Width, int32 _Height )
 {
 	RECT w;
 	RECT c;
@@ -263,23 +263,23 @@ void LkWindow::SetDimensions( int32 _Width, int32 _Height )
 	_UpdateRectangleInfo();
 }
 
-void LkWindow::SetX( int32 _X )
+void Window::SetX( int32 _X )
 {
 	SetPosition(_X, GetY());
 }
 
-void LkWindow::SetY( int32 _Y )
+void Window::SetY( int32 _Y )
 {
 	SetPosition(GetX(), _Y);
 }
 
-void LkWindow::SetPosition( int32 _X, int32 _Y )
+void Window::SetPosition( int32 _X, int32 _Y )
 {
 	::SetWindowPos(m_hWnd, 0, _X, _Y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOSENDCHANGING);
 	_UpdateRectangleInfo();
 }
 
-void LkWindow::SetFullscreen( bool _Fullscreen )
+void Window::SetFullscreen( bool _Fullscreen )
 {
 	if (m_Fullscreen == _Fullscreen)
 	{
@@ -348,12 +348,12 @@ void LkWindow::SetFullscreen( bool _Fullscreen )
 	}
 }
 
-bool LkWindow::IsValid() const
+bool Window::IsValid() const
 {
 	return m_WindowCreated;
 }
 
-bool LkWindow::LoadCursor( const char* _CursorFile, uint32 _SizeX /* = 26 */, uint32 _SizeY /* = 26 */ )
+bool Window::LoadCursor( const char* _CursorFile, uint32 _SizeX /* = 26 */, uint32 _SizeY /* = 26 */ )
 {
 	m_Cursor = (HCURSOR)LoadImageA(NULL, _CursorFile, IMAGE_CURSOR, _SizeX, _SizeY, LR_LOADFROMFILE);
 	SetCursor(m_Cursor);
@@ -361,7 +361,7 @@ bool LkWindow::LoadCursor( const char* _CursorFile, uint32 _SizeX /* = 26 */, ui
 	return (bool)m_Cursor;
 }
 
-bool LkWindow::LoadIcon( const char* _IconFile, uint32 _SizeX /* = 32 */, uint32 _SizeY /* = 32 */ )
+bool Window::LoadIcon( const char* _IconFile, uint32 _SizeX /* = 32 */, uint32 _SizeY /* = 32 */ )
 {
 	m_Icon = (HICON)LoadImageA(NULL, _IconFile, IMAGE_ICON, _SizeX, _SizeY, LR_LOADFROMFILE);
 	SendMessage(m_hWnd, WM_SETICON, ICON_SMALL, (LPARAM)m_Icon );
@@ -369,22 +369,22 @@ bool LkWindow::LoadIcon( const char* _IconFile, uint32 _SizeX /* = 32 */, uint32
 	return (bool)m_Icon;
 }
 
-HWND LkWindow::GetHWND() const
+HWND Window::GetHWND() const
 {
 	return m_hWnd;
 }
 
-bool LkWindow::IsFullscreen() const
+bool Window::IsFullscreen() const
 {
 	return m_Fullscreen;
 }
 
-bool LkWindow::HasFocus() const
+bool Window::HasFocus() const
 {
 	return (GetFocus() == m_hWnd);
 }
 
-void LkWindow::_Destroy()
+void Window::_Destroy()
 {
 	// Check wether a window was actually created.
 	if (!m_WindowCreated)
@@ -431,7 +431,7 @@ void LkWindow::_Destroy()
 	}
 }
 
-void LkWindow::_UpdateRectangleInfo()
+void Window::_UpdateRectangleInfo()
 {
 	RECT out;
 	GetClientRect(m_hWnd, &out);
@@ -442,7 +442,7 @@ void LkWindow::_UpdateRectangleInfo()
 	m_Y = (int32)(out.top);
 }
 
-LRESULT CALLBACK LkWindow::_WindowProc( HWND _hWnd, UINT _uMsg, WPARAM _wParam, LPARAM _lParam )
+LRESULT CALLBACK Window::_WindowProc( HWND _hWnd, UINT _uMsg, WPARAM _wParam, LPARAM _lParam )
 {
 	//////////////////////////////////////////////////////////////////////////
 	// NOTE: In order to be able to catch messages here but still have them
@@ -454,7 +454,7 @@ LRESULT CALLBACK LkWindow::_WindowProc( HWND _hWnd, UINT _uMsg, WPARAM _wParam, 
 
 	if (_uMsg != WM_NCCREATE && _uMsg != WM_NCCALCSIZE && _uMsg != WM_GETMINMAXINFO)
 	{
-		LkWindow* window = (_uMsg != WM_CREATE)?((LkWindow*)GetWindowLongPtr(_hWnd, GWL_USERDATA)):((LkWindow*)_lParam);
+		Window* window = (_uMsg != WM_CREATE)?((Window*)GetWindowLongPtr(_hWnd, GWL_USERDATA)):((Window*)_lParam);
 		if (!window)
 		{
 			// Shouldn't happen.
@@ -479,7 +479,7 @@ LRESULT CALLBACK LkWindow::_WindowProc( HWND _hWnd, UINT _uMsg, WPARAM _wParam, 
 	return DefWindowProc(_hWnd, _uMsg, _wParam, _lParam);
 }
 
-void LkWindow::_ParseWindowMessage( UINT _Msg, WPARAM _WParam, LPARAM _LParam )
+void Window::_ParseWindowMessage( UINT _Msg, WPARAM _WParam, LPARAM _LParam )
 {
 	switch (_Msg)
 	{

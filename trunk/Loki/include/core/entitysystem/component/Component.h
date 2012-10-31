@@ -4,13 +4,14 @@
 #define COMPONENT_H
 
 #include "core/eventsystem/eventlistener/eventlistener.h"
-#include "core/entitysystem/Entity.h"
 #include "util/typeinfo/typeinfo.h"
 
 namespace loki
 {
 
-#define DECLARE_COMPONENT_TYPEINFO(componentclass)		static util::TypeInfo& GetTypeInfo() { static util::TypeInfo ti = util::TypeInfo(typeid(componentclass)); return ti; }
+#define DECLARE_COMPONENT_TYPEINFO(componentclass)		static util::general::TypeInfo& GetTypeInfo() { static util::general::TypeInfo ti = util::general::TypeInfo(typeid(componentclass)); return ti; }
+
+class Entity;
 
 //////////////////////////////////////////////////////////////////////////
 // The Component class is the base class for any components that 
@@ -43,12 +44,12 @@ class Component	: public LkEventListener
 {
 	friend class Entity;
 public:
+	inline Entity* GetEntity();
+	inline const Entity* GetEntity() const;
+
 protected:
 	Component();
 	virtual ~Component() = 0;
-
-	inline Entity* GetEntity();
-	inline const Entity* GetEntity() const;
 
 private:
 	void SetEntity( Entity* _Entity );

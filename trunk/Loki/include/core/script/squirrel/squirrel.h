@@ -35,15 +35,18 @@ namespace loki
 
 namespace util
 {
-	class LkThread;
+	namespace system
+	{
+		class Thread;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 // This class is from where Squirrel scripts can be run.
 //////////////////////////////////////////////////////////////////////////
-class LkSquirrel
+class Squirrel
 {
-	friend class LkEngine;
+	friend class LokiEngine;
 public:
 	// static SquirrelScript* CompileScript( const char* _File );
 	// static void RunScript( SquirrelScript* _Script );
@@ -62,8 +65,8 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	void RegisterFunction( const char* _Name, SQFUNCTION _Function );
 private:
-	LkSquirrel();
-	~LkSquirrel();
+	Squirrel();
+	~Squirrel();
 
 	bool _Init();
 	void _Shutdown();
@@ -88,10 +91,10 @@ private:
 	HANDLE m_QueueSemaphoreHandle;
 	HANDLE m_ThreadStopEventHandle;
 	HANDLE m_ThreadExittedHandle;
-	util::LkThread* m_Thread;
+	util::system::Thread* m_Thread;
 };
 
-extern LkSquirrel* g_Squirrel;
+extern Squirrel* g_Squirrel;
 
 }
 

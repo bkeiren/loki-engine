@@ -1,5 +1,6 @@
 #include "core/entitysystem/component/default/CameraComponent.h"
 #include "core/renderer/renderer.h"
+#include "core/entitysystem/Entity.h"
 
 namespace loki
 {

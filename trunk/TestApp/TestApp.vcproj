@@ -190,10 +190,6 @@
 				RelativePath=".\src\main.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\src\mycontroller.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -202,10 +198,6 @@
 			>
 			<File
 				RelativePath=".\include\game.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\mycontroller.h"
 				>
 			</File>
 			<File

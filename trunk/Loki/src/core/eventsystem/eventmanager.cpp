@@ -1,5 +1,5 @@
 #include "core/eventsystem/eventmanager.h"
-#include "core/actor/actor.h"
+#include "core/eventsystem/eventlistener/eventlistener.h"
 
 namespace loki
 {

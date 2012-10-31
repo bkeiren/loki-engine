@@ -172,7 +172,7 @@ void LkHTMLView::Render()
 	if (IsDirty())
 	{
 		Awesomium::Rect dirtybounds = m_WebView->getDirtyBounds();
-		//util::Clock clock;
+		//util::time::Clock clock;
 		//clock.Start();
 		m_LastRenderbuffer = m_WebView->render();
 		

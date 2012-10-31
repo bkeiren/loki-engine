@@ -14,6 +14,12 @@
 namespace loki
 {
 
+namespace util
+{
+
+namespace general
+{
+
 template< class T>
 static void CleanSTLList( std::list<T>* _List )
 {
@@ -53,7 +59,9 @@ namespace
 
 }
 
-namespace util
+}
+
+namespace system
 {
 
 inline void Sleep( uint32 _ms )
@@ -65,12 +73,19 @@ inline void Sleep( uint32 _ms )
 #endif
 }
 
+}
+
+namespace strings
+{
+
 template< typename _T >
 std::string LexicalCast( _T _Argument )
 {
 	std::stringstream ss;
 	ss << _Argument;
 	return ss.str();
+}
+
 }
 
 }

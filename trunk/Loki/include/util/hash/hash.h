@@ -36,23 +36,23 @@ namespace util
 
 #if DEFAULT_HASH == HASH_FNV
 
-	#define HASH(a)	(loki::util::Hash_FNV32(a))
+	#define HASH(a)	(loki::util::hash::Hash_FNV32(a))
 
 #elif DEFAULT_HASH == HASH_MD5
 
-	#define HASH(a)	(loki::util::Hash_MD5(a))
+	#define HASH(a)	(loki::util::hash::Hash_MD5(a))
 
 #elif DEFAULT_HASH == HASH_MURMUR3
 
-	#define HASH(a)	(loki::util::Hash_MurmurHash3(a))
+	#define HASH(a)	(loki::util::hash::Hash_MurmurHash3(a))
 
 #elif DEFAULT_HASH == HASH_MURMUR3_128
 
-	#define HASH(a)	(loki::util::Hash_MurmurHash3_128(a))
+	#define HASH(a)	(loki::util::hash::Hash_MurmurHash3_128(a))
 
 #elif DEFAULT_HASH == HASH_MURMUR3_128_x64
 
-	#define HASH(a)	(loki::util::Hash_MurmurHash3_128_x64(a))
+	#define HASH(a)	(loki::util::hash::Hash_MurmurHash3_128_x64(a))
 
 #else
 	// Any other value for DEFAULT_HASH is invalid.

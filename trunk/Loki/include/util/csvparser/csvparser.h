@@ -12,24 +12,27 @@ namespace loki
 namespace util
 {
 
-class LkCSVParser
+namespace general
+{
+
+class CSVParser
 {
 public:
-	class LkCSVDataTable;
+	class CSVDataTable;
 
-	LkCSVParser();
-	~LkCSVParser();
+	CSVParser();
+	~CSVParser();
 
-	static LkCSVDataTable* ParseFile( const char* _File );
+	static CSVDataTable* ParseFile( const char* _File );
 private:
 };
 
-class LkCSVParser::LkCSVDataTable
+class CSVParser::CSVDataTable
 {
-	friend class LkCSVParser;
+	friend class CSVParser;
 public:
-	LkCSVDataTable();
-	~LkCSVDataTable();
+	CSVDataTable();
+	~CSVDataTable();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Get data from the table at position [_Column (X), _Row (Y)].
@@ -79,7 +82,9 @@ private:
 	std::vector<std::vector<std::string>> m_Data;
 };
 
-extern LkCSVParser* g_CSVParser;
+extern CSVParser* g_CSVParser;
+
+}
 
 }
 

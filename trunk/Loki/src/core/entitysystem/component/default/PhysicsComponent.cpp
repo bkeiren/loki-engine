@@ -2,6 +2,7 @@
 #include "core/entitysystem/component/default/RenderComponent.h"
 #include "core/physics/physics.h"
 #include "core/graphics/Model.h"
+#include "core/entitysystem/Entity.h"
 
 namespace loki
 {

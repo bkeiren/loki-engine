@@ -1,4 +1,3 @@
-#include "core\actor\camera\camera.h"
 #include "core\renderer\scene\scene.h"
 
 using namespace loki;

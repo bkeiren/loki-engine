@@ -31,14 +31,11 @@ sampler2D RT2Sampler			: LKRT2;
 sampler2D RT3Sampler			: LKRT3;
 
 float3 LightPosition				: LKLIGHTPOSITION;
-float LightRadius					: LKLIGHTRADIUS;
+float LightRange					: LKLIGHTRANGE;
 float3 LightVector					: LKLIGHTVECTOR;	// Direction in the case of a directional light or a spotlight.
 float3 LightColor					: LKLIGHTCOLOR;
-float3 LightSpecular				: LKLIGHTSPECULAR;
-float LightConstantAttenuation		: LKLIGHTCONSTANTATTENUATION;
-float LightLinearAttenuation		: LKLIGHTLINEARATTENUATION;
-float LightQuadraticAttenuation		: LKLIGHTQUADRATICATTENUATION;
-// TODO: Light type?
+float LightIntensity				: LKLIGHTINTENSITY;
+int LightType						: LKLIGHTTYPE;	// 0 = Point, 1 = Spot, 2 = Directional, 3 = Area.
 
 // Vertex program entry point.
 VertexOutput mainVP( VertexInput IN )
@@ -54,17 +51,21 @@ VertexOutput mainVP( VertexInput IN )
 	return OUT;
 }
 
-float LinearizeDepth( float _NonLinearDepth )
+float LinearizeDepth( float _NonLinearDepth
 {
 	return (2.0 * zFar * zNear / (zFar + zNear - (zFar - zNear) * (2 * _NonLinearDepth - 1.0))) / zFar;
 }
 
 float Attenuation( float3 _SurfacePosition, float3 _LightPosition )
 {
-	float3 v = _SurfacePosition - _LightPosition;
-	float d = dot(v, v) / (LightRadius * LightRadius);
-	//float d = distance(_SurfacePosition, _LightPosition) / LightRadius;
-	return max((1.0 - (LightConstantAttenuation + LightLinearAttenuation * d + LightQuadraticAttenuation * d * d)), 0.0);
+//	float3 v = _SurfacePosition - _LightPosition;
+//	float d = dot(v, v) / (LightRadius * LightRadius);
+//	return max((1.0 - (LightConstantAttenuation + LightLinearAttenuation * d + LightQuadraticAttenuation * d * d)), 0.0);
+
+	// http://imdoingitwrong.wordpress.com/2011/01/31/light-attenuation/
+	float3 v = _SurfacePostion - _LightPosition;
+	float f = (dot(v, v) / (LightRange * LightRange)) + 1.0;
+	return clamp(LightIntensity / (f * f), 0.0, 1.0);
 }
 
 // Fragment program entry point.
@@ -108,7 +109,7 @@ FragmentOutput mainFP( VertexOutput IN )
 		//vec3 R = reflect(-LightDir, SurfaceNormal);
 		float3 R = reflect(LightDir, SurfaceNormal);
 		float specular = pow( max(dot(R, EyeVec), 0.0), Shininess );
-		final_color += float4(LightSpecular, 1.0) * matSpecular * specular;
+		final_color += float4(LightColor, 1.0) * matSpecular * specular;
 	}
 
 	OUT.Color0 = final_color * distanceAtt;

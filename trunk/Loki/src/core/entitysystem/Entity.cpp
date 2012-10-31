@@ -1,5 +1,6 @@
 #include "core/entitysystem/Entity.h"
 #include "core/entitysystem/component/Component.h"
+#include "core/entitysystem/component/default/Transform.h"
 
 namespace loki
 {
@@ -40,9 +41,11 @@ bool EntityID::operator >= ( const EntityID& _ID ) const
 	return (m_ID >= _ID.m_ID);
 }
 
-Entity::Entity()
+Entity::Entity()	:
+	m_Transform(0)
 {
-	
+	// We always have a transform component.
+	m_Transform = InstantiateComponent<Transform>();
 }
 
 Entity::~Entity()
@@ -62,7 +65,7 @@ const std::string& Entity::GetName() const
 
 const Transform& Entity::GetTransform() const
 {
-	return m_Transform;
+	return *m_Transform;
 }
 
 Transform& Entity::GetTransform()
@@ -71,7 +74,7 @@ Transform& Entity::GetTransform()
 	// There is also a version of GetTransform which returns a const reference, so hopefully the compiler will use that version
 	// in places where the transform is only read and not modified. That will ensure that if we only want to read the transform
 	// we won't place an unnecessary event for this entity.
-	return m_Transform;
+	return *m_Transform;
 }
 
 void Entity::SetName( const char* _Name )

@@ -3,7 +3,7 @@
 #ifndef SCENEGRAPHNODE_H
 #define SCENEGRAPHNODE_H
 
-#include "core/transform/Transform.h"
+#include "core/entitysystem/component/default/Transform.h"
 #include "core/scenegraph/SceneGraph.h"
 
 namespace loki

@@ -7,8 +7,8 @@
 
 #include "core/engine.h"
 #include "core/game/game.h"
-#include "core/game/level/level.h"
-#include "core/actor/camera/camera.h"
+
+#include "core/entitysystem/component/default/CameraComponent.h"
 
 #ifdef USE_PBO
 #include "core/graphics/PixelBuffer.h"
@@ -488,11 +488,11 @@ mat4 LkImage::Get3DModelViewProjectionMatrix() const
 {
 	if (Is3D())
 	{
-		LkCamera* cam = g_Engine->GetGame()->GetLevel()->GetCurrentCamera();
+		components::CameraComponent* camera = components::CameraComponent::GetActiveCamera();
 
-		mat4 proj = cam->GetProjectionMatrix();
+		mat4 proj = camera->GetProjectionMatrix();
 		//proj = math::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, 0.1f, 100.0f);
-		mat4 view = cam->GetViewMatrix();
+		mat4 view = camera->GetViewMatrix();
 		mat4 model = GetModelMatrix();
 
 		return (proj * view * model);
@@ -504,11 +504,11 @@ mat4 LkImage::Get3DModelViewProjectionMatrixInverse() const
 {
 	if (Is3D())
 	{
-		LkCamera* cam = g_Engine->GetGame()->GetLevel()->GetCurrentCamera();
+		components::CameraComponent* camera = components::CameraComponent::GetActiveCamera();
 
-		mat4 proj = cam->GetProjectionMatrix();
+		mat4 proj = camera->GetProjectionMatrix();
 		//proj = math::gtc::matrix_transform::ortho(0.0f, 1.0f, 0.0f, 1.0f, 0.1f, 100.0f);
-		mat4 view = cam->GetViewMatrix();
+		mat4 view = camera->GetViewMatrix();
 		mat4 model = GetModelMatrix();
 
 		return (math::inverse(model) * math::inverse(view) * math::inverse(proj));
@@ -518,12 +518,12 @@ mat4 LkImage::Get3DModelViewProjectionMatrixInverse() const
 
 mat4 LkImage::GetProjectionMatrix() const
 {
-	return g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetProjectionMatrix();
+	return components::CameraComponent::GetActiveCamera()->GetProjectionMatrix();
 }
 
 mat4 LkImage::GetViewMatrix() const
 {
-	return g_Engine->GetGame()->GetLevel()->GetCurrentCamera()->GetViewMatrix();
+	return components::CameraComponent::GetActiveCamera()->GetViewMatrix();
 }
 
 const quat& LkImage::GetOrientation() const
