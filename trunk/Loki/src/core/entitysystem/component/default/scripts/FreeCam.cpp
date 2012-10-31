@@ -57,12 +57,9 @@ void FreeCam::Update()
 		static f32 camSpeed = 0.3f;
 		camSpeed = max(camSpeed + (g_Input->GetMouseWheelDelta() * 0.25f), 0.1f);
 
-		// Not sure why SIDE and FORWARD need to be switched around here...
-		// I'm guessing it has something to do with OpenGL pointing the camera down the Z-axis by default, while
-		// the X-axis is used as the forward axis in this engine.
 		m_Camera->GetEntity()->GetTransform().LocalTranslate( FORWARD * ((((bool)g_Input->Get(KEY_W)) * camSpeed) - (((bool)g_Input->Get(KEY_S)) * camSpeed)) );
 		m_Camera->GetEntity()->GetTransform().LocalTranslate( SIDE * ((((bool)g_Input->Get(KEY_D)) * camSpeed) - (((bool)g_Input->Get(KEY_A)) * camSpeed)) );
-		m_Camera->GetEntity()->GetTransform().LocalTranslate( UP * ((((bool)g_Input->Get(KEY_X)) * camSpeed) - (((bool)g_Input->Get(KEY_Z)) * camSpeed)) );	
+		m_Camera->GetEntity()->GetTransform().Translate( UP * ((((bool)g_Input->Get(KEY_X)) * camSpeed) - (((bool)g_Input->Get(KEY_Z)) * camSpeed)) );	
 	}
 }
 
