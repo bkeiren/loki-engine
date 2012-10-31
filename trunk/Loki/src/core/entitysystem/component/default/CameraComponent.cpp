@@ -105,6 +105,12 @@ void CameraComponent::SetFieldOfView( f32 _FieldOfView )
 	m_ProjectionMatrixIsDirty = true;
 }
 
+void CameraComponent::LookAt( const vec3& _Target )
+{
+	vec3 pos = GetEntity()->GetTransform().GetPosition();
+	GetEntity()->GetTransform().SetMatrix(math::inverse(math::lookAt(pos, _Target, UP)));
+}
+
 const mat4& CameraComponent::GetProjectionMatrix()
 {
 	if (m_ProjectionMatrixIsDirty)

@@ -41,6 +41,8 @@ public:
 	f32 GetFieldOfView() const;
 	void SetFieldOfView( f32 _FieldOfView );
 
+	void LookAt( const vec3& _Target );
+
 	const mat4& GetProjectionMatrix();
 
 	//////////////////////////////////////////////////////////////////////////

@@ -17,8 +17,8 @@ extern const math::vec3 GlobalZ;
 #define UNIT_Y	loki/*::math*/::GlobalY
 #define UNIT_Z	loki/*::math*/::GlobalZ
 
-#define FORWARD	UNIT_X
-#define SIDE	UNIT_Z
+#define FORWARD	UNIT_Z
+#define SIDE	UNIT_X
 #define UP		UNIT_Y
 
 #define ZEROVECTOR		math::vec3(0.0f, 0.0f, 0.0f)

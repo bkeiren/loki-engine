@@ -22,6 +22,8 @@
 #include "core/entitysystem/component/default/CameraComponent.h"
 #include "core/graphics/Model.h"
 
+#include "core/entitysystem/component/default/scripts/FreeCam.h"
+
 using namespace loki;
 
 physics::LkRigidBody* body = NULL;
@@ -223,32 +225,33 @@ bool MyGame::Init()
 
 
 	Entity* entity0 = g_EntitySystem->SpawnEntity("TestEntity");
-	entity0->InstantiateComponent<loki::components::PhysicsComponent>();
+	//entity0->InstantiateComponent<loki::components::PhysicsComponent>();
 	entity0->InstantiateComponent<loki::components::RenderComponent>();
-	loki::components::PhysicsComponent* pc = entity0->GetComponent<loki::components::PhysicsComponent>();
+	//loki::components::PhysicsComponent* pc = entity0->GetComponent<loki::components::PhysicsComponent>();
 	loki::components::RenderComponent* rc = entity0->GetComponent<loki::components::RenderComponent>();
 	
 	rc->SetModel(graphics::Model::Load("resources//lmo//test.lmo"));
 
-	physics::RigidBodyInfo info;
-	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-	info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetModel()->GetMesh(0));
-	info.m_Restitution = 0.75f;
-	info.m_Mass = 100.0f;
-	pc->CreateBodyFromInfo(info);
+// 	physics::RigidBodyInfo info;
+// 	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+// 	info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetModel()->GetMesh(0));
+// 	info.m_Restitution = 0.75f;
+// 	info.m_Mass = 100.0f;
+// 	pc->CreateBodyFromInfo(info);
 
 	Entity* entity1 = g_EntitySystem->SpawnEntity("BoxEntity");
 	entity1->InstantiateComponent<loki::components::RenderComponent>();
 	entity1->InstantiateComponent<loki::components::CameraComponent>();
+	entity1->InstantiateComponent<loki::scripts::FreeCam>();
 	rc = entity1->GetComponent<loki::components::RenderComponent>();
 	loki::components::CameraComponent* cc = entity1->GetComponent<loki::components::CameraComponent>();
 	cc->Activate();
 
 	rc->SetModel(graphics::Model::Load("resources//lmo//cube.lmo"));
 
-	entity0->GetTransform().SetParent(entity1->GetTransform());
-	entity0->GetTransform().SetOrientation(math::gtc::quaternion::rotate(quat(), 45.0f, UP));
-	entity1->GetTransform().SetLocalPosition(vec3(10.0f, 0.0f, 0.0f));
+// 	entity0->GetTransform().SetParent(entity1->GetTransform());
+// 	entity0->GetTransform().SetOrientation(math::gtc::quaternion::rotate(quat(), 45.0f, UP));
+// 	entity1->GetTransform().SetLocalPosition(vec3(10.0f, 0.0f, 0.0f));
 
 // 	loki::util::general::JSONDocument* doc = loki::util::general::JSONDocument::Open("resources//test.json");
 // 	if (doc)

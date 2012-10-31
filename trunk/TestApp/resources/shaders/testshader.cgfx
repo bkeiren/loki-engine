@@ -98,7 +98,7 @@ FragmentOutput mainFP( VertexOutput IN )
 		float4 normalpixel_vs = mul(ViewMatrix, float4(mul(ModelMatrixIT, normalize(ModelSpace_normal)), 0.0));
 		OUT.Color2 = normalpixel_vs;
 	}
-	//OUT.Color2 = mul(ViewMatrix, float4(mul(ModelMatrixIT, IN.Normal), 0.0));
+	OUT.Color2 = mul(ViewMatrix, float4(mul(ModelMatrixIT, IN.Normal), 0.0));
 	
 	OUT.Color3 = float4(tex2D(EmissiveSampler, IN.Tex).rgb, 1.0);
 
