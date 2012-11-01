@@ -52,14 +52,14 @@ public:
 	ELightType GetLightType() const;
 	void SetLightType( ELightType _Type );
 
-	float GetRange() const;
-	void SetRange( float _Range );
+	f32 GetRange() const;
+	void SetRange( f32 _Range );
 
 	const ColorRGB& GetColor() const;
 	void SetColor( const ColorRGB& _Color );
 
-	float GetIntensity() const;
-	void SetIntensity( float _Intensity );
+	f32 GetIntensity() const;
+	void SetIntensity( f32 _Intensity );
 
 	EShadowType GetShadowType() const;
 	void SetShadowType( EShadowType _ShadowType );
@@ -71,20 +71,20 @@ private:
 	ELightType m_LightType;
 
 	// For point and spot lights.
-	float m_Range;
+	f32 m_Range;
 
 	// For spot lights.
-	float m_SpotAngle;
+	f32 m_SpotAngle;
 
 	// For directional lights.
-	float m_CookieSize;
+	f32 m_CookieSize;
 
 	// For area lights.
 	vec2 m_AreaSize;	// Only X and Y components because area lights are actually planes, not boxes.
 
 	// For all light types.
 	ColorRGB m_Color;
-	float m_Intensity;	// Default 1.0. Min 0.0, max 8.0.
+	f32 m_Intensity;	// Default 1.0. Min 0.0, max 8.0.
 	EShadowType m_ShadowType;
 	graphics::Texture* m_Cookie;	// 2D for spot and directional lights, cubemap for point lights.
 

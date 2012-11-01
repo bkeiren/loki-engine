@@ -59,7 +59,7 @@ const mat4& Transform::GetMatrix()
 
 vec3 Transform::GetOrientationVector()
 {
-	return GetOrientation() * FORWARD;
+	return FORWARD * GetOrientation();
 }
 
 vec3 Transform::GetEulerAngles()
