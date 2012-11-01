@@ -15,9 +15,8 @@ struct VertexOutput
 	float4 PosS		: TEXCOORD0;
 	float3 Normal	: TEXCOORD1;
 	float2 Tex		: TEXCOORD2;
-	float3 Tangent	: TEXCOORD3;
-	float3 BiNormal	: TEXCOORD4;
-	float Depth		: TEXCOORD5;
+	float Depth		: TEXCOORD4;
+	float3x3 TBN	: TEXCOORD5;
 };
 
 // Structure for data output from the fragment program.
@@ -58,9 +57,8 @@ VertexOutput mainVP( VertexInput IN )
 	OUT.PosS = mul(mul(ViewMatrix, ModelMatrix), float4(IN.Position * Scale, 1));
 	OUT.Tex = IN.Tex * UVScale;
 	OUT.Normal = IN.Normal;
-	OUT.Tangent = IN.Tangent;
-	OUT.BiNormal = IN.BiNormal;
 	OUT.Depth = OUT.PosH.z;
+	OUT.TBN = float3x3(normalize(IN.Tangent), normalize(IN.BiNormal), normalize(IN.Normal));
 
 	return OUT;
 }
@@ -74,14 +72,7 @@ float LinearizeDepth( float _NonLinearDepth )
 FragmentOutput mainFP( VertexOutput IN )
 {
 	FragmentOutput OUT;
-
-	IN.Tangent = normalize(IN.Tangent);
-	IN.BiNormal = normalize(IN.BiNormal);
-	IN.Normal = normalize(IN.Normal);
-
-	float3x3 TBN = float3x3(IN.Tangent, IN.BiNormal, IN.Normal);
 	
-	//OUT.Depth = IN.Depth;
 	OUT.Color0 = float4(tex2D(DiffuseSampler, IN.Tex).rgb, tex2D(SpecularSampler, IN.Tex).r);
 	OUT.Color1 = float4(IN.PosS.xyz, MaterialShininess);
 	float3 normalpixel = float3(tex2D(NormalSampler, IN.Tex).rgb);
@@ -93,12 +84,14 @@ FragmentOutput mainFP( VertexOutput IN )
 	}
 	else
 	{
-		float3 ModelSpace_normal = IN.Tangent * normalpixel.x + IN.BiNormal * normalpixel.y + IN.Normal * normalpixel.z;
+		//float3 ModelSpace_normal = IN.Tangent * normalpixel.x + IN.BiNormal * normalpixel.y + IN.Normal * normalpixel.z;
+		float3 ModelSpace_normal = mul(IN.TBN, normalpixel);
 		//float4 normalpixel_vs = mul(ViewMatrix, float4(mul(ModelMatrixIT, normalize(mul(normalpixel, TBN))), 0.0));
 		float4 normalpixel_vs = mul(ViewMatrix, float4(mul(ModelMatrixIT, normalize(ModelSpace_normal)), 0.0));
 		OUT.Color2 = normalpixel_vs;
 	}
-	OUT.Color2 = mul(ViewMatrix, float4(mul(ModelMatrixIT, IN.Normal), 0.0));
+	//OUT.Color2 = mul(ViewMatrix, float4(mul(ModelMatrixIT, IN.Normal), 0.0));
+	OUT.Color2 = mul(ViewMatrix, float4(mul(ModelMatrixIT, mul(IN.TBN, float3(0.0, 0.0, 1.0))), 0.0));
 	
 	OUT.Color3 = float4(tex2D(EmissiveSampler, IN.Tex).rgb, 1.0);
 

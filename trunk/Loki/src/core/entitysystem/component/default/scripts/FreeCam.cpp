@@ -8,6 +8,9 @@
 namespace loki
 {
 
+namespace components
+{
+
 namespace scripts
 {
 
@@ -65,6 +68,8 @@ void FreeCam::Update()
 
 void FreeCam::Stop()
 {
+
+}
 
 }
 
