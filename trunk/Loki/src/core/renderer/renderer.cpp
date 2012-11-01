@@ -43,7 +43,7 @@ LkRenderer::LkRenderer( Window* _Window )	:
 	m_LightEffect(0),
 	m_GBuffer(0),
 #ifdef DBG_VISUALIZATIONS
-	m_DBG_VisualizeGBufferTargets(false),
+	m_DBG_VisualizeGBufferTargets(true),
 	m_DBG_VisualizeLightVolumes(false),
 #endif
 	m_Window(_Window)
@@ -293,7 +293,11 @@ void LkRenderer::Render( game::LkLevel* _Level )
 	_RenderSky();
 
 	m_GBuffer->SetDrawBuffers(DrawBuffersP1, 4);
-	glViewport(0, 0, m_Window->GetWidth(), m_Window->GetHeight());
+	const vec4& vp = components::CameraComponent::GetActiveCamera()->GetViewPort();
+	glViewport(vp.x * m_Window->GetWidth(), 
+			   vp.y * m_Window->GetHeight(), 
+			   vp.z * m_Window->GetWidth(), 
+			   vp.w * m_Window->GetHeight());
 	
 		_RenderOpaqueGeometry();
 
@@ -697,24 +701,11 @@ void LkRenderer::_RenderOpaqueGeometry()
 	glColorMask(true, true, true, true);
 	glDepthMask(true);
 
-	mat4 viewmatrix = components::CameraComponent::GetActiveCamera()->GetViewMatrix();
-	mat4 projectionmatrix = components::CameraComponent::GetActiveCamera()->GetProjectionMatrix();
-	f32 zfar = components::CameraComponent::GetActiveCamera()->GetFarPlane();
-	f32 znear = components::CameraComponent::GetActiveCamera()->GetNearPlane();
-
-// 	for (std::list<LkRenderComponent*>::iterator it = LkRenderComponent::m_RenderComponents.begin(); it != LkRenderComponent::m_RenderComponents.end(); ++it)
-// 	{
-// 		LkMovableComponent* movcomp = (*it)->GetActor()->GetComponent<LkMovableComponent>();
-// 
-// 		if ((*it)->m_Model)	// TODO: Replace this check with a default model to indicate missing models.
-// 		{
-// 			mat4 t = (movcomp)?(movcomp->GetTransformation()):(mat4(1.0f, 0.0f, 0.0f, 0.0f, 
-// 																			  0.0f, 1.0f, 0.0f, 0.0f, 
-// 																			  0.0f, 0.0f, 1.0f, 0.0f,
-// 																			  0.0f, 0.0f, 0.0f, 1.0f));
-// 			(*it)->m_Model->_Render(t, viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
-// 		}
-// 	}
+	components::CameraComponent* camera = components::CameraComponent::GetActiveCamera();
+	mat4 viewmatrix = camera->GetViewMatrix();
+	mat4 projectionmatrix = camera->GetProjectionMatrix();
+	f32 zfar = camera->GetFarPlane();
+	f32 znear = camera->GetNearPlane();
 
 	for (components::RenderComponent::RenderComponentsConstIter it = components::RenderComponent::m_RenderComponents.begin();
 		 it != components::RenderComponent::m_RenderComponents.end();
@@ -727,11 +718,6 @@ void LkRenderer::_RenderOpaqueGeometry()
 			rc->m_Model->Render(rc->GetEntity()->GetTransform().GetMatrix(), viewmatrix, projectionmatrix, zfar, znear);
 		}
 	}
-
-// 	static graphics::Model* mdl = graphics::Model::Load("resources//lmo//test.lmo");
-// 	static graphics::Model* mdl2 = graphics::Model::Load("resources//lmo//cube.lmo");
-// 	mdl->Render(mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f), viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
-// 	mdl2->Render(mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f), viewmatrix, projectionmatrix, m_CurrentLevelToRender->GetCurrentCamera()->GetZFar(), m_CurrentLevelToRender->GetCurrentCamera()->GetZNear());
 }
 
 void LkRenderer::_RenderLighting()
