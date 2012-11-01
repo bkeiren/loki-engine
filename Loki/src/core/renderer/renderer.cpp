@@ -874,7 +874,7 @@ void LkRenderer::_RenderLightingPointLights()
 		_ModelMatrix = math::gtc::matrix_transform::rotate(_ModelMatrix, 90.0f, vec3(1.0f, 0.0f, 0.0f));
 		SETCGPARAM("LKMODELVIEWPROJ", _ViewProjectionMatrix * _ModelMatrix);		// Set the model view projection matrix.
 		SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
-		SETCGPARAM("LKMODELMATRIXIT", mat3(math::transpose(math::inverse(_ModelMatrix))));		// Set the inverse transpose of the model matrix.	
+		SETCGPARAM("LKMODELMATRIXIT", mat3(math::inverseTranspose(_ModelMatrix)));		// Set the inverse transpose of the model matrix.	
 		SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
 		SETCGPARAM("LKLIGHTPOSITION", transform.GetPosition());
 		SETCGPARAM("LKLIGHTRANGE", light->GetRange());

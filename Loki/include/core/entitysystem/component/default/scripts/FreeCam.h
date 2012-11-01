@@ -10,8 +10,8 @@ namespace loki
 
 namespace components
 {
-	class CameraComponent;
-}
+
+class CameraComponent;
 
 namespace scripts
 {
@@ -31,6 +31,8 @@ private:
 
 	components::CameraComponent* m_Camera;
 };
+
+}
 
 }
 
