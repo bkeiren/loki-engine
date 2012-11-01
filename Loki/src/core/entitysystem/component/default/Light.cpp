@@ -55,12 +55,12 @@ void Light::SetLightType( ELightType _Type )
 	m_LightsByType[m_LightType].push_back(this);
 }
 
-float Light::GetRange() const
+f32 Light::GetRange() const
 {
 	return m_Range;
 }
 
-void Light::SetRange( float _Range )
+void Light::SetRange( f32 _Range )
 {
 	m_Range = _Range;
 }
@@ -75,12 +75,12 @@ void Light::SetColor( const ColorRGB& _Color )
 	m_Color = _Color;
 }
 
-float Light::GetIntensity() const
+f32 Light::GetIntensity() const
 {
 	return m_Intensity;
 }
 
-void Light::SetIntensity( float _Intensity )
+void Light::SetIntensity( f32 _Intensity )
 {
 	m_Intensity = math::clamp(_Intensity, 0.0f, 8.0f);
 }
