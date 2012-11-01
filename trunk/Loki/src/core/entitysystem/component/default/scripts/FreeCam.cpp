@@ -50,8 +50,8 @@ void FreeCam::Update()
 		if (g_Input->Get(BUTTON_MOUSELEFT))
 		{
 			int2 mouseDelta = -g_Input->GetMouseDelta();
-			m_Camera->GetEntity()->GetTransform().RotateX(-(f32)mouseDelta.y / 3);
-			m_Camera->GetEntity()->GetTransform().LocalRotateY(-(f32)mouseDelta.x / 3);
+			m_Camera->GetEntity()->GetTransform().RotateX((f32)mouseDelta.y / 3);
+			m_Camera->GetEntity()->GetTransform().LocalRotateY((f32)mouseDelta.x / 3);
 		}
 
 		static f32 camSpeed = 0.3f;

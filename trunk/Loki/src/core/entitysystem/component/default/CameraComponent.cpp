@@ -157,7 +157,7 @@ void CameraComponent::_ComputeProjectionMatrix()
 	f32 height = renderer::g_Renderer->GetRenderHeight() * m_ViewPort.VIEWPORT_BOTTOM;
 
 	(m_ProjectionType == PROJECTION_PERSPECTIVE)?
-		(m_ProjectionMatrix = math::gtc::matrix_transform::perspectiveFov(m_FieldOfView, width, height, GetNearPlane(), GetFarPlane())):
+		(m_ProjectionMatrix = math::gtc::matrix_transform::perspective(m_FieldOfView, width / height, GetNearPlane(), GetFarPlane())):
 		(m_ProjectionMatrix = math::gtc::matrix_transform::ortho(m_ViewPort.VIEWPORT_LEFT, m_ViewPort.VIEWPORT_RIGHT, m_ViewPort.VIEWPORT_BOTTOM, m_ViewPort.VIEWPORT_TOP, GetNearPlane(), GetFarPlane()));
 	m_ProjectionMatrixIsDirty = false;
 }
