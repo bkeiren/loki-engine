@@ -238,13 +238,18 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 		{
 			if (m_tempMeshArray[i]->mVertices)			Vertices[y].pos			= vec3(m_tempMeshArray[i]->mVertices[y].x,			m_tempMeshArray[i]->mVertices[y].y,		m_tempMeshArray[i]->mVertices[y].z);
 			if (m_tempMeshArray[i]->mNormals)			Vertices[y].normal		= vec3(m_tempMeshArray[i]->mNormals[y].x,			m_tempMeshArray[i]->mNormals[y].y,		m_tempMeshArray[i]->mNormals[y].z);
-			if (m_tempMeshArray[i]->mBitangents)		Vertices[y].binormal	= vec3(m_tempMeshArray[i]->mBitangents[y].x,		m_tempMeshArray[i]->mBitangents[y].y,	m_tempMeshArray[i]->mBitangents[y].z);
+			if (m_tempMeshArray[i]->mBitangents)		Vertices[y].bitangent	= vec3(m_tempMeshArray[i]->mBitangents[y].x,		m_tempMeshArray[i]->mBitangents[y].y,	m_tempMeshArray[i]->mBitangents[y].z);
 
 			// IMPORTANT NOTE: The tangent is negated because apparently, that's what is required when using Cg. If this negation is not performed,
 			// certain faces will have incorrect TBN matrices and will not be properly shaded.
 			if (m_tempMeshArray[i]->mTangents)			Vertices[y].tangent		= vec3(m_tempMeshArray[i]->mTangents[y].x,			m_tempMeshArray[i]->mTangents[y].y,		m_tempMeshArray[i]->mTangents[y].z);
 			if (m_tempMeshArray[i]->mTextureCoords[0])	Vertices[y].uv			= vec2(m_tempMeshArray[i]->mTextureCoords[0][y].x, m_tempMeshArray[i]->mTextureCoords[0][y].y);
 
+			// We want to ensure a certain handedness for the TBN matrix.
+			if (math::leftHanded(Vertices[i].tangent, Vertices[i].bitangent, Vertices[i].normal))
+			{
+				Vertices[i].tangent *= -1.0f;
+			}
 		}
 		vbo = graphics::VertexBuffer::Create(Vertices, NumVerts);
 		if(!vbo/*m_SubMeshes[i]->_CreateVertexBuffer(Vertices, NumVerts)*/)

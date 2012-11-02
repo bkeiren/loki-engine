@@ -28,7 +28,7 @@ public:
 		ATTRIB_Position = 0,
 		ATTRIB_Normal,
 		ATTRIB_Tangent,
-		ATTRIB_Binormal,
+		ATTRIB_BiTangent,
 		ATTRIB_Texcoord,
 		ATTRIB_ZFar,
 		ATTRIB_ZNear,
