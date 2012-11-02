@@ -77,12 +77,12 @@ FragmentOutput mainFP( VertexOutput IN )
 	OUT.Color1 = float4(IN.PosVS.xyz, MaterialShininess);
 
 	// View-space normal.
-	float3x3 TBN = float3x3(normalize(IN.Tangent), normalize(IN.BiTangent), normalize(IN.Normal));
-	float3 TangentSpaceNormal = float3(tex2D(NormalSampler, IN.Tex).rgb);
+	float3x3 TBN = float3x3(normalize(-IN.Tangent), normalize(IN.BiTangent), normalize(IN.Normal));
+	float3 TangentSpaceNormal = (float3(tex2D(NormalSampler, IN.Tex).rgb) * 2.0) - 1.0;
 	float3 WorldSpaceNormal = mul(ModelMatrixIT, mul(TBN, TangentSpaceNormal));
 	OUT.Color2.rgb = mul(float3x3(ViewMatrix), WorldSpaceNormal);
 
-	OUT.Color2.rgb = mul(float3x3(ViewMatrix), mul(ModelMatrixIT, TBN[2]));
+	//OUT.Color2.rgb = mul(float3x3(ViewMatrix), mul(ModelMatrixIT, TBN[2]));
 	
 	// Emissive color.
 	OUT.Color3 = float4(tex2D(EmissiveSampler, IN.Tex).rgb, 1.0);

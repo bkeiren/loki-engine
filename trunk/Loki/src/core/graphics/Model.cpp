@@ -245,11 +245,10 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 			if (m_tempMeshArray[i]->mTangents)			Vertices[y].tangent		= vec3(m_tempMeshArray[i]->mTangents[y].x,			m_tempMeshArray[i]->mTangents[y].y,		m_tempMeshArray[i]->mTangents[y].z);
 			if (m_tempMeshArray[i]->mTextureCoords[0])	Vertices[y].uv			= vec2(m_tempMeshArray[i]->mTextureCoords[0][y].x, m_tempMeshArray[i]->mTextureCoords[0][y].y);
 
-			// We want to ensure a certain handedness for the TBN matrix.
-			if (math::leftHanded(Vertices[i].tangent, Vertices[i].bitangent, Vertices[i].normal))
-			{
-				Vertices[i].tangent *= -1.0f;
-			}
+// 			if (math::leftHanded(Vertices[i].tangent, Vertices[i].bitangent, Vertices[i].normal))
+// 			{
+// 				Vertices[i].tangent *= -1.0f;
+// 			}
 		}
 		vbo = graphics::VertexBuffer::Create(Vertices, NumVerts);
 		if(!vbo/*m_SubMeshes[i]->_CreateVertexBuffer(Vertices, NumVerts)*/)
