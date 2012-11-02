@@ -15,7 +15,7 @@ namespace graphics
 // Texture coordinates
 // Normal
 // Tangent
-// Binormal
+// Bitangent
 //////////////////////////////////////////////////////////////////////////
 struct Vertex
 {
@@ -23,7 +23,7 @@ struct Vertex
 	vec2 uv;
 	vec3 normal;
 	vec3 tangent;
-	vec3 binormal;
+	vec3 bitangent;
 };
 
 }

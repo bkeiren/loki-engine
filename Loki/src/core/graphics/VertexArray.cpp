@@ -42,7 +42,7 @@ VertexArray::VertexArray( IndexBuffer* _IndexBuffer, VertexBuffer* _VertexBuffer
 	glVertexAttribPointer(		ATTR14,	3, GL_FLOAT, false, sizeof(Vertex), MEMBER_OFFSET(Vertex, tangent));
 
 	glEnableVertexAttribArray(	ATTR15);
-	glVertexAttribPointer(		ATTR15,	3, GL_FLOAT, false, sizeof(Vertex), MEMBER_OFFSET(Vertex, binormal));
+	glVertexAttribPointer(		ATTR15,	3, GL_FLOAT, false, sizeof(Vertex), MEMBER_OFFSET(Vertex, bitangent));
 	//////////////////////////////////////////////////////////////////////////
 
 	// Bind the IBO.

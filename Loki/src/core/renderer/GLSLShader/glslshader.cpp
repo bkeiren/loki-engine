@@ -11,7 +11,7 @@ const char* ATTRIB_LOCATION_NAMES[LkGLSLShader::ATTRIB_Count] = {	/*"AL_START_IN
 																"AttribPosition", 
 																"AttribNormal", 
 																"AttribTangent", 
-																"AttribBinormal",
+																"AttribBitanget",
 																"AttribTexcoord",
 																"AttribZFar",
 																"AttribZNear"
