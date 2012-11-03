@@ -23,6 +23,7 @@
 #include "core/graphics/Model.h"
 
 #include "core/entitysystem/component/default/scripts/FreeCam.h"
+#include "core/entitysystem/component/default/scripts/OrbitCam.h"
 #include "core/entitysystem/component/default/Light.h"
 
 using namespace loki;
@@ -55,164 +56,8 @@ bool MyGame::Init()
 	//game::g_Localization->SetLocale(game::LOCALE_NL);
 	//std::string str2 = game::g_Localization->GetLocalizedString("p1wins");
 
-
-// 	{
-// 		// TODO: Remove this.
-// 
-// 		LkPointLight* pointlight1 = m_Level->SpawnPointLight("PointLight1");
-// 		pointlight1->SetRadius(20.0f);
-// 		//pointlight1->SetPosition(vec3(-3.5f, -3.0f, -12.0f));
-// 		LkMovableComponent* light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-// 		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 0.0f));
-// 		pointlight1->SetColor(Color(0.2f, 0.2f, 1.0f));
-// 		pointlight1->Disable();
-// 
-// 		LkHandle<LkPointLight> handle = LkHandle<LkPointLight>(pointlight1);
-// 
-// 		pointlight1 = m_Level->SpawnPointLight("PointLight2");
-// 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-// 		pointlight1->SetRadius(50.0f);
-// 		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 10.0f));
-// 		pointlight1->SetColor(Color(1.0f, 0.2f, 0.2f));
-// 		//pointlight1->Disable();
-// 		
-// 
-// 		pointlight1 = m_Level->SpawnPointLight("MassivePointLight");
-// 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-// 		pointlight1->SetRadius(60.0f);
-// 		light_movcomp->SetPosition(vec3(0.0f, 0.0f, 0.0f));
-// 		pointlight1->SetColor(Color(1.0f, 1.0f, 1.0f));
-// 		//pointlight1->Disable();
-// 
-// 		pointlight1 = m_Level->SpawnPointLight("PointLight3");
-// 		light_movcomp = pointlight1->GetComponent<LkMovableComponent>();
-// 		pointlight1->SetRadius(50.0f);
-// 		light_movcomp->SetPosition(vec3(5.0f, 0.0f, 0.0f));
-// 		pointlight1->SetColor(Color(0.0f, 1.0f, 0.2f));
-// 		//pointlight1->Disable();
-// 	}
-
 	// Load an effect.
 	loki::renderer::g_EffectManager->CreateEffectFromFile("resources//shaders//testshader.cgfx", "TestEffect");
-	{
-		//LkPawn* pawn = NULL;
-		//loki::renderer::LkMaterial* mtl = NULL;
-
-// 		{
-// 			pawn = m_Level->SpawnPawn("StanfordDragon");
-// 			rendercomp = pawn->GetComponent<LkRenderComponent>();
-// 			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//torus.dae"));
-// 			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
-// 			mtl->SetShininess(100.0f);
-// 			rendercomp->GetModel()->SetMaterial(mtl, 0);
-// 			rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));
-// 			LkPhysicsComponent* phycomp = pawn->GetComponent<LkPhysicsComponent>();
-// 			physics::RigidBodyInfo info;
-// 			info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-// 			info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
-// 			info.m_Restitution = 0.75f;
-// 			info.m_Mass = 100.0f;
-// 			phycomp->CreateBodyFromInfo(info);
-// 		}
-// 		for (int i = 0; i < 10; ++i)
-// 		{
-// 			{
-// 				std::string name = "StanfordDragon";
-// 				char buff[8];
-// 				_itoa_s(i, buff, 2);
-// 				name += buff;
-// 				pawn = m_Level->SpawnPawn(name.c_str());
-// 				LkMovableComponent* movcomp = pawn->GetComponent<LkMovableComponent>();
-// 				movcomp->SetPosition(vec3(i * 0.01f, 5 + i * 2, 0.0f));
-// 				rendercomp = pawn->GetComponent<LkRenderComponent>();
-// 				rendercomp->SetModel(new loki::renderer::LkModel("resources//models//torus.dae"));
-// 				mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture2.bmp", "resources//textures//texture2_normal.bmp", "resources//textures//texture2_spec.bmp", "resources//textures//texture2_emissive.bmp");
-// 				mtl->SetShininess(100.0f);
-// 				rendercomp->GetModel()->SetMaterial(mtl, 0);
-// 				rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));			
-// 				LkPhysicsComponent* phycomp = pawn->GetComponent<LkPhysicsComponent>();
-// 				physics::RigidBodyInfo info;
-// 				info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-// 				info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(rendercomp->GetModel()->GetMesh());
-// 				info.m_Restitution = 0.75f;
-// 				info.m_Mass = 100.0f;
-// 				phycomp->CreateBodyFromInfo(info);
-// 			}
-// 		}
-// 
-// 		{
-// 			pawn = m_Level->SpawnPawn("Pawn1");
-// 			pawn->RemoveComponent<LkPhysicsComponent>();
-// 			rendercomp = pawn->GetComponent<LkRenderComponent>();
-// 			rendercomp->SetModel(new loki::renderer::LkModel("resources//models//cube.dae"));
-// 			mtl = new loki::renderer::LkMaterial("TestEffect", "resources//textures//texture6.bmp", "resources//textures//texture6_normal.bmp", "resources//textures//texture6_specular.bmp");
-// 			mtl->SetShininess(100.0f);
-// 			rendercomp->GetModel()->SetMaterial(mtl, 0);
-// 			rendercomp->GetModel()->SetUVScale(vec2(3.0f, 3.0f));
-// 		}
-	}
-
-	{
-		//DirectionalLight* directionallight1 = m_Level->SpawnDirectionalLight("DirectionalLight1");
-		//directionallight1->SetDirection(normalize(vec3(1.0f, -1.0f, 0.0f)));
-	}
-
-	//ui::Overlay* overlay = ui::g_OverlayManager->CreateOverlay("Overlay0");
-	//ui::OverlayElement* element = overlay->CreateElement("Button0", "button");
-
-	/*
-	physics::RigidBodyInfo info;
-	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-	info.m_MeshData.m_Mesh = const_cast<renderer::LkMesh*>(m_Level->GetPawn("StanfordDragon")->GetComponent<LkRenderComponent>()->GetModel()->GetMesh());
-	info.m_Restitution = 0.75f;
-	info.m_Mass = 100.0f;
-	body = physics::g_Physics->AddRigidBody(info);
-
-	for (int i = 0; i < 10; ++i)
-	{
-		info.m_InitialTransform = mat4(1.0f, 0.0f, 0.0f, 0.0f,
-											0.0f, 1.0f, 0.0f, 0.0f,
-											0.0f, 0.0f, 1.0f, 0.0f,
-											0.0f, 10.0f * (i + 1), 0.0f, 1.0f);
-		physics::g_Physics->AddRigidBody(info);
-	}*/
-
-	/*
-	if (!loki::ui::g_OverlayManager->LoadOverlayStyle("Style0", "resources//ui//style0.sty"))
-	{
-		return false;
-	}
-	loki::ui::LkOverlay* overlay = loki::ui::g_OverlayManager->CreateOverlay("Overlay0", "Style0");
-
-	if (overlay)
-	{
-		// Set the default button size before creating any.
-		//loki::ui::LkOverlayButton::SetDefaultSize(vec2(0.428f, 0.116f));
-
-		loki::ui::LkOverlayButton* button = (loki::ui::LkOverlayButton*)overlay->CreateElement("Button0", "button");
-		if (button)
-		{
-			button->SetRelativePosition(vec2(0.1f, 0.1f));
-// 			button->RegisterCallback(loki::ui::OCB_MOUSE_ENTER, testcallback);
-// 			button->RegisterCallback(loki::ui::OCB_MOUSE_LEFT_PRESSED, testcallback1);
-// 			button->RegisterCallback(loki::ui::OCB_MOUSE_LEFT_RELEASED, testcallback2);
-		}
-
-		loki::ui::LkOverlayCheckBox* checkbox = (loki::ui::LkOverlayCheckBox*)overlay->CreateElement("Checkbox0", "checkbox");
-		if (checkbox)
-		{
-			checkbox->SetRelativePosition(vec2(0.1f, 0.4f));
-			//checkbox->SetRelativeSize(vec2(0.08f, 0.08f));
-		}
-
-		loki::ui::LkOverlaySlider* slider = (loki::ui::LkOverlaySlider*)overlay->CreateElement("Slider0", "slider");
-		if (slider)
-		{
-			slider->SetRelativePosition(vec2(0.1f, 0.6f));	
- 			slider->RegisterCallback(OCB_SLIDER_VALUE_MOVE, testcallback1);
-// 			slider->RegisterCallback(OCB_SLIDER_VALUE_RELEASE, testcallback2);
-		}
-	}*/
 
 // 	LkParticleSystemDescriptor descr;
 // 	LkParticleSourceDescriptor& srcdescr = descr.AddSource();
@@ -248,7 +93,7 @@ bool MyGame::Init()
 
 	Entity* camEntity = g_EntitySystem->SpawnEntity("Main Camera");
 	camEntity->InstantiateComponent<loki::components::CameraComponent>()->Activate();
-	camEntity->InstantiateComponent<loki::components::scripts::FreeCam>();
+	camEntity->InstantiateComponent<loki::components::scripts::OrbitCam>();
 	camEntity->InstantiateComponent<loki::components::Light>()->SetRange(30.0f);
 
 // 	Entity* lightEntity = g_EntitySystem->SpawnEntity("Light0");
