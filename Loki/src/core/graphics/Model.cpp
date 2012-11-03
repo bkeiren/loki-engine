@@ -123,7 +123,7 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 	for (uint32 i = 0; i < m_Meshes.size(); ++i)
 	{
 		graphics::Mesh* mesh = m_Meshes[i];
-		const Material* material = m_Materials[i];
+		const Material* material = m_Materials[math::clamp(i,(uint32) 0, (uint32)m_Materials.size() - 1)];
 		renderer::LkEffect* effect = material->GetEffect();
 
 		if (!effect)
@@ -212,7 +212,7 @@ void Model::_CreateMeshesFromGeometryFile( const std::string& _GeometryFile, Mes
 	aiMesh** m_tempMeshArray = LocalScene->mMeshes;
 
 	for (uint32 i = 0; i < NumMeshes; ++i)
-	{       
+	{
 		graphics::IndexBuffer* ibo = 0;
 		graphics::VertexBuffer* vbo = 0;
 

@@ -857,11 +857,15 @@ void LkRenderer::_RenderLightingPointLights()
 	mat4 _ViewProjectionMatrix = _ProjectionMatrix * _ViewMatrix;
 	vec3 _EyePosition = vec3(math::inverse(_ViewMatrix)[3]);
 
-	SETCGPARAM("LKEYEPOSITION", _EyePosition);			// Set the eye position.
+	SETCGPARAM("LKEYEPOSITION", _EyePosition);
 	SETCGPARAM("LKRT0", m_GBuffer->GetAttachmentTexture(graphics::FRAMEBUFFER_COLOR_ATTACHMENT0));
 	SETCGPARAM("LKRT1", m_GBuffer->GetAttachmentTexture(graphics::FRAMEBUFFER_COLOR_ATTACHMENT1));
 	SETCGPARAM("LKRT2", m_GBuffer->GetAttachmentTexture(graphics::FRAMEBUFFER_COLOR_ATTACHMENT2));
-	//SETCGPARAM("LKRT3", m_GBuffer->GetRenderbufferTexture(3));
+	SETCGPARAM("LKRT3", m_GBuffer->GetAttachmentTexture(graphics::FRAMEBUFFER_DEPTH_STENCIL_ATTACHMENT));
+	graphics::Texture* LightAttenuationTexture = components::Light::GetAttenuationTexture();
+	SETCGPARAM("LKSPOTATTTEXTURE", (LightAttenuationTexture)?(LightAttenuationTexture->GetTextureHandle()):(0));
+	SETCGPARAM("LKZNEAR", components::CameraComponent::GetActiveCamera()->GetNearPlane());
+	SETCGPARAM("LKZFAR", components::CameraComponent::GetActiveCamera()->GetFarPlane());
 
 	components::Light::Lights& lights = components::Light::GetAllLights();
 	for (components::Light::LightsConstIter it = lights.begin(); it != lights.end(); ++it)

@@ -82,7 +82,7 @@ FragmentOutput mainFP( VertexOutput IN )
 	float3 WorldSpaceNormal = mul(ModelMatrixIT, mul(TBN, TangentSpaceNormal));
 	OUT.Color2.rgb = mul(float3x3(ViewMatrix), WorldSpaceNormal);
 
-	//OUT.Color2.rgb = mul(float3x3(ViewMatrix), mul(ModelMatrixIT, TBN[2]));
+	OUT.Color2.rgb = mul(float3x3(ViewMatrix), mul(ModelMatrixIT, TBN[2]));
 	
 	// Emissive color.
 	OUT.Color3 = float4(tex2D(EmissiveSampler, IN.Tex).rgb, 1.0);

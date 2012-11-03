@@ -16,6 +16,7 @@ class Model
 {
 	CONTAINER_MACRO_VECTOR(Mesh*, Meshes);
 	CONTAINER_MACRO_VECTOR(Material*, Materials);
+	CONTAINER_MACRO_VECTOR(int, MaterialIndices);
 public:
 	~Model();
 
@@ -36,6 +37,7 @@ private:
 	static Material* _CreateMaterialFromLMAFile( const std::string& _LMAFile );
 
 	Meshes m_Meshes;
+	MaterialIndices m_MaterialIndices;
 	Materials m_Materials;
 
 	vec3 m_Scale;
