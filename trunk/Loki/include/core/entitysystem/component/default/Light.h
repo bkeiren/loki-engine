@@ -49,6 +49,8 @@ public:
 	static Lights& GetAllLights();
 	static Lights& GetAllLightsByType( ELightType _Type );
 
+	static graphics::Texture* GetAttenuationTexture();
+
 	ELightType GetLightType() const;
 	void SetLightType( ELightType _Type );
 
@@ -94,6 +96,9 @@ private:
 
 	// All lights of each type in their own list.
 	static Lights m_LightsByType[_LIGHT_COUNT];
+
+	// Texture used as a look-up table to find the attenuation factor for spot and point lights.
+	static graphics::Texture* m_AttenuationTexture;
 };
 
 }

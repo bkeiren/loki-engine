@@ -71,12 +71,13 @@ bool MyGame::Init()
 
 
 	Entity* entity0 = g_EntitySystem->SpawnEntity("TestEntity");
-	//entity0->InstantiateComponent<loki::components::PhysicsComponent>();
-	entity0->InstantiateComponent<loki::components::RenderComponent>();
-	//loki::components::PhysicsComponent* pc = entity0->GetComponent<loki::components::PhysicsComponent>();
-	loki::components::RenderComponent* rc = entity0->GetComponent<loki::components::RenderComponent>();
-	
+	entity0->InstantiateComponent<loki::components::Light>()->SetRange(50.0f);
+	//loki::components::PhysicsComponent* pc = entity0->InstantiateComponent<loki::components::PhysicsComponent>();
+	loki::components::RenderComponent* rc = entity0->InstantiateComponent<loki::components::RenderComponent>();
+
 	rc->SetModel(graphics::Model::Load("resources//lmo//test.lmo"));
+
+	entity0->GetTransform().Translate(vec3(10.0f, 0.0f, 0.0f));
 
 // 	physics::RigidBodyInfo info;
 // 	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
@@ -93,8 +94,8 @@ bool MyGame::Init()
 
 	Entity* camEntity = g_EntitySystem->SpawnEntity("Main Camera");
 	camEntity->InstantiateComponent<loki::components::CameraComponent>()->Activate();
-	camEntity->InstantiateComponent<loki::components::scripts::OrbitCam>();
-	camEntity->InstantiateComponent<loki::components::Light>()->SetRange(30.0f);
+	camEntity->InstantiateComponent<loki::components::scripts::FreeCam>();
+	//camEntity->InstantiateComponent<loki::components::Light>()->SetRange(30.0f);
 
 // 	Entity* lightEntity = g_EntitySystem->SpawnEntity("Light0");
 // 	loki::components::Light* lc = lightEntity->InstantiateComponent<loki::components::Light>();

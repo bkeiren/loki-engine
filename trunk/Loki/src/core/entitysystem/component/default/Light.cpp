@@ -1,4 +1,5 @@
 #include "core/entitysystem/component/default/Light.h"
+#include "core/graphics/Texture.h"
 
 namespace loki
 {
@@ -8,6 +9,7 @@ namespace components
 
 Light::Lights Light::m_Lights;
 Light::Lights Light::m_LightsByType[];
+graphics::Texture* Light::m_AttenuationTexture = 0;
 
 Light::Light()	:
 	m_LightType(LIGHT_POINT)
@@ -20,7 +22,19 @@ Light::Light()	:
 	,m_ShadowType(SHADOWS_NONE)
 	,m_Cookie(0)
 {
-	
+	if (!m_AttenuationTexture)
+	{
+		m_AttenuationTexture = graphics::Texture::Load("resources//textures//LightAttenuation.bmp");
+		if (!m_AttenuationTexture)
+		{
+			LOG(VL_ERROR, "Light::Light: Failed to load light attenuation texture");
+		}
+		else
+		{
+			m_AttenuationTexture->SetTextureParameter(graphics::TEXTURE_WRAP_S, graphics::CLAMP_TO_EDGE);
+			m_AttenuationTexture->SetTextureParameter(graphics::TEXTURE_WRAP_T, graphics::CLAMP_TO_EDGE);
+		}
+	}
 }
 
 Light::~Light()
@@ -36,6 +50,11 @@ Light::Lights& Light::GetAllLights()
 Light::Lights& Light::GetAllLightsByType( ELightType _Type )
 {
 	return m_LightsByType[_Type];
+}
+
+graphics::Texture* Light::GetAttenuationTexture()
+{
+	return m_AttenuationTexture;
 }
 
 Light::ELightType Light::GetLightType() const

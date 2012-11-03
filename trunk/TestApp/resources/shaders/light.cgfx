@@ -8,9 +8,9 @@ struct VertexInput
 struct VertexOutput
 {
 	float4 PosH		: HPOS;
-	float4 PosW		: TEXCOORD0;
 	float4 PosHCustom	: TEXCOORD1;	// Because we can't acces HPOS semantic in fragment.
-	float3 LightPositionSS : TEXCOORD2;
+	float3 LightPositionViewSpace : TEXCOORD2;
+	float2 Tex			: TEXCOORD0;
 };
 
 // Structure for data output from the fragment program.
@@ -29,6 +29,8 @@ sampler2D RT0Sampler			: LKRT0;
 sampler2D RT1Sampler			: LKRT1;
 sampler2D RT2Sampler			: LKRT2;
 sampler2D RT3Sampler			: LKRT3;
+float zNear						: LKZNEAR;
+float zFar						: LKZFAR;
 
 float3 LightPosition				: LKLIGHTPOSITION;
 float LightRange					: LKLIGHTRANGE;
@@ -37,16 +39,21 @@ float3 LightColor					: LKLIGHTCOLOR;
 float LightIntensity				: LKLIGHTINTENSITY;
 int LightType						: LKLIGHTTYPE;	// 0 = Point, 1 = Spot, 2 = Directional, 3 = Area.
 
+sampler2D LightAttenuationTexture	: LKSPOTATTTEXTURE;
+
 // Vertex program entry point.
 VertexOutput mainVP( VertexInput IN )
 {
 	VertexOutput OUT;
 	
+	// Vertex position in clip space.
 	OUT.PosH = mul(ModelViewProjection, float4(IN.Position, 1));
-	OUT.PosW = mul(ModelMatrix, float4(IN.Position, 1));
+	
+	// Vertex position in clip space again because we need to use it in the fragment shader.
 	OUT.PosHCustom = OUT.PosH;
 	
-	OUT.LightPositionSS = mul(mul(ViewMatrix, ModelMatrix), float4(LightPosition, 1.0)).xyz;
+	// Position of the light in view-space.
+	OUT.LightPositionViewSpace = mul(mul(ViewMatrix, ModelMatrix), float4(LightPosition, 1.0)).xyz;
 
 	return OUT;
 }
@@ -56,12 +63,23 @@ float LinearizeDepth( float _NonLinearDepth )
 	return (2.0 * zFar * zNear / (zFar + zNear - (zFar - zNear) * (2 * _NonLinearDepth - 1.0))) / zFar;
 }
 
-float Attenuation( float3 _SurfacePosition, float3 _LightPosition )
+float3 ReconstructViewSpacePosition( float3 _SampledViewSpacePositionFromBuffer, float _NonLinearDepth )
 {
-	// http://imdoingitwrong.wordpress.com/2011/01/31/light-attenuation/
- 	float3 v = _SurfacePosition - _LightPosition;
- 	float f = (dot(v, v) / (LightRange * LightRange)) + 1.0;
- 	return clamp(LightIntensity / (f * f), 0.0, 1.0);
+	return float3(_SampledViewSpacePositionFromBuffer.xy * (-zFar / _SampledViewSpacePositionFromBuffer.z), -zFar) * 
+		   LinearizeDepth(_NonLinearDepth);
+}
+
+float Attenuation( float3 _SurfacePositionViewSpace, float3 _LightPositionViewSpace )
+{
+	// This function calculates the normalized distance value between the light position and the surface
+	// position. This value is then used to sample from a light attenuation texture. 
+	// This attenuation texture is simply a grayscale gradient which indicates how the light falloff happens.
+	// This allows artists to define entirely custom light falloff patterns (Theoretically even on a per-light basis
+	// if this is supported on the C++ side).
+	
+	float3 v = _SurfacePositionViewSpace - _LightPositionViewSpace;
+ 	float f = (dot(v, v) / (LightRange * LightRange));
+ 	return tex2D(LightAttenuationTexture, float2(f, 0.0)).r * LightIntensity;
 }
 
 // Fragment program entry point.
@@ -69,31 +87,33 @@ FragmentOutput mainFP( VertexOutput IN )
 {
 	FragmentOutput OUT;
 
+	// Window coordinates ([0 .. 1] on both axes). Used to be able to sample from the normal and diffuse textures and such.
 	float2 TexCoord = ((IN.PosHCustom.xy / IN.PosHCustom.w) * 0.5 + float2(0.5, 0.5));	// This calculation here was the result
 																						// of a little bit of experimenting and testing.	
 	
+	// Sample from the first buffer.
 	float4 RT1SampleValue = tex2D(RT1Sampler, TexCoord);
-	float Shininess = RT1SampleValue.w;
+	float Shininess = RT1SampleValue.a;
 	
 	// Sample surface position at fragment.
-	float3 SurfacePosition = RT1SampleValue.rgb;
+	float3 SurfacePositionViewSpace = ReconstructViewSpacePosition(RT1SampleValue, tex2D(RT3Sampler, TexCoord).r);
 	
 	// Sample surface normal at fragment.
-	float3 SurfaceNormal = tex2D(RT2Sampler, TexCoord).xyz;
+	float3 SurfaceNormalViewSpace = float3(tex2D(RT2Sampler, TexCoord).xyz);
 	
 	// Calculate direction vector from light origin to fragment position.
-	float3 LightDir = IN.LightPositionSS - SurfacePosition;
+	float3 LightDir = SurfacePositionViewSpace - IN.LightPositionViewSpace;
 	
-	// Calculate (linear) light attenuation.
-	float distanceAtt = Attenuation(SurfacePosition, IN.LightPositionSS);
+	// Calculate light attenuation.
+	float Att = Attenuation(SurfacePositionViewSpace, IN.LightPositionViewSpace);
 	
 	// Variable to hold the final fragment color.
 	float4 final_color = vec4(0.0, 0.0, 0.0, 1.0);
 	
-	//SurfaceNormal = normalize(SurfaceNormal);	// TODO: Is this normalization actually necessary?
+	SurfaceNormalViewSpace = normalize(SurfaceNormalViewSpace);	// TODO: Is this normalization actually necessary?
 	LightDir = normalize(LightDir);
 	
-	float LambertTerm = dot(SurfaceNormal, LightDir);
+	float LambertTerm = dot(SurfaceNormalViewSpace, LightDir);
 	
 	if(LambertTerm > 0.0)
 	{
@@ -101,15 +121,17 @@ FragmentOutput mainFP( VertexOutput IN )
 		final_color += float4(diffCol.rgb, 1.0) * float4(LightColor.rgb, 1.0) * LambertTerm;
 		
 		float4 matSpecular = vec4(diffCol.a, diffCol.a, diffCol.a, 1.0);
-		float3 EyeVec = normalize(SurfacePosition);
-		//vec3 R = reflect(-LightDir, SurfaceNormal);
-		float3 R = reflect(LightDir, SurfaceNormal);
+		float3 EyeVec = normalize(SurfacePositionViewSpace);
+		//vec3 R = reflect(-LightDir, SurfaceNormalViewSpace);
+		float3 R = reflect(LightDir, SurfaceNormalViewSpace);
 		float specular = pow( max(dot(R, EyeVec), 0.0), Shininess );
 		final_color += float4(LightColor, 1.0) * matSpecular * specular;
 	}
 
-	OUT.Color0 = final_color * distanceAtt;
-	//OUT.Color0 = float4((SurfaceNormal + 1.0) * 0.5, 1.0);
+	OUT.Color0 = final_color * Att;
+	//OUT.Color0 = float4((SurfaceNormalViewSpace + 1.0) * 0.5, 1.0);
+
+	OUT.Color0.rgb = float3(Att);
 
 	return OUT;
 }

@@ -579,7 +579,7 @@ void LokiEngine::Render()
 
 	renderer::g_Renderer->Render( m_Game->m_Level );
 
-	webtab->Render();
+	//webtab->Render();
 // 	if (g_HTMLCore->GetWebTabInFocus() == 0)
 // 	{
 // 		g_HTMLCore->SetFocus(webtab);
