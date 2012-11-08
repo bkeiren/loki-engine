@@ -69,6 +69,16 @@ float3 ReconstructViewSpacePosition( float3 _SampledViewSpacePositionFromBuffer,
  		   LinearizeDepth(_NonLinearDepth);
 }
 
+float3 PackNormal( float3 _UnpackedNormal )
+{
+	return (_UnpackedNormal + 1.0) * 0.5;
+}
+
+float3 UnpackNormal( float3 _PackedNormal )
+{
+	return (_PackedNormal * 2.0) - 1.0;
+}
+
 float Attenuation( float3 _SurfacePositionViewSpace, float3 _LightPositionViewSpace )
 {
 	// This function calculates the normalized distance value between the light position and the surface
@@ -99,7 +109,7 @@ FragmentOutput mainFP( VertexOutput IN )
 	float3 SurfacePositionViewSpace = ReconstructViewSpacePosition(RT1SampleValue, tex2D(RT3Sampler, TexCoord).r);
 	
 	// Sample surface normal at fragment.
-	float3 SurfaceNormalViewSpace = float3(tex2D(RT2Sampler, TexCoord).xyz);
+	float3 SurfaceNormalViewSpace = UnpackNormal(tex2D(RT2Sampler, TexCoord).xyz);
 	
 	// Calculate direction vector from light origin to fragment position.
 	float3 LightDir = SurfacePositionViewSpace - IN.LightPositionViewSpace;

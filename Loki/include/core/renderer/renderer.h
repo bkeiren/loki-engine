@@ -75,9 +75,6 @@ public:
 	int32 GetRenderHeight();
 	vec2 GetPixelScale();
 private:
-	bool _Init( Window* _Window );
-	void _Shutdown();
-
 	void _GetAPIInformation();
 	void _LogAPIInformation();
 
@@ -99,6 +96,8 @@ private:
 	void _RenderLightAccumulationToBackBuffer();
 
 	void _RenderGBufferTargets();
+
+	bool _ConstructGBuffer();
 
 	GLint m_PointLightShaderColorID;
 	GLint m_PointLightShaderPositionID;
