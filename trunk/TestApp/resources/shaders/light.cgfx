@@ -39,7 +39,7 @@ float3 LightColor					: LKLIGHTCOLOR;
 float LightIntensity				: LKLIGHTINTENSITY;
 int LightType						: LKLIGHTTYPE;	// 0 = Point, 1 = Spot, 2 = Directional, 3 = Area.
 
-sampler2D LightAttenuationTexture	: LKSPOTATTTEXTURE;
+sampler2D LightAttenuationTexture	: LKATTTEXTURE;
 
 // Vertex program entry point.
 VertexOutput mainVP( VertexInput IN )
@@ -65,8 +65,8 @@ float LinearizeDepth( float _NonLinearDepth )
 
 float3 ReconstructViewSpacePosition( float3 _SampledViewSpacePositionFromBuffer, float _NonLinearDepth )
 {
-	return float3(_SampledViewSpacePositionFromBuffer.xy * (-zFar / _SampledViewSpacePositionFromBuffer.z), -zFar) * 
-		   LinearizeDepth(_NonLinearDepth);
+ 	return float3(_SampledViewSpacePositionFromBuffer.xy * (-zFar / _SampledViewSpacePositionFromBuffer.z), -zFar) * 
+ 		   LinearizeDepth(_NonLinearDepth);
 }
 
 float Attenuation( float3 _SurfacePositionViewSpace, float3 _LightPositionViewSpace )
@@ -131,7 +131,7 @@ FragmentOutput mainFP( VertexOutput IN )
 	OUT.Color0 = final_color * Att;
 	//OUT.Color0 = float4((SurfaceNormalViewSpace + 1.0) * 0.5, 1.0);
 
-	OUT.Color0.rgb = float3(Att);
+	OUT.Color0.rgb = float3(SurfacePositionViewSpace.xy, 0.0);
 
 	return OUT;
 }
