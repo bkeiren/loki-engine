@@ -21,7 +21,6 @@ namespace graphics
 {
 
 Model::Model()	:
-	m_Scale(vec3(1.0f, 1.0f, 1.0f)),
 	m_UVScale(vec2(1.0f, 1.0f))
 {
 
@@ -98,19 +97,9 @@ Model* Model::Load( const std::string& _LMOFile )
 	return mdl;
 }
 
-void Model::SetScale( const vec3& _Scale )
-{
-	m_Scale = _Scale;
-}
-
 void Model::SetUVScale( const vec2& _Scale )
 {
 	m_UVScale = _Scale;
-}
-
-const vec3& Model::GetScale() const
-{
-	return m_Scale;
 }
 
 const vec2& Model::GetUVScale() const
@@ -144,7 +133,6 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 		SETCGPARAM("LKMODELMATRIXIT", mat3(math::inverseTranspose(_ModelMatrix)));		// Set the inverse transpose of the model matrix.	
 		SETCGPARAM("LKEYEPOSITION", math::inverse(_ViewMatrix)[3]);			// Set the eye position.
 		SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
-		SETCGPARAM("LKMODELSCALE", m_Scale);	// Set the model scale.
 		SETCGPARAM("LKUVSCALE", m_UVScale);		// Set the UV scale.
 		SETCGPARAM("LKZFAR", _ZFar);	// Set the Z-far value.
 		SETCGPARAM("LKZNEAR", _ZNear);	// Set the Z-near value.

@@ -43,19 +43,28 @@ float4x4 ModelMatrix			: LKMODELMATRIX;
 float3x3 ModelMatrixIT			: LKMODELMATRIXIT;
 float4x4 ViewMatrix				: LKVIEWMATRIX;
 float4 EyePosition				: LKEYEPOSITION;
-float Scale						: LKMODELSCALE;
 float2 UVScale					: LKUVSCALE = float2(1.0, 1.0);
 float zFar						: LKZFAR;
 float zNear						: LKZNEAR;
 float MaterialShininess			: LKMATERIALSHININESS;
+
+float3 PackNormal( float3 _UnpackedNormal )
+{
+	return (_UnpackedNormal + 1.0) * 0.5;
+}
+
+float3 UnpackNormal( float3 _PackedNormal )
+{
+	return (_PackedNormal * 2.0) - 1.0;
+}
 
 // Vertex program entry point.
 VertexOutput mainVP( VertexInput IN )
 {
 	VertexOutput OUT;
 	
-	OUT.PosH = mul(ModelViewProjection, float4(IN.Position * Scale, 1.0));
-	OUT.PosVS = mul(mul(ViewMatrix, ModelMatrix), float4(IN.Position * Scale, 1));
+	OUT.PosH = mul(ModelViewProjection, float4(IN.Position, 1.0));
+	OUT.PosVS = mul(mul(ViewMatrix, ModelMatrix), float4(IN.Position, 1));
 	OUT.Tex = IN.Tex * UVScale;
 	OUT.Normal = IN.Normal;
 	OUT.Tangent = IN.Tangent;
@@ -82,7 +91,7 @@ FragmentOutput mainFP( VertexOutput IN )
 	float3 WorldSpaceNormal = mul(ModelMatrixIT, mul(TBN, TangentSpaceNormal));
 	OUT.Color2.rgb = mul(float3x3(ViewMatrix), WorldSpaceNormal);
 
-	OUT.Color2.rgb = mul(float3x3(ViewMatrix), mul(ModelMatrixIT, TBN[2]));
+	OUT.Color2.rgb = PackNormal(mul(float3x3(ViewMatrix), mul(ModelMatrixIT, TBN[2])));
 	
 	// Emissive color.
 	OUT.Color3 = float4(tex2D(EmissiveSampler, IN.Tex).rgb, 1.0);

@@ -56,6 +56,13 @@ public:
 	bool operator == ( Transform& _Transform );
 	bool operator != ( Transform& _Transform );
 private:
+	enum EDirtyFlags
+	{
+		DIRTY_FLAG_MATRIX = (1 << 0),
+		DIRTY_FLAG_POS_ORI_SCALE = (1 << 1),
+		DIRTY_FLAG_WORLD_TO_LOCAL_MATRIX = (1 << 2)
+	};
+
 	void _Init();
 	void _Terminate();
 
@@ -65,6 +72,21 @@ private:
 	void _ComputePosition();
 	void _ComputeWorldToLocalMatrix();
 
+	inline bool _IsDirtyFlagSet( EDirtyFlags _Flag )
+	{
+		return (m_DirtyFlags & _Flag) == 1;	// Explicit comparison so we don't have those ugly warnings.
+	}
+
+	inline void _ClearDirtyFlag( EDirtyFlags _Flag )
+	{
+		 m_DirtyFlags &= ~_Flag;
+	}
+
+	inline void _SetDirtyFlag( EDirtyFlags _Flag )
+	{
+		m_DirtyFlags |= _Flag;
+	}
+
 	quat m_Orientation;
 	vec3 m_Position;
 	mat4 m_Transformation;
@@ -72,10 +94,7 @@ private:
 	mat4 m_LocalToWorldMatrix;
 	mat4 m_WorldToLocalMatrix;
 
-	bool m_MatrixIsDirty;
-	bool m_PositionAndOrientationIsDirty;
-
-	bool m_WorldToLocalMatrixIsDitry;
+	char m_DirtyFlags;
 };
 
 }

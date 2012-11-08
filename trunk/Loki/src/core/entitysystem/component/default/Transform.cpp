@@ -18,9 +18,7 @@ Transform::Transform()	:
 						   0.0f, 1.0f, 0.0f, 0.0f, 
 						   0.0f, 0.0f, 1.0f, 0.0f, 
 						   0.0f, 0.0, 0.0f, 1.0f)),
-   m_MatrixIsDirty(false),
-   m_PositionAndOrientationIsDirty(false),
-   m_WorldToLocalMatrixIsDitry(false)
+   m_DirtyFlags(0)
 {
 
 }
@@ -32,7 +30,7 @@ Transform::~Transform()
 
 const quat& Transform::GetOrientation()
 {
-	if (m_PositionAndOrientationIsDirty)
+	if (_IsDirtyFlagSet(DIRTY_FLAG_POS_ORI_SCALE))
 	{
 		_ComputePositionAndOrientation();
 	}
@@ -41,7 +39,7 @@ const quat& Transform::GetOrientation()
 
 const vec3& Transform::GetPosition()
 {
-	if (m_PositionAndOrientationIsDirty)
+	if (_IsDirtyFlagSet(DIRTY_FLAG_POS_ORI_SCALE))
 	{
 		_ComputePositionAndOrientation();
 	}
@@ -50,7 +48,7 @@ const vec3& Transform::GetPosition()
 
 const mat4& Transform::GetMatrix()
 {
-	if (m_MatrixIsDirty)
+	if (_IsDirtyFlagSet(DIRTY_FLAG_MATRIX))
 	{
 		_ComputeMatrix();
 	}
@@ -84,36 +82,36 @@ f32 Transform::GetRoll()
 
 void Transform::SetOrientation( const quat& _Orientation )
 {
-	if (m_PositionAndOrientationIsDirty)
+	if (_IsDirtyFlagSet(DIRTY_FLAG_POS_ORI_SCALE))
 	{
 		_ComputePosition();
 	}
 
 	m_Orientation = _Orientation;
-	m_MatrixIsDirty = true;
-	m_PositionAndOrientationIsDirty = false;
-	m_WorldToLocalMatrixIsDitry = true;
+	_SetDirtyFlag(DIRTY_FLAG_MATRIX);
+	_ClearDirtyFlag(DIRTY_FLAG_POS_ORI_SCALE);
+	_SetDirtyFlag(DIRTY_FLAG_WORLD_TO_LOCAL_MATRIX);
 }
 
 void Transform::SetPosition( const vec3& _Position )
 {
-	if (m_PositionAndOrientationIsDirty)
+	if (_IsDirtyFlagSet(DIRTY_FLAG_POS_ORI_SCALE))
 	{
 		_ComputeOrientation();
 	}
 
 	m_Position = _Position;
-	m_MatrixIsDirty = true;
-	m_PositionAndOrientationIsDirty = false;
-	m_WorldToLocalMatrixIsDitry = true;
+	_SetDirtyFlag(DIRTY_FLAG_MATRIX);
+	_ClearDirtyFlag(DIRTY_FLAG_POS_ORI_SCALE);
+	_SetDirtyFlag(DIRTY_FLAG_WORLD_TO_LOCAL_MATRIX);
 }
 
 void Transform::SetMatrix( const mat4& _Matrix )
 {
 	m_Transformation = _Matrix;
-	m_PositionAndOrientationIsDirty = true;
-	m_MatrixIsDirty = false;
-	m_WorldToLocalMatrixIsDitry = true;
+	_ClearDirtyFlag(DIRTY_FLAG_MATRIX);
+	_SetDirtyFlag(DIRTY_FLAG_POS_ORI_SCALE);
+	_SetDirtyFlag(DIRTY_FLAG_WORLD_TO_LOCAL_MATRIX);
 }
 
 void Transform::LocalTranslate( const vec3& _Translation )
@@ -179,7 +177,7 @@ const mat4& Transform::GetLocalToWorldMatrix()
 
 const mat4& Transform::GetWorldToLocalMatrix()
 {
-	if (m_WorldToLocalMatrixIsDitry)
+	if (_IsDirtyFlagSet(DIRTY_FLAG_WORLD_TO_LOCAL_MATRIX))
 	{
 		_ComputeWorldToLocalMatrix();
 	}
@@ -211,7 +209,7 @@ void Transform::_ComputeMatrix()
 	mat4 m = math::gtc::quaternion::mat4_cast(GetOrientation());
 	m[3] = vec4(GetPosition(), 1.0);
 	m_Transformation = m;
-	m_MatrixIsDirty = false;
+	_ClearDirtyFlag(DIRTY_FLAG_MATRIX);
 }
 
 void Transform::_ComputePositionAndOrientation()
@@ -223,19 +221,19 @@ void Transform::_ComputePositionAndOrientation()
 void Transform::_ComputeOrientation()
 {
 	m_Position = vec3(m_Transformation[3]);
-	m_PositionAndOrientationIsDirty = false;
+	_ClearDirtyFlag(DIRTY_FLAG_POS_ORI_SCALE);
 }
 
 void Transform::_ComputePosition()
 {
 	m_Orientation = math::gtc::quaternion::quat_cast(m_Transformation);
-	m_PositionAndOrientationIsDirty = false;
+	_ClearDirtyFlag(DIRTY_FLAG_POS_ORI_SCALE);
 }
 
 void Transform::_ComputeWorldToLocalMatrix()
 {
 	m_WorldToLocalMatrix = math::inverse(m_Transformation);
-	m_WorldToLocalMatrixIsDitry = false;
+	_ClearDirtyFlag(DIRTY_FLAG_WORLD_TO_LOCAL_MATRIX);
 }
 
 }
