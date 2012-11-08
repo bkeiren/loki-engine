@@ -19,11 +19,6 @@ RenderComponent::~RenderComponent()
 	m_RenderComponents.remove(this);
 }
 
-void RenderComponent::_OnEvent( const LkEvent& _Event )
-{
-
-}
-
 void RenderComponent::SetModel( graphics::Model* _Model )
 {
 	m_Model = _Model;
@@ -32,6 +27,11 @@ void RenderComponent::SetModel( graphics::Model* _Model )
 graphics::Model* RenderComponent::GetModel()
 {
 	return m_Model;
+}
+
+void RenderComponent::_HandleEvent( const LkEvent& _Event )
+{
+
 }
 
 void RenderComponent::_Init()

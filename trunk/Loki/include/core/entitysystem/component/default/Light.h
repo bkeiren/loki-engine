@@ -43,9 +43,6 @@ public:
 		,_SHADOWS_COUNT
 	};
 
-	Light();
-	~Light();
-
 	static Lights& GetAllLights();
 	static Lights& GetAllLightsByType( ELightType _Type );
 
@@ -66,7 +63,10 @@ public:
 	EShadowType GetShadowType() const;
 	void SetShadowType( EShadowType _ShadowType );
 private:
-	void _OnEvent( const LkEvent& _Event );
+	Light();
+	~Light();
+
+	void _HandleEvent( const LkEvent& _Event );
 	void _Init();
 	void _Terminate();
 

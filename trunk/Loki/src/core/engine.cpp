@@ -490,7 +490,7 @@ void LokiEngine::HandleEvents()
 	*/
 
 	// Capture input from the OS.
-	g_Input->Capture();
+	g_Input->_Capture();
 
 	MSG msg;
 	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))	// Is There A Message Waiting?
@@ -554,19 +554,6 @@ void LokiEngine::Update()
 	g_EventManager->Post(EVENT_POSTPHYSICSUPDATE);
 
 	m_Game->PostUpdate();
-
-// 	if (g_Input->Get(KEY_R) == KEYSTATE_RELEASED)
-// 	{
-// 		renderer::g_Renderer->ToggleVisualizeRenderTargets();
-// 	}
-
-	if (g_Input->Get(KEY_ESCAPE) == KEYSTATE_RELEASED)
-	{
-		//if (util::MessageBoxConfirmation("Are you sure you want to exit?", "Exit", true) == CONFIRMATION_YES)
-		//{
-			m_Exit = true;
-		//}
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////

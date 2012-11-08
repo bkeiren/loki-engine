@@ -28,8 +28,10 @@ private:
 	void Awake();
 	void Update();
 	void Stop();
-
-	components::CameraComponent* m_Camera;
+	void Enabled();
+	void Disabled();
+	
+	loki::components::CameraComponent* m_Camera;
 };
 
 }

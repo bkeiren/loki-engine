@@ -64,7 +64,7 @@ VertexOutput mainVP( VertexInput IN )
 	VertexOutput OUT;
 	
 	OUT.PosH = mul(ModelViewProjection, float4(IN.Position, 1.0));
-	OUT.PosVS = mul(mul(ViewMatrix, ModelMatrix), float4(IN.Position, 1));
+	OUT.PosVS = mul(mul(ViewMatrix, ModelMatrix), float4(IN.Position, 1.0));
 	OUT.Tex = IN.Tex * UVScale;
 	OUT.Normal = IN.Normal;
 	OUT.Tangent = IN.Tangent;
@@ -79,10 +79,10 @@ FragmentOutput mainFP( VertexOutput IN )
 {
 	FragmentOutput OUT;
 	
-	// Diffuse color in RGB and specular factor in A.
+	// Diffuse color in RGB and specular power in A.
 	OUT.Color0 = float4(tex2D(DiffuseSampler, IN.Tex).rgb, tex2D(SpecularSampler, IN.Tex).r);
 
-	// View-space position in RGB and material shininess factor in A.
+	// View-space position in RGB and material shininess in A.
 	OUT.Color1 = float4(IN.PosVS.xyz, MaterialShininess);
 
 	// View-space normal.

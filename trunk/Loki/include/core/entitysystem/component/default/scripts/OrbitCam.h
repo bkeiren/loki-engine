@@ -33,11 +33,13 @@ private:
 	void Awake();
 	void Update();
 	void Stop();
-
-	components::CameraComponent* m_Camera;
+	void Enabled();
+	void Disabled();
 
 	vec3 m_Center;
 	float m_Distance;
+
+	loki::components::CameraComponent* m_Camera;
 };
 
 }

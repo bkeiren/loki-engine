@@ -114,7 +114,7 @@ void Light::SetShadowType( EShadowType _ShadowType )
 	m_ShadowType = _ShadowType;
 }
 
-void Light::_OnEvent( const LkEvent& _Event )
+void Light::_HandleEvent( const LkEvent& _Event )
 {
 	
 }

@@ -29,13 +29,13 @@ class RenderComponent	: public Component
 public:
 	DECLARE_COMPONENT_TYPEINFO(RenderComponent)		// Required!
 
-	RenderComponent();
-	~RenderComponent();
-
 	void SetModel( graphics::Model* _Model );
 	graphics::Model* GetModel();
 private:
-	void _OnEvent( const LkEvent& _Event );
+	RenderComponent();
+	~RenderComponent();
+
+	void _HandleEvent( const LkEvent& _Event );
 	void _Init();
 	void _Terminate();
 	

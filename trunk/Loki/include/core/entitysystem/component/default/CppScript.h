@@ -16,10 +16,10 @@ class CppScript	: public Component
 public:
 	// We don't use the DECLARE_COMPONENT_TYPEINFO here because the CppScript class is an abstract class.
 
+protected:
 	CppScript();
 	virtual ~CppScript() = 0;
 
-protected:
 	// Called when the script awakes.
 	virtual void Awake() {}
 
@@ -29,8 +29,13 @@ protected:
 	// Called when the script is stopped.
 	virtual void Stop() {}
 
+	// Called when the script component is enabled.
+	virtual void Enabled() {}
+
+	// Called when the script component is disabled.
+	virtual void Disabled() {}
 private:
-	void _OnEvent( const LkEvent& _Event );
+	void _HandleEvent( const LkEvent& _Event );
 	void _Init();
 	void _Terminate();
 };

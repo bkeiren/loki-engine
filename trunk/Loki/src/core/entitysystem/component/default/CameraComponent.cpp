@@ -107,8 +107,8 @@ void CameraComponent::SetFieldOfView( f32 _FieldOfView )
 
 void CameraComponent::LookAt( const vec3& _Target )
 {
-	vec3 pos = GetEntity()->GetTransform().GetPosition();
-	GetEntity()->GetTransform().SetMatrix(math::inverse(math::lookAt(pos, _Target, UP)));
+	vec3 pos = GetTransform().GetPosition();
+	GetTransform().SetMatrix(math::inverse(math::lookAt(pos, _Target, UP)));
 }
 
 const mat4& CameraComponent::GetProjectionMatrix()
@@ -131,12 +131,17 @@ void CameraComponent::Activate()
 	m_ActiveCamera = this;
 }
 
+bool CameraComponent::IsActiveCamera() const
+{
+	return (GetActiveCamera() == this);
+}
+
 CameraComponent* CameraComponent::GetActiveCamera()
 {
 	return m_ActiveCamera;
 }
 
-void CameraComponent::_OnEvent( const LkEvent& _Event )
+void CameraComponent::_HandleEvent( const LkEvent& _Event )
 {
 
 }

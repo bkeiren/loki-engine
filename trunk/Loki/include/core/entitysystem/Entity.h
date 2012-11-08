@@ -128,9 +128,12 @@ private:
 	EntityID m_EntityID;
 	std::string m_Name;
 
-	Transform* m_Transform;
-
 	Components m_Components;
+
+	// Commonly used components are stored here for ease of access.
+	// The _Init() overrides in these classes store the pointers and
+	// the _Terminate() overrides clear them to 0.
+	Transform* m_Transform;
 };
 
 }
