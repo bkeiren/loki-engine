@@ -863,7 +863,7 @@ void LkRenderer::_RenderLightingPointLights()
 	SETCGPARAM("LKRT2", m_GBuffer->GetAttachmentTexture(graphics::FRAMEBUFFER_COLOR_ATTACHMENT2));
 	SETCGPARAM("LKRT3", m_GBuffer->GetAttachmentTexture(graphics::FRAMEBUFFER_DEPTH_STENCIL_ATTACHMENT));
 	graphics::Texture* LightAttenuationTexture = components::Light::GetAttenuationTexture();
-	SETCGPARAM("LKSPOTATTTEXTURE", (LightAttenuationTexture)?(LightAttenuationTexture->GetTextureHandle()):(0));
+	SETCGPARAM("LKATTTEXTURE", (LightAttenuationTexture)?(LightAttenuationTexture->GetTextureHandle()):(0));
 	SETCGPARAM("LKZNEAR", components::CameraComponent::GetActiveCamera()->GetNearPlane());
 	SETCGPARAM("LKZFAR", components::CameraComponent::GetActiveCamera()->GetFarPlane());
 
@@ -891,7 +891,7 @@ void LkRenderer::_RenderLightingPointLights()
 		{
 		case components::Light::LIGHT_POINT:
 			{
-				// TODO: Replace this with a VBO or something. Atleast not emmediate mode.
+				// TODO: Replace this with a VBO or something. At least not immediate mode.
 				static GLUquadric* quadric = gluNewQuadric();
 				int32 PassID = 0;
 				while (m_LightEffect->HasNextPass())
