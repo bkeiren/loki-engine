@@ -39,7 +39,7 @@ physics::LkRigidBody* PhysicsComponent::GetBody() const
 	return m_RigidBody;
 }
 
-void PhysicsComponent::_OnEvent( const LkEvent& _Event )
+void PhysicsComponent::_HandleEvent( const LkEvent& _Event )
 {
 	switch (_Event.GetEventType())
  	{

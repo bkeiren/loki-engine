@@ -1,4 +1,5 @@
 #include "core/entitysystem/component/Component.h"
+#include "core/entitysystem/Entity.h"
 
 namespace loki
 {
@@ -14,6 +15,39 @@ Component::~Component()
 
 }
 
+bool Component::IsEnabled() const
+{
+	return m_Enabled;
+}
+
+void Component::Enable()
+{
+	SetEnabled(true);
+}
+
+void Component::Disable()
+{
+	SetEnabled(false);
+}
+
+void Component::SetEnabled( bool _Enabled )
+{
+	m_Enabled = _Enabled;
+
+	// Dispatch events for this component only. The virtual-function table chain will ensure it arrives at the right place.
+	_HandleEvent( (m_Enabled) ? (EVENT_COMPONENT_ENABLED) : (EVENT_COMPONENT_DISABLED) );
+}
+
+const Transform& Component::GetTransform() const
+{
+	return GetEntity()->GetTransform();
+}
+
+Transform& Component::GetTransform()
+{
+	return GetEntity()->GetTransform();
+}
+
 void Component::SetEntity( Entity* _Entity )
 {
 	assert(_Entity != NULL);
@@ -24,7 +58,25 @@ void Component::SetEntity( Entity* _Entity )
 
 void Component::_OnEvent( const LkEvent& _Event )
 {
+	if (IsEnabled())
+	{
+		_HandleEvent(_Event);
+	}
+}
 
+void Component::_HandleEvent( const LkEvent& _Event )
+{
+
+}
+
+void Component::_BaseInit()
+{
+	_Init();
+}
+
+void Component::_BaseTerminate()
+{
+	_Terminate();
 }
 
 }

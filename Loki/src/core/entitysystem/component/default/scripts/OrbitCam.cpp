@@ -46,12 +46,16 @@ void OrbitCam::SetCenter( const vec3& _Center )
 
 void OrbitCam::Awake()
 {
-	m_Camera = GetEntity()->GetComponent<components::CameraComponent>();
+	m_Camera = GetEntity()->GetComponent<loki::components::CameraComponent>();
+	if (!m_Camera)
+	{
+		LOG(VL_WARN, "OrbitCam::Awake: Entity does not have a camera component attached!");
+	}
 }
 
 void OrbitCam::Update()
 {
-	Transform& t = GetEntity()->GetTransform();
+	Transform& t = GetTransform();
 	t.SetPosition(m_Center);
 
 	if (g_Input->Get(BUTTON_MOUSELEFT) == KEYSTATE_DOWN)
@@ -67,6 +71,16 @@ void OrbitCam::Update()
 }
 
 void OrbitCam::Stop()
+{
+
+}
+
+void OrbitCam::Enabled()
+{
+
+}
+
+void OrbitCam::Disabled()
 {
 
 }

@@ -44,7 +44,7 @@ bool EntityID::operator >= ( const EntityID& _ID ) const
 Entity::Entity()	:
 	m_Transform(0)
 {
-	// We always have a transform component.
+	// An entity always has a transform component.
 	m_Transform = InstantiateComponent<Transform>();
 }
 

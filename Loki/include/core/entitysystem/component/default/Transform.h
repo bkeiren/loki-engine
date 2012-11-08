@@ -15,9 +15,6 @@ class Transform	: public Component
 public:
 	DECLARE_COMPONENT_TYPEINFO(Transform)
 
-	Transform();
-	~Transform();
-
 	const quat& GetOrientation();
 	const vec3& GetPosition();
 	const vec3& GetScale();
@@ -64,6 +61,9 @@ public:
 	bool operator == ( Transform& _Transform );
 	bool operator != ( Transform& _Transform );
 private:
+	Transform();
+	~Transform();
+
 	enum EDirtyFlags
 	{
 		DIRTY_FLAG_MATRIX = (1 << 0),

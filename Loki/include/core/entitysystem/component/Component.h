@@ -9,7 +9,15 @@
 namespace loki
 {
 
-#define DECLARE_COMPONENT_TYPEINFO(componentclass)		static util::general::TypeInfo& GetTypeInfo() { static util::general::TypeInfo ti = util::general::TypeInfo(typeid(componentclass)); return ti; }
+class Transform;
+
+namespace components
+{
+	class CameraComponent;
+	class Light;
+}
+
+#define DECLARE_COMPONENT_TYPEINFO(componentclass)		friend class Entity; static util::general::TypeInfo& GetTypeInfo() { static util::general::TypeInfo ti = util::general::TypeInfo(typeid(componentclass)); return ti; }
 
 class Entity;
 
@@ -47,29 +55,47 @@ public:
 	inline Entity* GetEntity();
 	inline const Entity* GetEntity() const;
 
+	bool IsEnabled() const;
+	void Enable();
+	void Disable();
+	void SetEnabled( bool _Enabled );
 protected:
 	Component();
 	virtual ~Component() = 0;
 
+	//////////////////////////////////////////////////////////////////////////
+	// Utility functions that simply call GetEntity() and then GetComponent(). These are just here to 
+	// make it easier to find components attached to the same entity.
+	//////////////////////////////////////////////////////////////////////////
+	template< typename _ComponentType >
+	_ComponentType* GetComponent() const;
+
+	const Transform& GetTransform() const;
+	Transform& GetTransform();
 private:
 	void SetEntity( Entity* _Entity );
 
-	virtual void _OnEvent( const LkEvent& _Event );
+	void _OnEvent( const LkEvent& _Event );
+	virtual void _HandleEvent( const LkEvent& _Event );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Called after data such as m_Entity is set.
 	//////////////////////////////////////////////////////////////////////////
+	void _BaseInit();
 	virtual void _Init() = 0;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Called before the component is deleted.
 	//////////////////////////////////////////////////////////////////////////
+	void _BaseTerminate();
 	virtual void _Terminate() = 0;
 
 	//////////////////////////////////////////////////////////////////////////
 	// The entity to which this component belongs.
 	//////////////////////////////////////////////////////////////////////////
 	Entity* m_Entity;
+
+	bool m_Enabled;
 };
 
 }

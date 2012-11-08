@@ -16,7 +16,7 @@ CppScript::~CppScript()
 	UnsubscribeFromEvent(EVENT_ONUPDATE);
 }
 
-void CppScript::_OnEvent( const LkEvent& _Event )
+void CppScript::_HandleEvent( const LkEvent& _Event )
 {
 	switch (_Event.GetEventType())
 	{
@@ -25,6 +25,19 @@ void CppScript::_OnEvent( const LkEvent& _Event )
 			Update();
 			break;
 		}
+	case EVENT_COMPONENT_ENABLED:	// Not officially registered to this, but 
+									// is dispatched privately by the Component class.
+		{
+			Enabled();
+			break;
+		}
+	case EVENT_COMPONENT_DISABLED:	// Not officially registered to this, but 
+									// is dispatched privately by the Component class.
+		{
+			Disabled();
+			break;
+		}
+
 	}
 }
 

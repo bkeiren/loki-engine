@@ -16,9 +16,6 @@ class CameraComponent	: public Component
 public:
 	DECLARE_COMPONENT_TYPEINFO(CameraComponent)	// Required!
 
-	CameraComponent();
-	~CameraComponent();
-
 	enum EProjectionType
 	{
 		PROJECTION_PERSPECTIVE = 0,
@@ -55,9 +52,14 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	void Activate();
 
+	bool IsActiveCamera() const;
+
 	static CameraComponent* GetActiveCamera();
 private:
-	void _OnEvent( const LkEvent& _Event );
+	CameraComponent();
+	~CameraComponent();
+
+	void _HandleEvent( const LkEvent& _Event );
 	void _Init();
 	void _Terminate();
 

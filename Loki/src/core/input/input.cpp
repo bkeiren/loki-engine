@@ -63,8 +63,9 @@ void LkInput::_PerformMouseAcceleration()
 
 void LkInput::_CaptureKeyState( int32 _Key )
 {
-	short state = GetAsyncKeyState(_Key) >> 8;	// Shifted by 8 because the most significant bit is used to indicate the
-	// state of the key.
+	short state = GetKeyState(_Key) >> 8;	// Shifted by 8 because the most significant bit is used to indicate the
+											// state of the key.
+
 	// If key is down...
 	if (state)
 	{
@@ -96,7 +97,7 @@ void LkInput::_CaptureKeyState( int32 _Key )
 	}
 }
 
-void LkInput::Capture()
+void LkInput::_Capture()
 {
 	if (!g_Engine->GetWindow()->HasFocus())
 	{
@@ -105,7 +106,7 @@ void LkInput::Capture()
 
 	if (!g_Console->IsVisible())
 	{
-		for (int32 i = 0; i < KEY_LAST; ++i)
+		for (int32 i = 0; i < _KEY_LAST; ++i)
 		{
 			_CaptureKeyState(i);
 		}
@@ -114,7 +115,7 @@ void LkInput::Capture()
 	{
 		EKeyState states[2] = { m_Keys[KEY_TILDE], m_Keys[KEY_ESCAPE] };
 
-		for (int32 i = 0; i < KEY_LAST; ++i)
+		for (int32 i = 0; i < _KEY_LAST; ++i)
 		{
 			m_Keys[i] = KEYSTATE_UP;
 		}
@@ -191,9 +192,30 @@ void LkInput::Capture()
 	}
 }
 
-EKeyState LkInput::Get( EKeys _Key ) const
+EKeyState LkInput::Get( int32 _Key ) const
 {
+	assert(_Key > 0 && _Key < _KEY_LAST);
 	return m_Keys[_Key];
+}
+
+bool LkInput::IsUp( int32 _Key ) const
+{
+	return KEY_UP(_Key);
+}
+
+bool LkInput::IsPressed( int32 _Key ) const
+{
+	return KEY_PRESSED(_Key);
+}
+
+bool LkInput::IsDown( int32 _Key ) const
+{
+	return KEY_DOWN(_Key);
+}
+
+bool LkInput::IsReleased( int32 _Key ) const
+{
+	return KEY_RELEASED(_Key);
 }
 
 const int2 LkInput::GetMousePosition() const

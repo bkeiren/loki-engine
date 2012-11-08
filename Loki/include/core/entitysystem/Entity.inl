@@ -19,7 +19,7 @@ _ComponentType* Entity::InstantiateComponent()
 	m_Components.push_back(comp);
 #endif
 	comp->SetEntity(this);
-	comp->_Init();
+	comp->_BaseInit();
 	return (_ComponentType*)comp;
 }
 
@@ -56,7 +56,7 @@ void Entity::RemoveComponent()
 		return;
 	}
 #endif
-	comp->_Terminate();
+	comp->_BaseTerminate();
 	delete comp;
 	//comp->~_ComponentType();
 	//delete[] ((void*)comp);

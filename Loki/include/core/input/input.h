@@ -11,7 +11,7 @@
 namespace loki
 {
 
-enum EKeys
+enum
 {
 	BUTTON_MOUSELEFT = 1,
 	BUTTON_MOUSERIGHT, // 2
@@ -71,7 +71,10 @@ enum EKeys
 	KEY_Y, 
 	KEY_Z, // 90
 	KEY_MENU = 93,
-	KEY_F1 = 112,
+	// NOTE: 97 thru 122 are the ASCII codes of the lower-case versions of the letters of the alphabet.
+	// But at 112, the Fn keys start enumerating. Note that trying to access the state of alphabet-keys 
+	// by using their lower-case character variants will return the state of other keys (Not the ones expected).
+	KEY_F1 = 112,	
 	KEY_F2,
 	KEY_F3,
 	KEY_F4,
@@ -103,7 +106,7 @@ enum EKeys
 
 	// TODO: Numeric keys.
 
-	KEY_LAST = 255	// Keep as last!
+	_KEY_LAST = 255	// Keep as last!
 };
 
 enum EKeyState
@@ -125,21 +128,19 @@ enum EKeyState
 class LkInput
 {
 	friend class LokiEngine;
-public:
-	//////////////////////////////////////////////////////////////////////////
-	// Captures key input and sets the key states. Must be called by the engine 
-	// each frame in order to have up-to-date key information.
-	//////////////////////////////////////////////////////////////////////////
-	void Capture();
-	
-	EKeyState Get( EKeys _Key ) const;
+public:	
+	EKeyState Get( int32 _Key ) const;
+	bool IsUp( int32 _Key ) const;
+	bool IsPressed( int32 _Key ) const;
+	bool IsDown( int32 _Key ) const;
+	bool IsReleased( int32 _Key ) const;
 	const int2 GetMousePosition() const;
-	int32	GetMouseX() const;
-	int32	GetMouseY() const ;
+	int32 GetMouseX() const;
+	int32 GetMouseY() const ;
 	bool GetMouseMoved() const;
 	const int2& GetMouseDelta() const;
-	int32	GetMouseDeltaX() const;
-	int32	GetMouseDeltaY() const;
+	int32 GetMouseDeltaX() const;
+	int32 GetMouseDeltaY() const;
 	f32 GetMouseWheelDelta() const;
 	void SetMouseAccelerationEnabled( bool _Enabled );
 	bool GetMouseAccelerationEnabled() const;
@@ -157,11 +158,17 @@ private:
 	//////////////////////////////////////////////////////////////////////////
 	bool _Init();
 
+	//////////////////////////////////////////////////////////////////////////
+	// Captures key input and sets the key states. Must be called by the engine 
+	// each frame in order to have up-to-date key information.
+	//////////////////////////////////////////////////////////////////////////
+	void _Capture();
+
 	void _PerformMouseAcceleration();
 
 	inline void _CaptureKeyState( int32 _Key );
 
-	EKeyState m_Keys[KEY_LAST];
+	EKeyState m_Keys[_KEY_LAST];
 	int2 m_Mouse;
 	int2 m_MousePrevious;
 	int2 m_MouseDelta;

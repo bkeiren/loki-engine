@@ -22,14 +22,14 @@ class PhysicsComponent	: public Component
 public:
 	DECLARE_COMPONENT_TYPEINFO(PhysicsComponent)	// Required!
 
-	PhysicsComponent();
-	~PhysicsComponent();
-
 	bool CreateBodyFromInfo( physics::RigidBodyInfo& _Info );
 	
 	physics::LkRigidBody* GetBody() const;
 private:
-	void _OnEvent( const LkEvent& _Event );
+	PhysicsComponent();
+	~PhysicsComponent();
+
+	void _HandleEvent( const LkEvent& _Event );
 	void _Init();
 	void _Terminate();
 

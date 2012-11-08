@@ -26,10 +26,10 @@ FreeCam::~FreeCam()
 
 void FreeCam::Awake()
 {
-	m_Camera = GetEntity()->GetComponent<components::CameraComponent>();
+	m_Camera = GetEntity()->GetComponent<loki::components::CameraComponent>();
 	if (!m_Camera)
 	{
-		LOG(VL_ERROR, "FreeCam::Awake: Entity does not have a camera component attached!");
+		LOG(VL_WARN, "FreeCam::Awake: Entity does not have a camera component attached!");
 	}
 }
 
@@ -37,7 +37,7 @@ void FreeCam::Update()
 {
 	if (!g_HTMLCore->GetInputDetected())
 	{
-		if (g_Input->Get(KEY_T) == KEYSTATE_DOWN)
+		if (g_Input->Get('T') == KEYSTATE_DOWN)
 		{
 			m_Camera->LookAt(vec3(0.0f, 0.0f, 0.0f));
 		}
@@ -50,23 +50,35 @@ void FreeCam::Update()
 		// 				movcomp->RotateLocalY((f32)mouseDelta.x / 3);
 		// 			}
 
+		Transform& t = GetTransform();
+
 		if (g_Input->Get(BUTTON_MOUSELEFT))
 		{
 			int2 mouseDelta = -g_Input->GetMouseDelta();
-			m_Camera->GetEntity()->GetTransform().RotateX((f32)mouseDelta.y / 3);
-			m_Camera->GetEntity()->GetTransform().LocalRotateY((f32)mouseDelta.x / 3);
+			t.RotateX((f32)mouseDelta.y / 3);
+			t.LocalRotateY((f32)mouseDelta.x / 3);
 		}
 
 		static f32 camSpeed = 0.3f;
 		camSpeed = max(camSpeed + (g_Input->GetMouseWheelDelta() * 0.25f), 0.1f);
 
-		m_Camera->GetEntity()->GetTransform().LocalTranslate( -FORWARD * ((((bool)g_Input->Get(KEY_W)) * camSpeed) - (((bool)g_Input->Get(KEY_S)) * camSpeed)) );
-		m_Camera->GetEntity()->GetTransform().LocalTranslate( SIDE * ((((bool)g_Input->Get(KEY_D)) * camSpeed) - (((bool)g_Input->Get(KEY_A)) * camSpeed)) );
-		m_Camera->GetEntity()->GetTransform().Translate( UP * ((((bool)g_Input->Get(KEY_X)) * camSpeed) - (((bool)g_Input->Get(KEY_Z)) * camSpeed)) );	
+		t.LocalTranslate( -FORWARD * ((((bool)g_Input->Get('W')) * camSpeed) - (((bool)g_Input->Get('S')) * camSpeed)) );
+		t.LocalTranslate( SIDE * ((((bool)g_Input->Get('D')) * camSpeed) - (((bool)g_Input->Get('A')) * camSpeed)) );
+		t.Translate( UP * ((((bool)g_Input->Get('X')) * camSpeed) - (((bool)g_Input->Get('Z')) * camSpeed)) );	
 	}
 }
 
 void FreeCam::Stop()
+{
+
+}
+
+void FreeCam::Enabled()
+{
+
+}
+
+void FreeCam::Disabled()
 {
 
 }

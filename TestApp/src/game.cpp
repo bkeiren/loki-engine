@@ -26,6 +26,9 @@
 #include "core/entitysystem/component/default/scripts/OrbitCam.h"
 #include "core/entitysystem/component/default/Light.h"
 
+
+#include "scripts/SimpleController.h"
+
 using namespace loki;
 
 physics::LkRigidBody* body = NULL;
@@ -69,15 +72,18 @@ bool MyGame::Init()
 // 
 // 	LkParticleSystem* ps = m_Level->SpawnParticleSystem(descr);
 
+	loki::components::RenderComponent* rc = 0;
+	loki::components::PhysicsComponent* pc = 0;
 
 	Entity* entity0 = g_EntitySystem->SpawnEntity("TestEntity");
 	entity0->InstantiateComponent<loki::components::Light>()->SetRange(50.0f);
-	//loki::components::PhysicsComponent* pc = entity0->InstantiateComponent<loki::components::PhysicsComponent>();
-	loki::components::RenderComponent* rc = entity0->InstantiateComponent<loki::components::RenderComponent>();
+	//pc = entity0->InstantiateComponent<loki::components::PhysicsComponent>();
+	rc = entity0->InstantiateComponent<loki::components::RenderComponent>();
 
 	rc->SetModel(graphics::Model::Load("resources//lmo//test.lmo"));
 
-	entity0->GetTransform().Translate(vec3(10.0f, 0.0f, 10.0f));
+	//entity0->GetTransform().Translate(vec3(10.0f, 0.0f, 10.0f));
+	entity0->InstantiateComponent<SimpleController>();
 
 // 	physics::RigidBodyInfo info;
 // 	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
@@ -94,7 +100,8 @@ bool MyGame::Init()
 
 	Entity* camEntity = g_EntitySystem->SpawnEntity("Main Camera");
 	camEntity->InstantiateComponent<loki::components::CameraComponent>()->Activate();
-	camEntity->InstantiateComponent<loki::components::scripts::FreeCam>();
+	camEntity->InstantiateComponent<loki::components::scripts::FreeCam>()->Enable();
+	camEntity->InstantiateComponent<loki::components::scripts::OrbitCam>()->Disable();
 	//camEntity->InstantiateComponent<loki::components::Light>()->SetRange(30.0f);
 
 // 	Entity* lightEntity = g_EntitySystem->SpawnEntity("Light0");
@@ -170,6 +177,30 @@ void MyGame::Update()
 		b->ApplyCentralImpulse(force);
 	}
 
+	if (KEY_RELEASED('C'))
+	{
+		Entity* cam = g_EntitySystem->FindEntityByName("Main Camera");
+		if (cam)
+		{
+			loki::components::scripts::FreeCam* freecam = cam->GetComponent<loki::components::scripts::FreeCam>();
+			loki::components::scripts::OrbitCam* orbitcam = cam->GetComponent<loki::components::scripts::OrbitCam>();
+
+			if (freecam && orbitcam)
+			{
+				if (freecam->IsEnabled())
+				{
+					orbitcam->Enable();
+					freecam->Disable();
+				}
+				else
+				{
+					freecam->Enable();
+					orbitcam->Disable();
+				}
+			}
+		}
+	}
+
 	
 // 	{
 // 		LkPointLight* p0 = m_Level->GetPointLight("PointLight3");
@@ -200,6 +231,11 @@ void MyGame::Update()
 
 	//loki::LkMovableComponent* movcomp = m_Level->GetPawn("StanfordDragon")->GetComponent<loki::LkMovableComponent>();
 	//renderer::debug::DrawAxes(movcomp->GetPosition(), movcomp->GetOrientation(), 1.0f, true);
+
+	if (g_Input->IsReleased(KEY_ESCAPE))
+	{
+		g_Engine->RequestExit();
+	}
 }
 
 void MyGame::PostUpdate()

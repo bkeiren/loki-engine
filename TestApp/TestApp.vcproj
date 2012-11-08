@@ -205,6 +205,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\scripts\SimpleController.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\StdAfx.h"
 				>
 			</File>
