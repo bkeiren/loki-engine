@@ -20,6 +20,7 @@ public:
 
 	const quat& GetOrientation();
 	const vec3& GetPosition();
+	const vec3& GetScale();
 	const mat4& GetMatrix();
 
 	vec3 GetOrientationVector();
@@ -31,6 +32,8 @@ public:
 
 	void SetOrientation( const quat& _Orientation );
 	void SetPosition( const vec3& _Position );
+	void SetScale( float _Scale );
+	void SetScale( const vec3& _Scale );
 	void SetMatrix( const mat4& _Matrix );
 
 	void LocalTranslate( const vec3& _Translation );
@@ -41,14 +44,19 @@ public:
 	void LocalRotateY( f32 _Angle );
 	void LocalRotateZ( f32 _Angle );
 	void LocalRotate( vec3& _Axis, f32 _Angle );
-
+	
 	// Rotate around global axes.
 	void RotateX( f32 _Angle );
 	void RotateY( f32 _Angle );
 	void RotateZ( f32 _Angle );
 	void Rotate( vec3& _Axis, f32 _Angle );
 
+	void Scale( float _Scale );
+	void Scale( const vec3& _Scale );
+
 	void LookAt( const vec3& _Target );
+
+	bool ScaleIsUniform();
 
 	const mat4& GetLocalToWorldMatrix();
 	const mat4& GetWorldToLocalMatrix();
@@ -67,9 +75,10 @@ private:
 	void _Terminate();
 
 	void _ComputeMatrix();
-	void _ComputePositionAndOrientation();
+	void _ComputePositionOrientationAndScale();
 	void _ComputeOrientation();
 	void _ComputePosition();
+	void _ComputeScale();
 	void _ComputeWorldToLocalMatrix();
 
 	inline bool _IsDirtyFlagSet( EDirtyFlags _Flag )
@@ -89,6 +98,7 @@ private:
 
 	quat m_Orientation;
 	vec3 m_Position;
+	vec3 m_Scale;
 	mat4 m_Transformation;
 
 	mat4 m_LocalToWorldMatrix;
