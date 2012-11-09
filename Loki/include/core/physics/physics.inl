@@ -36,7 +36,7 @@ inline vec3 GLMVec3( const btVector3& _BTVec )
 
 inline quat GLMQuat( const btQuaternion& _BTQuat )
 {
-	return quat(_BTQuat.x(), _BTQuat.y(), _BTQuat.z(), _BTQuat.w());
+	return quat(_BTQuat.w(), _BTQuat.x(), _BTQuat.y(), _BTQuat.z());
 }
 
 inline mat4 GLMMat( const btTransform& _BTTransform )

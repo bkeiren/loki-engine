@@ -9,7 +9,8 @@ namespace components
 
 Light::Lights Light::m_Lights;
 Light::Lights Light::m_LightsByType[];
-graphics::Texture* Light::m_AttenuationTexture = 0;
+graphics::Texture* Light::m_PointAttenuationTexture = 0;
+graphics::Texture* Light::m_SpotAttenuationTexture = 0;
 
 Light::Light()	:
 	m_LightType(LIGHT_POINT)
@@ -22,24 +23,39 @@ Light::Light()	:
 	,m_ShadowType(SHADOWS_NONE)
 	,m_Cookie(0)
 {
-	if (!m_AttenuationTexture)
+	SetSpotAngle(30.0f);
+
+	if (!m_PointAttenuationTexture)
 	{
-		m_AttenuationTexture = graphics::Texture::Load("resources//textures//LightAttenuation.bmp");
-		if (!m_AttenuationTexture)
+		m_PointAttenuationTexture = graphics::Texture::Load("resources//textures//PointLightAttenuation.bmp");
+		if (!m_PointAttenuationTexture)
 		{
-			LOG(VL_ERROR, "Light::Light: Failed to load light attenuation texture");
+			LOG(VL_ERROR, "Light::Light: Failed to load pointlight attenuation texture");
 		}
 		else
 		{
-			m_AttenuationTexture->SetTextureParameter(graphics::TEXTURE_WRAP_S, graphics::CLAMP_TO_EDGE);
-			m_AttenuationTexture->SetTextureParameter(graphics::TEXTURE_WRAP_T, graphics::CLAMP_TO_EDGE);
+			m_PointAttenuationTexture->SetTextureParameter(graphics::TEXTURE_WRAP_S, graphics::CLAMP_TO_EDGE);
+			m_PointAttenuationTexture->SetTextureParameter(graphics::TEXTURE_WRAP_T, graphics::CLAMP_TO_EDGE);
+		}
+	}
+	if (!m_SpotAttenuationTexture)
+	{
+		m_SpotAttenuationTexture = graphics::Texture::Load("resources//textures//SpotLightAttenuation.bmp");
+		if (!m_SpotAttenuationTexture)
+		{
+			LOG(VL_ERROR, "Light::Light: Failed to load spotlight attenuation texture");
+		}
+		else
+		{
+			m_SpotAttenuationTexture->SetTextureParameter(graphics::TEXTURE_WRAP_S, graphics::CLAMP_TO_EDGE);
+			m_SpotAttenuationTexture->SetTextureParameter(graphics::TEXTURE_WRAP_T, graphics::CLAMP_TO_EDGE);
 		}
 	}
 }
 
 Light::~Light()
 {
-
+	
 }
 
 Light::Lights& Light::GetAllLights()
@@ -52,9 +68,14 @@ Light::Lights& Light::GetAllLightsByType( ELightType _Type )
 	return m_LightsByType[_Type];
 }
 
-graphics::Texture* Light::GetAttenuationTexture()
+graphics::Texture* Light::GetPointAttenuationTexture()
 {
-	return m_AttenuationTexture;
+	return m_PointAttenuationTexture;
+}
+
+graphics::Texture* Light::GetSpotAttenuationTexture()
+{
+	return m_SpotAttenuationTexture;
 }
 
 Light::ELightType Light::GetLightType() const
@@ -112,6 +133,22 @@ Light::EShadowType Light::GetShadowType() const
 void Light::SetShadowType( EShadowType _ShadowType )
 {
 	m_ShadowType = _ShadowType;
+}
+
+f32 Light::GetSpotAngle() const
+{
+	return m_SpotAngle;
+}
+
+void Light::SetSpotAngle( f32 _Angle )
+{
+	m_SpotAngle = math::clamp(_Angle, 1.0f, 179.0f);
+	m_SpotBaseTangent = math::tan(math::radians(m_SpotAngle * 0.5f));
+}
+
+f32 Light::GetSpotBaseRadius() const
+{
+	return GetRange() * m_SpotBaseTangent;
 }
 
 void Light::_HandleEvent( const LkEvent& _Event )

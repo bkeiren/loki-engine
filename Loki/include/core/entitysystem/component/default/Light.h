@@ -46,7 +46,8 @@ public:
 	static Lights& GetAllLights();
 	static Lights& GetAllLightsByType( ELightType _Type );
 
-	static graphics::Texture* GetAttenuationTexture();
+	static graphics::Texture* GetPointAttenuationTexture();
+	static graphics::Texture* GetSpotAttenuationTexture();
 
 	ELightType GetLightType() const;
 	void SetLightType( ELightType _Type );
@@ -62,6 +63,11 @@ public:
 
 	EShadowType GetShadowType() const;
 	void SetShadowType( EShadowType _ShadowType );
+
+	// Spot-light only. Range [1 .. 179].
+	f32 GetSpotAngle() const;
+	void SetSpotAngle( f32 _Angle );
+	f32 GetSpotBaseRadius() const;
 private:
 	Light();
 	~Light();
@@ -77,6 +83,7 @@ private:
 
 	// For spot lights.
 	f32 m_SpotAngle;
+	f32 m_SpotBaseTangent;	// Calculated each time the spot angle changes. Is multiplied with the light range upon calling GetSpotBaseRadius().
 
 	// For directional lights.
 	f32 m_CookieSize;
@@ -98,7 +105,8 @@ private:
 	static Lights m_LightsByType[_LIGHT_COUNT];
 
 	// Texture used as a look-up table to find the attenuation factor for spot and point lights.
-	static graphics::Texture* m_AttenuationTexture;
+	static graphics::Texture* m_PointAttenuationTexture;
+	static graphics::Texture* m_SpotAttenuationTexture;
 };
 
 }

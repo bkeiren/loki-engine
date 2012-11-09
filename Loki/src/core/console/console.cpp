@@ -94,7 +94,6 @@ void LkConsole::RegisterCommands()
 	
 	m_Commands["getengineversion"] = Command("Provides the current engine version", &Console_GetEngineVersion);
 	m_Commands["getgameversion"] = Command("Provides the current game version and title", &Console_GetGameVersion);
-	m_Commands["getplayerid"] = Command("Provides the player's actor ID", &Console_GetPlayerID);
 	m_Commands["print"] = Command("Prints text to the console", &Console_PrintText, Command::AT_STRING);
 	m_Commands["godmode"] = Command("Turns godmode on or off", &Console_Godmode, Command::AT_BOOLEAN);
 	m_Commands["noclip"] = Command("Turns clipping on or off", &Console_Noclip, Command::AT_BOOLEAN);
@@ -102,21 +101,21 @@ void LkConsole::RegisterCommands()
 	m_Commands["help"] = Command("Prints a list of commands, synonymous to 'printcommands'", &Console_PrintAllCommands);
 	m_Commands["reloadconsoleui"] = Command("Reloads the console UI's resource file. Allows for on-the-fly changes to the UI without restarting the engine", &Console_ReloadConsoleUI);
 	m_Commands["getengineuptime"] = Command("Provides the duration for which the engine has been running", &Console_GetEngineUpTime);
-	m_Commands["getframerate"] = Command("Provides the current framerate and whether the framecap is enabled", &Console_GetFrameRate);
+	m_Commands["getfps"] = Command("Provides the current framerate and whether the framecap is enabled", &Console_GetFrameRate);
 	m_Commands["gettimestamp"] = Command("Provides a time stamp at the time of execution", &Console_GetTimeStamp);
 	m_Commands["close"] = Command("Closes the console window", &Console_CloseConsole);
 	m_Commands["bgconsole"] = Command("Hides or shows the background console window of the operating system", &Console_BGConsole, Command::AT_BOOLEAN);
 	m_Commands["desc"] = Command("Provides a description of a console command", &Console_CommandDescription, Command::AT_STRING);
-	m_Commands["sq_rscript"] = Command("Runs a Squirrel script", &Console_SquirrelRunScript, Command::AT_STRING);
-	m_Commands["sq_rscripta"] = Command("Runs a Squirrel script asynchronously", &Console_SquirrelRunScriptAsync, Command::AT_STRING);
-	m_Commands["lua_rscript"] = Command("Runs a Lua script", &Console_LuaRunScript, Command::AT_STRING);
-	m_Commands["lua_rscripta"] = Command("Runs a Lua script asynchronously", &Console_LuaRunScriptAsync, Command::AT_STRING);
-	m_Commands["lua_rstring"] = Command("Runs a Lua string", &Console_LuaRunString, Command::AT_STRING);
-	m_Commands["lua_rstringa"] = Command("Runs a Lua string asynchronously", &Console_LuaRunStringAsync, Command::AT_STRING);
-	m_Commands["cam.setpos"] = Command("Sets the current camera's position", &Console_CamSetPos, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
-	m_Commands["cam.getpos"] = Command("Gets the current camera's position", &Console_CamGetPos);
-	m_Commands["cam.setori"] = Command("Sets the current camera's orientation from a quaternion", &Console_CamSetOrientation, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
-	m_Commands["cam.getori"] = Command("Gets the current camera's orientation as a quaternion", &Console_CamGetOrientation);
+	m_Commands["sq.rscript"] = Command("Runs a Squirrel script", &Console_SquirrelRunScript, Command::AT_STRING);
+	m_Commands["sq.rscripta"] = Command("Runs a Squirrel script asynchronously", &Console_SquirrelRunScriptAsync, Command::AT_STRING);
+	m_Commands["lua.rscript"] = Command("Runs a Lua script", &Console_LuaRunScript, Command::AT_STRING);
+	m_Commands["lua.rscripta"] = Command("Runs a Lua script asynchronously", &Console_LuaRunScriptAsync, Command::AT_STRING);
+	m_Commands["lua.rstring"] = Command("Runs a Lua string", &Console_LuaRunString, Command::AT_STRING);
+	m_Commands["lua.rstringa"] = Command("Runs a Lua string asynchronously", &Console_LuaRunStringAsync, Command::AT_STRING);
+	m_Commands["cam.setpos"] = Command("Sets the current camera's position (X, Y, Z)", &Console_CamSetPos, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
+	m_Commands["cam.getpos"] = Command("Gets the current camera's position (X, Y, Z)", &Console_CamGetPos);
+	m_Commands["cam.setori"] = Command("Sets the current camera's orientation from a quaternion (W, X, Y, Z)", &Console_CamSetOrientation, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
+	m_Commands["cam.getori"] = Command("Gets the current camera's orientation as a quaternion (W, X, Y, Z)", &Console_CamGetOrientation);
 	m_Commands["cam.setfov"] = Command("Sets the current camera's field of view", &Console_CamSetFoV, Command::AT_FLOAT);
 	m_Commands["cam.getfov"] = Command("Gets the current camera's field of view", &Console_CamGetFoV);
 	m_Commands["cam.setznear"] = Command("Sets the current camera's z-near distance", &Console_CamSetZNear, Command::AT_FLOAT);
@@ -127,8 +126,8 @@ void LkConsole::RegisterCommands()
 	m_Commands["win.setpos"] = Command("Sets the window position", &Console_SetWindowPos, Command::AT_INT, Command::AT_INT);
 	m_Commands["win.setsize"] = Command("Sets the window size", &Console_SetWindowSize, Command::AT_INT, Command::AT_INT);
 	m_Commands["terminate"] = Command("Signals for termination of the game and the engine", &Console_Terminate);
-	m_Commands["renderer.tgbuffer"] = Command("Toggles the visualization of the GBuffer", &Console_GBufferTargets);
-	m_Commands["renderer.tlightvol"] = Command("Toggles the visualization of light volumes", &Console_LightVolumes);
+	m_Commands["gfx.tgb"] = Command("Toggles the visualization of the GBuffer", &Console_GBufferTargets);
+	m_Commands["gfx.tlv"] = Command("Toggles the visualization of light volumes", &Console_LightVolumes);
 }
 
 std::list<std::string> LkConsole::GetCommandsList()

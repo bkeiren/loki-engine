@@ -794,10 +794,13 @@ void LkRenderer::_RenderLightingPointLights()
 	SETCGPARAM("LKRT1", m_GBuffer->GetAttachmentTexture(GBUFFER_POSITIONS));
 	SETCGPARAM("LKRT2", m_GBuffer->GetAttachmentTexture(GBUFFER_NORMALS));
 	SETCGPARAM("LKRT3", m_GBuffer->GetAttachmentTexture(GBUFFER_DEPTH_STENCIL));
-	graphics::Texture* LightAttenuationTexture = components::Light::GetAttenuationTexture();
-	SETCGPARAM("LKATTTEXTURE", (LightAttenuationTexture)?(LightAttenuationTexture->GetTextureHandle()):(0));
+	graphics::Texture* PointLightAttenuationTexture = components::Light::GetPointAttenuationTexture();
+	graphics::Texture* SpotLightAttenuationTexture = components::Light::GetSpotAttenuationTexture();
+	SETCGPARAM("LKPOINTATTTEXTURE", (PointLightAttenuationTexture)?(PointLightAttenuationTexture->GetTextureHandle()):(0));
+	SETCGPARAM("LKSPOTATTTEXTURE", (SpotLightAttenuationTexture)?(SpotLightAttenuationTexture->GetTextureHandle()):(0));
 	SETCGPARAM("LKZNEAR", components::CameraComponent::GetActiveCamera()->GetNearPlane());
 	SETCGPARAM("LKZFAR", components::CameraComponent::GetActiveCamera()->GetFarPlane());
+	SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
 
 	components::Light::Lights& lights = components::Light::GetAllLights();
 	for (components::Light::LightsConstIter it = lights.begin(); it != lights.end(); ++it)
@@ -811,13 +814,11 @@ void LkRenderer::_RenderLightingPointLights()
 		SETCGPARAM("LKMODELVIEWPROJ", _ViewProjectionMatrix * _ModelMatrix);		// Set the model view projection matrix.
 		SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
 		SETCGPARAM("LKMODELMATRIXIT", mat3(math::inverseTranspose(_ModelMatrix)));		// Set the inverse transpose of the model matrix.	
-		SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
 		SETCGPARAM("LKLIGHTPOSITION", transform.GetPosition());
 		SETCGPARAM("LKLIGHTRANGE", light->GetRange());
 		SETCGPARAM("LKLIGHTCOLOR", light->GetColor());
 		SETCGPARAM("LKLIGHTINTENSITY", light->GetIntensity());
 		SETCGPARAM("LKLIGHTTYPE", light->GetLightType());
-		SETCGPARAM("LKLIGHTVECTOR", light->GetEntity()->GetTransform().GetOrientationVector());
 
 		switch (light->GetLightType())
 		{
@@ -828,20 +829,32 @@ void LkRenderer::_RenderLightingPointLights()
 				int32 PassID = 0;
 				while (m_LightEffect->HasNextPass())
 				{
-#ifndef DBG_VISUALIZATIONS
-					if (PassID == 4)
-					{
-						continue;
-					}
-#else
-					if (!m_DBG_VisualizeLightVolumes && PassID == 4)
-					{
-						continue;				
-					}
+#ifndef DBG_VISUALIZATIONS	
+					if (PassID == 4){ continue;	}
+#else						
+					if (!m_DBG_VisualizeLightVolumes && PassID == 4){ continue;	}
 #endif
-
 					// Awesomely condensed code...
 					(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(gluSphere(quadric, light->GetRange(), 20, 15));
+					++PassID;
+				}
+				break;
+			}
+		case components::Light::LIGHT_SPOT:
+			{
+				SETCGPARAM("LKIGHTSPOTANGLE", light->GetSpotAngle());
+				SETCGPARAM("LKLIGHTVECTOR", light->GetEntity()->GetTransform().GetOrientationVector());
+				
+				int32 PassID = 0;
+				while (m_LightEffect->HasNextPass())
+				{
+#ifndef DBG_VISUALIZATIONS	
+					if (PassID == 4){ continue;	}
+#else						
+					if (!m_DBG_VisualizeLightVolumes && PassID == 4){ continue;	}
+#endif
+					CameraInsideVolume = false;
+					(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(_DrawSpotLightCone(light->GetSpotBaseRadius(), light->GetRange(), 20));
 					++PassID;
 				}
 
@@ -1099,6 +1112,38 @@ bool LkRenderer::_ConstructGBuffer()
 	// 	m_GBuffer->SetClearStencil(0);
 	
 	return (m_GBuffer != 0);
+}
+
+void LkRenderer::_DrawSpotLightCone( f32 _Base, f32 _Height, uint32 _Slices )
+{
+	static const int MaxSlices = 128;
+	static float X[MaxSlices];
+	static float Z[MaxSlices];
+	if (_Slices > MaxSlices)
+	{
+		_Slices = MaxSlices;
+	}
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex3f(0.0f, 0.0f, 0.0f);	// Top of the cone.
+	float a = math::radians(360.0f / _Slices);
+	for (uint32 i = 0; i < _Slices; ++i)
+	{
+		X[i] = cos(a * i) * _Base;
+		Z[i] = sin(a * i) * _Base;
+
+		glVertex3f(X[i], _Height, Z[i]);
+	}
+	glVertex3f(_Base, _Height, 0.0f);
+	glEnd();
+
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex3f(0.0f, _Height, 0.0f);
+	for (uint32 i = 0; i < _Slices; ++i)
+	{
+		glVertex3f(X[i], _Height, Z[i]);
+	}
+	glVertex3f(_Base, _Height, 0.0f);
+	glEnd();
 }
 
 #undef GBUFFER_DIFFUSE_SPEC

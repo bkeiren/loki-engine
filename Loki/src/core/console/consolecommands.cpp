@@ -70,12 +70,6 @@ CONSOLE_FUNCTION(Console_GetGameVersion)
 	return res;
 }
 
-CONSOLE_FUNCTION(Console_GetPlayerID)
-{
-	LkConsole::CommandResult res("Command does not do anything yet");
-	return res;
-}
-
 CONSOLE_FUNCTION(Console_PrintText)
 {
 	LkConsole::CommandResult res("");
@@ -230,18 +224,18 @@ CONSOLE_FUNCTION(Console_CamGetPos)
 
 CONSOLE_FUNCTION(Console_CamSetOrientation)
 {
-	f32 x = _Command->m_Arguments[0].m_Float;
-	f32 y = _Command->m_Arguments[1].m_Float;
-	f32 z = _Command->m_Arguments[2].m_Float;
-	f32 w = _Command->m_Arguments[3].m_Float;
-	components::CameraComponent::GetActiveCamera()->GetEntity()->GetTransform().SetOrientation(quat(x, y, z, w));
+	f32 w = _Command->m_Arguments[0].m_Float;
+	f32 x = _Command->m_Arguments[1].m_Float;
+	f32 y = _Command->m_Arguments[2].m_Float;
+	f32 z = _Command->m_Arguments[3].m_Float;
+	components::CameraComponent::GetActiveCamera()->GetEntity()->GetTransform().SetOrientation(quat(w, x, y, z));
 	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_CamGetOrientation)
 {
 	quat o = components::CameraComponent::GetActiveCamera()->GetEntity()->GetTransform().GetOrientation();
-	return LkConsole::CommandResult("CamOrientation: [%f, %f, %f, %f]", o.x, o.y, o.z, o.w);	
+	return LkConsole::CommandResult("CamOrientation: [%f, %f, %f, %f]", o.w, o.x, o.y, o.z);	
 }
 
 CONSOLE_FUNCTION(Console_CamSetFoV)
