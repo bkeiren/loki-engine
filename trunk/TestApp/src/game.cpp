@@ -177,6 +177,7 @@ void MyGame::Update()
 		b->ApplyCentralImpulse(force);
 	}
 
+	// Toggle between freecam and orbit cam.
 	if (KEY_RELEASED('C'))
 	{
 		Entity* cam = g_EntitySystem->FindEntityByName("Main Camera");
