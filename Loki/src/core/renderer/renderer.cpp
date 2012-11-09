@@ -848,9 +848,25 @@ void LkRenderer::_RenderLightingPointLights()
 				SETCGPARAM("LKIGHTSPOTANGLE", SpotAngle);
 				SETCGPARAM("LKLIGHTVECTOR", LightVec);
 
-				float d = math::degrees(acos(math::dot(math::normalize(_EyePosition - transform.GetPosition()), LightVec)));
-				bool CameraInsideVolume =	(math::length(_EyePosition - transform.GetPosition()) < light->GetRange()) && 
-											(d < SpotAngle * 0.5f);
+				// Calculate if the camera is inside the cone shape.
+				// NOTE: A special case is when the camera is actually at the very tip of the cone shape.
+				// To handle this, an epsilon value (0.0001f) is used which is the margin of error that
+				// has been observed when calculating the distance from the camera to the actual light.
+				// If the distance from the camera to the light is less than this epsilon value, we 
+				// handle that case as if the camera is actually inside the cone volume.
+				// Otherwise, we calculate the angle between the camera and the light direction. If this
+				// angle is less than the cone angle, we're inside. Else we're outside. Works like a charm.
+				// NOTE: This could also be 'fixed' by always having the cone volume translated slightly so that
+				// the tip is not at the actual position of the transform. This would still cause an issue when the two
+				// positions align, but that should be very, very, very rare (Most likely never). That would save us
+				// from handling a special case here.
+				vec3 LightToEye = _EyePosition - transform.GetPosition();
+				float LightToEyeLength = math::length(LightToEye);
+				f32 d = (LightToEyeLength > 0.0001f) ?	// If the distance from the light to the camera is greater than our error margin...
+						(math::degrees(math::acos(math::dot(LightToEye / LightToEyeLength, LightVec)))) :	// Calculate the actual angle.
+						(0.0f);	// Assume we're inside.
+				bool CameraInsideVolume =	(LightToEyeLength < light->GetRange()) && 
+											(d <= SpotAngle * 0.5f);
 
 				int32 PassID = 0;
 				while (m_LightEffect->HasNextPass())
