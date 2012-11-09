@@ -54,7 +54,7 @@ VertexOutput mainVP( VertexInput IN )
 	OUT.PosHCustom = OUT.PosH;
 	
 	// Position of the light in view-space.
-	OUT.LightPositionViewSpace = mul(ModelView, float4(LightPosition, 1.0)).xyz;
+	OUT.LightPositionViewSpace = mul(ViewMatrix, float4(LightPosition, 1.0)).xyz;
 
 	return OUT;
 }
@@ -106,14 +106,14 @@ FragmentOutput mainFP( VertexOutput IN )
 	float Shininess = RT1SampleValue.a;
 	
 	// Sample surface position at fragment.
-	//float3 SurfacePositionViewSpace = ReconstructViewSpacePosition(RT1SampleValue, tex2D(RT3Sampler, TexCoord).r);
-	float3 SurfacePositionViewSpace = RT1SampleValue.xyz;
+	float3 SurfacePositionViewSpace = ReconstructViewSpacePosition(RT1SampleValue, tex2D(RT3Sampler, TexCoord).r);
+	//float3 SurfacePositionViewSpace = RT1SampleValue.xyz;
 	
 	// Sample surface normal at fragment.
 	float3 SurfaceNormalViewSpace = UnpackNormal(tex2D(RT2Sampler, TexCoord).xyz);
 	
 	// Calculate direction vector from light origin to fragment position.
-	float3 LightDir = SurfacePositionViewSpace - IN.LightPositionViewSpace;
+	float3 LightDir = IN.LightPositionViewSpace - SurfacePositionViewSpace;
 	
 	// Calculate light attenuation.
 	float Att = Attenuation(LightDir);
@@ -140,9 +140,6 @@ FragmentOutput mainFP( VertexOutput IN )
 	}
 
 	OUT.Color0 = final_color * Att;
-	//OUT.Color0 = float4((SurfaceNormalViewSpace + 1.0) * 0.5, 1.0);
-
-	OUT.Color0.rgb = float3(Att);
 
 	return OUT;
 }
