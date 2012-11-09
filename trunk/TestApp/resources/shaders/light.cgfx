@@ -113,7 +113,7 @@ FragmentOutput mainFP( VertexOutput IN )
 	float3 SurfaceNormalViewSpace = UnpackNormal(tex2D(RT2Sampler, TexCoord).xyz);
 	
 	// Calculate direction vector from light origin to fragment position.
-	float3 LightDir = IN.LightPositionViewSpace - SurfacePositionViewSpace;
+	float3 LightDir = SurfacePositionViewSpace - IN.LightPositionViewSpace;
 	
 	// Calculate light attenuation.
 	float Att = Attenuation(LightDir);
@@ -124,7 +124,7 @@ FragmentOutput mainFP( VertexOutput IN )
 	SurfaceNormalViewSpace = normalize(SurfaceNormalViewSpace);	// TODO: Is this normalization actually necessary?
 	LightDir = normalize(LightDir);
 	
-	float LambertTerm = dot(SurfaceNormalViewSpace, LightDir);
+	float LambertTerm = dot(SurfaceNormalViewSpace, -LightDir);
 	
 	if(LambertTerm > 0.0)
 	{
@@ -133,8 +133,7 @@ FragmentOutput mainFP( VertexOutput IN )
 		
 		float4 matSpecular = vec4(diffCol.a, diffCol.a, diffCol.a, 1.0);
 		float3 EyeVec = normalize(SurfacePositionViewSpace);	// Doesn't this need to be negated? Or atleast the z-component...?
-		//vec3 R = reflect(-LightDir, SurfaceNormalViewSpace);
-		float3 R = reflect(LightDir, SurfaceNormalViewSpace);
+		float3 R = reflect(-LightDir, SurfaceNormalViewSpace);
 		float specular = pow( max(dot(R, EyeVec), 0.0), Shininess );
 		final_color += float4(LightColor, 1.0) * matSpecular * specular;
 	}

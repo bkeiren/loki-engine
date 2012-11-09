@@ -104,6 +104,26 @@ bool MyGame::Init()
 	camEntity->InstantiateComponent<loki::components::scripts::OrbitCam>()->Disable();
 	//camEntity->InstantiateComponent<loki::components::Light>()->SetRange(30.0f);
 
+
+
+	Entity* entity12 = g_EntitySystem->SpawnEntity("TestEntity12");
+	loki::components::Light* light = entity12->InstantiateComponent<loki::components::Light>();
+	light->SetRange(40.0f);
+	light->SetColor(ColorRGB(1.0f, 0.2f, 0.0f));
+	entity12->GetTransform().Translate(vec3(-10.0f, -5.0f, 0.0f));
+
+	Entity* entity13 = g_EntitySystem->SpawnEntity("TestEntity13");
+	light = entity13->InstantiateComponent<loki::components::Light>();
+	light->SetRange(40.0f);
+	light->SetColor(ColorRGB(0.0f, 0.2f, 1.0f));
+	entity13->GetTransform().Translate(vec3(-2.0f, -8.0f, 3.0f));
+
+	Entity* entity14 = g_EntitySystem->SpawnEntity("TestEntity14");
+	light = entity14->InstantiateComponent<loki::components::Light>();
+	light->SetRange(40.0f);
+	light->SetColor(ColorRGB(0.4f, 0.4f, 0.4f));
+	entity14->GetTransform().Translate(vec3(-10.0f, -15.0f, 10.0f));
+
 // 	Entity* lightEntity = g_EntitySystem->SpawnEntity("Light0");
 // 	loki::components::Light* lc = lightEntity->InstantiateComponent<loki::components::Light>();
 // 	lc->SetRange(20.0f);
