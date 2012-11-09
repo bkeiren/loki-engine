@@ -1,4 +1,4 @@
 {
-	"mesh":"resources//models//sphere_small.obj",
+	"mesh":"resources//models//stanford_dragon.dae",
 	"materials":["resources//lma//test.lma"]
 }
