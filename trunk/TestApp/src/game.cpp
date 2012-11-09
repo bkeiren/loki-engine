@@ -99,17 +99,17 @@ bool MyGame::Init()
 	Entity* entity1 = g_EntitySystem->SpawnEntity("BoxEntity");
 	entity1->InstantiateComponent<loki::components::RenderComponent>();
 	rc = entity1->GetComponent<loki::components::RenderComponent>();
-
 	rc->SetModel(graphics::Model::Load("resources//lmo//cube.lmo"));
+
 
 	Entity* camEntity = g_EntitySystem->SpawnEntity("Main Camera");
 	camEntity->InstantiateComponent<loki::components::CameraComponent>()->Activate();
 	camEntity->InstantiateComponent<loki::components::scripts::FreeCam>()->Enable();
 	camEntity->InstantiateComponent<loki::components::scripts::OrbitCam>()->Disable();
-// 	lc = camEntity->InstantiateComponent<loki::components::Light>();
-// 	lc->SetLightType(loki::components::Light::LIGHT_SPOT);
-// 	lc->SetRange(30.0f);
-
+	lc = camEntity->InstantiateComponent<loki::components::Light>();
+	lc->SetLightType(loki::components::Light::LIGHT_SPOT);
+	lc->SetRange(30.0f);
+	lc->SetSpotAngle(50.0f);
 
 
 	Entity* entity12 = g_EntitySystem->SpawnEntity("TestEntity12");
