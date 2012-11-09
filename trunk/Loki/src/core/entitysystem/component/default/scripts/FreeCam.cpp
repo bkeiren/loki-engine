@@ -54,16 +54,16 @@ void FreeCam::Update()
 
 		if (g_Input->Get(BUTTON_MOUSELEFT))
 		{
-			int2 mouseDelta = -g_Input->GetMouseDelta();
+			int2 mouseDelta = g_Input->GetMouseDelta();
 			t.RotateX((f32)mouseDelta.y / 3);
-			t.LocalRotateY((f32)mouseDelta.x / 3);
+			t.LocalRotateY(-(f32)mouseDelta.x / 3);
 		}
 
 		static f32 camSpeed = 0.3f;
 		camSpeed = max(camSpeed + (g_Input->GetMouseWheelDelta() * 0.25f), 0.1f);
 
-		t.LocalTranslate( -FORWARD * ((((bool)g_Input->Get('W')) * camSpeed) - (((bool)g_Input->Get('S')) * camSpeed)) );
-		t.LocalTranslate( SIDE * ((((bool)g_Input->Get('D')) * camSpeed) - (((bool)g_Input->Get('A')) * camSpeed)) );
+		t.LocalTranslate( FORWARD * ((((bool)g_Input->Get('W')) * camSpeed) - (((bool)g_Input->Get('S')) * camSpeed)) );
+		t.LocalTranslate( SIDE * ((((bool)g_Input->Get('A')) * camSpeed) - (((bool)g_Input->Get('D')) * camSpeed)) );
 		t.Translate( UP * ((((bool)g_Input->Get('X')) * camSpeed) - (((bool)g_Input->Get('Z')) * camSpeed)) );	
 	}
 }

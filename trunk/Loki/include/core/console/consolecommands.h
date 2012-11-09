@@ -13,7 +13,6 @@ namespace loki
 
 CONSOLE_FUNCTION(Console_GetEngineVersion);
 CONSOLE_FUNCTION(Console_GetGameVersion);
-CONSOLE_FUNCTION(Console_GetPlayerID);
 CONSOLE_FUNCTION(Console_PrintText);
 CONSOLE_FUNCTION(Console_Godmode);
 CONSOLE_FUNCTION(Console_Noclip);

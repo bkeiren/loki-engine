@@ -122,7 +122,11 @@ const mat4& CameraComponent::GetProjectionMatrix()
 
 mat4 CameraComponent::GetViewMatrix()
 {
-	mat4 m = math::inverse(GetEntity()->GetTransform().GetMatrix());
+	mat4 m = GetEntity()->GetTransform().GetMatrix();
+	m[0] = -m[0];	// This is required in order to make the camera actually point in the same way as
+	m[2] = -m[2];	// all other entities are oriented (Meaning, Z equals forward). This isn't strictly required
+					// but it helps in making controlling the camera a lot more intuitive.
+	m = math::inverse(m);
 	return m;
 }
 

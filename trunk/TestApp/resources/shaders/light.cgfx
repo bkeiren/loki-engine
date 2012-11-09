@@ -37,8 +37,10 @@ float3 LightVector					: LKLIGHTVECTOR;	// Direction in the case of a directiona
 float3 LightColor					: LKLIGHTCOLOR;
 float LightIntensity				: LKLIGHTINTENSITY;
 int LightType						: LKLIGHTTYPE;	// 0 = Point, 1 = Spot, 2 = Directional, 3 = Area.
+float SpotLightAngle				: LKIGHTSPOTANGLE;	// Spotlight specific.
 
-sampler2D LightAttenuationTexture	: LKATTTEXTURE;
+sampler2D PointLightAttenuationTexture	: LKPOINTATTTEXTURE;
+sampler2D SpotLightAttenuationTexture	: LKSPOTATTTEXTURE;
 
 // Vertex program entry point.
 VertexOutput mainVP( VertexInput IN )
@@ -48,7 +50,7 @@ VertexOutput mainVP( VertexInput IN )
 	float4x4 ModelView = mul(ViewMatrix, ModelMatrix);
 	
 	// Vertex position in clip space.
-	OUT.PosH = mul(ModelViewProjection, float4(IN.Position, 1));
+	OUT.PosH = mul(ModelViewProjection, float4(IN.Position, 1.0));
 	
 	// Vertex position in clip space again because we need to use it in the fragment shader.
 	OUT.PosHCustom = OUT.PosH;
@@ -80,7 +82,7 @@ float3 UnpackNormal( float3 _PackedNormal )
 	return (_PackedNormal * 2.0) - 1.0;
 }
 
-float Attenuation( float3 _VecFromLightToSurface )
+float AttenuationPoint( float3 _VecFromLightToSurface )
 {
 	// This function calculates the normalized distance value between the light position and the surface
 	// position. This value is then used to sample from a light attenuation texture. 
@@ -89,7 +91,18 @@ float Attenuation( float3 _VecFromLightToSurface )
 	// if this is supported on the C++ side).
 	
  	float f = (dot(_VecFromLightToSurface, _VecFromLightToSurface) / (LightRange * LightRange));
- 	return tex2D(LightAttenuationTexture, float2(f, 0.0)).r * LightIntensity;
+ 	return tex2D(PointLightAttenuationTexture, float2(f, 0.0)).r * LightIntensity;
+}
+
+float AttenuationSpot( float3 _VecFromLightToSurface )
+{
+	float3 Direction = normalize(mul(float3x3(ViewMatrix), LightVector));
+	float3 L = normalize(_VecFromLightToSurface);
+	float SpotLightHalfAngle = SpotLightAngle * 0.5;
+	float f = degrees(acos(dot(L, Direction))) / SpotLightHalfAngle;
+	float f2 = (dot(_VecFromLightToSurface, _VecFromLightToSurface) / (LightRange * LightRange));
+	return tex2D(SpotLightAttenuationTexture, float2(f, 0.0)).r * 
+		   tex2D(SpotLightAttenuationTexture, float2(f2, 0.0)).r * LightIntensity;
 }
 
 // Fragment program entry point.
@@ -116,7 +129,15 @@ FragmentOutput mainFP( VertexOutput IN )
 	float3 LightDir = SurfacePositionViewSpace - IN.LightPositionViewSpace;
 	
 	// Calculate light attenuation.
-	float Att = Attenuation(LightDir);
+	float Att = 1.0;
+	if (LightType == 0)
+	{
+		Att = AttenuationPoint(LightDir);
+	}
+	else if (LightType == 1)
+	{
+		Att = AttenuationSpot(LightDir);
+	}
 	
 	// Variable to hold the final fragment color.
 	float4 final_color = vec4(0.0, 0.0, 0.0, 1.0);
@@ -126,7 +147,7 @@ FragmentOutput mainFP( VertexOutput IN )
 	
 	float LambertTerm = dot(SurfaceNormalViewSpace, -LightDir);
 	
-	if(LambertTerm > 0.0)
+	if(LambertTerm > 0.0 && Att > 0.0)
 	{
 		float4 diffCol = tex2D(RT0Sampler, TexCoord);
 		final_color += float4(diffCol.rgb, 1.0) * float4(LightColor.rgb, 1.0) * LambertTerm;
