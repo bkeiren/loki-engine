@@ -809,7 +809,6 @@ void LkRenderer::_RenderLightingPointLights()
 
 		Transform& transform = light->GetEntity()->GetTransform();
 		mat4 _ModelMatrix = transform.GetMatrix();
-		bool CameraInsideVolume = math::length(_EyePosition - transform.GetPosition()) < light->GetRange();
 		_ModelMatrix = math::gtc::matrix_transform::rotate(_ModelMatrix, 90.0f, vec3(1.0f, 0.0f, 0.0f));
 		SETCGPARAM("LKMODELVIEWPROJ", _ViewProjectionMatrix * _ModelMatrix);		// Set the model view projection matrix.
 		SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
@@ -824,6 +823,8 @@ void LkRenderer::_RenderLightingPointLights()
 		{
 		case components::Light::LIGHT_POINT:
 			{
+				bool CameraInsideVolume = math::length(_EyePosition - transform.GetPosition()) < light->GetRange();
+
 				// TODO: Replace this with a VBO or something. At least not immediate mode.
 				static GLUquadric* quadric = gluNewQuadric();
 				int32 PassID = 0;
@@ -842,9 +843,15 @@ void LkRenderer::_RenderLightingPointLights()
 			}
 		case components::Light::LIGHT_SPOT:
 			{
-				SETCGPARAM("LKIGHTSPOTANGLE", light->GetSpotAngle());
-				SETCGPARAM("LKLIGHTVECTOR", light->GetEntity()->GetTransform().GetOrientationVector());
-				
+				f32 SpotAngle = light->GetSpotAngle();
+				vec3 LightVec = light->GetEntity()->GetTransform().GetOrientationVector();
+				SETCGPARAM("LKIGHTSPOTANGLE", SpotAngle);
+				SETCGPARAM("LKLIGHTVECTOR", LightVec);
+
+				float d = math::degrees(acos(math::dot(math::normalize(_EyePosition - transform.GetPosition()), LightVec)));
+				bool CameraInsideVolume =	(math::length(_EyePosition - transform.GetPosition()) < light->GetRange()) && 
+											(d < SpotAngle * 0.5f);
+
 				int32 PassID = 0;
 				while (m_LightEffect->HasNextPass())
 				{
@@ -853,7 +860,6 @@ void LkRenderer::_RenderLightingPointLights()
 #else						
 					if (!m_DBG_VisualizeLightVolumes && PassID == 4){ continue;	}
 #endif
-					CameraInsideVolume = false;
 					(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(_DrawSpotLightCone(light->GetSpotBaseRadius(), light->GetRange(), 20));
 					++PassID;
 				}
@@ -1114,11 +1120,11 @@ bool LkRenderer::_ConstructGBuffer()
 	return (m_GBuffer != 0);
 }
 
-void LkRenderer::_DrawSpotLightCone( f32 _Base, f32 _Height, uint32 _Slices )
+void LkRenderer::_DrawSpotLightCone( f32 _Base, f32 _Height, int32 _Slices )
 {
-	static const int MaxSlices = 128;
-	static float X[MaxSlices];
-	static float Z[MaxSlices];
+	static const int MaxSlices = 127;
+	static float X[MaxSlices + 1];
+	static float Z[MaxSlices + 1];
 	if (_Slices > MaxSlices)
 	{
 		_Slices = MaxSlices;
@@ -1126,23 +1132,21 @@ void LkRenderer::_DrawSpotLightCone( f32 _Base, f32 _Height, uint32 _Slices )
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex3f(0.0f, 0.0f, 0.0f);	// Top of the cone.
 	float a = math::radians(360.0f / _Slices);
-	for (uint32 i = 0; i < _Slices; ++i)
+	for (int32 i = 0; i <= _Slices; ++i)
 	{
 		X[i] = cos(a * i) * _Base;
 		Z[i] = sin(a * i) * _Base;
 
 		glVertex3f(X[i], _Height, Z[i]);
 	}
-	glVertex3f(_Base, _Height, 0.0f);
 	glEnd();
 
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex3f(0.0f, _Height, 0.0f);
-	for (uint32 i = 0; i < _Slices; ++i)
+	for (int32 i = _Slices; i >= 0; --i)	// Reversed order.
 	{
 		glVertex3f(X[i], _Height, Z[i]);
 	}
-	glVertex3f(_Base, _Height, 0.0f);
 	glEnd();
 }
 
