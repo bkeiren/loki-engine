@@ -106,10 +106,9 @@ bool MyGame::Init()
 	camEntity->InstantiateComponent<loki::components::CameraComponent>()->Activate();
 	camEntity->InstantiateComponent<loki::components::scripts::FreeCam>()->Enable();
 	camEntity->InstantiateComponent<loki::components::scripts::OrbitCam>()->Disable();
-	lc = camEntity->InstantiateComponent<loki::components::Light>();
-	lc->SetLightType(loki::components::Light::LIGHT_SPOT);
-	lc->SetRange(30.0f);
-	//camEntity->InstantiateComponent<loki::components::Light>()->SetRange(30.0f);
+// 	lc = camEntity->InstantiateComponent<loki::components::Light>();
+// 	lc->SetLightType(loki::components::Light::LIGHT_SPOT);
+// 	lc->SetRange(30.0f);
 
 
 
