@@ -260,10 +260,20 @@ CONSOLE_FUNCTION(Console_CamSetZFar)
 	components::CameraComponent::GetActiveCamera()->SetFarPlane(_Command->m_Arguments[0].m_Float);
 	return LkConsole::CommandResult("");
 }
+
 CONSOLE_FUNCTION(Console_CamGetZPlanes)
 {
 	return LkConsole::CommandResult("Cam ZNear: %f\tZFar: %f", components::CameraComponent::GetActiveCamera()->GetNearPlane(), 
 															   components::CameraComponent::GetActiveCamera()->GetFarPlane());
+}
+
+CONSOLE_FUNCTION(Console_CamLookAt)
+{
+	float x = _Command->m_Arguments[0].m_Float;
+	float y = _Command->m_Arguments[1].m_Float;
+	float z = _Command->m_Arguments[2].m_Float;
+	components::CameraComponent::GetActiveCamera()->LookAt(vec3(x, y, z));
+	return LkConsole::CommandResult("");
 }
 
 CONSOLE_FUNCTION(Console_SetFullscreen)

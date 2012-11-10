@@ -95,6 +95,7 @@ void Transform::SetOrientation( const quat& _Orientation )
 	if (_IsDirtyFlagSet(DIRTY_FLAG_POS_ORI_SCALE))
 	{
 		_ComputePosition();
+		_ComputeScale();
 	}
 
 	m_Orientation = _Orientation;
@@ -108,6 +109,7 @@ void Transform::SetPosition( const vec3& _Position )
 	if (_IsDirtyFlagSet(DIRTY_FLAG_POS_ORI_SCALE))
 	{
 		_ComputeOrientation();
+		_ComputeScale();
 	}
 
 	m_Position = _Position;
@@ -209,7 +211,13 @@ void Transform::Scale( const vec3& _Scale )
 
 void Transform::LookAt( const vec3& _Target )
 {
-	SetMatrix(math::gtc::matrix_transform::lookAt(GetPosition(), _Target, UP));
+	vec3 pos = GetPosition();
+	mat4 m = math::inverse(math::lookAt(pos, _Target, UP));
+	m[0] = -m[0];
+	m[2] = -m[2];
+//	SetMatrix(m);
+	SetPosition(pos);
+	SetOrientation(math::quat_cast(m));
 }
 
 bool Transform::ScaleIsUniform()

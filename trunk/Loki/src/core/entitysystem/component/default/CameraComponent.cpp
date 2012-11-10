@@ -107,8 +107,7 @@ void CameraComponent::SetFieldOfView( f32 _FieldOfView )
 
 void CameraComponent::LookAt( const vec3& _Target )
 {
-	vec3 pos = GetTransform().GetPosition();
-	GetTransform().SetMatrix(math::inverse(math::lookAt(pos, _Target, UP)));
+	GetTransform().LookAt(_Target);
 }
 
 const mat4& CameraComponent::GetProjectionMatrix()
