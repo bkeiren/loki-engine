@@ -39,6 +39,7 @@ CONSOLE_FUNCTION(Console_CamGetFoV);
 CONSOLE_FUNCTION(Console_CamSetZNear);
 CONSOLE_FUNCTION(Console_CamSetZFar);
 CONSOLE_FUNCTION(Console_CamGetZPlanes);
+CONSOLE_FUNCTION(Console_CamLookAt);
 CONSOLE_FUNCTION(Console_SetFullscreen);
 CONSOLE_FUNCTION(Console_SetWindowPos);
 CONSOLE_FUNCTION(Console_SetWindowSize);

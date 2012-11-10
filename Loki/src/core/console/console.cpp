@@ -121,6 +121,7 @@ void LkConsole::RegisterCommands()
 	m_Commands["cam.setznear"] = Command("Sets the current camera's z-near distance", &Console_CamSetZNear, Command::AT_FLOAT);
 	m_Commands["cam.setzfar"] = Command("Sets the current camera's z-far distance", &Console_CamSetZFar, Command::AT_FLOAT);
 	m_Commands["cam.getzplanes"] = Command("Gets the current camera's z-distances (both near and far)", &Console_CamGetZPlanes);
+	m_Commands["cam.lookat"] = Command("Orientates the camera to look at the specified location (X, Y, Z)", &Console_CamLookAt, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
 	m_Commands["fullscreen"] = Command("Sets the window to fullscreen or windowed mode. Synonymous to 'win.fullscr'", &Console_SetFullscreen, Command::AT_BOOLEAN);
 	m_Commands["win.fullscr"] = Command("Sets the window to fullscreen or windowed mode. Synonymous to 'fullscreen'", &Console_SetFullscreen, Command::AT_BOOLEAN);
 	m_Commands["win.setpos"] = Command("Sets the window position", &Console_SetWindowPos, Command::AT_INT, Command::AT_INT);
