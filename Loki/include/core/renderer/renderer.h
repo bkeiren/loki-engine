@@ -99,8 +99,6 @@ private:
 
 	bool _ConstructGBuffer();
 
-	void _DrawSpotLightCone( f32 _Base, f32 _Height, int32 _Slices );
-
 	GLint m_PointLightShaderColorID;
 	GLint m_PointLightShaderPositionID;
 	GLint m_PointLightShaderRadiusID;
