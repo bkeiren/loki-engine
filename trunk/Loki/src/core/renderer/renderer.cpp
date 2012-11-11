@@ -15,6 +15,7 @@
 #include "core/graphics/Model.h"
 
 #include "core/graphics/FrameBuffer.h"
+#include "core/graphics/DisplayList.h"
 
 #include "core/entitysystem/component/default/RenderComponent.h"
 #include "core/entitysystem/component/default/Light.h"
@@ -784,22 +785,24 @@ void LkRenderer::_RenderLightingPointLights()
 {
 #define SETCGPARAM(paramname, value)	{LkEffectParameter* param = m_LightEffect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
 
-	mat4 _ProjectionMatrix = components::CameraComponent::GetActiveCamera()->GetProjectionMatrix();
-	mat4 _ViewMatrix = components::CameraComponent::GetActiveCamera()->GetViewMatrix();
+	components::CameraComponent* camera = components::CameraComponent::GetActiveCamera();
+	mat4 _ProjectionMatrix = camera->GetProjectionMatrix();
+	mat4 _ViewMatrix = camera->GetViewMatrix();
 	mat4 _ViewProjectionMatrix = _ProjectionMatrix * _ViewMatrix;
-	vec3 _EyePosition = vec3(math::inverse(_ViewMatrix)[3]);
+	vec3 _EyePosition = camera->GetEntity()->GetTransform().GetPosition();
+
+	graphics::Texture* PointLightAttenuationTexture = components::Light::GetPointAttenuationTexture();
+	graphics::Texture* SpotLightAttenuationTexture = components::Light::GetSpotAttenuationTexture();
 
 	SETCGPARAM("LKEYEPOSITION", _EyePosition);
 	SETCGPARAM("LKRT0", m_GBuffer->GetAttachmentTexture(GBUFFER_DIFFUSE_SPEC));
 	SETCGPARAM("LKRT1", m_GBuffer->GetAttachmentTexture(GBUFFER_POSITIONS));
 	SETCGPARAM("LKRT2", m_GBuffer->GetAttachmentTexture(GBUFFER_NORMALS));
 	SETCGPARAM("LKRT3", m_GBuffer->GetAttachmentTexture(GBUFFER_DEPTH_STENCIL));
-	graphics::Texture* PointLightAttenuationTexture = components::Light::GetPointAttenuationTexture();
-	graphics::Texture* SpotLightAttenuationTexture = components::Light::GetSpotAttenuationTexture();
 	SETCGPARAM("LKPOINTATTTEXTURE", (PointLightAttenuationTexture)?(PointLightAttenuationTexture->GetTextureHandle()):(0));
 	SETCGPARAM("LKSPOTATTTEXTURE", (SpotLightAttenuationTexture)?(SpotLightAttenuationTexture->GetTextureHandle()):(0));
-	SETCGPARAM("LKZNEAR", components::CameraComponent::GetActiveCamera()->GetNearPlane());
-	SETCGPARAM("LKZFAR", components::CameraComponent::GetActiveCamera()->GetFarPlane());
+	SETCGPARAM("LKZNEAR", camera->GetNearPlane());
+	SETCGPARAM("LKZFAR", camera->GetFarPlane());
 	SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
 
 	components::Light::Lights& lights = components::Light::GetAllLights();
@@ -809,7 +812,7 @@ void LkRenderer::_RenderLightingPointLights()
 
 		Transform& transform = light->GetEntity()->GetTransform();
 		mat4 _ModelMatrix = transform.GetMatrix();
-		_ModelMatrix = math::gtc::matrix_transform::rotate(_ModelMatrix, 90.0f, vec3(1.0f, 0.0f, 0.0f));
+		//_ModelMatrix = math::gtc::matrix_transform::rotate(_ModelMatrix, 90.0f, vec3(1.0f, 0.0f, 0.0f));
 		SETCGPARAM("LKMODELVIEWPROJ", _ViewProjectionMatrix * _ModelMatrix);		// Set the model view projection matrix.
 		SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
 		SETCGPARAM("LKMODELMATRIXIT", mat3(math::inverseTranspose(_ModelMatrix)));		// Set the inverse transpose of the model matrix.	
@@ -836,7 +839,8 @@ void LkRenderer::_RenderLightingPointLights()
 					if (!m_DBG_VisualizeLightVolumes && PassID == 4){ continue;	}
 #endif
 					// Awesomely condensed code...
-					(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(gluSphere(quadric, light->GetRange(), 20, 15));
+					//(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(gluSphere(quadric, light->GetRange(), 20, 15));
+					(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(light->GetGeometry()->Draw());
 					++PassID;
 				}
 				break;
@@ -844,7 +848,7 @@ void LkRenderer::_RenderLightingPointLights()
 		case components::Light::LIGHT_SPOT:
 			{
 				f32 SpotAngle = light->GetSpotAngle();
-				vec3 LightVec = light->GetEntity()->GetTransform().GetOrientationVector();
+				vec3 LightVec = transform.GetOrientationVector();
 				SETCGPARAM("LKIGHTSPOTANGLE", SpotAngle);
 				SETCGPARAM("LKLIGHTVECTOR", LightVec);
 
@@ -876,7 +880,7 @@ void LkRenderer::_RenderLightingPointLights()
 #else						
 					if (!m_DBG_VisualizeLightVolumes && PassID == 4){ continue;	}
 #endif
-					(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(_DrawSpotLightCone(light->GetSpotBaseRadius(), light->GetRange(), 20));
+					(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(light->GetGeometry()->Draw());
 					++PassID;
 				}
 
@@ -1134,36 +1138,6 @@ bool LkRenderer::_ConstructGBuffer()
 	// 	m_GBuffer->SetClearStencil(0);
 	
 	return (m_GBuffer != 0);
-}
-
-void LkRenderer::_DrawSpotLightCone( f32 _Base, f32 _Height, int32 _Slices )
-{
-	static const int MaxSlices = 127;
-	static float X[MaxSlices + 1];
-	static float Z[MaxSlices + 1];
-	if (_Slices > MaxSlices)
-	{
-		_Slices = MaxSlices;
-	}
-	glBegin(GL_TRIANGLE_FAN);
-	glVertex3f(0.0f, 0.0f, 0.0f);	// Top of the cone.
-	float a = math::radians(360.0f / _Slices);
-	for (int32 i = 0; i <= _Slices; ++i)
-	{
-		X[i] = cos(a * i) * _Base;
-		Z[i] = sin(a * i) * _Base;
-
-		glVertex3f(X[i], _Height, Z[i]);
-	}
-	glEnd();
-
-	glBegin(GL_TRIANGLE_FAN);
-	glVertex3f(0.0f, _Height, 0.0f);
-	for (int32 i = _Slices; i >= 0; --i)	// Reversed order.
-	{
-		glVertex3f(X[i], _Height, Z[i]);
-	}
-	glEnd();
 }
 
 #undef GBUFFER_DIFFUSE_SPEC

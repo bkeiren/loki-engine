@@ -10,6 +10,7 @@ struct VertexOutput
 	float4 PosH		: HPOS;
 	float4 PosHCustom	: TEXCOORD1;	// Because we can't acces HPOS semantic in fragment.
 	float3 LightPositionViewSpace : TEXCOORD2;
+	float3 LightVectorViewSpace : TEXCOORD3;
 };
 
 // Structure for data output from the fragment program.
@@ -57,6 +58,9 @@ VertexOutput mainVP( VertexInput IN )
 	
 	// Position of the light in view-space.
 	OUT.LightPositionViewSpace = mul(ViewMatrix, float4(LightPosition, 1.0)).xyz;
+	
+	// Light vector (Direction) in view-space.
+	OUT.LightVectorViewSpace = normalize(mul(ViewMatrix, float4(LightVector, 0.0)).xyz);
 
 	return OUT;
 }
@@ -94,13 +98,12 @@ float AttenuationPoint( float3 _VecFromLightToSurface )
  	return tex2D(PointLightAttenuationTexture, float2(f, 0.0)).r * LightIntensity;
 }
 
-float AttenuationSpot( float3 _VecFromLightToSurface )
+float AttenuationSpot( float3 _VecFromLightToSurfaceViewSpace, float3 _LightDirectionViewSpace )
 {
-	float3 Direction = normalize(mul(float3x3(ViewMatrix), LightVector));
-	float3 L = normalize(_VecFromLightToSurface);
 	float SpotLightHalfAngle = SpotLightAngle * 0.5;
-	float f = degrees(acos(dot(L, Direction))) / SpotLightHalfAngle;
-	float f2 = (dot(_VecFromLightToSurface, _VecFromLightToSurface) / (LightRange * LightRange));
+	float3 L = normalize(_VecFromLightToSurfaceViewSpace);	
+	float f = degrees(acos(dot(L, _LightDirectionViewSpace))) / SpotLightHalfAngle;
+	float f2 = (dot(_VecFromLightToSurfaceViewSpace, _VecFromLightToSurfaceViewSpace) / (LightRange * LightRange));
 	return tex2D(SpotLightAttenuationTexture, float2(f, 0.0)).r * 
 		   tex2D(SpotLightAttenuationTexture, float2(f2, 0.0)).r * LightIntensity;
 }
@@ -136,7 +139,7 @@ FragmentOutput mainFP( VertexOutput IN )
 	}
 	else if (LightType == 1)
 	{
-		Att = AttenuationSpot(LightDir);
+		Att = AttenuationSpot(LightDir, IN.LightVectorViewSpace);
 	}
 	
 	// Variable to hold the final fragment color.
