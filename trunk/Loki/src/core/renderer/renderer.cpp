@@ -4,7 +4,7 @@
 #include "core/renderer/renderer.h"
 #include "core/renderer/scene/scene.h"
 #include "core/renderer/GLSLShader/glslshader.h"
-#include "core/graphics/Texture.h"
+#include "core/graphics/Texture2D.h"
 #include "core/resourcemanager/texturemanager.h"
 #include "core/resourcemanager/modelmanager.h"
 #include "core/renderer/effect/effectmanager.h"
@@ -791,8 +791,8 @@ void LkRenderer::_RenderLightingPointLights()
 	mat4 _ViewProjectionMatrix = _ProjectionMatrix * _ViewMatrix;
 	vec3 _EyePosition = camera->GetEntity()->GetTransform().GetPosition();
 
-	graphics::Texture* PointLightAttenuationTexture = components::Light::GetPointAttenuationTexture();
-	graphics::Texture* SpotLightAttenuationTexture = components::Light::GetSpotAttenuationTexture();
+	graphics::Texture2D* PointLightAttenuationTexture = components::Light::GetPointAttenuationTexture();
+	graphics::Texture2D* SpotLightAttenuationTexture = components::Light::GetSpotAttenuationTexture();
 
 	SETCGPARAM("LKEYEPOSITION", _EyePosition);
 	SETCGPARAM("LKRT0", m_GBuffer->GetAttachmentTexture(GBUFFER_DIFFUSE_SPEC));

@@ -11,7 +11,7 @@ namespace loki
 
 namespace graphics
 {
-	class Texture;
+	class Texture2D;
 	class DisplayList;
 }
 
@@ -47,8 +47,8 @@ public:
 	static Lights& GetAllLights();
 	static Lights& GetAllLightsByType( ELightType _Type );
 
-	static graphics::Texture* GetPointAttenuationTexture();
-	static graphics::Texture* GetSpotAttenuationTexture();
+	static graphics::Texture2D* GetPointAttenuationTexture();
+	static graphics::Texture2D* GetSpotAttenuationTexture();
 
 	ELightType GetLightType() const;
 	void SetLightType( ELightType _Type );
@@ -106,7 +106,7 @@ private:
 	ColorRGB m_Color;
 	f32 m_Intensity;	// Default 1.0. Min 0.0, max 8.0.
 	EShadowType m_ShadowType;
-	graphics::Texture* m_Cookie;	// 2D for spot and directional lights, cubemap for point lights.
+	graphics::Texture2D* m_Cookie;	// 2D for spot and directional lights, cubemap for point lights.
 
 	// All lights in one convenient list.
 	static Lights m_Lights;
@@ -115,8 +115,8 @@ private:
 	static Lights m_LightsByType[_LIGHT_COUNT];
 
 	// Texture used as a look-up table to find the attenuation factor for spot and point lights.
-	static graphics::Texture* m_PointAttenuationTexture;
-	static graphics::Texture* m_SpotAttenuationTexture;
+	static graphics::Texture2D* m_PointAttenuationTexture;
+	static graphics::Texture2D* m_SpotAttenuationTexture;
 };
 
 }

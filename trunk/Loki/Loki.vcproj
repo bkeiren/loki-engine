@@ -907,11 +907,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\baseclass\istate.h"
+			RelativePath=".\include\core\states\baseclass\istate.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\baseclass\istate.h"
+			RelativePath=".\include\states\baseclass\istate.h"
 			>
 		</File>
 		<File
@@ -1491,11 +1491,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\SplashState.h"
+			RelativePath=".\include\core\states\SplashState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\SplashState.h"
+			RelativePath=".\include\states\SplashState.h"
 			>
 		</File>
 		<File
@@ -1612,6 +1612,38 @@
 		</File>
 		<File
 			RelativePath=".\include\core\graphics\Texture.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\graphics\Texture1D.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\Texture1D.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\graphics\Texture2D.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\Texture2D.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\graphics\Texture3D.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\Texture3D.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\graphics\TextureCube.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\TextureCube.h"
 			>
 		</File>
 		<File

@@ -1,5 +1,5 @@
 #include "core/renderer/image/image.h"
-#include "core/graphics/Texture.h"
+#include "core/graphics/Texture2D.h"
 #include "core/renderer/renderer.h"
 #include "core/resourcemanager/texturemanager.h"
 
@@ -124,14 +124,14 @@ bool LkImage::AddTexture( const char* _Texture )
 	}
 
 //	LkTexture* tex = g_TextureManager->GetResource(_Texture);
-	graphics::Texture* tex = graphics::Texture::Load(_Texture);
+	graphics::Texture2D* tex = graphics::Texture2D::Load(_Texture);
 	
 	if (!tex)
 	{
 		return false;
 	}
 
-	m_Textures.push_back(std::pair<bool, graphics::Texture*>(true, tex));
+	m_Textures.push_back(std::pair<bool, graphics::Texture2D*>(true, tex));
 	return true;
 }
 
@@ -148,7 +148,7 @@ bool LkImage::AddTextureFromMemory( const void* _Data, uint32 _Width, uint32 _He
 	}
 
 	//LkTexture* tex = new LkTexture("LkImage::AddTextureFromMemory:Texture", texture);
-	graphics::Texture* tex = graphics::Texture::Create();
+	graphics::Texture2D* tex = graphics::Texture2D::Create();
 
 	tex->Bind();
 
@@ -172,7 +172,7 @@ bool LkImage::AddTextureFromMemory( const void* _Data, uint32 _Width, uint32 _He
 
 	tex->UpdateGLInformation();
 
-	m_Textures.push_back(std::pair<bool, graphics::Texture*>(false, tex));
+	m_Textures.push_back(std::pair<bool, graphics::Texture2D*>(false, tex));
 	//*(const_cast<int32*>(&(tex->m_Width))) = _Width;
 	//*(const_cast<int32*>(&(tex->m_Height))) = _Height;
 
@@ -185,7 +185,7 @@ bool LkImage::AddTextureFromMemory( const void* _Data, uint32 _Width, uint32 _He
 
 void LkImage::SetSubTextureFromMemory( const void* _Data, int32 _XOffset, int32 _YOffset, uint32 _Width, uint32 _Height, ETextureFormat _Format, ETextureType _Type )
 {
-	graphics::Texture* tex = m_Textures[m_TextureIndex].second;
+	graphics::Texture2D* tex = m_Textures[m_TextureIndex].second;
 #ifdef USE_PBO
 
 #define USE_ORPHANANDMAP
