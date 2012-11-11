@@ -36,7 +36,7 @@ sampler2D DiffuseSampler		: LKDIFFUSETEX;
 sampler2D NormalSampler			: LKNORMALTEX;
 sampler2D SpecularSampler		: LKSPECULARTEX;
 sampler2D EmissiveSampler		: LKEMISSIVETEX;
-samplerCUBE EnvSampler			: LKENVTEX;
+samplerCUBE EnvSampler			: LKENVCUBEMAP;
 float4 GlobalAmbient			: LKGLOBALAMBIENT;
 float4x4 ModelViewProjection	: LKMODELVIEWPROJ;
 float4x4 ModelMatrix			: LKMODELMATRIX;
@@ -78,9 +78,6 @@ VertexOutput mainVP( VertexInput IN )
 FragmentOutput mainFP( VertexOutput IN )
 {
 	FragmentOutput OUT;
-	
-	// Diffuse color in RGB and specular power in A.
-	OUT.Color0 = float4(tex2D(DiffuseSampler, IN.Tex).rgb, tex2D(SpecularSampler, IN.Tex).r);
 
 	// View-space position in RGB and material shininess in A.
 	OUT.Color1 = float4(IN.PosVS.xyz, MaterialShininess);
@@ -89,9 +86,21 @@ FragmentOutput mainFP( VertexOutput IN )
 	float3x3 TBN = float3x3(normalize(-IN.Tangent), normalize(IN.BiTangent), normalize(IN.Normal));
 	float3 TangentSpaceNormal = (float3(tex2D(NormalSampler, IN.Tex).rgb) * 2.0) - 1.0;
 	float3 WorldSpaceNormal = mul(ModelMatrixIT, mul(transpose(TBN), TangentSpaceNormal));	// Finally: I needed the transpose of the TBN...
-	OUT.Color2.rgb = PackNormal(mul(float3x3(ViewMatrix), WorldSpaceNormal));
+	float3 ViewSpaceNormal = mul(float3x3(ViewMatrix), WorldSpaceNormal);
+	OUT.Color2.rgb = PackNormal(ViewSpaceNormal);
 
 	//OUT.Color2.rgb = PackNormal(mul(float3x3(ViewMatrix), mul(ModelMatrixIT, IN.Normal)));
+	
+	// Diffuse color in RGB and specular power in A.
+	float3 DiffuseSample = tex2D(DiffuseSampler, IN.Tex).rgb;
+	float SpecularSample = tex2D(SpecularSampler, IN.Tex).r;
+	/*float3 ReflectionVector = mul(float3x3(inverse(ViewMatrix)), normalize(reflect(IN.PosVS.xyz, ViewSpaceNormal)));
+	ReflectionVector.y = -ReflectionVector.y;
+	ReflectionVector.z = -ReflectionVector.z;
+	float3 EnvironmentSample = texCUBE(EnvSampler, ReflectionVector);
+	float Reflectiveness = 1.0;
+	OUT.Color0 = float4( (DiffuseSample * (1.0 - Reflectiveness)) + (Reflectiveness * EnvironmentSample), SpecularSample);*/
+	OUT.Color0 = float4(DiffuseSample, SpecularSample);
 	
 	// Emissive color.
 	OUT.Color3 = float4(tex2D(EmissiveSampler, IN.Tex).rgb, 1.0);

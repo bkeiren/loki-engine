@@ -80,7 +80,7 @@ void DisplayList::Draw() const
 #ifdef _DEBUG
 	if (!IsCompiled())
 	{
-		LOG(VL_ERROR, "DisplayList::Draw: DisplayList has not been compiled yet");
+		LOG(VL_WARN, "DisplayList::Draw: DisplayList has not been compiled yet");
 	}
 #endif
 	glCallLists(m_NumLists, GL_UNSIGNED_INT, (void*)m_Lists);

@@ -5,6 +5,7 @@
 #include "core/renderer/scene/scene.h"
 #include "core/renderer/GLSLShader/glslshader.h"
 #include "core/graphics/Texture2D.h"
+#include "core/graphics/TextureCube.h"
 #include "core/resourcemanager/texturemanager.h"
 #include "core/resourcemanager/modelmanager.h"
 #include "core/renderer/effect/effectmanager.h"

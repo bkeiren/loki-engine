@@ -5,6 +5,7 @@
 #include "core/graphics/Vertex.h"
 #include "core/graphics/IndexBuffer.h"
 #include "core/graphics/VertexBuffer.h"
+#include "core/graphics/TextureCube.h"
 
 #include "AssImp/assimp.hpp"
 #include "AssImp/aiPostProcess.h"
@@ -137,6 +138,17 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 		SETCGPARAM("LKZFAR", _ZFar);	// Set the Z-far value.
 		SETCGPARAM("LKZNEAR", _ZNear);	// Set the Z-near value.
 		SETCGPARAM("LKMATERIALSHININESS", material->GetShininess());
+
+
+
+
+
+// 		static graphics::TextureCube* CubeMapTest = graphics::TextureCube::Load("resources//textures//cubemap.bmp");
+// 		SETCGPARAM("LKENVCUBEMAP", CubeMapTest->GetTextureHandle());
+
+
+
+
 
 		const Texture2D* tex = 0;
 

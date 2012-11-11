@@ -152,7 +152,7 @@ FragmentOutput mainFP( VertexOutput IN )
 	
 	if(LambertTerm > 0.0 && Att > 0.0)
 	{
-		float4 diffCol = tex2D(RT0Sampler, TexCoord);
+		float4 diffCol = tex2D(RT0Sampler, TexCoord);		
 		final_color += float4(diffCol.rgb, 1.0) * float4(LightColor.rgb, 1.0) * LambertTerm;
 		
 		float4 matSpecular = vec4(diffCol.a, diffCol.a, diffCol.a, 1.0);
