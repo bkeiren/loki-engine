@@ -14,7 +14,7 @@ class LkEffect;
 namespace graphics
 {
 
-class Texture;
+class Texture2D;
 
 class Material
 {
@@ -36,8 +36,8 @@ public:
 	Material();
 	~Material();
 
-	const Texture* GetTexture( uint32 _Index ) const;
-	void SetTexture( uint32 _Index, Texture* _Texture, bool _DeleteOldTexture = true );
+	const Texture2D* GetTexture( uint32 _Index ) const;
+	void SetTexture( uint32 _Index, Texture2D* _Texture, bool _DeleteOldTexture = true );
 
 	renderer::LkEffect* GetEffect() const;
 	void SetEffect( renderer::LkEffect* _Effect );
@@ -52,7 +52,7 @@ public:
 	bool HasEffect() const;
 private:
 
-	Texture* m_Textures[_TT_COUNT];
+	Texture2D* m_Textures[_TT_COUNT];
 	renderer::LkEffect* m_Effect;
 	f32 m_Shininess;
 };

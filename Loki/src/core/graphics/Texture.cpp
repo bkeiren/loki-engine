@@ -1,5 +1,5 @@
 #include "core/graphics/Texture.h"
-#include "SOIL/SOIL.h"
+#include <GLEW\\glew.h>
 
 namespace loki
 {
@@ -7,13 +7,15 @@ namespace loki
 namespace graphics
 {
 
-Texture::Texture()	:
+Texture::Texture()
+{
+	ILLEGAL_CTOR_ERROR("Texture")
+}
+
+Texture::Texture( ETextureTarget _TextureTarget )	:
+	m_TextureTarget(_TextureTarget),
 	m_GLTextureHandle(0),
-	m_File(std::string("")),
-	m_Width(1),
-	m_Height(1),
-	m_InternalFormat(INTERNAL_FORMAT_RGBA),
-	m_TextureDepth(0)
+	m_File(std::string(""))
 {
 	glGenTextures(1, &m_GLTextureHandle);
 }
@@ -23,44 +25,29 @@ Texture::~Texture()
 	glDeleteTextures(1, &m_GLTextureHandle);
 }
 
-Texture* Texture::Load( const std::string& _File )
+ETextureTarget Texture::GetTextureTarget() const
 {
-	Texture* tex = Texture::Create();
-
-	uint32 res = SOIL_load_OGL_texture(_File.c_str(), SOIL_LOAD_AUTO, tex->GetTextureHandle(), SOIL_FLAG_INVERT_Y);
-
-	if (!res)
-	{
-		LOG(VL_ERROR, "Texture::Load: Failed to load texture '%s'", _File.c_str());
-		return 0;
-	}
-
-	tex->Bind();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	tex->Unbind();
-
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	tex->UpdateGLInformation();
-
-	return tex;
+	return m_TextureTarget;
 }
 
-Texture* Texture::Create()
+bool Texture::Is1DTexture() const
 {
-	Texture* tex = new Texture();
-	return tex;
+	return GetTextureTarget() == TEXTURE_TARGET_1D;
 }
 
-void Texture::Bind() const
+bool Texture::Is2DTexture() const
 {
-	glBindTexture(GL_TEXTURE_2D, m_GLTextureHandle);
+	return GetTextureTarget() == TEXTURE_TARGET_2D;
 }
 
-void Texture::Unbind() const
+bool Texture::Is3DTexture() const
 {
-	glBindTexture(GL_TEXTURE_2D, 0);
+	return GetTextureTarget() == TEXTURE_TARGET_3D;
+}
+
+bool Texture::IsCubeMapTexture() const
+{
+	return GetTextureTarget() == TEXTURE_TARGET_CUBE_MAP;
 }
 
 uint32 Texture::GetTextureHandle() const
@@ -68,69 +55,14 @@ uint32 Texture::GetTextureHandle() const
 	return m_GLTextureHandle;
 }
 
-void Texture::SetTextureParameter( ETextureParameterName _Parameter, ETextureParameterValue _Value )
+void Texture::Bind() const
 {
-	glActiveTexture(GL_TEXTURE0);
-	Bind();
-
-	glTexParameteri(GL_TEXTURE_2D, GLTextureParameterNames[_Parameter], GLTextureParameterValues[_Value]);
-	
-	Unbind();
+	glBindTexture(GLTextureTargets[m_TextureTarget], m_GLTextureHandle);
 }
 
-void Texture::UpdateGLInformation()
+void Texture::Unbind() const
 {
-	// Obtain texture information from OpenGL.
-
-	int32 InternalFormat = 0;
-
-	glActiveTexture(GL_TEXTURE0);
-	Bind();
-
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &m_Width);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &m_Height);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &InternalFormat);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_DEPTH, &m_TextureDepth);
-	
-	Unbind();
-
-	// NOTE: Why is this here...?
-	SetTextureParameter(TEXTURE_WRAP_S, REPEAT);
-	SetTextureParameter(TEXTURE_WRAP_T, REPEAT);
-
-	m_InternalFormat = GetEnumInteralFormat(InternalFormat);
-}
-
-int32 Texture::GetWidth() const
-{
-	return m_Width;
-}
-
-int32 Texture::GetHeight() const
-{
-	return m_Height;
-}
-
-void Texture::UploadData( EInternalFormat _InternalFormat, ETextureFormat _Format, ETextureType _Type, int32 _Width, int32 _Height, const void* _Data )
-{
-	Bind();
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GLInternalFormats[_InternalFormat], _Width, _Height, 0, GLTextureFormats[_Format], GLTextureTypes[_Type], _Data);
-	glGenerateMipmap(GL_TEXTURE_2D);	// Generate mipmaps.
-	UpdateGLInformation();
-
-	Unbind();
-}
-
-void Texture::UploadSubData( ETextureFormat _Format, ETextureType _Type, int32 _XOffset, int32 _YOffset, int32 _Width, int32 _Height, const void* _Data )
-{
-	Bind();
-
-	glTexSubImage2D(GL_TEXTURE_2D, 0, _XOffset, _YOffset, _Width, _Height, GLTextureFormats[_Format], GLTextureTypes[_Type], _Data);
-	glGenerateMipmap(GL_TEXTURE_2D);	// Generate mipmaps.
-	UpdateGLInformation();
-
-	Unbind();
+	glBindTexture(GLTextureTargets[m_TextureTarget], 0);
 }
 
 }

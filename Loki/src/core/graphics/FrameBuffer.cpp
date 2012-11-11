@@ -2,7 +2,7 @@
 #include <cassert>
 #include "core/graphics/Error.h"
 #include "glew/glew.h"
-#include "core/graphics/Texture.h"
+#include "core/graphics/Texture2D.h"
 #include "core/graphics/RenderBuffer.h"
 
 namespace loki
@@ -69,7 +69,7 @@ FrameBuffer::~FrameBuffer()
 		{
 			if (m_Attachments[i].first == ATTACHMENT_STORAGE_TEXTURE)
 			{
-				delete ((Texture*)m_Attachments[i].second);
+				delete ((Texture2D*)m_Attachments[i].second);
 			}
 			else
 			{
@@ -103,7 +103,7 @@ FrameBuffer* FrameBuffer::Create( int32 _Width, int32 _Height, const std::vector
 
 		if (Info.m_GenerateTexture)
 		{
-			graphics::Texture* tex = graphics::Texture::Create();
+			graphics::Texture2D* tex = graphics::Texture2D::Create();
 
 			tex->UploadData(Info.m_InternalFormat, Info.m_TextureFormat, Info.m_TextureType, fb->m_Width, fb->m_Height, Info.m_TexturePixels);
 			CheckGL();
@@ -169,7 +169,7 @@ uint32 FrameBuffer::GetAttachmentTexture( EFrameBufferAttachment _Attachment )
 		return 0;
 	}
 #endif
-	return ((Texture*)m_Attachments[_Attachment].second)->GetTextureHandle();
+	return ((Texture2D*)m_Attachments[_Attachment].second)->GetTextureHandle();
 }
 
 bool FrameBuffer::HasAttachment( EFrameBufferAttachment _Attachment )

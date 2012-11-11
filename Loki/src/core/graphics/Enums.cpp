@@ -133,13 +133,25 @@ uint32 GLTextureParameterValues[_TEXTURE_PARAMETER_VALUE_COUNT] = {	GL_REPEAT,
 																	GL_NEAREST_MIPMAP_LINEAR,
 																	GL_LINEAR_MIPMAP_LINEAR };
 
+uint32 GLCubeMapFaces[_CUBEMAP_FACE_COUNT] = { GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+											   GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+											   GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+											   GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+											   GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+											   GL_TEXTURE_CUBE_MAP_NEGATIVE_Y };
+
+uint32 GLTextureTargets[_TEXTURE_TARGET_COUNT] = { GL_TEXTURE_1D, 
+												   GL_TEXTURE_2D,
+												   GL_TEXTURE_3D,
+												   GL_TEXTURE_CUBE_MAP };
+
 #ifdef EXT
 #undef EXT
 #endif
 
 #define GETENUM_FUNCTION_HELPER(maxcount, array, returntype)	{ for (int32 i = 0; i < maxcount; ++i) { if (_GLEnum == array[i]) { return (returntype)i; } } }
 
-EInternalFormat GetEnumInteralFormat( uint32 _GLEnum )
+EInternalFormat GetEnumInternalFormat( uint32 _GLEnum )
 {
 	GETENUM_FUNCTION_HELPER(_INTERNAL_FORMAT_COUNT, GLInternalFormats, EInternalFormat);
 	return INTERNAL_FORMAT_RGBA;	// Just return something.
@@ -173,6 +185,18 @@ ETextureParameterValue GetEnumTextureParameterValue( uint32 _GLEnum )
 {
 	GETENUM_FUNCTION_HELPER(_TEXTURE_PARAMETER_VALUE_COUNT, GLTextureParameterValues, ETextureParameterValue);
 	return CLAMP;	// Just return something.
+}
+
+ECubeMapFace GetEnumCubeMapFacesValue( uint32 _GLEnum )
+{
+	GETENUM_FUNCTION_HELPER(_CUBEMAP_FACE_COUNT, GLCubeMapFaces, ECubeMapFace);
+	return CUBEMAP_FACE_NORTH;	// Just return something.
+}
+
+ETextureTarget GetEnumTextureTarget( uint32 _GLEnum )
+{
+	GETENUM_FUNCTION_HELPER(_TEXTURE_TARGET_COUNT, GLTextureTargets, ETextureTarget);
+	return TEXTURE_TARGET_2D;
 }
 
 #undef GETENUM_FUNCTION_HELPER

@@ -3,7 +3,7 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include "core/graphics/Texture.h"
+#include "core/graphics/Texture2D.h"
 #include "core/graphics/Enums.h"
 
 #define USE_PBO
@@ -13,7 +13,7 @@ namespace loki
 
 namespace graphics
 {
-	class Texture;
+	class Texture2D;
 
 #ifdef USE_PBO
 	class PixelBuffer;
@@ -44,7 +44,7 @@ class LkEffect;
 
 class LkImage
 {
-	typedef std::vector<std::pair<bool, graphics::Texture*> >		Textures;
+	typedef std::vector<std::pair<bool, graphics::Texture2D*> >		Textures;
 	typedef Textures::iterator								TexturesIter;
 	typedef Textures::const_iterator						TexturesConstIter;
 public:

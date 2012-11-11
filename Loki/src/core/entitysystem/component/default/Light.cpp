@@ -1,5 +1,6 @@
 #include "core/entitysystem/component/default/Light.h"
-#include "core/graphics/Texture.h"
+#include <GLEW\\glew.h>
+#include "core/graphics/Texture2D.h"
 #include "core/graphics/DisplayList.h"
 
 namespace loki
@@ -63,8 +64,8 @@ void _IcoSphereSubdivisionHelper( f32 _Radius, int32 _Subdivision, int32 _MaxSub
 
 Light::Lights Light::m_Lights;
 Light::Lights Light::m_LightsByType[];
-graphics::Texture* Light::m_PointAttenuationTexture = 0;
-graphics::Texture* Light::m_SpotAttenuationTexture = 0;
+graphics::Texture2D* Light::m_PointAttenuationTexture = 0;
+graphics::Texture2D* Light::m_SpotAttenuationTexture = 0;
 
 Light::Light()	:
 	m_LightType(LIGHT_POINT)
@@ -83,7 +84,7 @@ Light::Light()	:
 
 	if (!m_PointAttenuationTexture)
 	{
-		m_PointAttenuationTexture = graphics::Texture::Load("resources//textures//PointLightAttenuation.bmp");
+		m_PointAttenuationTexture = graphics::Texture2D::Load("resources//textures//PointLightAttenuation.bmp");
 		if (!m_PointAttenuationTexture)
 		{
 			LOG(VL_ERROR, "Light::Light: Failed to load pointlight attenuation texture");
@@ -96,7 +97,7 @@ Light::Light()	:
 	}
 	if (!m_SpotAttenuationTexture)
 	{
-		m_SpotAttenuationTexture = graphics::Texture::Load("resources//textures//SpotLightAttenuation.bmp");
+		m_SpotAttenuationTexture = graphics::Texture2D::Load("resources//textures//SpotLightAttenuation.bmp");
 		if (!m_SpotAttenuationTexture)
 		{
 			LOG(VL_ERROR, "Light::Light: Failed to load spotlight attenuation texture");
@@ -130,12 +131,12 @@ Light::Lights& Light::GetAllLightsByType( ELightType _Type )
 	return m_LightsByType[_Type];
 }
 
-graphics::Texture* Light::GetPointAttenuationTexture()
+graphics::Texture2D* Light::GetPointAttenuationTexture()
 {
 	return m_PointAttenuationTexture;
 }
 
-graphics::Texture* Light::GetSpotAttenuationTexture()
+graphics::Texture2D* Light::GetSpotAttenuationTexture()
 {
 	return m_SpotAttenuationTexture;
 }
@@ -305,7 +306,7 @@ void Light::_DrawSpotLightCone( f32 _Base, f32 _Height, int32 _Slices )
 
 void Light::_DrawPointLightIcoSphere( f32 _Radius, int32 _Subdivisions /*= 1*/ )
 {
-	static const float t = (1.0 + math::sqrt(5.0)) / 2.0;	// Golden ratio calculation.
+	static const float t = (float)((1.0 + math::sqrt(5.0)) / 2.0);	// Golden ratio calculation.
 	static vec3 BaseVertices[12] = {	vec3(-1.0f,  t,  0.0f),
 										vec3( 1.0f,  t,  0.0f),
 										vec3(-1.0f, -t,  0.0f),

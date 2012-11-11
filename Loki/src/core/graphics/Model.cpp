@@ -1,6 +1,6 @@
 #include "core/graphics/Model.h"
 #include "core/graphics/Material.h"
-#include "core/graphics/Texture.h"
+#include "core/graphics/Texture2D.h"
 #include "core/graphics/Mesh.h"
 #include "core/graphics/Vertex.h"
 #include "core/graphics/IndexBuffer.h"
@@ -138,7 +138,7 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 		SETCGPARAM("LKZNEAR", _ZNear);	// Set the Z-near value.
 		SETCGPARAM("LKMATERIALSHININESS", material->GetShininess());
 
-		const Texture* tex = 0;
+		const Texture2D* tex = 0;
 
 		// Set the diffuse texture.
 		tex = material->GetTexture(Material::TT_DIFFUSE);
@@ -282,19 +282,19 @@ Material* Model::_CreateMaterialFromLMAFile( const std::string& _LMAFile )
 
 	if (diffuseTexString.IsString())
 	{
-		mtl->SetTexture(Material::TT_DIFFUSE, Texture::Load(diffuseTexString.AsString()));
+		mtl->SetTexture(Material::TT_DIFFUSE, Texture2D::Load(diffuseTexString.AsString()));
 	}
 	if (specularTexString.IsString())
 	{
-		mtl->SetTexture(Material::TT_SPECULAR, Texture::Load(specularTexString.AsString()));
+		mtl->SetTexture(Material::TT_SPECULAR, Texture2D::Load(specularTexString.AsString()));
 	}
 	if (normalTexString.IsString())
 	{
-		mtl->SetTexture(Material::TT_NORMAL, Texture::Load(normalTexString.AsString()));
+		mtl->SetTexture(Material::TT_NORMAL, Texture2D::Load(normalTexString.AsString()));
 	}
 	if (emissiveTexString.IsString())
 	{
-		mtl->SetTexture(Material::TT_EMISSIVE, Texture::Load(emissiveTexString.AsString()));
+		mtl->SetTexture(Material::TT_EMISSIVE, Texture2D::Load(emissiveTexString.AsString()));
 	}
 	if (effectString.IsString())
 	{

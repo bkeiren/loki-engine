@@ -1,5 +1,5 @@
 #include "core/graphics/Material.h"
-#include "core/graphics/Texture.h"
+#include "core/graphics/Texture2D.h"
 
 namespace loki
 {
@@ -25,12 +25,12 @@ Material::~Material()
 	}
 }
 
-const Texture* Material::GetTexture( uint32 _Index ) const
+const Texture2D* Material::GetTexture( uint32 _Index ) const
 {
 	return m_Textures[_Index];
 }
 
-void Material::SetTexture( uint32 _Index, Texture* _Texture, bool _DeleteOldTexture /*= true*/ )
+void Material::SetTexture( uint32 _Index, Texture2D* _Texture, bool _DeleteOldTexture /*= true*/ )
 {
 	if (_DeleteOldTexture)
 	{

@@ -176,19 +176,55 @@ enum ETextureParameterValue
 	_TEXTURE_PARAMETER_VALUE_COUNT
 };
 
+enum ECubeMapFace
+{
+	CUBEMAP_FACE_NORTH = 0,
+	CUBEMAP_FACE_SOUTH,
+	CUBEMAP_FACE_WEST,
+	CUBEMAP_FACE_EAST,
+	CUBEMAP_FACE_UP,
+	CUBEMAP_FACE_DOWN,
+
+	_CUBEMAP_FACE_COUNT,
+
+	// Same values, different names.
+	CUBEMAP_FACE_X_POS = CUBEMAP_FACE_EAST,
+	CUBEMAP_FACE_X_NEG = CUBEMAP_FACE_WEST,
+	CUBEMAP_FACE_Y_POS = CUBEMAP_FACE_UP,
+	CUBEMAP_FACE_Y_NEG = CUBEMAP_FACE_DOWN,
+	CUBEMAP_FACE_Z_POS = CUBEMAP_FACE_NORTH,
+	CUBEMAP_FACE_Z_NEG = CUBEMAP_FACE_SOUTH,
+};
+
+enum ETextureTarget
+{
+	TEXTURE_TARGET_1D = 0,
+	TEXTURE_TARGET_2D,
+	TEXTURE_TARGET_3D,
+	TEXTURE_TARGET_CUBE_MAP,
+
+	_TEXTURE_TARGET_COUNT
+};
+
+// These arrays can be used to convert loki enumeration values into GL enum values.
 extern uint32 GLInternalFormats[];
 extern uint32 GLTextureFormats[];
 extern uint32 GLTextureTypes[];
 extern uint32 GLFrameBufferAttachments[];
 extern uint32 GLTextureParameterNames[];
 extern uint32 GLTextureParameterValues[];
+extern uint32 GLCubeMapFaces[];
+extern uint32 GLTextureTargets[];
 
-EInternalFormat GetEnumInteralFormat( uint32 _GLEnum );
+// These functions convert GL enum values into the custom Loki enumeration values.
+EInternalFormat GetEnumInternalFormat( uint32 _GLEnum );
 ETextureFormat GetEnumTextureFormat( uint32 _GLEnum );
 ETextureType GetEnumTextureType( uint32 _GLEnum );
 EFrameBufferAttachment GetEnumFrameBufferAttachment( uint32 _GLEnum );
 ETextureParameterName GetEnumTextureParameterName( uint32 _GLEnum );
 ETextureParameterValue GetEnumTextureParameterValue( uint32 _GLEnum );
+ECubeMapFace GetEnumCubeMapFacesValue( uint32 _GLEnum );
+ETextureTarget GetEnumTextureTarget( uint32 _GLEnum );
 
 }
 
