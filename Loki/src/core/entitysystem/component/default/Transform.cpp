@@ -142,10 +142,14 @@ void Transform::SetScale( const vec3& _Scale )
 
 void Transform::SetMatrix( const mat4& _Matrix )
 {
-	m_Transformation = _Matrix;
-	_ClearDirtyFlag(DIRTY_FLAG_MATRIX);
-	_SetDirtyFlag(DIRTY_FLAG_POS_ORI_SCALE);
-	_SetDirtyFlag(DIRTY_FLAG_WORLD_TO_LOCAL_MATRIX);
+// 	m_Transformation = _Matrix;
+// 	_ClearDirtyFlag(DIRTY_FLAG_MATRIX);
+// 	_SetDirtyFlag(DIRTY_FLAG_POS_ORI_SCALE);
+// 	_SetDirtyFlag(DIRTY_FLAG_WORLD_TO_LOCAL_MATRIX);
+
+	// Because otherwise stuff doesn't work...
+	SetPosition(vec3(_Matrix[3]));
+	SetOrientation(math::quat_cast(_Matrix));
 }
 
 void Transform::LocalTranslate( const vec3& _Translation )

@@ -9,6 +9,7 @@
 #include "core/renderer/renderer.h"
 #include "core/entitysystem/component/default/CameraComponent.h"
 #include "core/entitysystem/Entity.h"
+#include "core/physics/physics.h"
 
 namespace loki
 {
@@ -332,6 +333,22 @@ CONSOLE_FUNCTION(Console_LightVolumes)
 #else
 	return LkConsole::CommandResult("This command is only available in a build with DBG_VISUALIZATIONS defined");
 #endif
+}
+
+CONSOLE_FUNCTION(Console_PhysicsDebugDraw)
+{
+	if (physics::g_Physics->DebugDrawingWasCompiled())
+	{
+		physics::g_Physics->SetDebugDrawingEnabled(_Command->m_Arguments[0].m_Boolean);
+		return LkConsole::CommandResult("");
+	}
+	return LkConsole::CommandResult("Physics debug drawing was not compiled into this build (PHY_DEBUG_DRAW was not defined at compile-time)");
+}
+
+CONSOLE_FUNCTION(Console_PhysicsSetGravity)
+{
+	physics::g_Physics->SetGravity(vec3(_Command->m_Arguments[0].m_Float, _Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float));
+	return LkConsole::CommandResult("");
 }
 
 }	// Namespace loki.

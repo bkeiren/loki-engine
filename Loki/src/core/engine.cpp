@@ -365,9 +365,6 @@ void LokiEngine::Loop()
 		g_EventManager->Post(LkEvent(EVENT_PRERENDER));
 
 		// Render.
-#ifndef _DEBUG
-		physics::g_Physics->DebugDraw();
-#endif
 		Render();
 
 		g_EventManager->Post(LkEvent(EVENT_FRAMEEND));
@@ -550,7 +547,7 @@ void LokiEngine::Update()
 	m_Game->Update();
 
 	g_EventManager->Post(EVENT_PREPHYSICSUPDATE);
-	physics::g_Physics->Update();
+	physics::g_Physics->_Update();
 	g_EventManager->Post(EVENT_POSTPHYSICSUPDATE);
 
 	m_Game->PostUpdate();
@@ -561,6 +558,9 @@ void LokiEngine::Update()
 //////////////////////////////////////////////////////////////////////////
 void LokiEngine::Render()
 {
+	// Do debug drawing if required.
+	physics::g_Physics->_DebugDraw();
+
 	// Render the currently active state.
 	//StateManager::GetActiveState()->Render();
 

@@ -57,6 +57,7 @@ bool LkPhysics::_Init()
 #ifdef PHY_DEBUG_DRAW
 	m_DebugDrawer = new LkDebugDrawer();
 	m_DynamiscWorld->setDebugDrawer(m_DebugDrawer);
+	m_DebugDawingEnabled = false;
 #endif
 
 	LOG(VL_ALWAYS, "Physics::Init: Physics initialized");
@@ -77,17 +78,20 @@ void LkPhysics::_Shutdown()
 	LOG(VL_ALWAYS, "Physics::Shutdown: Physics terminated");
 }
 
-void LkPhysics::Update()
+void LkPhysics::_DebugDraw()
+{
+#ifdef PHY_DEBUG_DRAW
+	if (DebugDrawingIsEnabled())
+	{
+		m_DynamiscWorld->debugDrawWorld();
+	}
+#endif
+}
+
+void LkPhysics::_Update()
 {
 	m_DynamiscWorld->stepSimulation(g_Engine->GetFrameTime(), 10, m_FixedTimeStep);
 }
-
-#ifdef PHY_DEBUG_DRAW
-void LkPhysics::DebugDraw()
-{
-	m_DynamiscWorld->debugDrawWorld();
-}
-#endif
 
 f32 LkPhysics::GetFixedTimeStep() const
 {
@@ -120,6 +124,31 @@ void LkPhysics::RemoveRigidBody( LkRigidBody* _Body )
 {
 	m_DynamiscWorld->removeRigidBody(_Body->m_RigidBody);
 	delete _Body;
+}
+
+void LkPhysics::SetDebugDrawingEnabled( bool _Enabled )
+{
+#ifdef PHY_DEBUG_DRAW
+	m_DebugDawingEnabled = _Enabled;
+#endif
+}
+
+bool LkPhysics::DebugDrawingIsEnabled() const
+{
+#ifdef PHY_DEBUG_DRAW
+	return m_DebugDawingEnabled;
+#else
+	return false;
+#endif
+}
+
+bool LkPhysics::DebugDrawingWasCompiled() const
+{
+#ifdef PHY_DEBUG_DRAW
+	return true;
+#else
+	return false;
+#endif
 }
 
 }

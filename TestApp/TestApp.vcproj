@@ -209,6 +209,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\scripts\SimpleRotationController.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\StdAfx.h"
 				>
 			</File>

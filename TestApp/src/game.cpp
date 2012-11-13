@@ -28,6 +28,7 @@
 
 
 #include "scripts/SimpleController.h"
+#include "scripts/SimpleRotationController.h"
 
 using namespace loki;
 
@@ -81,7 +82,7 @@ bool MyGame::Init()
 	lc->SetRange(100.0f);
 	lc->SetSpotAngle(50.0f);
 	lc->SetLightType(components::Light::LIGHT_SPOT);
-	//pc = entity0->InstantiateComponent<loki::components::PhysicsComponent>();
+	pc = entity0->InstantiateComponent<loki::components::PhysicsComponent>();
 	rc = entity0->InstantiateComponent<loki::components::RenderComponent>();
 
 	rc->SetModel(graphics::Model::Load("resources//lmo//test.lmo"));
@@ -89,12 +90,12 @@ bool MyGame::Init()
 	entity0->GetTransform().Translate(vec3(10.0f, 0.0f, 10.0f));
 	entity0->InstantiateComponent<SimpleController>();
 
-// 	physics::RigidBodyInfo info;
-// 	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-// 	info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetModel()->GetMesh(0));
-// 	info.m_Restitution = 0.75f;
-// 	info.m_Mass = 100.0f;
-// 	pc->CreateBodyFromInfo(info);
+	physics::RigidBodyInfo info;
+	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+	info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetModel()->GetMesh(0));
+	info.m_Restitution = 0.1f;
+	info.m_Mass = 0.001f;
+	pc->CreateBodyFromInfo(info);
 
 	Entity* entity1 = g_EntitySystem->SpawnEntity("BoxEntity");
 	entity1->InstantiateComponent<loki::components::RenderComponent>();
@@ -112,20 +113,31 @@ bool MyGame::Init()
 	lc->SetSpotAngle(50.0f);
 
 
-	Entity* entity12 = g_EntitySystem->SpawnEntity("TestEntity12");
+	SimpleRotationController* rcntrl = 0;
+
+	Entity* entity12 = g_EntitySystem->SpawnEntity("Light0");
 	lc = entity12->InstantiateComponent<loki::components::Light>();
+	rcntrl = entity12->InstantiateComponent<SimpleRotationController>();
+	rcntrl->SetRotationVector(UP);
+	rcntrl->SetVector(vec3(4.0f, 0.0f, 0.0f));
 	lc->SetRange(40.0f);
 	lc->SetColor(ColorRGB(1.0f, 0.2f, 0.0f));
 	entity12->GetTransform().Translate(vec3(-10.0f, -5.0f, 0.0f));
 
-	Entity* entity13 = g_EntitySystem->SpawnEntity("TestEntity13");
+	Entity* entity13 = g_EntitySystem->SpawnEntity("Light1");
 	lc = entity13->InstantiateComponent<loki::components::Light>();
+	rcntrl = entity13->InstantiateComponent<SimpleRotationController>();
+	rcntrl->SetRotationVector(FORWARD);
+	rcntrl->SetVector(vec3(-8.0f, 0.0f, 0.0f));
 	lc->SetRange(40.0f);
 	lc->SetColor(ColorRGB(0.0f, 0.2f, 1.0f));
 	entity13->GetTransform().Translate(vec3(-2.0f, -8.0f, 3.0f));
 
-	Entity* entity14 = g_EntitySystem->SpawnEntity("TestEntity14");
+	Entity* entity14 = g_EntitySystem->SpawnEntity("Light2");
 	lc = entity14->InstantiateComponent<loki::components::Light>();
+	rcntrl = entity14->InstantiateComponent<SimpleRotationController>();
+	rcntrl->SetRotationVector(SIDE);
+	rcntrl->SetVector(vec3(0.0f, 5.0f, 0.0f));
 	lc->SetRange(40.0f);
 	lc->SetColor(ColorRGB(0.4f, 0.4f, 0.4f));
 	entity14->GetTransform().Translate(vec3(-10.0f, -15.0f, 10.0f));
