@@ -32,12 +32,6 @@ class LkPhysics
 {
 	friend class LokiEngine;
 public:
-	void Update();
-
-#ifdef PHY_DEBUG_DRAW
-	void DebugDraw();
-#endif
-
 	f32 GetFixedTimeStep() const;
 	void SetFixedTimeStep( f32 _TimeStep );
 
@@ -46,9 +40,21 @@ public:
 
 	LkRigidBody* AddRigidBody( const RigidBodyInfo& _Info );
 	void RemoveRigidBody( LkRigidBody* _Body );
+
+	void SetDebugDrawingEnabled( bool _Enabled );
+	bool DebugDrawingIsEnabled() const;
+	bool DebugDrawingWasCompiled() const;
 private:
 	LkPhysics();
 	~LkPhysics();
+	
+	// NOTE: This function only works if:
+	// PHY_DEBUG_DRAW was defined at compile time (This compiles all code required to actually be able to debug draw),
+	// and if m_DebugDrawingEnabled is set to true. (This can be changed by calling SetDebugDrawingEnabled() and queried
+	// by calling DebugDrawingIsEnabled().
+	void _DebugDraw();
+
+	void _Update();
 
 	bool _Init();
 	void _Shutdown();
@@ -66,6 +72,7 @@ private:
 
 #ifdef PHY_DEBUG_DRAW
 	LkDebugDrawer* m_DebugDrawer;
+	bool m_DebugDawingEnabled;
 #endif
 };
 

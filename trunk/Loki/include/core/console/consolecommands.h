@@ -46,6 +46,8 @@ CONSOLE_FUNCTION(Console_SetWindowSize);
 CONSOLE_FUNCTION(Console_Terminate);
 CONSOLE_FUNCTION(Console_GBufferTargets);
 CONSOLE_FUNCTION(Console_LightVolumes);
+CONSOLE_FUNCTION(Console_PhysicsDebugDraw);
+CONSOLE_FUNCTION(Console_PhysicsSetGravity);
 
 }	// Namespace loki.
 

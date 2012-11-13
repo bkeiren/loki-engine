@@ -129,6 +129,8 @@ void LkConsole::RegisterCommands()
 	m_Commands["terminate"] = Command("Signals for termination of the game and the engine", &Console_Terminate);
 	m_Commands["gfx.tgb"] = Command("Toggles the visualization of the GBuffer", &Console_GBufferTargets);
 	m_Commands["gfx.tlv"] = Command("Toggles the visualization of light volumes", &Console_LightVolumes);
+	m_Commands["phy.dbgdraw"] = Command("Toggles debug drawing of the physics worlds and interactions", &Console_PhysicsDebugDraw, Command::AT_BOOLEAN);
+	m_Commands["phy.setgravity"] = Command("Sets the physics world's global gravity vector (Default: [0.0, -9.81, 0.0])", &Console_PhysicsSetGravity, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
 }
 
 std::list<std::string> LkConsole::GetCommandsList()
