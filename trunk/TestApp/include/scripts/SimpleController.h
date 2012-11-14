@@ -24,6 +24,7 @@ public:
 	}
 
 private:
+
 	void Awake()
 	{
 		m_AutoRotate = false;
@@ -92,7 +93,8 @@ private:
 			{
 				v.y = -1.0f;
 			}
-			t.Translate(v);
+			//t.Translate(v);
+			t.position += v;
 		}
 	}
 
