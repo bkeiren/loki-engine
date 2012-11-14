@@ -6,6 +6,12 @@
 #include "Types.h"	// Need this for client apps including this file.
 #include "core/entitysystem/component/Component.h"
 
+#define TRANSFORM_SUPPORT_PROPERTIES
+#ifdef TRANSFORM_SUPPORT_PROPERTIES
+#include "util/property/Property.h"
+using namespace loki::util;
+#endif
+
 namespace loki
 {
 
@@ -60,6 +66,12 @@ public:
 
 	bool operator == ( Transform& _Transform );
 	bool operator != ( Transform& _Transform );
+
+#ifdef TRANSFORM_SUPPORT_PROPERTIES
+	Property<Transform, vec3> position;
+	Property<Transform, quat> orientation;
+	Property<Transform, mat4> transform;
+#endif
 private:
 	Transform();
 	~Transform();
@@ -95,6 +107,15 @@ private:
 	{
 		m_DirtyFlags |= _Flag;
 	}
+
+#ifdef TRANSFORM_SUPPORT_PROPERTIES
+	void Property_SetPosition( const vec3& _Position );
+	void Property_SetOrientation( const quat& _Orientation );
+	void Property_SetTransform( const mat4& _Transform);
+	const vec3& Property_GetPosition();
+	const quat& Property_GetOrientation();
+	const mat4& Property_GetTransform();
+#endif
 
 	quat m_Orientation;
 	vec3 m_Position;

@@ -213,7 +213,7 @@ void LokiEngine::ParseArguments( int32 argc, char** argv )
 //////////////////////////////////////////////////////////////////////////
 bool LokiEngine::Init()
 {
-	srand((uint32)time(0));
+	srand((uint32)::time(0));
 
 	// Collect system information.
 	util::system::g_SystemInfo = new util::system::SystemInfo();

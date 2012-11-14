@@ -90,7 +90,7 @@ bool MyGame::Init()
 	rc->SetModel(graphics::Model::Load("resources//lmo//test.lmo"));
 
 	entity0->GetTransform().Translate(vec3(10.0f, 0.0f, 10.0f));
-	entity0->InstantiateComponent<SimpleController>();
+	SimpleController* simplecntrl = entity0->InstantiateComponent<SimpleController>();
 
 	physics::RigidBodyInfo info;
 	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
