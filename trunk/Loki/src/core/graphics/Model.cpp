@@ -15,6 +15,8 @@
 
 #include "core/renderer/effect/effectmanager.h"
 
+#include "core/game/Sky.h"
+
 namespace loki
 {
 
@@ -110,6 +112,8 @@ const vec2& Model::GetUVScale() const
 
 void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat4& _ProjectionMatrix, f32 _ZFar, f32 _ZNear )
 {
+	graphics::TextureCube* SkyCubeMap = game::Sky::GetCubeMap();
+
 	for (uint32 i = 0; i < m_Meshes.size(); ++i)
 	{
 		graphics::Mesh* mesh = m_Meshes[i];
@@ -138,6 +142,7 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 		SETCGPARAM("LKZFAR", _ZFar);	// Set the Z-far value.
 		SETCGPARAM("LKZNEAR", _ZNear);	// Set the Z-near value.
 		SETCGPARAM("LKMATERIALSHININESS", material->GetShininess());
+		SETCGPARAM("LKSKYSAMPLER", SkyCubeMap ? SkyCubeMap->GetTextureHandle() : 0);
 
 
 

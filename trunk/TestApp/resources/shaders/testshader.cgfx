@@ -36,7 +36,7 @@ sampler2D DiffuseSampler		: LKDIFFUSETEX;
 sampler2D NormalSampler			: LKNORMALTEX;
 sampler2D SpecularSampler		: LKSPECULARTEX;
 sampler2D EmissiveSampler		: LKEMISSIVETEX;
-samplerCUBE EnvSampler			: LKENVCUBEMAP;
+samplerCUBE EnvSampler			: LKSKYSAMPLER;
 float4 GlobalAmbient			: LKGLOBALAMBIENT;
 float4x4 ModelViewProjection	: LKMODELVIEWPROJ;
 float4x4 ModelMatrix			: LKMODELMATRIX;
@@ -91,16 +91,21 @@ FragmentOutput mainFP( VertexOutput IN )
 
 	//OUT.Color2.rgb = PackNormal(mul(float3x3(ViewMatrix), mul(ModelMatrixIT, IN.Normal)));
 	
+#define REFLECTION
+	
 	// Diffuse color in RGB and specular power in A.
 	float3 DiffuseSample = tex2D(DiffuseSampler, IN.Tex).rgb;
 	float SpecularSample = tex2D(SpecularSampler, IN.Tex).r;
-	/*float3 ReflectionVector = mul(float3x3(inverse(ViewMatrix)), normalize(reflect(IN.PosVS.xyz, ViewSpaceNormal)));
-	ReflectionVector.y = -ReflectionVector.y;
-	ReflectionVector.z = -ReflectionVector.z;
+#ifndef REFLECTION
+	OUT.Color0 = float4(DiffuseSample, SpecularSample);
+#else
+	float3 ReflectionVector = mul(float3x3(inverse(ViewMatrix)), normalize(reflect(IN.PosVS.xyz, ViewSpaceNormal)));
+	//float3 ReflectionVector = mul(float3x3(inverse(ViewMatrix)), normalize(IN.PosVS.xyz));
+
 	float3 EnvironmentSample = texCUBE(EnvSampler, ReflectionVector);
 	float Reflectiveness = 1.0;
-	OUT.Color0 = float4( (DiffuseSample * (1.0 - Reflectiveness)) + (Reflectiveness * EnvironmentSample), SpecularSample);*/
-	OUT.Color0 = float4(DiffuseSample, SpecularSample);
+	OUT.Color0 = float4( (DiffuseSample * (1.0 - Reflectiveness)) + (Reflectiveness * EnvironmentSample), SpecularSample);
+#endif
 	
 	// Emissive color.
 	OUT.Color3 = float4(tex2D(EmissiveSampler, IN.Tex).rgb, 1.0);

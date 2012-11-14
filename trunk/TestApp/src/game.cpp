@@ -145,7 +145,7 @@ bool MyGame::Init()
 	entity14->GetTransform().Translate(vec3(-10.0f, -15.0f, 10.0f));
 
 	
-	game::Sky::SetCubeMap(graphics::TextureCube::Load("resources//textures//cubemap.bmp"));
+	game::Sky::SetCubeMap(graphics::TextureCube::Load("resources//textures//cubemap2.bmp"));
 
 // 	loki::util::general::JSONDocument* doc = loki::util::general::JSONDocument::Open("resources//test.json");
 // 	if (doc)

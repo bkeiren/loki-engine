@@ -24,6 +24,7 @@ class Sky
 {
 public:
 	static void SetCubeMap( graphics::TextureCube* _CubeMap );
+	static graphics::TextureCube* GetCubeMap();
 
 	static void Render();
 private:
