@@ -187,6 +187,7 @@ void LkRenderer::Render( game::LkLevel* _Level )
 	glClearStencil(0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+	// Render the sky to the light accumulation buffer.
 	m_GBuffer->SetDrawBuffers(DrawBuffersP0, 1);
 	_RenderSky();
 

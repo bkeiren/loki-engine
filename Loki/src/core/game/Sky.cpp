@@ -30,6 +30,11 @@ void Sky::SetCubeMap( graphics::TextureCube* _CubeMap )
 	m_CubeMap = _CubeMap;
 }
 
+graphics::TextureCube* Sky::GetCubeMap()
+{
+	return m_CubeMap;
+}
+
 void Sky::Render()
 {
 	if (!m_Shader)
