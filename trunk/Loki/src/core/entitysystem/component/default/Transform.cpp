@@ -21,11 +21,7 @@ Transform::Transform()	:
 						   0.0f, 0.0, 0.0f, 1.0f)),
    m_DirtyFlags(0)
 {
-#ifdef TRANSFORM_SUPPORT_PROPERTIES
-	position.Init(this, &Transform::Property_GetPosition, &Transform::Property_SetPosition);
-	orientation.Init(this, &Transform::Property_GetOrientation, &Transform::Property_SetOrientation);
-	transform.Init(this, &Transform::Property_GetTransform, &Transform::Property_SetTransform);
-#endif
+
 }
 
 Transform::~Transform()
@@ -311,37 +307,5 @@ void Transform::_ComputeWorldToLocalMatrix()
 	m_WorldToLocalMatrix = math::inverse(m_Transformation);
 	_ClearDirtyFlag(DIRTY_FLAG_WORLD_TO_LOCAL_MATRIX);
 }
-
-#ifdef TRANSFORM_SUPPORT_PROPERTIES
-void Transform::Property_SetPosition( const vec3& _Position )
-{
-	SetPosition(_Position);
-}
-
-void Transform::Property_SetOrientation( const quat& _Orientation )
-{
-	SetOrientation(_Orientation);
-}
-
-void Transform::Property_SetTransform( const mat4& _Transform)
-{
-	SetMatrix(_Transform);
-}
-
-const vec3& Transform::Property_GetPosition()
-{
-	return GetPosition();
-}
-
-const quat& Transform::Property_GetOrientation()
-{
-	return GetOrientation();
-}
-
-const mat4& Transform::Property_GetTransform()
-{
-	return GetMatrix();
-}
-#endif
 
 }

@@ -1,9 +1,7 @@
 template TEMPLATELINE
 Property TEMPLATEARGUMENTLINE ::Property()
 {
-	m_Class = 0;
-	m_SetFunctor = 0;
-	m_GetFunctor = 0;
+	
 }
 
 template TEMPLATELINE
@@ -13,62 +11,66 @@ Property TEMPLATEARGUMENTLINE ::~Property()
 }
 
 template TEMPLATELINE
-void Property TEMPLATEARGUMENTLINE ::Init(_ParentClassType* _Class, GetFunctor _GetFunctor, SetFunctor _SetFunctor )
+_Class& Property TEMPLATEARGUMENTLINE ::Self()
 {
-	m_Class = _Class;
-	m_SetFunctor = _SetFunctor;
-	m_GetFunctor = _GetFunctor;
+	return *reinterpret_cast<_Class *> (reinterpret_cast<char *> (this) - _Offset());
 }
 
 template TEMPLATELINE
-inline Property TEMPLATEARGUMENTLINE ::operator _PropertyType(void)
+_Class const& Property TEMPLATEARGUMENTLINE ::Self() const
 {
-	return this->Get();
+	return *reinterpret_cast<_Class const *> (reinterpret_cast<char const *> (this) - _Offset());
 }
 
 template TEMPLATELINE
-inline const _PropertyType& Property TEMPLATEARGUMENTLINE ::operator = (const _PropertyType& _Value)
+Property TEMPLATEARGUMENTLINE& Property TEMPLATEARGUMENTLINE ::operator = (_T const& rhs) 
 {
-	this->Set(_Value);
-	return m_Value;
+	_Set(Self(), rhs); 
+	return *this; 
 }
 
 template TEMPLATELINE
-inline const _PropertyType& Property TEMPLATEARGUMENTLINE ::operator += (const _PropertyType& _Value)
-{
-	this->Set(this->Get() + _Value);
-	return m_Value;
+Property TEMPLATEARGUMENTLINE& Property TEMPLATEARGUMENTLINE ::operator += (_T const& rhs) 
+{ 
+	_Set(Self(), _Get(Self()) + rhs); 
+	return *this; 
 }
 
 template TEMPLATELINE
-inline const _PropertyType& Property TEMPLATEARGUMENTLINE ::operator -= (const _PropertyType& _Value)
-{
-	this->Set(this->Get() - _Value);
-	return m_Value;
+Property TEMPLATEARGUMENTLINE& Property TEMPLATEARGUMENTLINE ::operator -= (_T const& rhs) 
+{ 
+	_Set(Self(), _Get(Self()) - rhs); 
+	return *this; 
 }
 
 template TEMPLATELINE
-inline const _PropertyType& Property TEMPLATEARGUMENTLINE ::operator *= (const _PropertyType& _Value)
-{
-	this->Set(this->Get() * _Value);
-	return m_Value;
+Property TEMPLATEARGUMENTLINE& Property TEMPLATEARGUMENTLINE ::operator *= (_T const& rhs) 
+{ 
+	_Set(Self(), _Get(Self()) * rhs); 
+	return *this; 
 }
 
 template TEMPLATELINE
-inline const _PropertyType& Property TEMPLATEARGUMENTLINE ::operator /= (const _PropertyType& _Value)
-{
-	this->Set(this->Get() / _Value);
-	return m_Value;
+Property TEMPLATEARGUMENTLINE& Property TEMPLATEARGUMENTLINE ::operator /= (_T const& rhs) 
+{ 
+	_Set(Self(), _Get(Self()) / rhs); 
+	return *this; 
 }
 
 template TEMPLATELINE
-inline const _PropertyType& Property TEMPLATEARGUMENTLINE ::Get(void)
+Property TEMPLATEARGUMENTLINE ::operator _T const & () const
 {
-	return (m_Class->*m_GetFunctor)();
+	return _Get(Self());
 }
 
 template TEMPLATELINE
-inline void Property TEMPLATEARGUMENTLINE ::Set(const _PropertyType& _Value)
+_T* Property TEMPLATEARGUMENTLINE ::operator -> ()
 {
-	(m_Class->*m_SetFunctor)(_Value);
+	return &const_cast<_T &> (_Get(Self()));
+}
+
+template TEMPLATELINE
+_T const* Property TEMPLATEARGUMENTLINE ::operator -> () const
+{
+	return &_Get(Self());
 }
