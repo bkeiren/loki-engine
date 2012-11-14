@@ -27,7 +27,7 @@ TextureCube* TextureCube::Load( const std::string& _File )
 	TextureCube* tex = TextureCube::Create();
 
 	static const char FaceOrder[6] = { 'N', 'E', 'S', 'W', 'U', 'D' };
-	uint32 res = SOIL_load_OGL_single_cubemap(_File.c_str(), FaceOrder, SOIL_LOAD_AUTO, tex->GetTextureHandle(), SOIL_FLAG_INVERT_Y);
+	uint32 res = SOIL_load_OGL_single_cubemap(_File.c_str(), FaceOrder, SOIL_LOAD_AUTO, tex->GetTextureHandle(), 0);
 
 	tex->m_File = _File;
 
@@ -44,7 +44,7 @@ TextureCube* TextureCube::Load( const std::string& _FileNorth, const std::string
 										_FileDown.c_str(), 
 										_FileNorth.c_str(), 
 										_FileSouth.c_str(), 
-										SOIL_LOAD_AUTO, tex->GetTextureHandle(), SOIL_FLAG_INVERT_Y);
+										SOIL_LOAD_AUTO, tex->GetTextureHandle(), 0);
 
 	tex->m_File = _FileNorth;
 	tex->m_File += _FileEast;
@@ -86,10 +86,6 @@ void TextureCube::UpdateGLInformation()
 	glGetTexLevelParameteriv(GL_TEXTURE_CUBE_MAP, 0, GL_TEXTURE_INTERNAL_FORMAT, &InternalFormat);
 	
 	Unbind();
-
-	// NOTE: Why is this here...?
-	SetTextureParameter(TEXTURE_WRAP_S, REPEAT);
-	SetTextureParameter(TEXTURE_WRAP_T, REPEAT);
 
 	m_InternalFormat = GetEnumInternalFormat(InternalFormat);
 }
@@ -135,10 +131,10 @@ TextureCube* TextureCube::_LoadHelper( int32 _SOIL_Load_Result, TextureCube* _Te
 		return 0;
 	}
 
-	_Tex->Bind();
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	_Tex->Unbind();
+	_Tex->SetTextureParameter(TEXTURE_MIN_FILTER, LINEAR);
+	_Tex->SetTextureParameter(TEXTURE_MAG_FILTER, LINEAR);
+	_Tex->SetTextureParameter(TEXTURE_WRAP_S, CLAMP_TO_EDGE);
+	_Tex->SetTextureParameter(TEXTURE_WRAP_T, CLAMP_TO_EDGE);
 
 	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 

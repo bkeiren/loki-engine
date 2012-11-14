@@ -339,11 +339,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\console\console.h"
+			RelativePath=".\include\console\console.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\console\console.h"
+			RelativePath=".\include\core\console\console.h"
 			>
 		</File>
 		<File
@@ -431,11 +431,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\engine.h"
+			RelativePath=".\include\engine.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\engine.h"
+			RelativePath=".\include\core\engine.h"
 			>
 		</File>
 		<File
@@ -1315,11 +1315,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
 			>
 		</File>
 		<File
@@ -1459,11 +1459,19 @@
 			>
 		</File>
 		<File
+			RelativePath=".\include\core\singleton.h"
+			>
+		</File>
+		<File
 			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
+			RelativePath=".\src\core\game\Sky.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\game\Sky.h"
 			>
 		</File>
 		<File
@@ -1527,11 +1535,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\statemanager.h"
+			RelativePath=".\include\core\statemanager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\statemanager.h"
+			RelativePath=".\include\statemanager.h"
 			>
 		</File>
 		<File
@@ -1599,11 +1607,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\TestState.h"
+			RelativePath=".\include\core\states\TestState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\TestState.h"
+			RelativePath=".\include\states\TestState.h"
 			>
 		</File>
 		<File
@@ -1907,11 +1915,19 @@
 			>
 		</File>
 		<File
+			RelativePath=".\include\util\util.inline.h"
+			>
+		</File>
+		<File
 			RelativePath=".\include\util.inline.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.inline.h"
+			RelativePath=".\src\core\graphics\UtilityPrimitives.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\UtilityPrimitives.h"
 			>
 		</File>
 		<File

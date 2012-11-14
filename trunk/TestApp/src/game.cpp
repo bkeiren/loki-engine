@@ -26,6 +26,8 @@
 #include "core/entitysystem/component/default/scripts/OrbitCam.h"
 #include "core/entitysystem/component/default/Light.h"
 
+#include "core/game/Sky.h"
+#include "core/graphics/TextureCube.h"
 
 #include "scripts/SimpleController.h"
 #include "scripts/SimpleRotationController.h"
@@ -142,13 +144,8 @@ bool MyGame::Init()
 	lc->SetColor(ColorRGB(0.4f, 0.4f, 0.4f));
 	entity14->GetTransform().Translate(vec3(-10.0f, -15.0f, 10.0f));
 
-// 	Entity* lightEntity = g_EntitySystem->SpawnEntity("Light0");
-// 	loki::components::Light* lc = lightEntity->InstantiateComponent<loki::components::Light>();
-// 	lc->SetRange(20.0f);
-
-// 	entity0->GetTransform().SetParent(entity1->GetTransform());
-// 	entity0->GetTransform().SetOrientation(math::gtc::quaternion::rotate(quat(), 45.0f, UP));
-// 	entity1->GetTransform().SetLocalPosition(vec3(10.0f, 0.0f, 0.0f));
+	
+	game::Sky::SetCubeMap(graphics::TextureCube::Load("resources//textures//cubemap.bmp"));
 
 // 	loki::util::general::JSONDocument* doc = loki::util::general::JSONDocument::Open("resources//test.json");
 // 	if (doc)
