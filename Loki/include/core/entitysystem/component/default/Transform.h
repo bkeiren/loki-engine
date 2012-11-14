@@ -68,9 +68,34 @@ public:
 	bool operator != ( Transform& _Transform );
 
 #ifdef TRANSFORM_SUPPORT_PROPERTIES
-	Property<Transform, vec3> position;
-	Property<Transform, quat> orientation;
-	Property<Transform, mat4> transform;
+
+	PROPERTY(vec3, Transform, position,
+		{
+			return self.GetPosition();
+		},
+		{
+			self.SetPosition(value);
+		}
+	);
+
+	PROPERTY(quat, Transform, orientation,
+		{
+			return self.GetOrientation();
+		},
+		{
+			self.SetOrientation(value);
+		}
+		);
+
+	PROPERTY(mat4, Transform, transform,
+		{
+			return self.GetMatrix();
+		},
+		{
+			self.SetMatrix(value);
+		}
+	);
+
 #endif
 private:
 	Transform();
@@ -107,15 +132,6 @@ private:
 	{
 		m_DirtyFlags |= _Flag;
 	}
-
-#ifdef TRANSFORM_SUPPORT_PROPERTIES
-	void Property_SetPosition( const vec3& _Position );
-	void Property_SetOrientation( const quat& _Orientation );
-	void Property_SetTransform( const mat4& _Transform);
-	const vec3& Property_GetPosition();
-	const quat& Property_GetOrientation();
-	const mat4& Property_GetTransform();
-#endif
 
 	quat m_Orientation;
 	vec3 m_Position;
