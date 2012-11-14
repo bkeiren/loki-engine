@@ -82,9 +82,6 @@ private:
 
 	void _GenerateGeometry();
 
-	void _DrawSpotLightCone( f32 _Base, f32 _Height, int32 _Slices );
-	void _DrawPointLightIcoSphere( f32 _Radius, int32 _Subdivisions = 1 );	// Actually subdivides at least once, even when _SubDivision is 0.
-
 	ELightType m_LightType;
 
 	// For point and spot lights.

@@ -1,0 +1,64 @@
+// Strucure for input data as sent by the application.
+struct VertexInput
+{
+	in float3 Position 	: ATTR0;
+};
+
+// Structure for data transferred from the vertex to the fragment program.
+struct VertexOutput
+{
+	float4 PosH		: HPOS;
+	float3 WorldSpaceVector	: TEXCOORD0;
+};
+
+// Structure for data output from the fragment program.
+struct FragmentOutput
+{
+	float4 Color0	: COLOR0;
+	float4 Color1	: COLOR1;
+	float4 Color2	: COLOR2;
+	float4 Color3	: COLOR3;
+};
+
+// Additional input data that we don't want to have in the VertexInput struct.
+samplerCUBE SkySampler			: LKSKYSAMPLER;
+float4x4 ModelViewProjection		: LKMODELVIEWPROJ;
+
+// Vertex program entry point.
+VertexOutput mainVP( VertexInput IN )
+{
+	VertexOutput OUT;
+	
+	OUT.PosH = mul(ModelViewProjection, float4(IN.Position, 1.0));
+	OUT.WorldSpaceVector = IN.Position.xyz;
+
+	return OUT;
+}
+
+// Fragment program entry point.
+FragmentOutput mainFP( VertexOutput IN )
+{
+	FragmentOutput OUT;
+
+	OUT.Color0 = texCUBE(SkySampler, IN.WorldSpaceVector);
+	OUT.Color0.rgb = (IN.WorldSpaceVector + 1.0) * 0.5;
+
+	return OUT;
+}
+
+technique t0
+{
+	pass p0
+	{
+		CullFaceEnable = false;
+		DepthTestEnable = false;
+		DepthMask = false;
+		BlendEnable = false;
+		ColorMask = bool4(true, true, true, true);
+		StencilEnable = false;
+		//PolygonMode = int2(FrontAndBack, Wireframe);
+
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = compile latest mainFP();
+	}
+}
