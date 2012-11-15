@@ -9,7 +9,8 @@ namespace graphics
 
 Material::Material()	:
 	m_Effect(0),
-	m_Shininess(50.0f)
+	m_Shininess(50.0f),
+	m_Reflectivity(0.0f)
 {
 	for (uint32 i = 0; i < _TT_COUNT; ++i)
 	{
@@ -57,6 +58,16 @@ f32 Material::GetShininess() const
 void Material::SetShininess( f32 _Shininess )
 {
 	m_Shininess = _Shininess;
+}
+
+f32 Material::GetReflectivity() const
+{
+	return m_Reflectivity;
+}
+
+void Material::SetReflectivity( f32 _Reflectivity )
+{
+	m_Reflectivity = math::clamp(_Reflectivity, 0.0f, 1.0f);
 }
 
 bool Material::HasDiffuse() const

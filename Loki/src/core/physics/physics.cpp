@@ -1,7 +1,9 @@
 #include "core/physics/physics.h"
 #include "core/physics/rigidbody.h"
 
-#include "core/engine.h"
+//#include "core/engine.h"
+
+#include "core/time/Time.h"
 
 #include "Bullet/btBulletDynamicsCommon.h"
 #include "Bullet/btBulletCollisionCommon.h"
@@ -90,7 +92,7 @@ void LkPhysics::_DebugDraw()
 
 void LkPhysics::_Update()
 {
-	m_DynamiscWorld->stepSimulation(g_Engine->GetFrameTime(), 10, m_FixedTimeStep);
+	m_DynamiscWorld->stepSimulation(g_Time->GetFrameTime(), 10, m_FixedTimeStep);
 }
 
 f32 LkPhysics::GetFixedTimeStep() const

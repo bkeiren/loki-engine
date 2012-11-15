@@ -1,5 +1,5 @@
 #include "core/renderer/image/animatedimage.h"
-#include "core/engine.h"
+#include "core/time/Time.h"
 
 namespace loki
 {
@@ -50,7 +50,7 @@ void LkAnimatedImage::_OnEvent( const LkEvent& _Event )
 	{
 	case EVENT_ONUPDATE:
 		{
-			m_TimeElapsed += loki::g_Engine->GetFrameTime() * m_Speed;
+			m_TimeElapsed += loki::g_Time->GetFrameTime() * m_Speed;
 
 			// Wrap around if necessary.
 			if (m_TimeElapsed < 0.0f)

@@ -10,6 +10,7 @@
 #include "core/entitysystem/component/default/CameraComponent.h"
 #include "core/entitysystem/Entity.h"
 #include "core/physics/physics.h"
+#include "core/time/Time.h"
 
 namespace loki
 {
@@ -115,7 +116,7 @@ CONSOLE_FUNCTION(Console_ReloadConsoleUI)
 
 CONSOLE_FUNCTION(Console_GetEngineUpTime)
 {
-	f32 s = g_Engine->GetEngineUpTime();	// Seconds.
+	f32 s = g_Time->GetGlobalTime();	// Seconds.
 	f32 m = s / 60.0f;	// Minutes.
 	f32 h = s / 3600.0f;	// Hours.
 
@@ -349,6 +350,17 @@ CONSOLE_FUNCTION(Console_PhysicsSetGravity)
 {
 	physics::g_Physics->SetGravity(vec3(_Command->m_Arguments[0].m_Float, _Command->m_Arguments[1].m_Float, _Command->m_Arguments[2].m_Float));
 	return LkConsole::CommandResult("");
+}
+
+CONSOLE_FUNCTION(Console_TimeSetScale)
+{
+	g_Time->SetTimeScale(_Command->m_Arguments[0].m_Float);
+	return LkConsole::CommandResult("");
+}
+
+CONSOLE_FUNCTION(Console_TimeGetScale)
+{
+	return LkConsole::CommandResult("Time scale: %f", g_Time->GetTimeScale());
 }
 
 }	// Namespace loki.

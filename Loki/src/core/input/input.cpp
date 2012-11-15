@@ -4,6 +4,7 @@
 #include "core/renderer/renderer.h"
 #include "core/window.h"
 #include "core/console/console.h"
+#include "core/time/Time.h"
 
 namespace loki
 {
@@ -40,7 +41,7 @@ void LkInput::_PerformMouseAcceleration()
 	f32 dr = sqrtf((f32)(m_MouseDelta.x * m_MouseDelta.x + m_MouseDelta.y * m_MouseDelta.y));
 
 	//3) determine how much time has passed, and calculate the speed of the movement: v = dr/dt
-	f32 dt = g_Engine->GetFrameTime();
+	f32 dt = g_Time->GetActualFrameTime();
 	f32 v = dr / dt;
 
 	//4) perform some non-linear transform on the velocity, 

@@ -47,6 +47,7 @@ float2 UVScale					: LKUVSCALE = float2(1.0, 1.0);
 float zFar						: LKZFAR;
 float zNear						: LKZNEAR;
 float MaterialShininess			: LKMATERIALSHININESS;
+float MaterialReflectivity		: LKMATERIALREFLECTIVITY;
 
 float3 PackNormal( float3 _UnpackedNormal )
 {
@@ -83,7 +84,7 @@ FragmentOutput mainFP( VertexOutput IN )
 	OUT.Color1 = float4(IN.PosVS.xyz, MaterialShininess);
 
 	// View-space normal.
-	float3x3 TBN = float3x3(normalize(-IN.Tangent), normalize(IN.BiTangent), normalize(IN.Normal));
+	float3x3 TBN = float3x3(normalize(IN.Tangent), normalize(IN.BiTangent), normalize(IN.Normal));
 	float3 TangentSpaceNormal = (float3(tex2D(NormalSampler, IN.Tex).rgb) * 2.0) - 1.0;
 	float3 WorldSpaceNormal = mul(ModelMatrixIT, mul(transpose(TBN), TangentSpaceNormal));	// Finally: I needed the transpose of the TBN...
 	float3 ViewSpaceNormal = mul(float3x3(ViewMatrix), WorldSpaceNormal);
@@ -103,8 +104,7 @@ FragmentOutput mainFP( VertexOutput IN )
 	//float3 ReflectionVector = mul(float3x3(inverse(ViewMatrix)), normalize(IN.PosVS.xyz));
 
 	float3 EnvironmentSample = texCUBE(EnvSampler, ReflectionVector);
-	float Reflectiveness = 1.0;
-	OUT.Color0 = float4( (DiffuseSample * (1.0 - Reflectiveness)) + (Reflectiveness * EnvironmentSample), SpecularSample);
+	OUT.Color0 = float4( (DiffuseSample * (1.0 - MaterialReflectivity)) + (MaterialReflectivity * EnvironmentSample), SpecularSample);
 #endif
 	
 	// Emissive color.

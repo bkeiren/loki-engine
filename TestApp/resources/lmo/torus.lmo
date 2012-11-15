@@ -1,0 +1,6 @@
+{
+	"mesh":"resources//models//torus.dae",
+	"materials":["resources//lma//torus.lma"],
+	"uscale":6.0,
+	"vscale":3.0
+}

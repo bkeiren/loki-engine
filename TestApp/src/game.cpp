@@ -148,6 +148,27 @@ bool MyGame::Init()
 	
 	game::Sky::SetCubeMap(graphics::TextureCube::Load("resources//textures//cubemap2.bmp"));
 
+	for (int i = 0; i < 10; ++i)
+	{
+		std::stringstream str;
+		str << "TorusEntity";
+		str << i;
+		
+		Entity* TorusEntity = g_EntitySystem->SpawnEntity(str.str().c_str());
+		rc = TorusEntity->InstantiateComponent<loki::components::RenderComponent>();
+		rc->SetModel(graphics::Model::Load("resources//lmo//torus.lmo"));
+		
+		pc = TorusEntity->InstantiateComponent<loki::components::PhysicsComponent>();
+		info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+		info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetModel()->GetMesh(0));
+		info.m_Restitution = 0.1f;
+		info.m_Mass = 0.001f;
+		pc->CreateBodyFromInfo(info);
+		
+		
+		TorusEntity->GetTransform().Translate(vec3(0.0f, i * 10.0f, 0.0f));
+	}
+
 // 	loki::util::general::JSONDocument* doc = loki::util::general::JSONDocument::Open("resources//test.json");
 // 	if (doc)
 // 	{
