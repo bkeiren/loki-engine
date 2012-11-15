@@ -92,7 +92,7 @@ void LkPhysics::_DebugDraw()
 
 void LkPhysics::_Update()
 {
-	m_DynamiscWorld->stepSimulation(g_Time->GetFrameTime(), 10, m_FixedTimeStep);
+	m_DynamiscWorld->stepSimulation(g_Time->GetFrameTime(), 100, m_FixedTimeStep);
 }
 
 f32 LkPhysics::GetFixedTimeStep() const
