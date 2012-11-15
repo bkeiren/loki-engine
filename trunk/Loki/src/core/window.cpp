@@ -15,6 +15,7 @@ Window::Window( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fu
 	m_Icon(0),
 	m_WindowIsOwned(false),
 	m_WindowCallback(_WindowCallback),
+	m_AcceptsDragDropFiles(false),
 	m_X(0),
 	m_Y(0),
 	m_Width(0),
@@ -163,6 +164,7 @@ Window::Window( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fu
 	ShowWindow(m_hWnd, SW_SHOW);						// Show The Window
 	SetForegroundWindow(m_hWnd);						// Slightly Higher Priority
 	SetFocus(m_hWnd);									// Sets Keyboard Focus To The Window
+	SetAcceptDragDropFiles(false);
 
 	m_WindowCreated = true;
 
@@ -382,6 +384,17 @@ bool Window::IsFullscreen() const
 bool Window::HasFocus() const
 {
 	return (GetFocus() == m_hWnd);
+}
+
+void Window::SetAcceptDragDropFiles( bool _Accept )
+{
+	DragAcceptFiles(m_hWnd, _Accept);
+	m_AcceptsDragDropFiles = _Accept;
+}
+
+bool Window::AcceptsDragDropFiles()
+{
+	return m_AcceptsDragDropFiles;
 }
 
 void Window::_Destroy()

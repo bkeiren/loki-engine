@@ -41,6 +41,8 @@
 
 #include "core/time/Time.h"
 
+#include "util/dragdrophandler/DragDropHandler.h"
+
 #ifdef _DEBUG
 // Debug defines.
 	#define WINDOW_WIDTH			1280
@@ -612,6 +614,22 @@ long __stdcall LokiEngine::WindowProc( Window* _Window, UINT _uMsg, WPARAM _wPar
 	case WM_SIZE:
 		{
 			g_EventManager->Post(LkEvent(EVENT_WINDOWRESIZE));
+			return 0;
+		}
+	case WM_DROPFILES:
+		{
+			char FileName[MAX_PATH] = "";
+			uint32 NumFiles = DragQueryFileA((HDROP)_wParam, 0xffffffff, FileName, MAX_PATH);
+
+			for (uint32 i = 0; i < NumFiles; ++i)
+			{
+				POINT CursorPosition;
+				DragQueryFileA((HDROP)_wParam, i, FileName, MAX_PATH);
+				DragQueryPoint((HDROP)_wParam, &CursorPosition);
+
+				util::system::DragDropHandler::_PushDroppedFile(std::string(FileName), int2(CursorPosition.x, CursorPosition.y));
+			}
+			DragFinish((HDROP)_wParam);
 			return 0;
 		}
 	}
