@@ -131,8 +131,6 @@ namespace strings
 
 namespace system
 {
-
-
 	//////////////////////////////////////////////////////////////////////////
 	// Sleeps the calling thread for _ms number of milliseconds.
 	// Can be implemented differently per platform.
@@ -159,6 +157,23 @@ namespace system
 #define CONFIRMATION_YES	1
 	int32 MessageBoxConfirmation( const char* _Text, const char* _Caption = NULL, bool _CanCancel = false );
 
+#ifdef _WIN32
+
+	//////////////////////////////////////////////////////////////////////////
+	// File opening/saving functions.
+	//////////////////////////////////////////////////////////////////////////
+// Some example filter strings. These can be combined simply by stringing (forgive the pun) them together
+// separated by nothing else than a good ol' space.
+#define OPENFILE_FILTER_ALLFILES	"All Files (*.*)\0*.*\0"
+#define OPENFILE_FILTER_TXTFILES	"Text Files (*.txt)\0*.txt\0"
+#define OPENFILE_FILTER_LMAFILES	"Loki Material Files (*.lma)\0*.lma\0"
+#define OPENFILE_FILTER_LMOFILES	"Loki Model Files (*.lmo)\0*.lmo\0"
+#define OPENFILE_FILTER_HELPER(DescriptionString, ExtensionString)	DescriptionString" (*."ExtensionString")\0*."ExtensionString"\0"
+
+	bool OpenFileDialog( const char* _Filter, std::string& _Output );
+	bool SaveFileDialog( const char* _Filter, std::string& _Output );
+
+#endif
 }
 
 namespace time

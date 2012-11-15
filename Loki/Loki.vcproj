@@ -295,11 +295,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\commandlineparsing.h"
+			RelativePath=".\include\commandlineparsing.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\commandlineparsing.h"
+			RelativePath=".\include\core\commandlineparsing.h"
 			>
 		</File>
 		<File
@@ -379,11 +379,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\dev_notes.txt"
+			RelativePath=".\src\dev_notes.txt"
 			>
 		</File>
 		<File
-			RelativePath=".\src\dev_notes.txt"
+			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -396,6 +396,14 @@
 		</File>
 		<File
 			RelativePath=".\include\core\graphics\DisplayList.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\util\dragdrophandler\DragDropHandler.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\util\dragdrophandler\DragDropHandler.h"
 			>
 		</File>
 		<File
@@ -431,11 +439,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\engine.h"
+			RelativePath=".\include\core\engine.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\engine.h"
+			RelativePath=".\include\engine.h"
 			>
 		</File>
 		<File
@@ -995,11 +1003,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\logger.h"
+			RelativePath=".\include\logger.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\logger.h"
+			RelativePath=".\include\core\logger.h"
 			>
 		</File>
 		<File
@@ -1323,19 +1331,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
-			>
-		</File>
-		<File
 			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtx\quaternion.inl"
+			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
 			>
 		</File>
 		<File
 			RelativePath=".\include\math\glm\gtc\quaternion.inl"
+			>
+		</File>
+		<File
+			RelativePath=".\include\math\glm\gtx\quaternion.inl"
 			>
 		</File>
 		<File
@@ -1507,11 +1515,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\SplashState.h"
+			RelativePath=".\include\core\states\SplashState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\SplashState.h"
+			RelativePath=".\include\states\SplashState.h"
 			>
 		</File>
 		<File
@@ -1615,11 +1623,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\TestState.h"
+			RelativePath=".\include\states\TestState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\TestState.h"
+			RelativePath=".\include\core\states\TestState.h"
 			>
 		</File>
 		<File
@@ -1923,19 +1931,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\util\util.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.inline.h"
+			RelativePath=".\include\util.h"
 			>
 		</File>
 		<File
 			RelativePath=".\include\util\util.inline.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\util.inline.h"
 			>
 		</File>
 		<File

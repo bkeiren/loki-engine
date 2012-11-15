@@ -32,6 +32,9 @@
 #include "scripts/SimpleController.h"
 #include "scripts/SimpleRotationController.h"
 
+#include "util/dragdrophandler/DragDropHandler.h"
+#include "core/window.h"
+
 using namespace loki;
 
 physics::LkRigidBody* body = NULL;
@@ -187,6 +190,8 @@ bool MyGame::Init()
 // 		doc->Close();
 // 	}
 
+	g_Engine->GetWindow()->SetAcceptDragDropFiles(true);
+
 	return true;
 }
 
@@ -259,6 +264,13 @@ void MyGame::Update()
 		}
 	}
 
+	while (util::system::DragDropHandler::GetNumFiles() > 0)
+	{
+		util::system::DragDropHandler::DroppedFileInfo Info;
+		util::system::DragDropHandler::QueryNewest(Info, true);
+
+		LOG(VL_NORMAL, "Dropped file: %s (@ [%i, %i])", Info.m_File.c_str(), Info.m_CursorPosition.x, Info.m_CursorPosition.y);
+	}
 	
 // 	{
 // 		LkPointLight* p0 = m_Level->GetPointLight("PointLight3");

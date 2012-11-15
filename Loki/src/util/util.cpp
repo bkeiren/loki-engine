@@ -121,6 +121,38 @@ namespace system
 		}
 	}
 
+	namespace
+	{
+		inline bool FileDialogHelper( const char* _Filter, std::string& _Output, bool _Mode )
+		{
+			_Output.clear();
+			OPENFILENAMEA ofn;
+			char fileName[MAX_PATH] = "";
+			ZeroMemory(&ofn, sizeof(ofn));
+			ofn.lStructSize = sizeof(OPENFILENAME);
+			ofn.hwndOwner = g_Engine->GetWindow()->GetHWND();
+			ofn.lpstrFilter = _Filter;
+			ofn.lpstrFile = fileName;
+			ofn.nMaxFile = MAX_PATH;
+			ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+			ofn.lpstrDefExt = "";
+			if ( _Mode ? GetOpenFileNameA(&ofn) : GetSaveFileNameA(&ofn) )
+			{
+				_Output = fileName;
+				return true;
+			}
+			return false;
+		}
+	}
+	bool OpenFileDialog( const char* _Filter, std::string& _Output )
+	{
+		return FileDialogHelper(_Filter, _Output, true);
+	}
+
+	bool SaveFileDialog( const char* _Filter, std::string& _Output )
+	{
+		return FileDialogHelper(_Filter, _Output, false);
+	}
 }
 
 namespace time

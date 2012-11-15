@@ -51,6 +51,9 @@ public:
 	bool IsFullscreen() const;
 
 	bool HasFocus() const;
+
+	void SetAcceptDragDropFiles( bool _Accept );
+	bool AcceptsDragDropFiles();
 private:
 	Window();
 
@@ -77,6 +80,7 @@ private:
 	HICON m_Icon;
 	bool m_WindowIsOwned;
 	WindowProc m_WindowCallback;
+	bool m_AcceptsDragDropFiles;
 	
 	// This information is kept up to date by updating it each time the window's position or dimensions change.
 	// This is done so that the data does not need to be queried each time it is request, but rather
