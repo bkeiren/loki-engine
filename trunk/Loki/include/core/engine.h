@@ -53,15 +53,6 @@ public:
 	game::LkGame* GetGame();
 
 	//////////////////////////////////////////////////////////////////////////
-	// In seconds.
-	f32 GetFrameTime() const;
-
-	//////////////////////////////////////////////////////////////////////////
-	// In seconds. Returns the time that has passed since the engine's Go()
-	// function was called.
-	f32 GetEngineUpTime() const;
-
-	//////////////////////////////////////////////////////////////////////////
 	// Returns the number of frames per second, based on the current frame time.
 	f32 GetFrameRate() const;
 
@@ -97,14 +88,6 @@ private:
 
 	static long __stdcall WindowProc( Window* _Window, UINT _uMsg, WPARAM _wParam, LPARAM _lParam );
 
-	//////////////////////////////////////////////////////////////////////////
-	// To be called at start of frame.
-	void _PrepareFrameTime();
-
-	//////////////////////////////////////////////////////////////////////////
-	// To be called at end of frame.
-	void _CalculateFrameTime();
-
 	void _CapFrameRate();
 
 	// An std::list of parsed command line arguments.
@@ -115,10 +98,6 @@ private:
 	Window* m_Window;
 
 	game::LkGame* m_Game;
-
-	util::time::Clock m_EngineClock;
-	util::time::Clock m_FrameClock;
-	f32 m_FrameTime;	// Seconds.
 
 	//////////////////////////////////////////////////////////////////////////
 	// Used to cap the frame rate.

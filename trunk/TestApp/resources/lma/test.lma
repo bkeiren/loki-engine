@@ -4,5 +4,6 @@
 	"specular":"resources//textures//texture2_spec.bmp",
 	"emissive":"resources//textures//texture2_emissive.bmp",
 	"effect":"resources//shaders//testshader.cgfx",
-	"shininess":50.0
+	"shininess":50.0,
+	"reflectivity":0.7
 }

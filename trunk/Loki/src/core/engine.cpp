@@ -39,6 +39,8 @@
 
 #include "core/input/input.h"
 
+#include "core/time/Time.h"
+
 #ifdef _DEBUG
 // Debug defines.
 	#define WINDOW_WIDTH			1280
@@ -85,7 +87,6 @@ loki::LkHTMLView* webtab = NULL;	// REMOVE.
 LokiEngine::LokiEngine( game::LkGame* _Game )	:
 	m_Exit(false),
 	m_Game(_Game),
-	m_FrameTime(1.0f),
 	m_FrameRateCap(0),
 	m_TargetFrameTime(0.0f),
 	m_Window(0)
@@ -120,7 +121,7 @@ LokiEngine::~LokiEngine()
 
 void LokiEngine::Go( int32 argc, char** argv )
 {
-	m_EngineClock.Start();
+	g_Time = new Time();
 
 	// Init console and logger (In this order!).
 	// These are initalized in Go() instead of Init() because they need to be initalized as one of the first components.
@@ -158,19 +159,9 @@ game::LkGame* LokiEngine::GetGame()
 	return m_Game;
 }
 
-f32 LokiEngine::GetFrameTime() const
-{
-	return m_FrameTime;
-}
-
-f32 LokiEngine::GetEngineUpTime() const
-{
-	return m_EngineClock.Lap();
-}
-
 f32 LokiEngine::GetFrameRate() const
 {
-	return (1.0f / m_FrameTime);
+	return (1.0f / g_Time->GetFrameTime());
 }
 
 void LokiEngine::SetFrameRateCap( uint32 _Cap )
@@ -351,7 +342,7 @@ void LokiEngine::Loop()
 {
 	while (/*g_RenderWindow.IsOpened() ||*/ !m_Exit)
 	{
-		_PrepareFrameTime();
+		g_Time->_PrepareFrameTime();
 
 		HandleEvents();
 
@@ -369,7 +360,7 @@ void LokiEngine::Loop()
 
 		g_EventManager->Post(LkEvent(EVENT_FRAMEEND));
 
-		_CalculateFrameTime();
+		g_Time->_CalculateFrameTime();
 		_CapFrameRate();
 	}
 }
@@ -453,6 +444,9 @@ void LokiEngine::Shutdown()
 
 	delete g_Console;
 	g_Console = NULL;
+
+	delete g_Time;
+	g_Time = NULL;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -630,23 +624,14 @@ void LokiEngine::RequestExit()
 	m_Exit = true;
 }
 
-void LokiEngine::_PrepareFrameTime()
-{
-	m_FrameClock.Start();
-}
-
-void LokiEngine::_CalculateFrameTime()
-{
-	m_FrameTime = m_FrameClock.Lap();
-}
-
 void LokiEngine::_CapFrameRate()
 {
+	return;
 	// Cap the frame rate if a cap is enabled by filling spare time with a call to Sleep().
-	if ((bool)m_FrameRateCap && m_FrameTime < m_TargetFrameTime)
+	if ((bool)m_FrameRateCap && g_Time->GetFrameTime() < m_TargetFrameTime)
 	{
-		util::system::Sleep((uint32)((m_TargetFrameTime - m_FrameTime) * 1000));
-		m_FrameTime = m_TargetFrameTime;
+		util::system::Sleep((uint32)((m_TargetFrameTime - g_Time->GetActualFrameTime()) * 1000));
+		g_Time->_SetFrameTime(m_TargetFrameTime);
 	}
 }
 

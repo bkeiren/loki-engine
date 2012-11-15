@@ -45,6 +45,9 @@ public:
 	f32 GetShininess() const;
 	void SetShininess( f32 _Shininess );
 
+	f32 GetReflectivity() const;
+	void SetReflectivity( f32 _Reflectivity );
+
 	bool HasDiffuse() const;
 	bool HasNormal() const;
 	bool HasSpecular() const;
@@ -55,6 +58,7 @@ private:
 	Texture2D* m_Textures[_TT_COUNT];
 	renderer::LkEffect* m_Effect;
 	f32 m_Shininess;
+	f32 m_Reflectivity;
 };
 
 }

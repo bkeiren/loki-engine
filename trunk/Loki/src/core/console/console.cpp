@@ -131,6 +131,8 @@ void LkConsole::RegisterCommands()
 	m_Commands["gfx.tlv"] = Command("Toggles the visualization of light volumes", &Console_LightVolumes);
 	m_Commands["phy.dbgdraw"] = Command("Toggles debug drawing of the physics worlds and interactions", &Console_PhysicsDebugDraw, Command::AT_BOOLEAN);
 	m_Commands["phy.setgravity"] = Command("Sets the physics world's global gravity vector (Default: [0.0, -9.81, 0.0])", &Console_PhysicsSetGravity, Command::AT_FLOAT, Command::AT_FLOAT, Command::AT_FLOAT);
+	m_Commands["time.setscale"] = Command("Sets the time scale", &Console_TimeSetScale, Command::AT_FLOAT);
+	m_Commands["time.getscale"] = Command("Gets the time scale", &Console_TimeGetScale);
 }
 
 std::list<std::string> LkConsole::GetCommandsList()

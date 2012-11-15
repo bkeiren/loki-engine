@@ -142,6 +142,7 @@ void Model::Render( const mat4& _ModelMatrix, const mat4& _ViewMatrix, const mat
 		SETCGPARAM("LKZFAR", _ZFar);	// Set the Z-far value.
 		SETCGPARAM("LKZNEAR", _ZNear);	// Set the Z-near value.
 		SETCGPARAM("LKMATERIALSHININESS", material->GetShininess());
+		SETCGPARAM("LKMATERIALREFLECTIVITY", material->GetReflectivity());
 		SETCGPARAM("LKSKYSAMPLER", SkyCubeMap ? SkyCubeMap->GetTextureHandle() : 0);
 
 
@@ -294,6 +295,7 @@ Material* Model::_CreateMaterialFromLMAFile( const std::string& _LMAFile )
 	util::general::JSONValue emissiveTexString = root["emissive"];
 	util::general::JSONValue effectString = root["effect"];
 	util::general::JSONValue shininessString = root["shininess"];
+	util::general::JSONValue reflectivityString = root["reflectivity"];
 
 	Material* mtl = new Material();
 
@@ -323,6 +325,10 @@ Material* Model::_CreateMaterialFromLMAFile( const std::string& _LMAFile )
 	if (shininessString.IsDouble())
 	{
 		mtl->SetShininess((f32)shininessString.AsDouble());
+	}
+	if (reflectivityString.IsDouble())
+	{
+		mtl->SetReflectivity((f32)reflectivityString.AsDouble());
 	}
 
 	JSON_CLOSE(doc);
