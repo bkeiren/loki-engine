@@ -45,6 +45,9 @@
 #include "util/dragdrophandler/DragDropHandler.h"
 
 #include "core/window/Win32SubMenu.h"
+#include "core/window/Win32MenuItem.h"
+
+#include "core/editor/MenuCallbacks.h"
 
 #ifdef _DEBUG
 // Debug defines.
@@ -521,6 +524,11 @@ void LokiEngine::HandleEvents()
 				g_HTMLCore->InjectKeyboardEvent(msg.message, msg.wParam, msg.lParam);
 				break;
 			}
+		case WM_COMMAND:
+			{
+				Win32MenuItem::_CallCallback((uint32)LOWORD(msg.wParam));
+				break;
+			}
 		default:
 			{
 				break;
@@ -670,11 +678,15 @@ void LokiEngine::_CapFrameRate()
 void LokiEngine::_BuildEditorMenus()
 {
 	Win32SubMenu* FileSubMenu = m_Window->GetWin32Menu()->CreateSubMenu("&File");
-	Win32SubMenu* NewSubMenu = FileSubMenu->CreateSubMenu("&New...");
-	NewSubMenu->CreateItem("&Scene", 0);
-	NewSubMenu->CreateItem("", Win32SubMenu::ITEM_FLAG_SEPARATOR);
-	NewSubMenu->CreateItem("&Material", 0);
-	NewSubMenu->CreateItem("&Model", 0);
+		Win32SubMenu* NewSubMenu = FileSubMenu->CreateSubMenu("&New...");
+			NewSubMenu->CreateItem("&Scene", 0)->SetCallback(&NewSceneCallback);
+			NewSubMenu->CreateItem("&Material", 0)->SetCallback(&NewMaterialCallback);
+			NewSubMenu->CreateItem("&Model", 0)->SetCallback(&NewModelCallback);
+
+	Win32SubMenu* EntitySubMenu = m_Window->GetWin32Menu()->CreateSubMenu("&Entity");
+		EntitySubMenu->CreateItem("Create Empty", 0)->SetCallback(&EmptyEntityCallback);
+		EntitySubMenu->CreateItem("", Win32SubMenu::ITEM_FLAG_SEPARATOR);
+		EntitySubMenu->CreateItem("Find...", 0);
 
 	m_Window->ReloadWin32Menu();
 }
