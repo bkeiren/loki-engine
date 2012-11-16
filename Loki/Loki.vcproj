@@ -295,11 +295,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\commandlineparsing.h"
+			RelativePath=".\include\core\commandlineparsing.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\commandlineparsing.h"
+			RelativePath=".\include\commandlineparsing.h"
 			>
 		</File>
 		<File
@@ -379,15 +379,15 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\dev_notes.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\dev_notes.txt"
+			>
+		</File>
+		<File
 			RelativePath=".\src\dev_notes.txt"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\dev_notes.txt"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -915,11 +915,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\baseclass\istate.h"
+			RelativePath=".\include\states\baseclass\istate.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\baseclass\istate.h"
+			RelativePath=".\include\core\states\baseclass\istate.h"
 			>
 		</File>
 		<File
@@ -1183,6 +1183,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\include\core\html\nullhtmlcore.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\html\htmlview\nullhtmlview.h"
+			>
+		</File>
+		<File
 			RelativePath=".\include\math\glm\gtx\number_precision.hpp"
 			>
 		</File>
@@ -1331,11 +1339,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
 			>
 		</File>
 		<File
@@ -1475,11 +1483,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\singleton.h"
+			RelativePath=".\include\core\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
+			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
@@ -1515,11 +1523,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\SplashState.h"
+			RelativePath=".\include\states\SplashState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\SplashState.h"
+			RelativePath=".\include\core\states\SplashState.h"
 			>
 		</File>
 		<File
@@ -1931,11 +1939,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.h"
+			RelativePath=".\include\util.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.h"
+			RelativePath=".\include\util\util.h"
 			>
 		</File>
 		<File

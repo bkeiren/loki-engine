@@ -48,9 +48,7 @@ public:
 	LkRenderer();
 	virtual ~LkRenderer();
 
-	//static void SetScene( Scene* _Scene );
-	//static Scene* GetScene();
-	void Render( game::LkLevel* _Level );
+	void Render();
 
 	void ToggleWireframe();
 

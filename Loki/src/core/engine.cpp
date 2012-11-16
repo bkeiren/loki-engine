@@ -23,6 +23,7 @@
 #include "util/systeminfo/systeminfo.h"
 
 #include "core/html/htmlcore.h"
+#include "core/html/nullhtmlcore.h"
 
 #include <time.h>
 
@@ -91,7 +92,8 @@ LokiEngine::LokiEngine( game::LkGame* _Game )	:
 	m_Game(_Game),
 	m_FrameRateCap(0),
 	m_TargetFrameTime(0.0f),
-	m_Window(0)
+	m_Window(0),
+	m_EditorMode(false)
 {
 #ifndef _DEBUG
 	HideBackgroundConsoleWindow();
@@ -198,6 +200,13 @@ void LokiEngine::ParseArguments( int32 argc, char** argv )
 	LOG(VL_ALWAYS, "Parsing command line...");
 
 	ParseCommandLine(argc, argv, m_CommandLineArguments);
+
+	CommandLineParametersConstIter it = m_CommandLineArguments.find("editor");
+	if (it != m_CommandLineArguments.end())
+	{
+		m_EditorMode = true;
+		LOG(VL_ALWAYS, "LokiEngine: -editor command line argument detected. Running in editor mode");
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -241,20 +250,6 @@ bool LokiEngine::Init()
 	// Initialize overlay manager.
 	ui::g_OverlayManager = new ui::LkOverlayManager();
 
-	// Lua examples.
-	if (false)
-	{
-		g_Lua->RunScript("resources//scripts//script1.lua");
-		g_Lua->RunString("c = 7 LOG(c)");
-		g_Lua->RunString("local b = 6");
-		g_Lua->RunString("LOG(b)");
-
-		g_Lua->RunStringAsync("LOG(\"This is asynchronous\")");
-		g_Lua->RunScriptAsync("resources//scripts//script1.lua");
-		g_Lua->RunScriptAsync("resources//scripts//script1.lua");
-		g_Lua->RunStringAsync("LOG(\"This is asynchronous\")");
-	}
-
 	// TODO: Implement config loader
 
 	// Initialize the renderer.
@@ -267,9 +262,8 @@ bool LokiEngine::Init()
 		return false;
 	}
 	renderer::g_Renderer = new renderer::LkRenderer(m_Window);
-	
-	// Initialize web browser.
-	g_HTMLCore = new LkHTMLCore();
+
+	g_HTMLCore = IsInEditorMode() ? new NullHTMLCore() : new LkHTMLCore();
 
 	// Finalize console UI.
 	g_Console->FinalizeInitialization();
@@ -278,23 +272,18 @@ bool LokiEngine::Init()
 	g_EntitySystem = CreateEntitySystem();
 
 	// Webbrowser tab creation and page loading + rendering.
-	if (true)
+	if (false)
 	{
 		webtab = g_HTMLCore->CreateView(renderer::g_Renderer->GetRenderWidth(), renderer::g_Renderer->GetRenderHeight());
 		//webtab->LoadURL("http://www.google.com/");
 		//webtab->LoadFile("resources//ui//test1//page.html");
-		webtab->LoadFile("resources//ui//index.html");
+		webtab->LoadFile(DEFAULT_RESOURCE("ui//index.html"));
 		webtab->CreateJavascriptObject(L"TestObject");
 		webtab->SetJavascriptCallback(L"TestObject", L"MyCallback");
 		webtab->ExecuteJavascript("TestObject.MyCallback();");
 		webtab->ExecuteJavascript("TestObject.MyCallback(\"Je Oma Is Lelijk :D\");");
 		webtab->ExecuteJavascript("TestObject.MyCallback(0, 1, 2, 3, 4);");
 	}
-
-	// Just for testing.
-	//g_Console->Execute("godmode 1");
-	//g_Console->Execute("getEngineVersion");
-	//g_Console->Execute("getGameVersion");
 
 	// Register states.
 	g_StateManager = new LkStateManager();
@@ -304,16 +293,19 @@ bool LokiEngine::Init()
 	// Set the state to start up with.
 	//StateManager::SetActiveState("State_Splash");
 
-	m_Game->PreInit();
-	if (!m_Game->Init())
+	
+	if (!IsInEditorMode())
 	{
-		LOG(VL_ERROR, "Engine::Init: Game failed to initialize");
-		m_Game->PostInitFail();
-		return false;
+		m_Game->PreInit();
+		if (!m_Game->Init())
+		{
+			LOG(VL_ERROR, "Engine::Init: Game failed to initialize");
+			m_Game->PostInitFail();
+			return false;
+		}
+		m_Game->PostInit();
+		LOG(VL_ALWAYS, "Game::Init: Initialized");
 	}
-	m_Game->PostInit();
-
-	LOG(VL_ALWAYS, "Game::Init: Initialized");
 	
 	//Sound* sound = Audio::CreateSound("resources//sound//song.mp3");
 	//sound->Play();
@@ -560,7 +552,7 @@ void LokiEngine::Render()
 	// Render the currently active state.
 	//StateManager::GetActiveState()->Render();
 
-	renderer::g_Renderer->Render( m_Game->m_Level );
+	renderer::g_Renderer->Render();
 
 	//webtab->Render();
 // 	if (g_HTMLCore->GetWebTabInFocus() == 0)
@@ -640,6 +632,11 @@ long __stdcall LokiEngine::WindowProc( Window* _Window, UINT _uMsg, WPARAM _wPar
 void LokiEngine::RequestExit()
 {
 	m_Exit = true;
+}
+
+bool LokiEngine::IsInEditorMode() const
+{
+	return m_EditorMode;
 }
 
 void LokiEngine::_CapFrameRate()

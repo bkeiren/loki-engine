@@ -37,7 +37,8 @@ DragDropHandler::~DragDropHandler()
 									if (_Remove)										\
 									{													\
 										PopFunction();									\
-									}
+									}													\
+									return true;
 
 bool DragDropHandler::QueryOldest( DragDropHandler::DroppedFileInfo& _Output, bool _Remove /* = true */ )
 {

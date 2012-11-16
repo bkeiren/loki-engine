@@ -10,4 +10,6 @@
 #include "core/filesystem/filesystem.h"
 #include "core/logger.h"
 
+#define DEFAULT_RESOURCE(File)	"resources//default//"File
+
 #endif

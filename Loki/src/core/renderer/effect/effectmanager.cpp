@@ -96,9 +96,9 @@ LkEffect* LkEffectManager::CreateEffectFromFile( const std::string& _File, const
 	CGeffect cgeffect = cgCreateEffectFromFile((CGcontext)m_CGContext, _File.c_str(), NULL);
 	if (cgeffect == NULL)
 	{
-		std::string temp = cgGetLastListing((CGcontext)m_CGContext);	// Stored in a temporary variable because using it directly crashes
+		//std::string temp = cgGetLastListing((CGcontext)m_CGContext);	// Stored in a temporary variable because using it directly crashes
 																		// in the logger.
-		LOG(VL_ERROR, "EffectManager::CreateEffectFromFile: Failed to load effect from file:\n%s", temp.c_str());
+		LOG(VL_ERROR, "EffectManager::CreateEffectFromFile: Failed to load effect from file");
 		return 0;
 	}
 

@@ -14,12 +14,15 @@ namespace loki
 
 LkHTMLCore* g_HTMLCore = NULL;
 
-LkHTMLCore::LkHTMLCore()	:
+LkHTMLCore::LkHTMLCore( bool _Null )	:
 	m_WebCore(NULL),
 	m_HTMLViewInFocus(NULL),
 	m_InputDetected(false)
 {
-	_Init();
+	if (!_Null)
+	{
+		_Init();
+	}
 }
 
 LkHTMLCore::~LkHTMLCore()
@@ -36,7 +39,11 @@ bool LkHTMLCore::_Init()
 	
 	// This CSS file can be used to alter the global default appearance of things.
 	// It is mainly used for altering the look of scrollbars though.
-	config.setCustomCSSFromFile("resources//ui//customcss.css");
+	config.setCustomCSSFromFile(DEFAULT_RESOURCE("ui//customcss.css"));
+
+	config.setSaveCacheAndCookies(false);
+
+	config.setUserDataPath("awesomium_userdata");
 
 	m_WebCore = new Awesomium::WebCore(config);
 

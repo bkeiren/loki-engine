@@ -17,7 +17,17 @@ namespace components
 	class Light;
 }
 
-#define DECLARE_COMPONENT_TYPEINFO(componentclass)		friend class Entity; static util::general::TypeInfo& GetTypeInfo() { static util::general::TypeInfo ti = util::general::TypeInfo(typeid(componentclass)); return ti; }
+#define DECLARE_COMPONENT_TYPEINFO(componentclass)		friend class Entity;											\
+														static const std::string& GetComponentTypeName()				\
+														{																\
+															static std::string Name = std::string(#componentclass);		\
+															return Name;												\
+														}																\
+														static util::general::TypeInfo& GetTypeInfo()					\
+														{																\
+															static util::general::TypeInfo ti = util::general::TypeInfo(typeid(componentclass));	\
+															return ti;													\
+														}
 
 class Entity;
 

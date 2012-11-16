@@ -73,6 +73,7 @@ private:
 	bool m_ProjectionMatrixIsDirty;
 
 	static CameraComponent* m_ActiveCamera;
+	static CameraComponent* m_DefaultCamera;
 };
 
 }

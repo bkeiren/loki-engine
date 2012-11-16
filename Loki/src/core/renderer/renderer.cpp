@@ -76,7 +76,7 @@ LkRenderer::LkRenderer( Window* _Window )	:
 		m_GBuffer = NULL;
 	}
 
-	m_LightEffect = g_EffectManager->CreateEffectFromFile("resources//shaders//light.cgfx", "LightEffect");
+	m_LightEffect = g_EffectManager->CreateEffectFromFile(DEFAULT_RESOURCE("shaders//light.cgfx"), "LightEffect");
 	if (!m_LightEffect)
 	{
 		LOG(VL_ERROR, "Renderer::Init: Failed to load light effect");
@@ -174,7 +174,7 @@ void LkRenderer::_LogAPIInformation()
 
 // NOTE: Renderer needing to be passed an instance to a level == circular dependency between engine systems.
 // The rendering system should not need to know anything about the set-up of levels.
-void LkRenderer::Render( game::LkLevel* _Level )
+void LkRenderer::Render()
 {
 	static graphics::EFrameBufferAttachment DrawBuffersP0[] = { GBUFFER_LIGHTACCUM };
 	static graphics::EFrameBufferAttachment DrawBuffersP1[] = { GBUFFER_DIFFUSE_SPEC, GBUFFER_POSITIONS, GBUFFER_NORMALS, GBUFFER_LIGHTACCUM }; 

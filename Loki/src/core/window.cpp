@@ -168,8 +168,8 @@ Window::Window( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fu
 
 	m_WindowCreated = true;
 
-	LoadCursor("resources//cursor2.cur");
-	LoadIcon("resources//icon.ico", 64, 64);
+	LoadCursor(DEFAULT_RESOURCE("cursor2.cur"));
+	LoadIcon(DEFAULT_RESOURCE("icon.ico"), 64, 64);
 
 	_UpdateRectangleInfo();
 }

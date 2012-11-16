@@ -3,7 +3,7 @@
 	"normal":"resources//textures//texture2_normal.bmp",
 	"specular":"resources//textures//texture2_spec.bmp",
 	"emissive":"resources//textures//texture2_emissive.bmp",
-	"effect":"resources//shaders//testshader.cgfx",
+	"effect":"resources//default//shaders//gbuffer_default.cgfx",
 	"shininess":50.0,
 	"reflectivity":0.7
 }

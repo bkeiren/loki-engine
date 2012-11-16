@@ -37,8 +37,6 @@
 
 using namespace loki;
 
-physics::LkRigidBody* body = NULL;
-
 MyGame::MyGame()
 {
 	
@@ -64,9 +62,6 @@ bool MyGame::Init()
 	//std::string str = game::g_Localization->GetLocalizedString("TestString");
 	//game::g_Localization->SetLocale(game::LOCALE_NL);
 	//std::string str2 = game::g_Localization->GetLocalizedString("p1wins");
-
-	// Load an effect.
-	loki::renderer::g_EffectManager->CreateEffectFromFile("resources//shaders//testshader.cgfx", "TestEffect");
 
 // 	LkParticleSystemDescriptor descr;
 // 	LkParticleSourceDescriptor& srcdescr = descr.AddSource();

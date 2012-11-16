@@ -68,6 +68,8 @@ public:
 	void HideBackgroundConsoleWindow() const;
 	
 	void RequestExit();
+
+	bool IsInEditorMode() const;
 private:
 	LokiEngine();
 
@@ -90,7 +92,7 @@ private:
 
 	void _CapFrameRate();
 
-	// An std::list of parsed command line arguments.
+	// A map of parsed command line arguments.
 	CommandLineParameters m_CommandLineArguments;
 
 	//HINSTANCE m_hInstance;		// Holds The Instance Of The Application
@@ -103,6 +105,8 @@ private:
 	// Used to cap the frame rate.
 	uint32 m_FrameRateCap;
 	f32 m_TargetFrameTime;
+
+	bool m_EditorMode;
 };
 
 extern LokiEngine* g_Engine;

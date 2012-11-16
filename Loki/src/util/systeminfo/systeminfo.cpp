@@ -178,10 +178,16 @@ bool SystemInfo::Collect()
 	m_ProcessorType = sysInfo.dwProcessorType;
 	m_ProcessorArchitecture = sysInfo.wProcessorArchitecture;
 
+
+	RECT desktop;
+	const HWND hDesktop = GetDesktopWindow();
+	GetWindowRect(hDesktop, &desktop);
+	m_DesktopResolution = int2(desktop.right, desktop.bottom);
+
 	return true;
 }
 
-void SystemInfo::LogSystemInformation()
+void SystemInfo::LogSystemInformation() const
 {
 	LOG(VL_ALWAYS, "System Information:\n\tOS: %u.%u.%u %s SP%u.%u (%s %s)\n\tCPU: %u cores @ %.2f GHz\n\tRAM: %I64d MB Physical\t%I64d MB Virtual", 
 				   m_VersionOSMajor, 
@@ -198,89 +204,94 @@ void SystemInfo::LogSystemInformation()
 				   BYTE_TO_MB(m_MemoryAmountTotalVirtual));
 }
 
-const unsigned long SystemInfo::GetVersionOSMajor()
+const unsigned long SystemInfo::GetVersionOSMajor() const
 {
 	return m_VersionOSMajor;
 }
 
-const unsigned long SystemInfo::GetVersionOSMinor()
+const unsigned long SystemInfo::GetVersionOSMinor() const
 {
 	return m_VersionOSMinor;
 }
 
-const unsigned long SystemInfo::GetVersionOSBuild()
+const unsigned long SystemInfo::GetVersionOSBuild() const
 {
 	return m_VersionOSBuild;
 }
 
-const unsigned long SystemInfo::GetVersionOSServicePackMajor()
+const unsigned long SystemInfo::GetVersionOSServicePackMajor() const
 {
 	return m_VersionOSServicePackMajor;
 }
 
-const unsigned long SystemInfo::GetVersionOSServicePackMinor()
+const unsigned long SystemInfo::GetVersionOSServicePackMinor() const
 {
 	return m_VersionOSServicePackMinor;
 }
 
-const bool SystemInfo::GetVersionOS64Bit()
+const bool SystemInfo::GetVersionOS64Bit() const
 {
 	return m_VersionOS64Bit;
 }
 
-const std::string& SystemInfo::GetVersionOSString()
+const std::string& SystemInfo::GetVersionOSString() const
 {
 	return m_VersionOSString;
 }
 
-const std::string& SystemInfo::GetVersionOSServicePackString()
+const std::string& SystemInfo::GetVersionOSServicePackString() const
 {
 	return m_VersionOSServicePackString;
 }
 
-const unsigned long SystemInfo::GetNumProcessors()
+const unsigned long SystemInfo::GetNumProcessors() const
 {
 	return m_NumProcessors;
 }
 
-const unsigned long SystemInfo::GetProcessorType()
+const unsigned long SystemInfo::GetProcessorType() const
 {
 	return m_ProcessorType;
 }
 
-const unsigned short SystemInfo::GetProcessorArchitecture()
+const unsigned short SystemInfo::GetProcessorArchitecture() const
 {
 	return m_ProcessorArchitecture;
 }
 
-const uint64 SystemInfo::GetMemoryAmountTotalPhysical()
+const uint64 SystemInfo::GetMemoryAmountTotalPhysical() const
 {
 	return m_MemoryAmountTotalPhysical;
 }
 
-const uint64 SystemInfo::GetMemoryAmountTotalVirtual()
+const uint64 SystemInfo::GetMemoryAmountTotalVirtual() const
 {
 	return m_MemoryAmountTotalVirtual;
 }
 
-const uint32 SystemInfo::GetCPUFrequencyHz()
+const uint32 SystemInfo::GetCPUFrequencyHz() const
 {
 	return m_CPUFrequency;
 }
 
-const f32 SystemInfo::GetCPUFrequencyGHz()
+const f32 SystemInfo::GetCPUFrequencyGHz() const
 {
 	return ((f32)m_CPUFrequency) / 1000000;
 }
 
-const std::string& SystemInfo::GetComputerName()
+const std::string& SystemInfo::GetComputerName() const
 {
 	return m_ComputerName;
 }
 
-const std::string& SystemInfo::GetUserName()
+const std::string& SystemInfo::GetUserName() const
 {
 	return m_UserName;
+}
+
+const int2& SystemInfo::GetDesktopResolution() const
+{
+	return m_DesktopResolution;
 }
 
 }
