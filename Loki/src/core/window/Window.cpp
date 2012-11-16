@@ -1,6 +1,8 @@
-#include "core/window.h"
+#include "core/window/Window.h"
 #include <GLEW//glew.h>
 #include "core/input/input.h"
+#include "core/engine.h"
+#include "core/window/Win32SubMenu.h"
 
 namespace loki
 {
@@ -21,7 +23,8 @@ Window::Window( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fu
 	m_Width(0),
 	m_Height(0),
 	m_LastWindowedWidth(0),
-	m_LastWindowedHeight(0)
+	m_LastWindowedHeight(0),
+	m_Menu(0)
 {
 	_Width = (_Width <= 0)?(1):(_Width);
 	_Height = (_Height <= 0)?(1):(_Height);
@@ -45,7 +48,7 @@ Window::Window( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fu
 	wc.hIcon			= 0;
 	wc.hCursor			= 0;
 	wc.hbrBackground	= NULL;									// No Background Required For GL
-	wc.lpszMenuName		= NULL;									// We Don't Want A Menu
+	wc.lpszMenuName		= NULL;
 	wc.lpszClassName	= L"OpenGL";								// Set The Class Name
 
 	if (!RegisterClass(&wc))									// Attempt To Register The Window Class
@@ -165,6 +168,15 @@ Window::Window( int32 _Width, int32 _Height, char* _Title, int32 _Bits, bool _Fu
 	SetForegroundWindow(m_hWnd);						// Slightly Higher Priority
 	SetFocus(m_hWnd);									// Sets Keyboard Focus To The Window
 	SetAcceptDragDropFiles(false);
+
+	if (g_Engine->IsInEditorMode())
+	{
+		m_Menu = new Win32Menu();
+		DestroyMenu(m_Menu->m_HMENUHandle);
+		m_Menu->m_HMENUHandle = CreateMenu();
+		m_Menu->m_Name = std::string("MainToolbarMenu");
+		SetMenu(m_hWnd, m_Menu->m_HMENUHandle);
+	}
 
 	m_WindowCreated = true;
 
@@ -350,6 +362,11 @@ void Window::SetFullscreen( bool _Fullscreen )
 	}
 }
 
+void Window::Maximize() const
+{
+	ShowWindow(m_hWnd, SW_MAXIMIZE);
+}
+
 bool Window::IsValid() const
 {
 	return m_WindowCreated;
@@ -397,8 +414,20 @@ bool Window::AcceptsDragDropFiles()
 	return m_AcceptsDragDropFiles;
 }
 
+Win32SubMenu* Window::GetWin32Menu() const
+{
+	return m_Menu;
+}
+
+void Window::ReloadWin32Menu()
+{
+	SetMenu(m_hWnd, m_Menu->m_HMENUHandle);
+}
+
 void Window::_Destroy()
 {
+	delete m_Menu;
+
 	// Check wether a window was actually created.
 	if (!m_WindowCreated)
 	{

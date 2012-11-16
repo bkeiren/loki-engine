@@ -5,7 +5,7 @@
 #include "core/game/game.h"
 #include "core/script/squirrel/squirrel.h"
 #include "core/script/lua/lua.h"
-#include "core/window.h"
+#include "core/window/Window.h"
 #include "core/renderer/renderer.h"
 #include "core/entitysystem/component/default/CameraComponent.h"
 #include "core/entitysystem/Entity.h"

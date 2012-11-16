@@ -2,7 +2,7 @@
 #include "core/eventsystem/eventmanager.h"
 #include "core/engine.h"
 #include "core/renderer/renderer.h"
-#include "core/window.h"
+#include "core/window/Window.h"
 #include "core/console/console.h"
 #include "core/time/Time.h"
 

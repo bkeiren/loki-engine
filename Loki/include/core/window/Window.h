@@ -8,6 +8,9 @@
 namespace loki
 {
 
+class Win32SubMenu;
+typedef Win32SubMenu Win32Menu;
+
 class Window
 {
 public:
@@ -40,6 +43,7 @@ public:
 	void SetPosition( int32 _X, int32 _Y );
 
 	void SetFullscreen( bool _Fullscreen );
+	void Maximize() const;
 
 	bool IsValid() const;
 
@@ -54,6 +58,9 @@ public:
 
 	void SetAcceptDragDropFiles( bool _Accept );
 	bool AcceptsDragDropFiles();
+
+	Win32Menu* GetWin32Menu() const;
+	void ReloadWin32Menu();
 private:
 	Window();
 
@@ -94,6 +101,8 @@ private:
 	// If the window has no history of being in windowed mode, the window will simply take on the resolution of the display.
 	int32 m_LastWindowedWidth;
 	int32 m_LastWindowedHeight;
+
+	Win32Menu* m_Menu;
 };
 
 }

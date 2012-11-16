@@ -11,7 +11,7 @@
 #include "core/renderer/effect/effectmanager.h"
 #include "core/renderer/debugrenderer.h"
 #include "core/renderer/effect/effectmanager.h"
-#include "core/window.h"
+#include "core/window/Window.h"
 
 #include "core/graphics/Model.h"
 
