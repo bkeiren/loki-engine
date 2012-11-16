@@ -31,28 +31,29 @@ public:
 	// the log buffer right after calling this function call to ensure
 	// the data is written to disk.
 	//////////////////////////////////////////////////////////////////////////
-	void LogSystemInformation();
+	void LogSystemInformation() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// A number of Get* functions that return various system info values.
 	//////////////////////////////////////////////////////////////////////////
-	const unsigned long GetVersionOSMajor();
-	const unsigned long GetVersionOSMinor();
-	const unsigned long GetVersionOSBuild();
-	const unsigned long GetVersionOSServicePackMajor();
-	const unsigned long GetVersionOSServicePackMinor();
-	const bool GetVersionOS64Bit();
-	const std::string& GetVersionOSString();
-	const std::string& GetVersionOSServicePackString();
-	const unsigned long GetNumProcessors();
-	const unsigned long GetProcessorType();
-	const unsigned short GetProcessorArchitecture();
-	const uint64 GetMemoryAmountTotalPhysical();
-	const uint64 GetMemoryAmountTotalVirtual();
-	const uint32 GetCPUFrequencyHz();		// Hertz.
-	const f32 GetCPUFrequencyGHz();	// Gigahertz.
-	const std::string& GetComputerName();
-	const std::string& GetUserName();
+	const unsigned long GetVersionOSMajor() const;
+	const unsigned long GetVersionOSMinor() const;
+	const unsigned long GetVersionOSBuild() const;
+	const unsigned long GetVersionOSServicePackMajor() const;
+	const unsigned long GetVersionOSServicePackMinor() const;
+	const bool GetVersionOS64Bit() const;
+	const std::string& GetVersionOSString() const;
+	const std::string& GetVersionOSServicePackString() const;
+	const unsigned long GetNumProcessors() const;
+	const unsigned long GetProcessorType() const;
+	const unsigned short GetProcessorArchitecture() const;
+	const uint64 GetMemoryAmountTotalPhysical() const;
+	const uint64 GetMemoryAmountTotalVirtual() const;
+	const uint32 GetCPUFrequencyHz() const;		// Hertz.
+	const f32 GetCPUFrequencyGHz() const;	// Gigahertz.
+	const std::string& GetComputerName() const;
+	const std::string& GetUserName() const;
+	const int2& GetDesktopResolution() const;
 private:
 	SystemInfo();
 	~SystemInfo();
@@ -74,6 +75,7 @@ private:
 	uint32 m_CPUFrequency;
 	std::string m_ComputerName;
 	std::string m_UserName;
+	int2 m_DesktopResolution;
 };
 
 extern SystemInfo* g_SystemInfo;

@@ -31,6 +31,8 @@ typedef void(*JSDelegate)( const JSArguments& );	// JS Delegate function signatu
 class LkHTMLView
 {
 	friend class LkHTMLCore;
+	friend class NullHTMLCore;
+	friend class NullHTMLView;
 
 	typedef stdext::hash_map<std::wstring, JSDelegate>			JSDelegateMapTier1;
 	typedef JSDelegateMapTier1::iterator						JSDelegateMapIterTier1;
@@ -47,22 +49,22 @@ public:
 	// can be used to pass authentication information to the webpage if
 	// this is required.
 	//////////////////////////////////////////////////////////////////////////
-	void LoadURL( const std::string& _URL, const std::string& _Username = "", const std::string& _Password = "" );
+	virtual void LoadURL( const std::string& _URL, const std::string& _Username = "", const std::string& _Password = "" );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Loads the specified HTML code.
 	//////////////////////////////////////////////////////////////////////////
-	void LoadHTML( const std::string& _HTML );
+	virtual void LoadHTML( const std::string& _HTML );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Loads the specified file.
 	//////////////////////////////////////////////////////////////////////////
-	void LoadFile( const std::string& _File );
+	virtual void LoadFile( const std::string& _File );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Executes Javascript code in the context of the current page.
 	//////////////////////////////////////////////////////////////////////////
-	void ExecuteJavascript( const std::string& _Javascript );
+	virtual void ExecuteJavascript( const std::string& _Javascript );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Calls a Javascript function on the given object with the given
@@ -70,29 +72,29 @@ public:
 	// If the function resides in the global namespace, _Object should be
 	// empty ("").
 	//////////////////////////////////////////////////////////////////////////
-	void CallJavascriptFunction( const std::wstring& _FunctionName, const std::wstring& _Object = L"" /* Global scope if empty */, const JSArguments& _Arguments = JSArguments() );
+	virtual void CallJavascriptFunction( const std::wstring& _FunctionName, const std::wstring& _Object = L"" /* Global scope if empty */, const JSArguments& _Arguments = JSArguments() );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Creates a Javascript object.
 	//////////////////////////////////////////////////////////////////////////
-	void CreateJavascriptObject( const std::wstring& _ObjectName );
+	virtual void CreateJavascriptObject( const std::wstring& _ObjectName );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Destroys a previously created Javascript object.
 	//////////////////////////////////////////////////////////////////////////
-	void DestroyJavascriptObject( const std::wstring& _ObjectName );
+	virtual void DestroyJavascriptObject( const std::wstring& _ObjectName );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Sets a callback name for a Javascript object. This name will be 
 	// used to identify the callback when LkWebTabListener::onCallback() is
 	// fired.
 	//////////////////////////////////////////////////////////////////////////
-	void SetJavascriptCallback( const std::wstring& _ObjectName, const std::wstring& _CallbackName );
+	virtual void SetJavascriptCallback( const std::wstring& _ObjectName, const std::wstring& _CallbackName );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Sets a property of a Javascript object.
 	//////////////////////////////////////////////////////////////////////////
-	void SetJavascriptProperty( const std::wstring& _ObjectName, const std::wstring& _PropertyName, const JSValue& _Value );
+	virtual void SetJavascriptProperty( const std::wstring& _ObjectName, const std::wstring& _PropertyName, const JSValue& _Value );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Binds a C++ Javascript delegate function to a JS object and callback.
@@ -107,13 +109,13 @@ public:
 	//
 	//		JS:		MyObject.MyDelegateFunction();	// Optional arguments.
 	//////////////////////////////////////////////////////////////////////////
-	void BindJSDelegate( const std::wstring& _ObjectName, const std::wstring& _FunctionName, JSDelegate _CFunction );
+	virtual void BindJSDelegate( const std::wstring& _ObjectName, const std::wstring& _FunctionName, JSDelegate _CFunction );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns a C++ Javascript delegate function if one exists for the
 	// given object and function name.
 	//////////////////////////////////////////////////////////////////////////
-	JSDelegate GetJSDelegate( const std::wstring& _ObjectName, const std::wstring& _FunctionName );
+	virtual JSDelegate GetJSDelegate( const std::wstring& _ObjectName, const std::wstring& _FunctionName );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Utility function that simply calls GetJSDelegate and checks whether
@@ -123,76 +125,76 @@ public:
 	// if (f) f();
 	// Returns true if a delegate function was called, false if not.
 	//////////////////////////////////////////////////////////////////////////
-	bool CallJSDelegate( const std::wstring& _ObjectName, const std::wstring& _FunctionName, const JSArguments& _Args );
+	virtual bool CallJSDelegate( const std::wstring& _ObjectName, const std::wstring& _FunctionName, const JSArguments& _Args );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Stops the current navigation.
 	//////////////////////////////////////////////////////////////////////////
-	void Stop();
+	virtual void Stop();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Reloads the page.
 	//////////////////////////////////////////////////////////////////////////
-	void Reload();
+	virtual void Reload();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns the current URL of the page.
 	//////////////////////////////////////////////////////////////////////////
-	const std::string& GetURL() const;
+	virtual const std::string& GetURL() const;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Renders this tab to a render buffer.
 	//////////////////////////////////////////////////////////////////////////
-	void Render();
+	virtual void Render();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Checks whether the tab wants to be re-rendered.
 	//////////////////////////////////////////////////////////////////////////
-	bool IsDirty();
+	virtual bool IsDirty();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Checks whether the tab is loading.
 	//////////////////////////////////////////////////////////////////////////
-	bool IsLoading();
+	virtual bool IsLoading();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Sets whether rendering is done with transparency preserved.
 	//////////////////////////////////////////////////////////////////////////
-	void SetTransparent( bool _Transparent );
+	virtual void SetTransparent( bool _Transparent );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns whether rendering is done with transparency preserved.
 	//////////////////////////////////////////////////////////////////////////
-	bool IsTransparent() const;
+	virtual bool IsTransparent() const;
 
-	f32 GetAlphaAt( int32 _X, int32 _Y ) const;
-	f32 GetAlphaAtCursor() const;
+	virtual f32 GetAlphaAt( int32 _X, int32 _Y ) const;
+	virtual f32 GetAlphaAtCursor() const;
 
-	int2 TranslateGlobalMousePositionToLocal( const int2& _GlobalPosition ) const;
+	virtual int2 TranslateGlobalMousePositionToLocal( const int2& _GlobalPosition ) const;
 
-	void Resize( int32 _Width, int32 _Height, bool _WaitForRepaint = true, int32 _RepaintTimeoutMs = 300 );
+	virtual void Resize( int32 _Width, int32 _Height, bool _WaitForRepaint = true, int32 _RepaintTimeoutMs = 300 );
 
-	int32 GetWidth() const;
-	int32 GetHeight() const;
+	virtual int32 GetWidth() const;
+	virtual int32 GetHeight() const;
 
-	bool IsActive() const;
-	void SetActive( bool _Active );
+	virtual bool IsActive() const;
+	virtual void SetActive( bool _Active );
 
-	void SetListener( LkHTMLViewListener* _Listener );
+	virtual void SetListener( LkHTMLViewListener* _Listener );
 
-	bool GetAllowHistoryBrowsing() const;
-	void SetAllowHistoryBrowsing( bool _Allow );
+	virtual bool GetAllowHistoryBrowsing() const;
+	virtual void SetAllowHistoryBrowsing( bool _Allow );
 
-	void GoToHistoryOffset( int32 _Offset );
+	virtual void GoToHistoryOffset( int32 _Offset );
 private:
 	LkHTMLView( Awesomium::WebView* _WebView, LkHTMLCore* _ParentBrowser, int32 _Width, int32 _Height );
 	LkHTMLView(); // Private default c-tor.
 	~LkHTMLView(); // Private default d-tor. Clients should not have access to it.
 
-	LkHTMLViewListener* _GetListener();
+	virtual LkHTMLViewListener* _GetListener();
 
-	void _SetLayer( int32 _Layer );
-	int32 _GetLayer() const;
+	virtual void _SetLayer( int32 _Layer );
+	virtual int32 _GetLayer() const;
 
 	Awesomium::WebView* m_WebView;
 	renderer::LkImage* m_RenderImage;

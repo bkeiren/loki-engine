@@ -311,7 +311,7 @@ LokiEngine* LkConsole::GetEngine()
 
 void LkConsole::ReloadUI()
 {
-	m_ConsoleUI->LoadFile("resources//ui//console.html");
+	m_ConsoleUI->LoadFile(DEFAULT_RESOURCE("ui//console.html"));
 	m_ConsoleUI->CreateJavascriptObject(L"Console");
 	m_ConsoleUI->BindJSDelegate(L"Console", L"Execute", &JavascriptConsoleExecute);
 }

@@ -8,6 +8,7 @@ namespace loki
 #define FOREACH_ENTITY(iteratorname)	for (EntitiesConstIter iteratorname = m_Entities.begin(); iteratorname != m_Entities.end(); ++iteratorname)
 
 EntitySystem* g_EntitySystem = 0;
+Entity* EntitySystem::m_DummyEntity = 0;
 
 EntitySystem* CreateEntitySystem()
 {
@@ -16,7 +17,10 @@ EntitySystem* CreateEntitySystem()
 
 EntitySystem::EntitySystem()
 {
-
+	if (!m_DummyEntity)
+	{
+		m_DummyEntity = this->SpawnEntity("LokiDummyEntity");
+	}
 }
 
 EntitySystem::~EntitySystem()
@@ -98,6 +102,11 @@ void EntitySystem::FindEntitiesInFrustum( const Frustum& _Frustum, const mat4& _
 			//PlaneNormals[i]
 		}
 	}
+}
+
+Entity* EntitySystem::GetDummyEntity() const
+{
+	return m_DummyEntity;
 }
 
 EntityID EntitySystem::GenerateEntityIDFromName( const char* _EntityName ) const

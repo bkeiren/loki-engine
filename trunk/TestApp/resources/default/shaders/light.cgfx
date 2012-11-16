@@ -1,0 +1,273 @@
+// Strucure for input data as sent by the application.
+struct VertexInput
+{
+	in float3 Position 	: ATTR0;
+};
+
+// Structure for data transferred from the vertex to the fragment program.
+struct VertexOutput
+{
+	float4 PosH		: HPOS;
+	float4 PosHCustom	: TEXCOORD1;	// Because we can't acces HPOS semantic in fragment.
+	float3 LightPositionViewSpace : TEXCOORD2;
+	float3 LightVectorViewSpace : TEXCOORD3;
+};
+
+// Structure for data output from the fragment program.
+struct FragmentOutput
+{
+	float4 Color0	: COLOR0;
+};
+
+// Additional input data that we don't want to have in the VertexInput struct.
+float4x4 ModelViewProjection	: LKMODELVIEWPROJ;
+float4x4 ModelMatrix			: LKMODELMATRIX;
+float3x3 ModelMatrixIT			: LKMODELMATRIXIT;
+float4x4 ViewMatrix				: LKVIEWMATRIX;
+float4 EyePosition				: LKEYEPOSITION;
+sampler2D RT0Sampler			: LKRT0;
+sampler2D RT1Sampler			: LKRT1;
+sampler2D RT2Sampler			: LKRT2;
+sampler2D RT3Sampler			: LKRT3;
+float zNear						: LKZNEAR;
+float zFar						: LKZFAR;
+
+float3 LightPosition				: LKLIGHTPOSITION;
+float LightRange					: LKLIGHTRANGE;
+float3 LightVector					: LKLIGHTVECTOR;	// Direction in the case of a directional light or a spotlight.
+float3 LightColor					: LKLIGHTCOLOR;
+float LightIntensity				: LKLIGHTINTENSITY;
+int LightType						: LKLIGHTTYPE;	// 0 = Point, 1 = Spot, 2 = Directional, 3 = Area.
+float SpotLightAngle				: LKIGHTSPOTANGLE;	// Spotlight specific.
+
+sampler2D PointLightAttenuationTexture	: LKPOINTATTTEXTURE;
+sampler2D SpotLightAttenuationTexture	: LKSPOTATTTEXTURE;
+
+// Vertex program entry point.
+VertexOutput mainVP( VertexInput IN )
+{
+	VertexOutput OUT;
+	
+	float4x4 ModelView = mul(ViewMatrix, ModelMatrix);
+	
+	// Vertex position in clip space.
+	OUT.PosH = mul(ModelViewProjection, float4(IN.Position, 1.0));
+	
+	// Vertex position in clip space again because we need to use it in the fragment shader.
+	OUT.PosHCustom = OUT.PosH;
+	
+	// Position of the light in view-space.
+	OUT.LightPositionViewSpace = mul(ViewMatrix, float4(LightPosition, 1.0)).xyz;
+	
+	// Light vector (Direction) in view-space.
+	OUT.LightVectorViewSpace = normalize(mul(ViewMatrix, float4(LightVector, 0.0)).xyz);
+
+	return OUT;
+}
+
+float LinearizeDepth( float _NonLinearDepth )
+{
+	return (2.0 * zFar * zNear / (zFar + zNear - (zFar - zNear) * (2 * _NonLinearDepth - 1.0))) / zFar;
+}
+
+float3 ReconstructViewSpacePosition( float3 _SampledViewSpacePositionFromBuffer, float _NonLinearDepth )
+{
+ 	return float3(_SampledViewSpacePositionFromBuffer.xy * (-zFar / _SampledViewSpacePositionFromBuffer.z), -zFar) * 
+ 		   LinearizeDepth(_NonLinearDepth);
+}
+
+float3 PackNormal( float3 _UnpackedNormal )
+{
+	return (_UnpackedNormal + 1.0) * 0.5;
+}
+
+float3 UnpackNormal( float3 _PackedNormal )
+{
+	return (_PackedNormal * 2.0) - 1.0;
+}
+
+float AttenuationPoint( float3 _VecFromLightToSurface )
+{
+	// This function calculates the normalized distance value between the light position and the surface
+	// position. This value is then used to sample from a light attenuation texture. 
+	// This attenuation texture is simply a grayscale gradient which indicates how the light falloff happens.
+	// This allows artists to define entirely custom light falloff patterns (Theoretically even on a per-light basis
+	// if this is supported on the C++ side).
+	
+ 	float f = (dot(_VecFromLightToSurface, _VecFromLightToSurface) / (LightRange * LightRange));
+ 	return tex2D(PointLightAttenuationTexture, float2(f, 0.0)).r * LightIntensity;
+}
+
+float AttenuationSpot( float3 _VecFromLightToSurfaceViewSpace, float3 _LightDirectionViewSpace )
+{
+	float SpotLightHalfAngle = SpotLightAngle * 0.5;
+	float3 L = normalize(_VecFromLightToSurfaceViewSpace);	
+	float f = degrees(acos(dot(L, _LightDirectionViewSpace))) / SpotLightHalfAngle;
+	float f2 = (dot(_VecFromLightToSurfaceViewSpace, _VecFromLightToSurfaceViewSpace) / (LightRange * LightRange));
+	return tex2D(SpotLightAttenuationTexture, float2(f, 0.0)).r * 
+		   tex2D(SpotLightAttenuationTexture, float2(f2, 0.0)).r * LightIntensity;
+}
+
+// Fragment program entry point.
+FragmentOutput mainFP( VertexOutput IN )
+{
+	FragmentOutput OUT;
+
+	// Window coordinates ([0 .. 1] on both axes). Used to be able to sample from the normal and diffuse textures and such.
+	// This calculation transforms the coordinates to window space, and puts [0, 0] at the top left and [1, 1] at the bottom right.
+	float2 TexCoord = ((IN.PosHCustom.xy / IN.PosHCustom.w) + 1.0) * 0.5;
+
+	// Sample from the first buffer.
+	float4 RT1SampleValue = tex2D(RT1Sampler, TexCoord);
+	float Shininess = RT1SampleValue.a;
+	
+	// Sample surface position at fragment.
+	float3 SurfacePositionViewSpace = ReconstructViewSpacePosition(RT1SampleValue, tex2D(RT3Sampler, TexCoord).r);
+	//float3 SurfacePositionViewSpace = RT1SampleValue.xyz;
+	
+	// Sample surface normal at fragment.
+	float3 SurfaceNormalViewSpace = UnpackNormal(tex2D(RT2Sampler, TexCoord).xyz);
+	
+	// Calculate direction vector from light origin to fragment position.
+	float3 LightDir = SurfacePositionViewSpace - IN.LightPositionViewSpace;
+	
+	// Calculate light attenuation.
+	float Att = 1.0;
+	if (LightType == 0)
+	{
+		Att = AttenuationPoint(LightDir);
+	}
+	else if (LightType == 1)
+	{
+		Att = AttenuationSpot(LightDir, IN.LightVectorViewSpace);
+	}
+	
+	// Variable to hold the final fragment color.
+	float4 final_color = vec4(0.0, 0.0, 0.0, 1.0);
+	
+	SurfaceNormalViewSpace = normalize(SurfaceNormalViewSpace);	// TODO: Is this normalization actually necessary?
+	LightDir = normalize(LightDir);
+	
+	float LambertTerm = dot(SurfaceNormalViewSpace, -LightDir);
+	
+	if(LambertTerm > 0.0 && Att > 0.0)
+	{
+		float4 diffCol = tex2D(RT0Sampler, TexCoord);		
+		final_color += float4(diffCol.rgb, 1.0) * float4(LightColor.rgb, 1.0) * LambertTerm;
+		
+		float4 matSpecular = vec4(diffCol.a, diffCol.a, diffCol.a, 1.0);
+		float3 EyeVec = normalize(SurfacePositionViewSpace);	// Doesn't this need to be negated? Or atleast the z-component...?
+		float3 R = reflect(-LightDir, SurfaceNormalViewSpace);
+		float specular = pow( max(dot(R, EyeVec), 0.0), Shininess );
+		final_color += float4(LightColor, 1.0) * matSpecular * specular;
+	}
+
+	OUT.Color0 = final_color * Att;
+
+	return OUT;
+}
+
+// Debug fragment rendering.
+FragmentOutput DebugFP( VertexOutput IN )
+{
+	FragmentOutput OUT;
+	OUT.Color0 = float4(LightColor, 0.5);
+	return OUT;
+}
+
+technique t0
+{
+	// Back pass.
+	pass pass_back
+	{
+		CullFaceEnable = true;
+		CullMode = int(Front);
+		DepthTestEnable = true;
+		DepthFunc = int(Less);
+		DepthMask = false;
+		ColorMask = bool4(false, false, false, false);
+		StencilEnable = true;
+		StencilOp = int3(Keep, Keep, Incr);
+		StencilFunc = int3(Always, 0, 0);
+		StencilMask = true;
+	
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = NULL;
+	}
+	
+	// Front pass when camera is outside the volume (Inside-pass doesn't exist).
+	pass pass_front_camoutside
+	{
+		CullFaceEnable = true;
+		CullMode = int(Back);
+		DepthTestEnable = true;
+		DepthFunc = int(Less);
+		DepthMask = false;
+		ColorMask = bool4(false, false, false, false);
+		StencilEnable = true;
+		StencilOp = int3(Keep, Keep, Incr);
+		StencilFunc = int3(Always, 0, 0);
+		StencilMask = true;
+
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = NULL;
+	}
+
+	// Shade pass when camera is inside the volume.
+	pass pass_shade_caminside
+	{
+		CullFaceEnable = true;
+		CullMode = int(Front);
+		DepthTestEnable = false;
+		DepthMask = false;
+		StencilEnable = true;
+		StencilOp = int3(Zero, Zero, Zero);	// This will clear the stencil buffer back to 0 at each fragment that was involved in this technique.
+											// This means that we don't have to clear the entire stencil buffer after each light. Yay =D
+		StencilFunc = int3(Greater, 1, 1);	// For some reason, this works. Don't ask why. Don't touch it. It works.
+		StencilMask = true;
+		ColorMask = bool4(true, true, true, true);
+		BlendEnable = true;
+		BlendFunc = int2(One, One);
+
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = compile latest mainFP();
+	}
+
+	// Shade pass when camera is outside the volume.
+	pass pass_shade_camoutside
+	{
+		CullFaceEnable = true;
+		CullMode = int(Back);
+		DepthTestEnable = false;
+		DepthMask = false;
+		StencilEnable = true;
+		StencilOp = int3(Zero, Zero, Zero);	// This will clear the stencil buffer back to 0 at each fragment that was involved in this technique.
+											// This means that we don't have to clear the entire stencil buffer after each light. Yay =D
+		StencilFunc = int3(Equal, 1, 1);
+		StencilMask = true;
+		ColorMask = bool4(true, true, true, true);
+		BlendEnable = true;
+		BlendFunc = int2(One, One);
+
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = compile latest mainFP();
+	}
+
+	// Debug pass to draw the light geometry.
+	pass pass_geometry_debug
+	{
+		CullFaceEnable = false;
+		DepthTestEnable = true;
+		DepthMask = false;
+		StencilEnable = false;
+		StencilFunc = int3(Always, 0, 0);
+		StencilMask = false;
+		ColorMask = bool4(true, true, true, true);
+		BlendEnable = true;
+		BlendFunc = int2(SrcAlpha, OneMinusSrcAlpha);
+		PolygonMode = int2(FrontAndBack, Line);
+
+		VertexProgram = compile latest mainVP();
+		FragmentProgram = compile latest DebugFP();
+	}
+}

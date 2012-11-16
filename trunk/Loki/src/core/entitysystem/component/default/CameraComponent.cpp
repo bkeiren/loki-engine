@@ -1,6 +1,6 @@
 #include "core/entitysystem/component/default/CameraComponent.h"
 #include "core/renderer/renderer.h"
-#include "core/entitysystem/Entity.h"
+#include "core/entitysystem/EntitySystem.h"
 
 namespace loki
 {
@@ -17,6 +17,7 @@ namespace components
 #define VIEWPORT_BOTTOM		w
 
 CameraComponent* CameraComponent::m_ActiveCamera = 0;
+CameraComponent* CameraComponent::m_DefaultCamera = 0;
 
 CameraComponent::CameraComponent()	:
 	m_ClippingPlanes(vec2(0.1f, 1000.0f)),
@@ -121,7 +122,7 @@ const mat4& CameraComponent::GetProjectionMatrix()
 
 mat4 CameraComponent::GetViewMatrix()
 {
-	mat4 m = GetEntity()->GetTransform().GetMatrix();
+	mat4 m = GetTransform().GetMatrix();
 	m[0] = -m[0];	// This is required in order to make the camera actually point in the same way as
 	m[2] = -m[2];	// all other entities are oriented (Meaning, Z equals forward). This isn't strictly required
 					// but it helps in making controlling the camera a lot more intuitive.
@@ -141,6 +142,14 @@ bool CameraComponent::IsActiveCamera() const
 
 CameraComponent* CameraComponent::GetActiveCamera()
 {
+	if (!m_ActiveCamera)
+	{
+		if (!m_DefaultCamera)
+		{
+			m_DefaultCamera = g_EntitySystem->GetDummyEntity()->InstantiateComponent<CameraComponent>();
+		}
+		return m_DefaultCamera;
+	}
 	return m_ActiveCamera;
 }
 

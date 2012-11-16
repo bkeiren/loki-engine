@@ -1,0 +1,110 @@
+::-webkit-scrollbar
+{
+	width: 15px; 
+	height: 15px; 
+	background-color: transparent; 
+} 
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment  
+{
+	height: 30px;
+	display: block;
+	background-color: transparent;
+}
+
+::-webkit-scrollbar-track:horizontal
+{
+	/* Chrome10+, Safari5.1 */
+	background: -webkit-linear-gradient(	top, 
+						rgba(255,255,255,0) 0%, 
+						rgba(57,85,116,0) 24%,
+						rgba(49,78,110,1) 25%,
+						rgba(49,78,110,1) 75%,
+						rgba(57,85,116,0) 76%,
+						rgba(255,255,255,0) 100%);
+
+	/* Chrome, Safari4+ */
+	background: -webkit-gradient(	linear, 
+					left top, 
+					left bottom, 
+					color-stop(0%,rgba(255,255,255,0)), 
+					color-stop(24%,rgba(137,144,151,0)), 
+					color-stop(25%,rgba(137,144,151,1)), 
+					color-stop(75%,rgba(137,144,151,1)), 
+					color-stop(76%,rgba(137,144,151,0)), 
+					color-stop(100%,rgba(255,255,255,0)));
+}
+
+::-webkit-scrollbar-track:vertical
+{
+	/* Chrome10+, Safari5.1 */
+	background: -webkit-linear-gradient(	left, 
+						rgba(255,255,255,0) 0%, 
+						rgba(57,85,116,0) 24%,
+						rgba(49,78,110,1) 25%,
+						rgba(49,78,110,1) 75%,
+						rgba(57,85,116,0) 76%,
+						rgba(255,255,255,0) 100%);
+
+	/* Chrome, Safari4+ */
+	background: -webkit-gradient(	linear, 
+					left top, 
+					right top, 
+					color-stop(0%,rgba(255,255,255,0)), 
+					color-stop(24%,rgba(137,144,151,0)), 
+					color-stop(25%,rgba(137,144,151,1)), 
+					color-stop(75%,rgba(137,144,151,1)), 
+					color-stop(76%,rgba(137,144,151,0)), 
+					color-stop(100%,rgba(255,255,255,0)));
+
+}
+
+::-webkit-scrollbar-thumb:horizontal
+{  
+	/*background-color: #294762;*/
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(40,79,113,1)), color-stop(50%,rgba(40,79,113,1)), color-stop(51%,rgba(41,71,98,1)), color-stop(100%,rgba(41,71,98,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(40,79,113,1) 0%,rgba(40,79,113,1) 50%,rgba(41,71,98,1) 51%,rgba(41,71,98,1) 100%); /* Chrome10+,Safari5.1+ */
+} 
+
+::-webkit-scrollbar-thumb:vertical
+{  
+	/*background-color: #294762;*/
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(40,79,113,1)), color-stop(50%,rgba(40,79,113,1)), color-stop(51%,rgba(41,71,98,1)), color-stop(100%,rgba(41,71,98,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left, rgba(40,79,113,1) 0%,rgba(40,79,113,1) 50%,rgba(41,71,98,1) 51%,rgba(41,71,98,1) 100%); /* Chrome10+,Safari5.1+ */
+} 
+
+::-webkit-scrollbar-track-piece:disabled 
+{ 
+	display: none !important; 
+} 
+
+::-webkit-scrollbar-track:disabled 
+{ 
+	margin: 6px; 
+}
+
+/* remove border around all input elements */
+input:focus {
+    outline: none;
+}
+
+/* remove border around all textarea elements */
+textarea:focus {
+    outline: none;
+}
+
+/* remove border around all select elements */
+select:focus {
+    outline: none;
+}
+
+/* remove border around all input,textarea and select elements */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+}
+
+/* remove border around all elements */
+:focus {
+    outline: none;
+}

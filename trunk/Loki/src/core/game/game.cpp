@@ -10,8 +10,7 @@ LkGame::LkGame()	:
 	GameVersionMajor(0),
 	GameVersionMinor(0),
 	GameVersionBuild(0),
-	GameName("<NO TITLE>"),
-	m_Level(NULL)
+	GameName("<NO TITLE>")
 {
 	
 }
@@ -19,16 +18,6 @@ LkGame::LkGame()	:
 LkGame::~LkGame()
 {
 
-}
-
-bool LkGame::LoadLevel( const char* _Level )
-{
-	return true;
-}
-
-LkLevel* LkGame::GetLevel()
-{
-	return m_Level;
 }
 
 }

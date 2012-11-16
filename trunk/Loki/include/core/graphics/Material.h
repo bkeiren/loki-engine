@@ -57,6 +57,7 @@ private:
 
 	Texture2D* m_Textures[_TT_COUNT];
 	renderer::LkEffect* m_Effect;
+	static renderer::LkEffect* m_DefaultEffect;
 	f32 m_Shininess;
 	f32 m_Reflectivity;
 };

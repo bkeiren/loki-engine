@@ -18,6 +18,7 @@ namespace loki
 class LkHTMLCore	: public LkEventListener
 {
 	friend class LokiEngine;
+	friend class NullHTMLCore;
 
 	typedef std::list<LkHTMLView*>				HTMLViews;
 	typedef HTMLViews::iterator					HTMLViewsIter;
@@ -31,27 +32,27 @@ public:
 	// layer, we assume that the newest view should get priority and it is inserted
 	// on top of the older view.
 	//////////////////////////////////////////////////////////////////////////
-	LkHTMLView* CreateView( int32 _Width, int32 _Height, int32 _Layer = 0 );
+	virtual LkHTMLView* CreateView( int32 _Width, int32 _Height, int32 _Layer = 0 );
 
-	void DestroyView( LkHTMLView** _Tab );
+	virtual void DestroyView( LkHTMLView** _Tab );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Injects input directly from windows events.
 	//////////////////////////////////////////////////////////////////////////
-	void InjectKeyboardEvent( UINT _Msg, WPARAM _WParam, LPARAM _LParam );
+	virtual void InjectKeyboardEvent( UINT _Msg, WPARAM _WParam, LPARAM _LParam );
 
-	void SetViewInFocus( LkHTMLView* _View );
-	LkHTMLView* GetViewInFocus() const;
+	virtual void SetViewInFocus( LkHTMLView* _View );
+	virtual LkHTMLView* GetViewInFocus() const;
 
-	bool GetInputDetected() const;
+	virtual bool GetInputDetected() const;
 private:
-	LkHTMLCore();
+	LkHTMLCore( bool _Null = false );
 	~LkHTMLCore();
 
-	bool _Init();
-	void _Terminate();
+	virtual bool _Init();
+	virtual void _Terminate();
 	
-	void _OnEvent( const LkEvent& _Event );
+	virtual void _OnEvent( const LkEvent& _Event );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Finds the topmost view under the mouse position.
@@ -76,7 +77,7 @@ private:
 	// For an alpha value of 0.5 for _ExceptionAlpha, any value in 
 	// the range [0.48, 0.52] will be accepted.
 	//////////////////////////////////////////////////////////////////////////
-	LkHTMLView* _GetTopMostViewUnderMouse( bool _ConsiderTransparency = true, f32 _AlphaThreshold = 0.0f, f32 _ExceptionAlpha = -1.0f ) const;
+	virtual LkHTMLView* _GetTopMostViewUnderMouse( bool _ConsiderTransparency = true, f32 _AlphaThreshold = 0.0f, f32 _ExceptionAlpha = -1.0f ) const;
 
 	Awesomium::WebCore* m_WebCore;
 

@@ -1,11 +1,14 @@
 #include "core/graphics/Material.h"
 #include "core/graphics/Texture2D.h"
+#include "core/renderer/effect/effectmanager.h"
 
 namespace loki
 {
 
 namespace graphics
 {
+
+renderer::LkEffect* Material::m_DefaultEffect = 0;
 
 Material::Material()	:
 	m_Effect(0),
@@ -15,6 +18,11 @@ Material::Material()	:
 	for (uint32 i = 0; i < _TT_COUNT; ++i)
 	{
 		m_Textures[i] = 0;
+	}
+
+	if (!m_DefaultEffect)
+	{
+		m_DefaultEffect = renderer::g_EffectManager->CreateEffectFromFile(DEFAULT_RESOURCE("shaders//gbuffer_default.cgfx"), "DefaultMaterialEffect");
 	}
 }
 
@@ -42,7 +50,7 @@ void Material::SetTexture( uint32 _Index, Texture2D* _Texture, bool _DeleteOldTe
 
 renderer::LkEffect* Material::GetEffect() const
 {
-	return m_Effect;
+	return m_Effect == 0 ? m_DefaultEffect : m_Effect;
 }
 
 void Material::SetEffect( renderer::LkEffect* _Effect )

@@ -31,12 +31,15 @@ public:
 
 	void FindEntitiesInRange( const vec3& _Center, f32 _Range, EntitiesList& _OutputList ) const;
 	void FindEntitiesInFrustum( const Frustum& _Frustum, const mat4& _FrustumTransform, EntitiesList& _OutputList ) const;
+
+	Entity* GetDummyEntity() const;
 private:
 	EntitySystem();
 
 	EntityID GenerateEntityIDFromName( const char* _EntityName ) const;
 
 	Entities m_Entities;
+	static Entity* m_DummyEntity;
 };
 
 EntitySystem* CreateEntitySystem();

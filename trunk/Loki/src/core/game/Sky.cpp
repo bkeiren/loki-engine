@@ -39,7 +39,7 @@ void Sky::Render()
 {
 	if (!m_Shader)
 	{
-		m_Shader = renderer::g_EffectManager->CreateEffectFromFile("resources//shaders//sky.cgfx", "SkyShader");
+		m_Shader = renderer::g_EffectManager->CreateEffectFromFile(DEFAULT_RESOURCE("shaders//sky.cgfx"), "SkyShader");
 	}
 	if (!m_DisplayList)
 	{
