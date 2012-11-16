@@ -1103,6 +1103,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\editor\MenuCallbacks.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\editor\MenuCallbacks.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\core\graphics\Mesh.cpp"
 			>
 		</File>
@@ -1339,11 +1347,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtx\quaternion.hpp"
+			RelativePath=".\include\math\glm\gtc\quaternion.hpp"
 			>
 		</File>
 		<File
@@ -1483,11 +1491,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\singleton.h"
+			RelativePath=".\include\core\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
+			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
@@ -1559,11 +1567,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\statemanager.h"
+			RelativePath=".\include\statemanager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\statemanager.h"
+			RelativePath=".\include\core\statemanager.h"
 			>
 		</File>
 		<File
@@ -1939,11 +1947,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.h"
+			RelativePath=".\include\util.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.h"
+			RelativePath=".\include\util\util.h"
 			>
 		</File>
 		<File
