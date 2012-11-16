@@ -1483,11 +1483,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
+			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\singleton.h"
+			RelativePath=".\include\core\singleton.h"
 			>
 		</File>
 		<File
@@ -1523,11 +1523,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\SplashState.h"
+			RelativePath=".\include\core\states\SplashState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\SplashState.h"
+			RelativePath=".\include\states\SplashState.h"
 			>
 		</File>
 		<File
@@ -1939,11 +1939,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.h"
+			RelativePath=".\include\util\util.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.h"
+			RelativePath=".\include\util.h"
 			>
 		</File>
 		<File
@@ -2039,11 +2039,27 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\window.cpp"
+			RelativePath=".\src\core\window\Win32MenuItem.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\window.h"
+			RelativePath=".\include\core\window\Win32MenuItem.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\window\Win32SubMenu.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\window\Win32SubMenu.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\window\Window.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\window\Window.h"
 			>
 		</File>
 		<File

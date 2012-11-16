@@ -4,7 +4,7 @@
 #include "core/states/Teststate.h"
 #include "core/renderer/renderer.h"
 #include "core/engine.h"
-#include "core/window.h"
+#include "core/window/Window.h"
 
 #include "util/util.h"
 
@@ -44,6 +44,8 @@
 
 #include "util/dragdrophandler/DragDropHandler.h"
 
+#include "core/window/Win32SubMenu.h"
+
 #ifdef _DEBUG
 // Debug defines.
 	#define WINDOW_WIDTH			1280
@@ -53,6 +55,7 @@
 	#define WINDOW_BITDEPTH			32
 	#define WINDOW_X				0
 	#define WINDOW_Y				0
+	#define EDITOR_CAPTION			"LokiEd (Debug)"
 #else
 // Release defines.
 	#define WINDOW_WIDTH			1280
@@ -62,6 +65,7 @@
 	#define WINDOW_BITDEPTH			32
 	#define WINDOW_X				0
 	#define WINDOW_Y				0
+	#define EDITOR_CAPTION			"LokiEd"
 #endif
 
 namespace loki
@@ -253,7 +257,20 @@ bool LokiEngine::Init()
 	// TODO: Implement config loader
 
 	// Initialize the renderer.
-	m_Window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_CAPTION, WINDOW_BITDEPTH, WINDOW_FULLSCREEN, LokiEngine::WindowProc, WINDOW_X, WINDOW_Y);
+	if (IsInEditorMode())
+	{
+		m_Window = new Window(util::system::g_SystemInfo->GetDesktopResolution().x, 
+							  util::system::g_SystemInfo->GetDesktopResolution().y, 
+							  EDITOR_CAPTION, WINDOW_BITDEPTH, false, LokiEngine::WindowProc, 0, 0);
+		m_Window->Maximize();
+		m_Window->SetAcceptDragDropFiles(true);
+		_BuildEditorMenus();
+	}
+	else
+	{
+		m_Window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_CAPTION, WINDOW_BITDEPTH, WINDOW_FULLSCREEN, LokiEngine::WindowProc, WINDOW_X, WINDOW_Y);
+	}
+	
 	m_Window->MakeRenderContextCurrent();
 	/*if (!LkEngine::CreateGLWindow(WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_BITDEPTH, WINDOW_FULLSCREEN))*/
 	if (!m_Window->IsValid())
@@ -648,6 +665,18 @@ void LokiEngine::_CapFrameRate()
 		util::system::Sleep((uint32)((m_TargetFrameTime - g_Time->GetActualFrameTime()) * 1000));
 		g_Time->_SetFrameTime(m_TargetFrameTime);
 	}
+}
+
+void LokiEngine::_BuildEditorMenus()
+{
+	Win32SubMenu* FileSubMenu = m_Window->GetWin32Menu()->CreateSubMenu("&File");
+	Win32SubMenu* NewSubMenu = FileSubMenu->CreateSubMenu("&New...");
+	NewSubMenu->CreateItem("&Scene", 0);
+	NewSubMenu->CreateItem("", Win32SubMenu::ITEM_FLAG_SEPARATOR);
+	NewSubMenu->CreateItem("&Material", 0);
+	NewSubMenu->CreateItem("&Model", 0);
+
+	m_Window->ReloadWin32Menu();
 }
 
 }

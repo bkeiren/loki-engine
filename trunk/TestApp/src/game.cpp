@@ -33,7 +33,7 @@
 #include "scripts/SimpleRotationController.h"
 
 #include "util/dragdrophandler/DragDropHandler.h"
-#include "core/window.h"
+#include "core/window/Window.h"
 
 using namespace loki;
 

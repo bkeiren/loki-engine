@@ -8,11 +8,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestApp", "TestApp\TestApp.
 		{0E1D0B36-8721-4DBB-8743-EB0CD58B8468} = {0E1D0B36-8721-4DBB-8743-EB0CD58B8468}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LokiEd", "LokiEd\LokiEd.vcproj", "{C49AD094-DCF5-4300-A621-021C2C08B231}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0E1D0B36-8721-4DBB-8743-EB0CD58B8468} = {0E1D0B36-8721-4DBB-8743-EB0CD58B8468}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,10 +22,6 @@ Global
 		{F6A2141F-26EF-4149-850E-73568914AEC9}.Debug|Win32.Build.0 = Debug|Win32
 		{F6A2141F-26EF-4149-850E-73568914AEC9}.Release|Win32.ActiveCfg = Release|Win32
 		{F6A2141F-26EF-4149-850E-73568914AEC9}.Release|Win32.Build.0 = Release|Win32
-		{C49AD094-DCF5-4300-A621-021C2C08B231}.Debug|Win32.ActiveCfg = Debug|Win32
-		{C49AD094-DCF5-4300-A621-021C2C08B231}.Debug|Win32.Build.0 = Debug|Win32
-		{C49AD094-DCF5-4300-A621-021C2C08B231}.Release|Win32.ActiveCfg = Release|Win32
-		{C49AD094-DCF5-4300-A621-021C2C08B231}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

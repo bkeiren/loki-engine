@@ -92,6 +92,8 @@ private:
 
 	void _CapFrameRate();
 
+	void _BuildEditorMenus();
+
 	// A map of parsed command line arguments.
 	CommandLineParameters m_CommandLineArguments;
 

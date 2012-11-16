@@ -1,7 +1,7 @@
 #include "util/util.h"
 #include "core/engine.h"
 #include <Windows.h>
-#include "core/window.h"
+#include "core/window/Window.h"
 
 #include <sstream>
 
