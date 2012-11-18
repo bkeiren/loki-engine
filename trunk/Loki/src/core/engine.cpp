@@ -243,7 +243,7 @@ bool LokiEngine::Init()
 	physics::g_Physics = new physics::LkPhysics();
 
 	// Initialize audio.
-	g_Audio = new LkAudio();
+	audio::g_Audio = new audio::Audio();
 
 	// Initialize Lua state.
 	g_Lua = new LkLua();
@@ -431,8 +431,8 @@ void LokiEngine::Shutdown()
 	g_Lua = NULL;
 
 	// Close audio.
-	delete g_Audio;
-	g_Audio = NULL;
+	delete audio::g_Audio;
+	audio::g_Audio = NULL;
 
 	// Close physics.
 	delete physics::g_Physics;
@@ -548,7 +548,7 @@ void LokiEngine::Update()
 	m_Window->UpdateCursorImage();
 
 	// Update audio.
-	g_Audio->Update();
+	audio::g_Audio->_Update();
 
 	// Update the currently active state.
 	//StateManager::GetActiveState()->Update();

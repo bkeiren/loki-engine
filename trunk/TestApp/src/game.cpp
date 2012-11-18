@@ -35,6 +35,8 @@
 #include "util/dragdrophandler/DragDropHandler.h"
 #include "core/window/Window.h"
 
+#include "core/audio/audio.h"
+
 using namespace loki;
 
 MyGame::MyGame()
@@ -184,8 +186,6 @@ bool MyGame::Init()
 // 
 // 		doc->Close();
 // 	}
-
-	g_Engine->GetWindow()->SetAcceptDragDropFiles(true);
 
 	return true;
 }
