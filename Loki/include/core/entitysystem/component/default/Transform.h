@@ -19,7 +19,7 @@ class Transform	: public Component
 {
 	CONTAINER_MACRO_LIST(Transform*, Children);
 public:
-	DECLARE_COMPONENT_TYPEINFO(Transform)
+	DECLARE_COMPONENT_SINGLE_INSTANCE(Transform)
 
 	const quat& GetOrientation();
 	const vec3& GetPosition();

@@ -10,6 +10,13 @@ template< typename _ComponentType >
 _ComponentType* Entity::InstantiateComponent()
 {
 	Component* comp = (Component*)new _ComponentType();
+
+	ComponentsIter it = m_Components.find(_ComponentType::GetTypeInfo());
+	if (!_ComponentType::AllowMultipleInstancesOnEntity() && it != m_Components.end() && (*it).second.size() >= 1)
+	{
+		LOG(VL_ERROR, "Entity::InstantiateComponent: Entities can not have more than one instance of the '%s' component. Use macro DECLARE_COMPONENT instead of DECLARE_COMPONENT_SINGLE_INSTANCE to change.", _ComponentType::GetComponentTypeName().c_str());
+		return 0;
+	}
 	m_Components[_ComponentType::GetTypeInfo()].push_back(comp);
 	_OnComponentInstantiated<_ComponentType>((_ComponentType*)comp);
 	comp->SetEntity(this);
