@@ -3,6 +3,19 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#ifndef _DEBUG				// If release build...
+	#if _SECURE_SCL != 0	// If STL containers and iterators use run-time checks...
+		// Yield an error because the library is build without run-time checks for release builds, but the current project
+		// that's including this file has not disabled these checks.
+		#error	The Loki lib file was compiled without STL run-time checks, yet your project has them enabled. This will cause errors.	\
+				Disable them by setting _SECURE_SCL to 0 in your preprocessor defines.
+	#endif
+	#if _HAS_ITERATOR_DEBUGGING != 0
+		#error	The Loki lib file was compiled without STL iterator run-time checks, yet your project has them enabled. This will cause errors.	\
+				Disable them by setting _HAS_ITERATOR_DEBUGGING to 0 in your preprocessor defines.
+	#endif
+#endif
+
 #include <Windows.h>
 #include <WinDef.h>
 
