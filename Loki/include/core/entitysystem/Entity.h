@@ -16,20 +16,16 @@
 #define MAP_TYPE	std::map
 #endif
 
-#define RTTI_TYPEID			0
-#define RTTI_DYNAMIC_CAST	1
-
-// Used to control which way is used
-// to compare types of components. Either by 
-// using the typeid() operator (RTTI_TYPEID)
-// or by using dynamic_cast<>() (RTTI_DYNAMIC_CAST).
-#define RTTI_TYPE			RTTI_TYPEID
-
-
 namespace loki
 {
 
 class Component;
+
+namespace components
+{
+	class CameraComponent;
+	class Light;
+}
 
 struct EntityID
 {
@@ -50,27 +46,37 @@ struct EntityID
 class Entity
 {
 	friend class EntitySystem;
+
+	CONTAINER_MACRO_VECTOR(Component*, ComponentsVector)
 	
-#if RTTI_TYPE == RTTI_TYPEID
-	typedef MAP_TYPE<util::general::TypeInfo, Component*>	Components;	// Pointers to std::type_info are safe because they are valid throughout the entire application lifetime.
-	typedef std::pair<util::general::TypeInfo, Component*>	ComponentsPair;	// ^
-#elif RTTI_TYPE == RTTI_DYNAMIC_CAST
-	CONTAINER_MACRO_LIST(Component*, Components);
-#endif
+	typedef MAP_TYPE<util::general::TypeInfo, ComponentsVector>		Components;	// Pointers to std::type_info are safe because they are valid throughout the entire application lifetime.
+	typedef std::pair<util::general::TypeInfo, ComponentsVector>	ComponentsPair;	// ^
+	typedef Components::iterator									ComponentsIter;
+	typedef Components::const_iterator								ComponentsConstIter;
+	typedef Components::reverse_iterator							ComponentsRIter;
+	typedef Components::const_reverse_iterator						ComponentsConstRIter;
 public:
 	EntityID GetID() const;
 
 	const std::string& GetName() const;
 
 	//////////////////////////////////////////////////////////////////////////
-	// Synonymous to GetComponent<Transform>(), except
+	// Synonymous to GetComponent<type>(), except
 	// that GetComponent<>() searches for the Transform component in the 
-	// component map, while GetTransform simply returns the already cached
-	// Transform. This means that these functions are faster than
+	// component map, while GetTransform, GetCamera, GetLight etc. simply return 
+	// the already cached instances. This means that these functions are faster than
 	// GetComponent<>().
 	//////////////////////////////////////////////////////////////////////////
 	const Transform& GetTransform() const;
 	Transform& GetTransform();
+
+	const components::CameraComponent* GetCamera() const;
+	components::CameraComponent* GetCamera();
+
+	const components::Light* GetLight() const;
+	components::Light* GetLight();
+
+	//PROPERTY(components::CameraComponent, Entity, camera, {return *self.m_Camera;}, {});
 
 	//////////////////////////////////////////////////////////////////////////
 	// Adds a component to an entity. Calling this function requires a template
@@ -78,15 +84,30 @@ public:
 	// an entity is to receive a component of type MoveableComponent, this
 	// function can be called like so:
 	// entity::InstantiateComponent<MoveableComponent>();
+	// Multiple instances of the same type can be added.
 	//////////////////////////////////////////////////////////////////////////
 	template< typename _ComponentType >
 	_ComponentType* InstantiateComponent();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Removes a component from the entity.
+	// Removes the most recently added component if more than
+	// one component of the type passed have been added.
 	//////////////////////////////////////////////////////////////////////////
 	template< typename _ComponentType >
 	void RemoveComponent();
+
+	//////////////////////////////////////////////////////////////////////////
+	// Removes a specific component instance from the entity.
+	//////////////////////////////////////////////////////////////////////////
+	template< typename _ComponentType >
+	void RemoveComponent( _ComponentType* _Instance );
+
+	//////////////////////////////////////////////////////////////////////////
+	// Removes all components of the passed type.
+	//////////////////////////////////////////////////////////////////////////
+	template< typename _ComponentType >
+	void RemoveComponents();
 
 	//////////////////////////////////////////////////////////////////////////
 	// Transform specialization.
@@ -102,10 +123,19 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 	// Returns a pointer to a component of the entity has one of the specified
-	// type, otherwise NULL.
+	// type, otherwise NULL. If more than one component of the passed
+	// type have been added, returns the most recently added one.
 	//////////////////////////////////////////////////////////////////////////
 	template< typename _ComponentType >
 	_ComponentType* GetComponent() const;
+
+	//////////////////////////////////////////////////////////////////////////
+	// Returns the vector of components of the passed type, if at least one
+	// component of such type has been added. If no components of
+	// the specified type have been added, returns NULL.
+	//////////////////////////////////////////////////////////////////////////
+	template< typename _ComponentType >
+	const std::vector<_ComponentType*>* GetComponents() const;	
 
 	//////////////////////////////////////////////////////////////////////////
 	// Transform specialization.
@@ -125,19 +155,53 @@ private:
 	//////////////////////////////////////////////////////////////////////////
 	void _ClearComponents();
 
+	//////////////////////////////////////////////////////////////////////////
+	// Private callback that is called when a component is added to the entity.
+	// Can be specialized for component types to provide specific functionality
+	// for that type. This is called AFTER the component is added to the entity
+	// but BEFORE it is initialized.
+	//////////////////////////////////////////////////////////////////////////
+	template< typename _ComponentType >
+	void _OnComponentInstantiated( _ComponentType* _Component );
+
+	// _OnComponentInstantiated specializations.
+#define ONINSTANTIATESPEC(type)	template<> void Entity::_OnComponentInstantiated<type>( type* _Component )
+	ONINSTANTIATESPEC(Transform);
+	ONINSTANTIATESPEC(components::CameraComponent);
+	ONINSTANTIATESPEC(components::Light);
+
+	//////////////////////////////////////////////////////////////////////////
+	// Same as _OnComponentInstantiated, but for when a component is removed.
+	// This is called AFTER the component has been terminated but BEFORE
+	// it's memory is freed.
+	//////////////////////////////////////////////////////////////////////////
+	template< typename _ComponentType >
+	void _OnComponentRemoved( _ComponentType* _Component );
+
+	// _OnComponentRemoved specializations.
+#define ONREMOVESPEC(type)	template<> void Entity::_OnComponentRemoved<type>( type* _Component )
+	ONREMOVESPEC(Transform);
+	ONREMOVESPEC(components::CameraComponent);
+	ONREMOVESPEC(components::Light);
+
 	EntityID m_EntityID;
 	std::string m_Name;
 
 	Components m_Components;
 
 	// Commonly used components are stored here for ease of access.
-	// The _Init() overrides in these classes store the pointers and
-	// the _Terminate() overrides clear them to 0.
+	// The _OnComponentInstantiated() specializations store the pointers and
+	// the _OnComponentRemoved() specializations clear them to 0.
 	Transform* m_Transform;
+	components::CameraComponent* m_Camera;
+	components::Light* m_Light;
 };
 
 }
 
 #include "core/entitysystem/Entity.inl"
+
+#undef ONINSTANTIATESPEC
+#undef ONREMOVESPEC
 
 #endif

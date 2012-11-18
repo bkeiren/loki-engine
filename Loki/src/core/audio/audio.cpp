@@ -11,7 +11,10 @@
 namespace loki
 {
 
-LkAudio* g_Audio = NULL;
+namespace audio
+{
+
+Audio* g_Audio = NULL;
 
 // FMOD::System* Audio::m_System = NULL;
 // FMOD::Sound* Audio::m_Sound = NULL;
@@ -20,9 +23,8 @@ LkAudio* g_Audio = NULL;
 // uint32 Audio::m_Version = 0;
 // std::list<Sound*> Audio::m_Sounds;
 
-LkAudio::LkAudio()	:
+Audio::Audio()	:
 	m_System(NULL),
-	m_Sound(NULL),
 	m_Channel(NULL),
 	m_Key(0),
 	m_Version(0)
@@ -30,12 +32,12 @@ LkAudio::LkAudio()	:
 	_Init();
 }
 
-LkAudio::~LkAudio()
+Audio::~Audio()
 {
 	_Shutdown();
 }
 
-bool LkAudio::_Init()
+bool Audio::_Init()
 {
 	// http://www.fmod.org/wiki/index.php5?title=Midi_example_in_C
 
@@ -62,32 +64,20 @@ bool LkAudio::_Init()
 	return true;
 }
 
-void LkAudio::_Shutdown()
+void Audio::_Shutdown()
 {
 	FMOD_RESULT result = FMOD_OK;
-	result = m_Sound->release();
-	ErrorCheck(result);
 	result = m_System->release();
 	ErrorCheck(result);
 
 	LOG(VL_ALWAYS, "Audio::Shutdown: Done");
 }
 
-void LkAudio::Update()
+void Audio::_Update()
 {
 	m_System->update();
 }
 
-LkSound* LkAudio::CreateSound( char* _File )
-{
-	LkSound* sound = new LkSound(m_System, m_Channel, _File);
-	m_Sounds.push_back(sound);
-	return sound;
 }
-
-// void Audio::PlaySound( Sound* _Sound )
-// {
-// 	
-// }
 
 }

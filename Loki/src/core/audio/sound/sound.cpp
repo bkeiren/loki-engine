@@ -15,7 +15,7 @@ LkSound::LkSound( FMOD::System* _System, FMOD::Channel* _Channel, const char* _F
     memset(&m_SoundExInfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
     m_SoundExInfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
  
-    FMOD_RESULT result = _System->createSound(_File, FMOD_SOFTWARE | FMOD_CREATESTREAM, &m_SoundExInfo, &m_Sound);
+    FMOD_RESULT result = _System->createSound(_File, FMOD_HARDWARE | FMOD_CREATESTREAM, &m_SoundExInfo, &m_Sound);
     ErrorCheck(result);
 }
 

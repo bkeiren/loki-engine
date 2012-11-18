@@ -43,9 +43,11 @@ bool EntityID::operator >= ( const EntityID& _ID ) const
 
 Entity::Entity()	:
 	m_Transform(0)
+	,m_Camera(0)
+	,m_Light(0)
 {
 	// An entity always has a transform component.
-	m_Transform = InstantiateComponent<Transform>();
+	InstantiateComponent<Transform>();
 }
 
 Entity::~Entity()
@@ -77,6 +79,26 @@ Transform& Entity::GetTransform()
 	return *m_Transform;
 }
 
+const components::CameraComponent* Entity::GetCamera() const
+{
+	return m_Camera;
+}
+
+components::CameraComponent* Entity::GetCamera()
+{
+	return m_Camera;
+}
+
+const components::Light* Entity::GetLight() const
+{
+	return m_Light;
+}
+
+components::Light* Entity::GetLight()
+{
+	return m_Light;
+}
+
 void Entity::SetName( const char* _Name )
 {
 	m_Name = std::string(_Name);
@@ -91,11 +113,12 @@ void Entity::_ClearComponents()
 {
 	for (Components::iterator it = m_Components.begin(); it != m_Components.end(); ++it)
 	{
-#if RTTI_TYPE == RTTI_TYPEID
-		delete (*it).second;
-#elif RTTI_TYPE == RTTI_DYNAMIC_CAST
-		delete (*it);
-#endif
+		ComponentsVector Vector = (*it).second;
+		for (ComponentsVectorIter it2 = Vector.begin(); it2 != Vector.end(); ++it2)
+		{
+			delete (*it2);
+		}
+		Vector.clear();
 	}
 	m_Components.clear();
 }
