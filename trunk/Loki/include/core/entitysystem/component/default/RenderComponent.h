@@ -27,7 +27,7 @@ class RenderComponent	: public Component
 	
 	CONTAINER_MACRO_LIST(RenderComponent*, RenderComponents);
 public:
-	DECLARE_COMPONENT_TYPEINFO(RenderComponent)		// Required!
+	DECLARE_COMPONENT_SINGLE_INSTANCE(RenderComponent)		// Required!
 
 	void SetModel( graphics::Model* _Model );
 	graphics::Model* GetModel();

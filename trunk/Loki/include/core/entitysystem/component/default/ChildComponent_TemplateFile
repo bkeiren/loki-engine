@@ -23,7 +23,8 @@ namespace components
 class COMPONENTCLASSNAME	: public Component
 {
 public:
-	DECLARE_COMPONENT_TYPEINFO(COMPONENTCLASSNAME)	// Required!
+	DECLARE_COMPONENT(COMPONENTCLASSNAME)	// Required! Or DECLARE_COMPONENT_SINGLE_INSTANCE if only one instance of the class
+											// should be allowed on an entity.
 
 	COMPONENTCLASSNAME();
 	~COMPONENTCLASSNAME();

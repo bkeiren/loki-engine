@@ -11,7 +11,7 @@ using namespace loki;
 class SimpleRotationController	: public components::CppScript
 {
 public:
-	DECLARE_COMPONENT_TYPEINFO(SimpleRotationController);
+	DECLARE_COMPONENT(SimpleRotationController);
 
 	SimpleRotationController()
 	{

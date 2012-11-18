@@ -21,7 +21,7 @@ namespace components
 class Light	: public Component
 {
 public:
-	DECLARE_COMPONENT_TYPEINFO(Light)
+	DECLARE_COMPONENT_SINGLE_INSTANCE(Light)
 
 	CONTAINER_MACRO_LIST(Light*, Lights);
 

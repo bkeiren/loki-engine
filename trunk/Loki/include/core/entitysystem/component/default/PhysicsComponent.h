@@ -20,7 +20,7 @@ namespace components
 class PhysicsComponent	: public Component
 {
 public:
-	DECLARE_COMPONENT_TYPEINFO(PhysicsComponent)	// Required!
+	DECLARE_COMPONENT_SINGLE_INSTANCE(PhysicsComponent)	// Required!
 
 	bool CreateBodyFromInfo( physics::RigidBodyInfo& _Info );
 	

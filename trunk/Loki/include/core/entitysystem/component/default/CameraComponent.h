@@ -14,7 +14,7 @@ namespace components
 class CameraComponent	: public Component
 {
 public:
-	DECLARE_COMPONENT_TYPEINFO(CameraComponent)	// Required!
+	DECLARE_COMPONENT_SINGLE_INSTANCE(CameraComponent)	// Required!
 
 	enum EProjectionType
 	{

@@ -81,6 +81,7 @@ bool MyGame::Init()
 
 	Entity* entity0 = g_EntitySystem->SpawnEntity("TestEntity");
 	lc = entity0->InstantiateComponent<loki::components::Light>();
+	entity0->InstantiateComponent<loki::components::Light>();
 	lc->SetRange(100.0f);
 	lc->SetSpotAngle(50.0f);
 	lc->SetLightType(components::Light::LIGHT_SPOT);

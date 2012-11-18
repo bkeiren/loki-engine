@@ -19,7 +19,7 @@ namespace scripts
 class OrbitCam	: public components::CppScript
 {
 public:
-	DECLARE_COMPONENT_TYPEINFO(OrbitCam)
+	DECLARE_COMPONENT(OrbitCam)
 
 	OrbitCam();
 	~OrbitCam();

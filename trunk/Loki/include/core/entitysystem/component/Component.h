@@ -17,17 +17,40 @@ namespace components
 	class Light;
 }
 
-#define DECLARE_COMPONENT_TYPEINFO(componentclass)		friend class Entity;											\
-														static const std::string& GetComponentTypeName()				\
-														{																\
-															static std::string Name = std::string(#componentclass);		\
-															return Name;												\
-														}																\
-														static util::general::TypeInfo& GetTypeInfo()					\
-														{																\
-															static util::general::TypeInfo ti = util::general::TypeInfo(typeid(componentclass));	\
-															return ti;													\
-														}
+// Use this macro in your component class definition in order to be able
+// to instantiate it on Entities. If you want your class to only be instantiable once
+// per entity, use the DECLARE_COMPONENT_SINGLE_INSTANCE macro instead.
+#define DECLARE_COMPONENT(componentclass)		friend class Entity;											\
+												static const std::string& GetComponentTypeName()				\
+												{																\
+													static std::string Name = std::string(#componentclass);		\
+													return Name;												\
+												}																\
+												static util::general::TypeInfo& GetTypeInfo()					\
+												{																\
+													static util::general::TypeInfo ti = util::general::TypeInfo(typeid(componentclass));	\
+													return ti;													\
+												}																\
+												static bool AllowMultipleInstancesOnEntity()					\
+												{																\
+													return true;												\
+												}
+
+#define DECLARE_COMPONENT_SINGLE_INSTANCE(componentclass)	friend class Entity;											\
+															static const std::string& GetComponentTypeName()				\
+															{																\
+																static std::string Name = std::string(#componentclass);		\
+																return Name;												\
+															}																\
+															static util::general::TypeInfo& GetTypeInfo()					\
+															{																\
+																static util::general::TypeInfo ti = util::general::TypeInfo(typeid(componentclass));	\
+																return ti;													\
+															}																\
+															static bool AllowMultipleInstancesOnEntity()					\
+															{																\
+																return false;												\
+															}
 
 class Entity;
 
@@ -40,7 +63,7 @@ class Entity;
 //		In order to speed up type-info generation, some awesome stuff
 //		is done using a macro and static member functions and such.
 //		When making your own component, be sure to put the 
-//		DECLARE_COMPONENT_TYPEINFO macro in the public field of the class,
+//		DECLARE_COMPONENT macro in the public field of the class,
 //		passing your component class type as argument.
 //		Without this macro, the class will yield compiler errors telling you
 //		that 'GetTypeInfo' is not a member of your class!
@@ -48,7 +71,7 @@ class Entity;
 //		class MyComponent : public Component
 //		{
 //		public:
-//			DECLARE_COMPONENT_TYPEINFO
+//			DECLARE_COMPONENT
 //		};
 //		Note that you should not use this macro in any custom 'base' component
 //		classes. For instance, say you want to have a base component class

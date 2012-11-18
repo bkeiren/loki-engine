@@ -19,7 +19,7 @@ namespace scripts
 class FreeCam	: public components::CppScript
 {
 public:
-	DECLARE_COMPONENT_TYPEINFO(FreeCam);
+	DECLARE_COMPONENT(FreeCam);
 
 	FreeCam();
 	~FreeCam();

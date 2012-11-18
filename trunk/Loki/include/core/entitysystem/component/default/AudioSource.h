@@ -14,7 +14,7 @@ namespace components
 class AudioSource	: public Component
 {
 public:
-	DECLARE_COMPONENT_TYPEINFO(AudioSource)
+	DECLARE_COMPONENT(AudioSource)
 
 	AudioSource();
 	~AudioSource();

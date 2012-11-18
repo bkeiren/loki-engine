@@ -11,7 +11,7 @@ using namespace loki;
 class SimpleController	: public components::CppScript
 {
 public:
-	DECLARE_COMPONENT_TYPEINFO(SimpleController);
+	DECLARE_COMPONENT(SimpleController);
 
 	SimpleController()
 	{
