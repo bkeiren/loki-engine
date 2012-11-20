@@ -374,7 +374,7 @@ LkConsole::Command::Command( const std::string& _Description, ConsoleCommandFunc
 			{
 			case AT_INT:
 				{
-					str = "int32";
+					str = "int";
 					break;
 				}
 			case AT_BOOLEAN:
@@ -384,7 +384,7 @@ LkConsole::Command::Command( const std::string& _Description, ConsoleCommandFunc
 				}
 			case AT_FLOAT:
 				{
-					str = "f32";
+					str = "float";
 					break;
 				}
 			case AT_STRING:
@@ -395,6 +395,7 @@ LkConsole::Command::Command( const std::string& _Description, ConsoleCommandFunc
 			default:
 				{
 					// Don't do anything.
+					str = "Unknown";
 					continue;
 				}
 			}

@@ -147,7 +147,8 @@ Material* Material::_CreateMaterialFromLMAFile( const std::string& _MaterialFile
 	util::general::JSONValue effectString = root["effect"];
 	util::general::JSONValue shininessString = root["shininess"];
 	util::general::JSONValue reflectivityString = root["reflectivity"];
-	// TODO: Uv scale.
+	util::general::JSONValue uscaleString = root["uscale"];
+	util::general::JSONValue vscaleString = root["vscale"];
 
 	Material* mtl = new Material();
 
@@ -182,6 +183,16 @@ Material* Material::_CreateMaterialFromLMAFile( const std::string& _MaterialFile
 	{
 		mtl->SetReflectivity((f32)reflectivityString.AsDouble());
 	}
+	vec2 uvscale = vec2(1.0f, 1.0f);
+	if (uscaleString.IsDouble())
+	{
+		uvscale.x = uscaleString.AsDouble();
+	}
+	if (vscaleString.IsDouble())
+	{
+		uvscale.y = vscaleString.AsDouble();
+	}
+	mtl->SetUVScale(uvscale);
 
 	JSON_CLOSE(doc);
 

@@ -26,6 +26,9 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	void Draw() const;
 
+	const IndexBuffer* GetIBO() const;
+	const VertexBuffer* GetVBO() const;
+	const VertexArray* GetVAO() const;
 private:
 	SubMesh();
 

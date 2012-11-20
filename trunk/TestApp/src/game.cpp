@@ -21,7 +21,6 @@
 #include "core/entitysystem/component/default/MeshRenderer.h"
 #include "core/graphics/Mesh.h"
 #include "core/entitysystem/component/default/CameraComponent.h"
-#include "core/graphics/Model.h"
 
 #include "core/entitysystem/component/default/scripts/FreeCam.h"
 #include "core/entitysystem/component/default/scripts/OrbitCam.h"
@@ -100,7 +99,7 @@ bool MyGame::Init()
 
 	physics::RigidBodyInfo info;
 	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-	info.m_MeshData.m_Mesh = const_cast<graphics::SubMesh*>(rc->GetMesh()->GetSubMesh(0));
+	info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetMesh());
 	info.m_Restitution = 0.1f;
 	info.m_Mass = 0.001f;
 	pc->CreateBodyFromInfo(info);
@@ -167,8 +166,8 @@ bool MyGame::Init()
 		rc->SetMaterial("resources//lma//torus.lma");
 		
 		pc = TorusEntity->InstantiateComponent<loki::components::PhysicsComponent>();
-		info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-		info.m_MeshData.m_Mesh = const_cast<graphics::SubMesh*>(rc->GetMesh()->GetSubMesh(0));
+		info.m_Shape = physics::CS_MESH_CONVEXHULL;
+		info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetMesh());
 		info.m_Restitution = 0.1f;
 		info.m_Mass = 0.001f;
 		pc->CreateBodyFromInfo(info);
@@ -242,7 +241,7 @@ void MyGame::Update()
 		info.m_SphereData.m_Radius = 0.5f;
 		info.m_InitialTransform = components::CameraComponent::GetActiveCamera()->GetEntity()->GetTransform().GetMatrix();
 		physics::LkRigidBody* b = physics::g_Physics->AddRigidBody(info);
-		vec3 force = vec3(-info.m_InitialTransform[2]) * 200.0f;
+		vec3 force = vec3(info.m_InitialTransform[2]) * 200.0f;
 		b->ApplyCentralImpulse(force);
 	}
 

@@ -2,7 +2,6 @@
 #include "core/entitysystem/component/default/MeshRenderer.h"
 #include "core/graphics/Mesh.h"
 #include "core/physics/physics.h"
-#include "core/graphics/Model.h"
 #include "core/entitysystem/Entity.h"
 
 namespace loki
@@ -78,10 +77,9 @@ void PhysicsComponent::_Init()
    	if (meshrenderer)
    	{
 		const graphics::Mesh* mesh = meshrenderer->GetMesh();
-		const graphics::SubMesh* submesh = mesh->GetSubMesh(0);
-
-   		info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-		info.m_MeshData.m_Mesh = const_cast<graphics::SubMesh*>(submesh);
+		
+		info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+		info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(mesh);
    	}
    	else
    	{

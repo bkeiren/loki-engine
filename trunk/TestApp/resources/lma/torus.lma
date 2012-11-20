@@ -2,5 +2,7 @@
 	"diffuse":"resources//textures//texture5.bmp",
 	"normal":"resources//textures//texture5_normal.bmp",
 	"specular":"resources//textures//texture5_spec.bmp",
-	"shininess":50.0
+	"shininess":50.0,
+	"uscale":6.0,
+	"vscale":3.0
 }

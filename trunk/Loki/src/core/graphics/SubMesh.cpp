@@ -56,6 +56,21 @@ void SubMesh::Draw() const
 #undef MEMBER_OFFSET
 }
 
+const IndexBuffer* SubMesh::GetIBO() const
+{
+	return m_IBO;
+}
+
+const VertexBuffer* SubMesh::GetVBO() const
+{
+	return m_VBO;
+}
+
+const VertexArray* SubMesh::GetVAO() const
+{
+	return m_VAO;
+}
+
 }
 
 }
