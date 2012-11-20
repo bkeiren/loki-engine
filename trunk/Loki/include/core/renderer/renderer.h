@@ -88,10 +88,6 @@ private:
 	void _RenderUI();						// Renders the standard UI.
 	void _RenderParticles();
 
-	void _RenderLightingPointLights();
-	void _RenderLightingDirectionalLights();
-	void _RenderLightingSpotLights();
-
 	void _RenderLightAccumulationToBackBuffer();
 
 	void _RenderGBufferTargets();
