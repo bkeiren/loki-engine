@@ -6,15 +6,11 @@
 namespace loki
 {
 
-namespace renderer
-{
-class LkEffect;
-}
-
 namespace graphics
 {
 
 class Texture2D;
+class Effect;
 
 class Material
 {
@@ -39,8 +35,8 @@ public:
 	const Texture2D* GetTexture( uint32 _Index ) const;
 	void SetTexture( uint32 _Index, Texture2D* _Texture, bool _DeleteOldTexture = true );
 
-	renderer::LkEffect* GetEffect() const;
-	void SetEffect( renderer::LkEffect* _Effect );
+	graphics::Effect* GetEffect() const;
+	void SetEffect( graphics::Effect* _Effect );
 
 	f32 GetShininess() const;
 	void SetShininess( f32 _Shininess );
@@ -64,8 +60,8 @@ private:
 	static Material* _FindMaterial( const std::string& _MaterialFile );
 
 	Texture2D* m_Textures[_TT_COUNT];
-	renderer::LkEffect* m_Effect;
-	static renderer::LkEffect* m_DefaultEffect;
+	graphics::Effect* m_Effect;
+	static graphics::Effect* m_DefaultEffect;
 	f32 m_Shininess;
 	f32 m_Reflectivity;
 	vec2 m_UVScale;

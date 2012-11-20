@@ -2,7 +2,7 @@
 #include "core/game/localization/localization.h"
 #include "core/renderer/renderer.h"
 #include "core/script/squirrel/squirrel.h"
-#include "core/renderer/effect/effectmanager.h"
+#include "core/graphics/effect/EffectManager.h"
 
 #include "core/ui/overlay.h"
 #include "core/ui/elements/button.h"

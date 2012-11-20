@@ -1,7 +1,7 @@
 #include "core/game/Sky.h"
 #include "core/graphics/TextureCube.h"
 #include "core/graphics/DisplayList.h"
-#include "core/renderer/effect/effectmanager.h"
+#include "core/graphics/effect/EffectManager.h"
 #include "core/graphics/UtilityPrimitives.h"
 #include "core/entitysystem/component/default/CameraComponent.h"
 
@@ -13,7 +13,7 @@ namespace game
 
 graphics::TextureCube* Sky::m_CubeMap = 0;
 graphics::DisplayList* Sky::m_DisplayList = 0;
-renderer::LkEffect* Sky::m_Shader = 0;
+graphics::Effect* Sky::m_Shader = 0;
 
 Sky::Sky()
 {
@@ -39,7 +39,7 @@ void Sky::Render()
 {
 	if (!m_Shader)
 	{
-		m_Shader = renderer::g_EffectManager->CreateEffectFromFile(DEFAULT_RESOURCE("shaders//sky.cgfx"), "SkyShader");
+		m_Shader = graphics::g_EffectManager->CreateEffectFromFile(DEFAULT_RESOURCE("shaders//sky.cgfx"), "SkyShader");
 	}
 	if (!m_DisplayList)
 	{
@@ -58,7 +58,7 @@ void Sky::Render()
 		return;
 	}
 
-	renderer::LkEffectParameter* Param = 0;
+	graphics::EffectParameter* Param = 0;
 	Param = m_Shader->GetParameterBySemantic("LKSKYSAMPLER");
 	if (Param)
 	{

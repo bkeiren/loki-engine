@@ -10,11 +10,7 @@ namespace graphics
 {
 	class TextureCube;
 	class DisplayList;
-}
-
-namespace renderer
-{
-	class LkEffect;
+	class Effect;
 }
 
 namespace game
@@ -33,7 +29,7 @@ private:
 
 	static graphics::TextureCube* m_CubeMap;
 	static graphics::DisplayList* m_DisplayList;
-	static renderer::LkEffect* m_Shader;
+	static graphics::Effect* m_Shader;
 };
 
 }

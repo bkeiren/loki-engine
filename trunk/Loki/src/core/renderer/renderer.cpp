@@ -8,9 +8,9 @@
 #include "core/graphics/TextureCube.h"
 #include "core/resourcemanager/texturemanager.h"
 #include "core/resourcemanager/modelmanager.h"
-#include "core/renderer/effect/effectmanager.h"
+#include "core/graphics/effect/EffectManager.h"
 #include "core/renderer/debugrenderer.h"
-#include "core/renderer/effect/effectmanager.h"
+#include "core/graphics/effect/EffectManager.h"
 #include "core/window/Window.h"
 
 #include "core/graphics/FrameBuffer.h"
@@ -70,7 +70,7 @@ LkRenderer::LkRenderer( Window* _Window )	:
 
 	// Initialize the effect manager.
 	// NOTE: Must be done before instantiating an object of class LkMRTObject because this class accesses g_EffectManager.
-	g_EffectManager = new LkEffectManager();
+	graphics::g_EffectManager = new graphics::EffectManager();
 
 	if (!_ConstructGBuffer())
 	{
@@ -78,26 +78,26 @@ LkRenderer::LkRenderer( Window* _Window )	:
 		m_GBuffer = NULL;
 	}
 
-	m_LightEffect = g_EffectManager->CreateEffectFromFile(DEFAULT_RESOURCE("shaders//light.cgfx"), "LightEffect");
+	m_LightEffect = graphics::g_EffectManager->CreateEffectFromFile(DEFAULT_RESOURCE("shaders//light.cgfx"), "LightEffect");
 	if (!m_LightEffect)
 	{
 		LOG(VL_ERROR, "Renderer::Init: Failed to load light effect");
 	}
 
-	m_LightAccumulationToBackBufferEffect = g_EffectManager->CreateEffectFromMemory(
+	m_LightAccumulationToBackBufferEffect = graphics::g_EffectManager->CreateEffectFromMemory(
 #include "core/renderer/lightaccumtobackbuffer_cgeffect.inl"
 		, "LightAccumulationToBackBuffer");
 
 #ifdef DBG_VISUALIZATIONS
-	m_GBufferTargets_General = g_EffectManager->CreateEffectFromMemory(
+	m_GBufferTargets_General = graphics::g_EffectManager->CreateEffectFromMemory(
 #include "core/renderer/gbuffertargets_general_cgeffect.inl"
 		, "GBufferTargets_General");
 
-	m_GBufferTargets_Normals = g_EffectManager->CreateEffectFromMemory(
+	m_GBufferTargets_Normals = graphics::g_EffectManager->CreateEffectFromMemory(
 #include "core/renderer/gbuffertargets_normals_cgeffect.inl"
 		, "GBufferTargets_Normals");
 
-	m_GBufferTargets_Depth = g_EffectManager->CreateEffectFromMemory(
+	m_GBufferTargets_Depth = graphics::g_EffectManager->CreateEffectFromMemory(
 #include "core/renderer/gbuffertargets_depth_cgeffect.inl"
 		, "GBufferTargets_Depth");
 #endif
@@ -138,8 +138,8 @@ LkRenderer::~LkRenderer()
 	// 	delete g_TextureManager;
 	// 	g_TextureManager = NULL;
 
-	delete g_EffectManager;
-	g_EffectManager = NULL;
+	delete graphics::g_EffectManager;
+	graphics::g_EffectManager = NULL;
 
 	delete m_GBuffer;
 	m_GBuffer = NULL;
@@ -502,7 +502,7 @@ void LkRenderer::_RenderOpaqueGeometry()
 			{
 				const graphics::SubMesh* submesh = mesh->GetSubMesh(i);
 				const graphics::Material* material = rc->m_Materials[math::clamp(i,(uint32) 0, (uint32)rc->m_Materials.size() - 1)];
-				renderer::LkEffect* effect = material->GetEffect();
+				graphics::Effect* effect = material->GetEffect();
 
 				if (!effect)
 				{
@@ -510,7 +510,7 @@ void LkRenderer::_RenderOpaqueGeometry()
 					continue;
 				}
 
-				renderer::LkEffectParameter* param = 0;
+				graphics::EffectParameter* param = 0;
 
 				// Set the global ambient color.
 				// TODO.
@@ -699,7 +699,7 @@ void LkRenderer::_RenderParticles()
 
 void LkRenderer::_RenderLightingPointLights()
 {
-#define SETCGPARAM(paramname, value)	{LkEffectParameter* param = m_LightEffect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
+#define SETCGPARAM(paramname, value)	{graphics::EffectParameter* param = m_LightEffect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
 
 	components::CameraComponent* camera = components::CameraComponent::GetActiveCamera();
 	mat4 _ProjectionMatrix = camera->GetProjectionMatrix();
@@ -912,7 +912,7 @@ void LkRenderer::_RenderLightAccumulationToBackBuffer()
 #undef SETCGPARAM
 #endif
 
-#define SETCGPARAM(paramname, value)	{LkEffectParameter* param = m_LightAccumulationToBackBufferEffect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
+#define SETCGPARAM(paramname, value)	{graphics::EffectParameter* param = m_LightAccumulationToBackBufferEffect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
 
 	//SETCGPARAM("LKLIGHTACCUMULATIONTEX", m_GBuffer->GetRenderbufferTexture(4));
 	SETCGPARAM("LKLIGHTACCUMULATIONTEX", m_GBuffer->GetAttachmentTexture(GBUFFER_LIGHTACCUM));
@@ -941,7 +941,7 @@ void LkRenderer::_RenderGBufferTargets()
 #undef SETCGPARAM
 #endif
 
-#define SETCGPARAM(paramname, value)	{LkEffectParameter* param = effect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
+#define SETCGPARAM(paramname, value)	{graphics::EffectParameter* param = effect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
 
 	for (int32 i = 0; i < 4; ++i)
 	{
@@ -949,7 +949,7 @@ void LkRenderer::_RenderGBufferTargets()
 
 		static graphics::EFrameBufferAttachment Attachments[4] = { GBUFFER_DIFFUSE_SPEC, GBUFFER_POSITIONS, GBUFFER_NORMALS, GBUFFER_DEPTH_STENCIL };
 
-		LkEffect* effect = 0;
+		graphics::Effect* effect = 0;
 		switch (i)
 		{
 		case 2:

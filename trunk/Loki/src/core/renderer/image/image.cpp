@@ -3,7 +3,7 @@
 #include "core/renderer/renderer.h"
 #include "core/resourcemanager/texturemanager.h"
 
-#include "core/renderer/effect/effectmanager.h"
+#include "core/graphics/effect/EffectManager.h"
 
 #include "core/engine.h"
 #include "core/game/game.h"
@@ -20,7 +20,7 @@ namespace loki
 namespace renderer
 {
 
-LkEffect* LkImage::m_CgEffect = NULL;
+graphics::Effect* LkImage::m_CgEffect = NULL;
 
 LkImage::LkImage( const char* _Texture, const vec3& _Position, const vec2& _Size, bool _PositionIsAbsolute /*= false*/, bool _SizeIsAbsolute /*= false*/ )	:
 	m_Position(_Position),
@@ -86,7 +86,7 @@ void LkImage::_Init( const char* _Texture, const vec3& _Position, const vec2& _S
 	static bool CgEffectLoaded = false;
 	if (!CgEffectLoaded)
 	{
-		m_CgEffect = renderer::g_EffectManager->CreateEffectFromFile("resources//shaders//ui.cgfx", "ImageEffect");
+		m_CgEffect = graphics::g_EffectManager->CreateEffectFromFile("resources//shaders//ui.cgfx", "ImageEffect");
 		if (m_CgEffect)
 		{
 			CgEffectLoaded = true;
@@ -267,7 +267,7 @@ void LkImage::Render()
 		return;
 	}
 
-	LkEffectParameter* param = m_CgEffect->GetParameterBySemantic("LKDIFFUSETEX");
+	graphics::EffectParameter* param = m_CgEffect->GetParameterBySemantic("LKDIFFUSETEX");
 	if (param)
 	{
 		param->Set(m_Textures[m_TextureIndex].second->GetTextureHandle());

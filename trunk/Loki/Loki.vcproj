@@ -300,11 +300,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\commandlineparsing.h"
+			RelativePath=".\include\commandlineparsing.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\commandlineparsing.h"
+			RelativePath=".\include\core\commandlineparsing.h"
 			>
 		</File>
 		<File
@@ -384,15 +384,15 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\dev_notes.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\dev_notes.txt"
+			>
+		</File>
+		<File
 			RelativePath=".\src\dev_notes.txt"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\dev_notes.txt"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -412,27 +412,31 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\renderer\effect\effect.cpp"
+			RelativePath=".\src\core\graphics\effect\Effect.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\renderer\effect\effect.h"
+			RelativePath=".\include\core\graphics\effect\Effect.h"
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\renderer\effect\effectmanager.cpp"
+			RelativePath=".\src\core\graphics\effect\EffectManager.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\renderer\effect\effectmanager.h"
+			RelativePath=".\include\core\graphics\effect\EffectManager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\renderer\effect\effectparameter.cpp"
+			RelativePath=".\src\core\graphics\effect\EffectParameter.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\renderer\effect\effectparameter.h"
+			RelativePath=".\include\core\graphics\effect\EffectParameter.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\effect\EffectTechnique.h"
 			>
 		</File>
 		<File
@@ -1644,11 +1648,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\TestState.h"
+			RelativePath=".\include\states\TestState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\TestState.h"
+			RelativePath=".\include\core\states\TestState.h"
 			>
 		</File>
 		<File

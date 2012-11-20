@@ -1,5 +1,5 @@
-#include "core/renderer/effect/effect.h"
-#include "core/renderer/effect/effectparameter.h"
+#include "core/graphics/effect/Effect.h"
+#include "core/graphics/effect/EffectParameter.h"
 
 #include <iostream>
 
@@ -8,10 +8,10 @@
 namespace loki
 {
 
-namespace renderer
+namespace graphics
 {
 
-LkEffect::LkEffect( void* _Effect, const std::string& _EffectName )	:
+Effect::Effect( void* _Effect, const std::string& _EffectName )	:
 	m_Name(_EffectName),
 	m_CGEffect(_Effect),
 	m_CGTechnique(0),
@@ -40,13 +40,13 @@ LkEffect::LkEffect( void* _Effect, const std::string& _EffectName )	:
 	LOG(VL_NORMAL, "Effect::Effect: Created effect '%s'", _EffectName.c_str());
 }
 
-LkEffect::LkEffect()
+Effect::Effect()
 {
 	ILLEGAL_CTOR_ERROR("Effect");
 }
 
 
-LkEffect::~LkEffect()
+Effect::~Effect()
 {
 	if (m_CGEffect != NULL)
 	{
@@ -55,14 +55,14 @@ LkEffect::~LkEffect()
 	}
 }
 
-const std::string& LkEffect::GetName() const
+const std::string& Effect::GetName() const
 {
 	return m_Name;
 }
 
-LkEffectParameter* LkEffect::GetParameter( const std::string& _ParameterName )
+EffectParameter* Effect::GetParameter( const std::string& _ParameterName )
 {
-	ParametersConstItr it = m_Parameters.find(_ParameterName);
+	ParametersConstIter it = m_Parameters.find(_ParameterName);
 	if (it != m_Parameters.end())
 	{
 		return (*it).second;
@@ -71,10 +71,10 @@ LkEffectParameter* LkEffect::GetParameter( const std::string& _ParameterName )
 	return 0;
 }
 
-LkEffectParameter* LkEffect::GetParameterBySemantic( const std::string& _Semantic )
+EffectParameter* Effect::GetParameterBySemantic( const std::string& _Semantic )
 {
 	// First attempt to find the semantic parameter in the 'cache' map.
-	ParametersConstItr it = m_ParametersBySemantic.find(_Semantic);
+	ParametersConstIter it = m_ParametersBySemantic.find(_Semantic);
 	if (it != m_ParametersBySemantic.end())
 	{
 		return (*it).second;
@@ -85,7 +85,7 @@ LkEffectParameter* LkEffect::GetParameterBySemantic( const std::string& _Semanti
 	CGparameter param = cgGetEffectParameterBySemantic((CGeffect)m_CGEffect, _Semantic.c_str());
 	if (param != 0)
 	{
-		LkEffectParameter* effectparameter = new LkEffectParameter(param, _Semantic);
+		EffectParameter* effectparameter = new EffectParameter(param, _Semantic);
 		m_Parameters.insert(ParametersPair(_Semantic, effectparameter));
 		return effectparameter;
 	}
@@ -94,19 +94,19 @@ LkEffectParameter* LkEffect::GetParameterBySemantic( const std::string& _Semanti
 	return 0;
 }
 
-void LkEffect::_LoadNamedParameters()
+void Effect::_LoadNamedParameters()
 {
 	CGparameter param = cgGetFirstEffectParameter((CGeffect)m_CGEffect);
 	while (param)
 	{
 		std::string paramname = std::string(cgGetParameterName(param));
-		m_Parameters.insert(ParametersPair(paramname, new LkEffectParameter(param, paramname)));
+		m_Parameters.insert(ParametersPair(paramname, new EffectParameter(param, paramname)));
 
 		param = cgGetNextParameter(param);
 	}
 }
 
-bool LkEffect::HasNextPass()
+bool Effect::HasNextPass()
 {
 	if (m_CGCurrentPass == 0)
 	{

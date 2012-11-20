@@ -4,44 +4,46 @@
 #define EFFECTMANAGER_H
 
 #include <hash_map>
-#include "core/renderer/effect/effect.h"
-#include "core/renderer/effect/effectparameter.h"
+#include "core/graphics/effect/Effect.h"
+#include "core/graphics/effect/EffectParameter.h"
 
 namespace loki
 {
 
 namespace renderer
 {
+	class LkRenderer;
+}
 
-class LkEffect;
-
-class LkEffectManager
+namespace graphics
 {
-	typedef stdext::hash_map<std::string, LkEffect*>	Effects;
-	typedef Effects::iterator							EffectsItr;
-	typedef Effects::const_iterator						EffectsConstItr;
-	typedef std::pair<std::string, LkEffect*>			EffectsPair;
 
-	friend class LkRenderer;
+class Effect;
+
+class EffectManager
+{
+	CONTAINER_MACRO_HASH_MAP(std::string, Effect*, Effects)
+
+	friend class renderer::LkRenderer;
 public:
 	//////////////////////////////////////////////////////////////////////////
 	// Create an effect from a .cgfx file.
-	LkEffect* CreateEffectFromFile( const std::string& _File, const std::string& _EffectName );
+	Effect* CreateEffectFromFile( const std::string& _File, const std::string& _EffectName );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Create an effect from a string of source code.
-	LkEffect* CreateEffectFromMemory( const std::string& _Source, const std::string& _EffectName );
+	Effect* CreateEffectFromMemory( const std::string& _Source, const std::string& _EffectName );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Find an already created effect by name.
-	LkEffect* GetEffect( const std::string& _EffectName ) const;
+	Effect* GetEffect( const std::string& _EffectName ) const;
 
 // 	void SetViewMatrix( const mat4& _M );
 // 	void SetModelMatrix( const mat4& _M );
 // 	void SetProjectionMatrix( const mat4& _M );
 private:
-	LkEffectManager();
-	~LkEffectManager();
+	EffectManager();
+	~EffectManager();
 
 	void _Init();
 	void _Shutdown();
@@ -51,7 +53,7 @@ private:
 	void* m_CGContext;
 };
 
-extern LkEffectManager* g_EffectManager;
+extern EffectManager* g_EffectManager;
 
 }
 
