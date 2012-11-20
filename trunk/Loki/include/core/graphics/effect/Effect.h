@@ -32,6 +32,15 @@ public:
 	EffectParameter* GetParameterBySemantic( const std::string& _Semantic );
 
 	//////////////////////////////////////////////////////////////////////////
+	// Find a shader technique.
+	EffectTechnique* GetTechnique( const std::string& _TechniqueName );
+
+	//////////////////////////////////////////////////////////////////////////
+	// Set the shader technique that is to be used for next calls to HasNextPass.
+	void SetActiveTechnique( const std::string& _TechniqueName );
+	void SetActiveTechnique( EffectTechnique* _Technique );
+
+	//////////////////////////////////////////////////////////////////////////
 	// Used to activate the effect and iterate over all passes.
 	// Example use:
 	// while (effect->HasNextPass())
@@ -44,6 +53,7 @@ private:
 	Effect();
 	~Effect();
 
+	void _LoadTechniques();
 	void _LoadNamedParameters();
 
 	std::string m_Name;
@@ -53,6 +63,7 @@ private:
 	Parameters m_Parameters;
 	Parameters m_ParametersBySemantic;
 	bool m_HasValidTechnique;
+	EffectTechnique* m_ActiveTechnique;
 	Techniques m_Techniques;
 };
 
