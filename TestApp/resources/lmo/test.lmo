@@ -1,4 +1,0 @@
-{
-	"mesh":"resources//models//sphere_small.obj",
-	"materials":["resources//lma//test.lma"]
-}

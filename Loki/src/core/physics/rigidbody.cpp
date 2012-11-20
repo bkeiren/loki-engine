@@ -23,13 +23,11 @@
 
 #include "Bullet/LinearMath/btDefaultMotionState.h"
 
-//#include "core/renderer/geometry/vertex/vertex.h"
-//#include "core/renderer/geometry/mesh/mesh.h"
-//#include "core/renderer/geometry/submesh/submesh.h"
-
 #include "core/graphics/IndexBuffer.h"
 #include "core/graphics/VertexBuffer.h"
+#include "core/graphics/Mesh.h"
 #include "core/graphics/SubMesh.h"
+#include "core/graphics/Vertex.h"
 
 namespace loki
 {
@@ -57,21 +55,21 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 
 				btTriangleIndexVertexArray* meshinterface = new btTriangleIndexVertexArray();
 
-// 				for (uint32 i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
-// 				{
-// 					const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
-// 					
-// 					btIndexedMesh btmesh;
-// 
-// 					btmesh.m_numTriangles = mesh->GetIndexBufferObject()->GetNumIndices() / 3;
-// 					btmesh.m_numVertices = mesh->GetVertexBufferObject()->GetNumVertices();
-// 					btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndexBufferObject()->GetIndicesRAM();
-// 					btmesh.m_triangleIndexStride = 3 * sizeof(int32);
-// 					btmesh.m_vertexBase = (unsigned char*)((int32)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int32)MEMBER_OFFSET(renderer::LkVertex, pos));
-// 					btmesh.m_vertexStride = sizeof(renderer::LkVertex);
-// 
-// 					meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
-// 				}
+				for (uint32 i = 0; i < _Info.m_MeshData.m_Mesh->GetSubMeshCount(); ++i)
+				{
+					const graphics::SubMesh* submesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
+					
+					btIndexedMesh btmesh;
+
+					btmesh.m_numTriangles = submesh->GetIBO()->GetNumIndices() / 3;
+					btmesh.m_numVertices = submesh->GetVBO()->GetNumVertices();
+					btmesh.m_triangleIndexBase = (unsigned char*)submesh->GetIBO()->GetIndicesRAM();
+					btmesh.m_triangleIndexStride = 3 * sizeof(int32);
+					btmesh.m_vertexBase = (unsigned char*)((int32)submesh->GetVBO()->GetVerticesRAM() + (int32)MEMBER_OFFSET(graphics::Vertex, pos));
+					btmesh.m_vertexStride = sizeof(graphics::Vertex);
+
+					meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
+				}
 
 				// Is this static?
 				shape = new btBvhTriangleMeshShape(meshinterface, true, true);
@@ -80,58 +78,76 @@ LkRigidBody::LkRigidBody( const RigidBodyInfo& _Info )	:
 		}
 	case CS_MESH_CONVEXHULL:
 		{
-			shape = new btCompoundShape();
+			if (_Info.m_MeshData.m_Mesh == NULL)
+			{
+				LOG(VL_WARN, "RigidBody::RigidBody: Geometric data required to build a triangle mesh is missing, using a normalized box hull instead");
+				// We don't break here because we want to roll over into the CS_BOX case because our triangle mesh is missing an actual
+				// mesh, so we don't have any geometric data.
+			}
+			else
+			{
+				shape = new btCompoundShape();
 
-// 			for (uint32 i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
-// 			{
-// 				const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
-// 				mat4 submeshtransform;	// Identity, for now?
-// 
-// 				// The original, non-reduced, shape.
-// 				// A btConvexHullShape simply takes a point cloud (No triangles are defined) and from this constructs
-// 				// a basic shape primitive that most tightly fits this cloud (Which could be a box, sphere, cylinder, etc.).
-// 				btConvexHullShape* original = new btConvexHullShape((btScalar*)((int32)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int32)MEMBER_OFFSET(renderer::LkVertex, pos)), 
-// 																	mesh->GetVertexBufferObject()->GetNumVertices(),
-// 																	sizeof(renderer::LkVertex));
-// 				btShapeHull* hull = new btShapeHull(original);
-// 
-// 				// Build a new hull with less vertices. We do this because we don't want to have to construct a shape for a huge number
-// 				// of vertices when only some of these will be of any actual affect to the final shape.
-// 				// The Bullet documentation says that the number of vertices should be ideally kept below 100...
-// 				hull->buildHull(original->getMargin());
-// 
-// 				// Store the hull.
-// 				((btCompoundShape*)shape)->addChildShape(BTTransform(submeshtransform), new btConvexHullShape((btScalar*)hull->getVertexPointer(), hull->numVertices()));
-// 			}
+				for (uint32 i = 0; i < _Info.m_MeshData.m_Mesh->GetSubMeshCount(); ++i)
+				{
+					const graphics::SubMesh* submesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
+					mat4 submeshtransform;	// Identity, for now?
 
-			//delete original;	// Required?
-			break;
+					// The original, non-reduced, shape.
+					// A btConvexHullShape simply takes a point cloud (No triangles are defined) and from this constructs
+					// a basic shape primitive that most tightly fits this cloud (Which could be a box, sphere, cylinder, etc.).
+					btConvexHullShape* original = new btConvexHullShape((btScalar*)((int32)submesh->GetVBO()->GetVerticesRAM() + (int32)MEMBER_OFFSET(graphics::Vertex, pos)), 
+																		submesh->GetVBO()->GetNumVertices(),
+																		sizeof(graphics::Vertex));
+					btShapeHull* hull = new btShapeHull(original);
+
+					// Build a new hull with less vertices. We do this because we don't want to have to construct a shape for a huge number
+					// of vertices when only some of these will be of any actual affect to the final shape.
+					// The Bullet documentation says that the number of vertices should be ideally kept below 100...
+					hull->buildHull(original->getMargin());
+
+					// Store the hull.
+					((btCompoundShape*)shape)->addChildShape(BTTransform(submeshtransform), new btConvexHullShape((btScalar*)hull->getVertexPointer(), hull->numVertices()));
+				}
+
+				//delete original;	// Required?
+				break;
+			}
 		}
 	case CS_MESH_CONVEXTRIANGLEMESH:
 		{
+			if (_Info.m_MeshData.m_Mesh == NULL)
+			{
+				LOG(VL_WARN, "RigidBody::RigidBody: Geometric data required to build a triangle mesh is missing, using a normalized box hull instead");
+				// We don't break here because we want to roll over into the CS_BOX case because our triangle mesh is missing an actual
+				// mesh, so we don't have any geometric data.
+			}
+			else
+			{
 #define MEMBER_OFFSET(s,m) ((char *)NULL + (offsetof(s,m)))
 
-			btTriangleIndexVertexArray* meshinterface = new btTriangleIndexVertexArray();
+				btTriangleIndexVertexArray* meshinterface = new btTriangleIndexVertexArray();
 
-// 			for (uint32 i = 0; i < _Info.m_MeshData.m_Mesh->GetNumSubMeshes(); ++i)
-// 			{
-// 				const graphics::Mesh* mesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
-// 
-// 				btIndexedMesh btmesh;
-// 
-// 				btmesh.m_numTriangles = mesh->GetIndexBufferObject()->GetNumIndices() / 3;
-// 				btmesh.m_numVertices = mesh->GetVertexBufferObject()->GetNumVertices();
-// 				btmesh.m_triangleIndexBase = (unsigned char*)mesh->GetIndexBufferObject()->GetIndicesRAM();
-// 				btmesh.m_triangleIndexStride = 3 * sizeof(int32);
-// 				btmesh.m_vertexBase = (unsigned char*)((int32)mesh->GetVertexBufferObject()->GetVerticesRAM() + (int32)MEMBER_OFFSET(renderer::LkVertex, pos));
-// 				btmesh.m_vertexStride = sizeof(renderer::LkVertex);
-// 
-// 				meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
-// 			}
+				for (uint32 i = 0; i < _Info.m_MeshData.m_Mesh->GetSubMeshCount(); ++i)
+				{
+					const graphics::SubMesh* submesh = _Info.m_MeshData.m_Mesh->GetSubMesh(i);
 
-			shape = new btConvexTriangleMeshShape(meshinterface, true);
-			//shape = new btGImpactMeshShape(meshinterface);
-			break;
+					btIndexedMesh btmesh;
+
+					btmesh.m_numTriangles = submesh->GetIBO()->GetNumIndices() / 3;
+					btmesh.m_numVertices = submesh->GetVBO()->GetNumVertices();
+					btmesh.m_triangleIndexBase = (unsigned char*)submesh->GetIBO()->GetIndicesRAM();
+					btmesh.m_triangleIndexStride = 3 * sizeof(int32);
+					btmesh.m_vertexBase = (unsigned char*)((int32)submesh->GetVBO()->GetVerticesRAM() + (int32)MEMBER_OFFSET(graphics::Vertex, pos));
+					btmesh.m_vertexStride = sizeof(graphics::Vertex);
+
+					meshinterface->addIndexedMesh(btmesh, PHY_INTEGER);
+				}
+
+				shape = new btConvexTriangleMeshShape(meshinterface, true);
+				//shape = new btGImpactMeshShape(meshinterface);
+				break;
+			}
 		}
 	case CS_BOX:
 		{

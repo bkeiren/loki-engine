@@ -8,7 +8,7 @@ namespace loki
 
 namespace graphics
 {
-class SubMesh;
+class Mesh;
 }
 
 namespace physics
@@ -84,7 +84,7 @@ struct RigidBodyInfo
 	// Triangle mesh data.
 	struct  
 	{
-		graphics::SubMesh* m_Mesh;	// TODO: Change this so that we use a mesh loaded with 
+		graphics::Mesh* m_Mesh;	// TODO: Change this so that we use a mesh loaded with 
 								// the express purpose of being used for physics hulls.
 	} m_MeshData;
 

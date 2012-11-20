@@ -1,6 +1,0 @@
-{
-	"mesh":"resources//models//cube.dae",
-	"materials":["resources//lma//cube.lma"],
-	"uscale":3.0,
-	"vscale":3.0
-}
