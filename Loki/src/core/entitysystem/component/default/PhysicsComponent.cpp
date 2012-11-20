@@ -1,5 +1,6 @@
 #include "core/entitysystem/component/default/PhysicsComponent.h"
-#include "core/entitysystem/component/default/RenderComponent.h"
+#include "core/entitysystem/component/default/MeshRenderer.h"
+#include "core/graphics/Mesh.h"
 #include "core/physics/physics.h"
 #include "core/graphics/Model.h"
 #include "core/entitysystem/Entity.h"
@@ -65,19 +66,22 @@ void PhysicsComponent::_HandleEvent( const LkEvent& _Event )
 
 void PhysicsComponent::_Init()
 {
-	// By default, the physics component will check for a RenderComponent and sync with its mesh.
+	// By default, the physics component will check for a MeshRenderer and sync with its mesh.
 	// Alterations can be made afterwards.
 	// if there is no render component, the shape of the physicsshape is a simple box of unit size.
 	  
-	RenderComponent* rendercomp = GetEntity()->GetComponent<RenderComponent>();
+	components::MeshRenderer* meshrenderer = GetEntity()->GetComponent<components::MeshRenderer>();
 
    	physics::RigidBodyInfo info;
 
    	// Check whether we have a render component, a model on that component and a mesh on that model.
-   	if (rendercomp && rendercomp->GetModel() && rendercomp->GetModel()->GetMesh(0))
+   	if (meshrenderer)
    	{
+		const graphics::Mesh* mesh = meshrenderer->GetMesh();
+		const graphics::SubMesh* submesh = mesh->GetSubMesh(0);
+
    		info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-		info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rendercomp->GetModel()->GetMesh(0));
+		info.m_MeshData.m_Mesh = const_cast<graphics::SubMesh*>(submesh);
    	}
    	else
    	{

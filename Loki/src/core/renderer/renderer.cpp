@@ -13,17 +13,19 @@
 #include "core/renderer/effect/effectmanager.h"
 #include "core/window/Window.h"
 
-#include "core/graphics/Model.h"
-
 #include "core/graphics/FrameBuffer.h"
 #include "core/graphics/DisplayList.h"
 
-#include "core/entitysystem/component/default/RenderComponent.h"
+#include "core/entitysystem/component/default/MeshRenderer.h"
 #include "core/entitysystem/component/default/Light.h"
 #include "core/entitysystem/component/default/Transform.h"
 #include "core/entitysystem/component/default/CameraComponent.h"
 #include "core/entitysystem/Entity.h"
 #include "core/game/Sky.h"
+
+#include "core/graphics/Mesh.h"
+#include "core/graphics/SubMesh.h"
+#include "core/graphics/Material.h"
 
 using namespace loki;
 using namespace loki::renderer;
@@ -478,15 +480,91 @@ void LkRenderer::_RenderOpaqueGeometry()
 	f32 zfar = camera->GetFarPlane();
 	f32 znear = camera->GetNearPlane();
 
-	for (components::RenderComponent::RenderComponentsConstIter it = components::RenderComponent::m_RenderComponents.begin();
-		 it != components::RenderComponent::m_RenderComponents.end();
+	for (components::MeshRenderer::RenderComponentsConstIter it = components::MeshRenderer::m_RenderComponents.begin();
+		 it != components::MeshRenderer::m_RenderComponents.end();
 		 ++it)
 	{
-		components::RenderComponent* rc = (*it);
+		components::MeshRenderer* rc = (*it);	// Must have MeshFilter too.
 
-		if (rc->m_Model)	// TODO: Replace this check with a default model to indicate missing models.
+		if (rc->m_Mesh)	// TODO: Replace this check with a default model to indicate missing models.
 		{
-			rc->m_Model->Render(rc->GetEntity()->GetTransform().GetMatrix(), viewmatrix, projectionmatrix, zfar, znear);
+			graphics::Mesh* mesh = rc->m_Mesh;
+
+			const mat4& _ModelMatrix = rc->GetTransform().GetMatrix();
+			const mat4& _ViewMatrix = viewmatrix;
+			const mat4& _ProjectionMatrix = projectionmatrix;
+			float _ZFar = zfar;
+			float _ZNear = znear;
+
+			graphics::TextureCube* SkyCubeMap = game::Sky::GetCubeMap();
+
+			for (uint32 i = 0; i < mesh->GetSubMeshCount(); ++i)
+			{
+				const graphics::SubMesh* submesh = mesh->GetSubMesh(i);
+				const graphics::Material* material = rc->m_Materials[math::clamp(i,(uint32) 0, (uint32)rc->m_Materials.size() - 1)];
+				renderer::LkEffect* effect = material->GetEffect();
+
+				if (!effect)
+				{
+					LOG(VL_ERROR, "Model::_Render: No effect associated with material");
+					continue;
+				}
+
+				renderer::LkEffectParameter* param = 0;
+
+				// Set the global ambient color.
+				// TODO.
+
+#define SETCGPARAM(paramname, value)	{param = effect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
+
+				SETCGPARAM("LKMODELVIEWPROJ", _ProjectionMatrix * _ViewMatrix * _ModelMatrix);		// Set the model view projection matrix.
+				SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
+				SETCGPARAM("LKMODELMATRIXIT", mat3(math::inverseTranspose(_ModelMatrix)));		// Set the inverse transpose of the model matrix.	
+				SETCGPARAM("LKEYEPOSITION", math::inverse(_ViewMatrix)[3]);			// Set the eye position.
+				SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
+				SETCGPARAM("LKUVSCALE", material->GetUVScale());		// Set the UV scale.
+				SETCGPARAM("LKZFAR", _ZFar);	// Set the Z-far value.
+				SETCGPARAM("LKZNEAR", _ZNear);	// Set the Z-near value.
+				SETCGPARAM("LKMATERIALSHININESS", material->GetShininess());
+				SETCGPARAM("LKMATERIALREFLECTIVITY", material->GetReflectivity());
+				SETCGPARAM("LKSKYSAMPLER", SkyCubeMap ? SkyCubeMap->GetTextureHandle() : 0);
+
+
+
+
+
+				// 		static graphics::TextureCube* CubeMapTest = graphics::TextureCube::Load("resources//textures//cubemap.bmp");
+				// 		SETCGPARAM("LKENVCUBEMAP", CubeMapTest->GetTextureHandle());
+
+
+
+
+
+				const graphics::Texture2D* tex = 0;
+
+				// Set the diffuse texture.
+				tex = material->GetTexture(graphics::Material::TT_DIFFUSE);
+				SETCGPARAM("LKDIFFUSETEX", (tex)?(tex->GetTextureHandle()):((GLuint)0));
+
+				// Set the normal texture.
+				tex = material->GetTexture(graphics::Material::TT_NORMAL);
+				SETCGPARAM("LKNORMALTEX", (tex)?(tex->GetTextureHandle()):((GLuint)0));
+
+				// Set the specular texture.
+				tex = material->GetTexture(graphics::Material::TT_SPECULAR);
+				SETCGPARAM("LKSPECULARTEX", (tex)?(tex->GetTextureHandle()):((GLuint)0));
+
+				// Set the emissive texture.
+				tex = material->GetTexture(graphics::Material::TT_EMISSIVE);
+				SETCGPARAM("LKEMISSIVETEX", (tex)?(tex->GetTextureHandle()):((GLuint)0));
+
+				while (effect->HasNextPass())
+				{
+					submesh->Draw();
+				}
+
+#undef SETCGPARAM
+			}
 		}
 	}
 }

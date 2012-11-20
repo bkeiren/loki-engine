@@ -25,6 +25,7 @@ namespace components
 {
 	class CameraComponent;
 	class Light;
+	class MeshRenderer;
 }
 
 struct EntityID
@@ -76,15 +77,19 @@ public:
 	const components::Light* GetLight() const;
 	components::Light* GetLight();
 
+	const components::MeshRenderer* GetRenderer() const;
+	components::MeshRenderer* GetRenderer();
+
 	//PROPERTY(components::CameraComponent, Entity, camera, {return *self.m_Camera;}, {});
 
 	//////////////////////////////////////////////////////////////////////////
 	// Adds a component to an entity. Calling this function requires a template
 	// syntax with the type of the component as argument. For example, if
-	// an entity is to receive a component of type MoveableComponent, this
+	// an entity is to receive a component of type MyComponent, this
 	// function can be called like so:
-	// entity::InstantiateComponent<MoveableComponent>();
-	// Multiple instances of the same type can be added.
+	// entity::InstantiateComponent<MyComponent>();
+	// Multiple instances of the same type can be added unless that component
+	// type was declared using DECLARE_COMPONENT_SINGLE_INSTANCE.
 	//////////////////////////////////////////////////////////////////////////
 	template< typename _ComponentType >
 	_ComponentType* InstantiateComponent();
@@ -169,6 +174,7 @@ private:
 	ONINSTANTIATESPEC(Transform);
 	ONINSTANTIATESPEC(components::CameraComponent);
 	ONINSTANTIATESPEC(components::Light);
+	ONINSTANTIATESPEC(components::MeshRenderer);
 
 	//////////////////////////////////////////////////////////////////////////
 	// Same as _OnComponentInstantiated, but for when a component is removed.
@@ -183,6 +189,7 @@ private:
 	ONREMOVESPEC(Transform);
 	ONREMOVESPEC(components::CameraComponent);
 	ONREMOVESPEC(components::Light);
+	ONREMOVESPEC(components::MeshRenderer);
 
 	EntityID m_EntityID;
 	std::string m_Name;
@@ -195,6 +202,7 @@ private:
 	Transform* m_Transform;
 	components::CameraComponent* m_Camera;
 	components::Light* m_Light;
+	components::MeshRenderer* m_Renderer;
 };
 
 }

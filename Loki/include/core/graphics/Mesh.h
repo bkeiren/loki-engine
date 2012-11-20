@@ -6,32 +6,39 @@
 namespace loki
 {
 
+namespace renderer
+{
+	class LkRenderer;
+}
+
 namespace graphics
 {
 
-class IndexBuffer;
-class VertexBuffer;
-class VertexArray;
+class SubMesh;
 
 class Mesh
 {
+	friend class renderer::LkRenderer;
+	CONTAINER_MACRO_HASH_MAP(std::string, Mesh*, Meshes)
 public:
+	CONTAINER_MACRO_VECTOR(SubMesh*, SubMeshes)
+
+	static Mesh* LoadMesh( const std::string& _GeometryFile );
+
+	const SubMesh* GetSubMesh( int32 _Index ) const;
+
+	uint32 GetSubMeshCount() const;
+private:
+	Mesh( const SubMeshes& _SubMeshes );
+	Mesh();
 	~Mesh();
 
-	static Mesh* Create( IndexBuffer* _IBO, VertexBuffer* _VBO );
+	static Mesh* _CreateMeshFromGeometryFile( const std::string& _GeometryFile );
+	static Mesh* _FindMesh( const std::string& _MeshFile );
 
-	//////////////////////////////////////////////////////////////////////////
-	// Makes the draw calls required to draw the mesh. Shaders and materials
-	// and other settings must be set before calling this.
-	//////////////////////////////////////////////////////////////////////////
-	void Draw() const;
+	SubMeshes m_SubMeshes;
 
-private:
-	Mesh();
-
-	IndexBuffer* m_IBO;
-	VertexBuffer* m_VBO;
-	VertexArray* m_VAO;
+	static Meshes m_Meshes;
 };
 
 }
