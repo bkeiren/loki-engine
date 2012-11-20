@@ -83,6 +83,8 @@ LkRenderer::LkRenderer( Window* _Window )	:
 	{
 		LOG(VL_ERROR, "Renderer::Init: Failed to load light effect");
 	}
+	m_LightEffectTechnique_CameraInside = m_LightEffect->GetTechnique("CameraInside");
+	m_LightEffectTechnique_CameraOutside = m_LightEffect->GetTechnique("CameraOutside");
 
 	m_LightAccumulationToBackBufferEffect = graphics::g_EffectManager->CreateEffectFromMemory(
 #include "core/renderer/lightaccumtobackbuffer_cgeffect.inl"
@@ -738,27 +740,12 @@ void LkRenderer::_RenderLightingPointLights()
 		SETCGPARAM("LKLIGHTINTENSITY", light->GetIntensity());
 		SETCGPARAM("LKLIGHTTYPE", light->GetLightType());
 
+		bool CameraInsideVolume = false;
 		switch (light->GetLightType())
 		{
 		case components::Light::LIGHT_POINT:
 			{
-				bool CameraInsideVolume = math::length(_EyePosition - transform.GetPosition()) < light->GetRange();
-
-				// TODO: Replace this with a VBO or something. At least not immediate mode.
-				static GLUquadric* quadric = gluNewQuadric();
-				int32 PassID = 0;
-				while (m_LightEffect->HasNextPass())
-				{
-#ifndef DBG_VISUALIZATIONS	
-					if (PassID == 4){ continue;	}
-#else						
-					if (!m_DBG_VisualizeLightVolumes && PassID == 4){ continue;	}
-#endif
-					// Awesomely condensed code...
-					//(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(gluSphere(quadric, light->GetRange(), 20, 15));
-					(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(light->GetGeometry()->Draw());
-					++PassID;
-				}
+				CameraInsideVolume = math::length(_EyePosition - transform.GetPosition()) < light->GetRange();
 				break;
 			}
 		case components::Light::LIGHT_SPOT:
@@ -785,21 +772,8 @@ void LkRenderer::_RenderLightingPointLights()
 				f32 d = (LightToEyeLength > 0.0001f) ?	// If the distance from the light to the camera is greater than our error margin...
 						(math::degrees(math::acos(math::dot(LightToEye / LightToEyeLength, LightVec)))) :	// Calculate the actual angle.
 						(0.0f);	// Assume we're inside.
-				bool CameraInsideVolume =	(LightToEyeLength < light->GetRange()) && 
+				CameraInsideVolume =	(LightToEyeLength < light->GetRange()) && 
 											(d <= SpotAngle * 0.5f);
-
-				int32 PassID = 0;
-				while (m_LightEffect->HasNextPass())
-				{
-#ifndef DBG_VISUALIZATIONS	
-					if (PassID == 4){ continue;	}
-#else						
-					if (!m_DBG_VisualizeLightVolumes && PassID == 4){ continue;	}
-#endif
-					(CameraInsideVolume && (PassID == 1 || PassID == 3) || ((!CameraInsideVolume) && PassID == 2))?(0):(light->GetGeometry()->Draw());
-					++PassID;
-				}
-
 				break;
 			}
 		default:
@@ -807,6 +781,22 @@ void LkRenderer::_RenderLightingPointLights()
 				break;
 			}
 		}
+
+		m_LightEffect->SetActiveTechnique( CameraInsideVolume ? m_LightEffectTechnique_CameraInside : m_LightEffectTechnique_CameraOutside );
+		while (m_LightEffect->HasNextPass())
+		{
+			light->GetGeometry()->Draw();
+		}
+#ifdef DBG_VISUALIZATIONS
+		if (m_DBG_VisualizeLightVolumes)
+		{
+			m_LightEffect->SetActiveTechnique("DebugDraw");
+			while (m_LightEffect->HasNextPass())
+			{
+				light->GetGeometry()->Draw();
+			}
+		}
+#endif
 
 		//glClear(GL_STENCIL_BUFFER_BIT);
 	}

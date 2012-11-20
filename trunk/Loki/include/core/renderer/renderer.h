@@ -31,6 +31,7 @@ namespace graphics
 {
 	class FrameBuffer;
 	class Effect;
+	class EffectTechnique;
 }
 
 namespace renderer
@@ -122,6 +123,9 @@ private:
 	aiLogStream m_AssImpLogStream;
 
 	graphics::Effect* m_LightEffect;
+	graphics::EffectTechnique* m_LightEffectTechnique_CameraInside;
+	graphics::EffectTechnique* m_LightEffectTechnique_CameraOutside;
+
 	graphics::Effect* m_LightAccumulationToBackBufferEffect;
 
 	// Visualization of Gbuffer targets for debug purposes.
