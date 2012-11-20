@@ -590,9 +590,105 @@ void LkRenderer::_RenderLighting()
 	// buffer at fragments that pass the stencil test in the final pass.
 	glClear(GL_STENCIL_BUFFER_BIT);
 
-	_RenderLightingPointLights();
-	_RenderLightingDirectionalLights();
-	_RenderLightingSpotLights();
+
+#define SETCGPARAM(paramname, value)	{graphics::EffectParameter* param = m_LightEffect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
+
+	components::CameraComponent* camera = components::CameraComponent::GetActiveCamera();
+	mat4 _ProjectionMatrix = camera->GetProjectionMatrix();
+	mat4 _ViewMatrix = camera->GetViewMatrix();
+	mat4 _ViewProjectionMatrix = _ProjectionMatrix * _ViewMatrix;
+	vec3 _EyePosition = camera->GetEntity()->GetTransform().GetPosition();
+
+	graphics::Texture2D* PointLightAttenuationTexture = components::Light::GetPointAttenuationTexture();
+	graphics::Texture2D* SpotLightAttenuationTexture = components::Light::GetSpotAttenuationTexture();
+
+	SETCGPARAM("LKEYEPOSITION", _EyePosition);
+	SETCGPARAM("LKRT0", m_GBuffer->GetAttachmentTexture(GBUFFER_DIFFUSE_SPEC));
+	SETCGPARAM("LKRT1", m_GBuffer->GetAttachmentTexture(GBUFFER_POSITIONS));
+	SETCGPARAM("LKRT2", m_GBuffer->GetAttachmentTexture(GBUFFER_NORMALS));
+	SETCGPARAM("LKRT3", m_GBuffer->GetAttachmentTexture(GBUFFER_DEPTH_STENCIL));
+	SETCGPARAM("LKPOINTATTTEXTURE", (PointLightAttenuationTexture)?(PointLightAttenuationTexture->GetTextureHandle()):(0));
+	SETCGPARAM("LKSPOTATTTEXTURE", (SpotLightAttenuationTexture)?(SpotLightAttenuationTexture->GetTextureHandle()):(0));
+	SETCGPARAM("LKZNEAR", camera->GetNearPlane());
+	SETCGPARAM("LKZFAR", camera->GetFarPlane());
+	SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
+
+	components::Light::Lights& lights = components::Light::GetAllLights();
+	for (components::Light::LightsConstIter it = lights.begin(); it != lights.end(); ++it)
+	{
+		components::Light* light = (*it);
+
+		Transform& transform = light->GetEntity()->GetTransform();
+		mat4 _ModelMatrix = transform.GetMatrix();
+		//_ModelMatrix = math::gtc::matrix_transform::rotate(_ModelMatrix, 90.0f, vec3(1.0f, 0.0f, 0.0f));
+		SETCGPARAM("LKMODELVIEWPROJ", _ViewProjectionMatrix * _ModelMatrix);		// Set the model view projection matrix.
+		SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
+		SETCGPARAM("LKMODELMATRIXIT", mat3(math::inverseTranspose(_ModelMatrix)));		// Set the inverse transpose of the model matrix.	
+		SETCGPARAM("LKLIGHTPOSITION", transform.GetPosition());
+		SETCGPARAM("LKLIGHTRANGE", light->GetRange());
+		SETCGPARAM("LKLIGHTCOLOR", light->GetColor());
+		SETCGPARAM("LKLIGHTINTENSITY", light->GetIntensity());
+		SETCGPARAM("LKLIGHTTYPE", light->GetLightType());
+
+		bool CameraInsideVolume = false;
+		switch (light->GetLightType())
+		{
+		case components::Light::LIGHT_POINT:
+			{
+				CameraInsideVolume = math::length(_EyePosition - transform.GetPosition()) < light->GetRange();
+				break;
+			}
+		case components::Light::LIGHT_SPOT:
+			{
+				f32 SpotAngle = light->GetSpotAngle();
+				vec3 LightVec = transform.GetOrientationVector();
+				SETCGPARAM("LKIGHTSPOTANGLE", SpotAngle);
+				SETCGPARAM("LKLIGHTVECTOR", LightVec);
+
+				// Calculate if the camera is inside the cone shape.
+				// NOTE: A special case is when the camera is actually at the very tip of the cone shape.
+				// To handle this, an epsilon value (0.0001f) is used which is the margin of error that
+				// has been observed when calculating the distance from the camera to the actual light.
+				// If the distance from the camera to the light is less than this epsilon value, we 
+				// handle that case as if the camera is actually inside the cone volume.
+				// Otherwise, we calculate the angle between the camera and the light direction. If this
+				// angle is less than the cone angle, we're inside. Else we're outside. Works like a charm.
+				// NOTE: This could also be 'fixed' by always having the cone volume translated slightly so that
+				// the tip is not at the actual position of the transform. This would still cause an issue when the two
+				// positions align, but that should be very, very, very rare (Most likely never). That would save us
+				// from handling a special case here.
+				vec3 LightToEye = _EyePosition - transform.GetPosition();
+				float LightToEyeLength = math::length(LightToEye);
+				f32 d = (LightToEyeLength > 0.0001f) ?	// If the distance from the light to the camera is greater than our error margin...
+					(math::degrees(math::acos(math::dot(LightToEye / LightToEyeLength, LightVec)))) :	// Calculate the actual angle.
+				(0.0f);	// Assume we're inside.
+				CameraInsideVolume =	(LightToEyeLength < light->GetRange()) && 
+					(d <= SpotAngle * 0.5f);
+				break;
+			}
+		default:
+			{
+				break;
+			}
+		}
+
+		m_LightEffect->SetActiveTechnique( CameraInsideVolume ? m_LightEffectTechnique_CameraInside : m_LightEffectTechnique_CameraOutside );
+		while (m_LightEffect->HasNextPass())
+		{
+			light->GetGeometry()->Draw();
+		}
+#ifdef DBG_VISUALIZATIONS
+		if (m_DBG_VisualizeLightVolumes)
+		{
+			m_LightEffect->SetActiveTechnique("DebugDraw");
+			while (m_LightEffect->HasNextPass())
+			{
+				light->GetGeometry()->Draw();
+			}
+		}
+#endif
+	}
+
 
 	glDepthMask(true);	// Enable depth-writing again.
 	glDisable( GL_STENCIL_TEST );	// Disable stencil testing.
@@ -697,203 +793,6 @@ void LkRenderer::_RenderParticles()
 // 	{
 // 		(*it).second->Render(m_CurrentLevelToRender->GetCurrentCamera()->GetViewMatrix(), m_CurrentLevelToRender->GetCurrentCamera()->GetProjectionMatrix());
 // 	}
-}
-
-void LkRenderer::_RenderLightingPointLights()
-{
-#define SETCGPARAM(paramname, value)	{graphics::EffectParameter* param = m_LightEffect->GetParameterBySemantic(paramname);if(param){param->Set(value);}}
-
-	components::CameraComponent* camera = components::CameraComponent::GetActiveCamera();
-	mat4 _ProjectionMatrix = camera->GetProjectionMatrix();
-	mat4 _ViewMatrix = camera->GetViewMatrix();
-	mat4 _ViewProjectionMatrix = _ProjectionMatrix * _ViewMatrix;
-	vec3 _EyePosition = camera->GetEntity()->GetTransform().GetPosition();
-
-	graphics::Texture2D* PointLightAttenuationTexture = components::Light::GetPointAttenuationTexture();
-	graphics::Texture2D* SpotLightAttenuationTexture = components::Light::GetSpotAttenuationTexture();
-
-	SETCGPARAM("LKEYEPOSITION", _EyePosition);
-	SETCGPARAM("LKRT0", m_GBuffer->GetAttachmentTexture(GBUFFER_DIFFUSE_SPEC));
-	SETCGPARAM("LKRT1", m_GBuffer->GetAttachmentTexture(GBUFFER_POSITIONS));
-	SETCGPARAM("LKRT2", m_GBuffer->GetAttachmentTexture(GBUFFER_NORMALS));
-	SETCGPARAM("LKRT3", m_GBuffer->GetAttachmentTexture(GBUFFER_DEPTH_STENCIL));
-	SETCGPARAM("LKPOINTATTTEXTURE", (PointLightAttenuationTexture)?(PointLightAttenuationTexture->GetTextureHandle()):(0));
-	SETCGPARAM("LKSPOTATTTEXTURE", (SpotLightAttenuationTexture)?(SpotLightAttenuationTexture->GetTextureHandle()):(0));
-	SETCGPARAM("LKZNEAR", camera->GetNearPlane());
-	SETCGPARAM("LKZFAR", camera->GetFarPlane());
-	SETCGPARAM("LKVIEWMATRIX", _ViewMatrix);
-
-	components::Light::Lights& lights = components::Light::GetAllLights();
-	for (components::Light::LightsConstIter it = lights.begin(); it != lights.end(); ++it)
-	{
-		components::Light* light = (*it);
-
-		Transform& transform = light->GetEntity()->GetTransform();
-		mat4 _ModelMatrix = transform.GetMatrix();
-		//_ModelMatrix = math::gtc::matrix_transform::rotate(_ModelMatrix, 90.0f, vec3(1.0f, 0.0f, 0.0f));
-		SETCGPARAM("LKMODELVIEWPROJ", _ViewProjectionMatrix * _ModelMatrix);		// Set the model view projection matrix.
-		SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
-		SETCGPARAM("LKMODELMATRIXIT", mat3(math::inverseTranspose(_ModelMatrix)));		// Set the inverse transpose of the model matrix.	
-		SETCGPARAM("LKLIGHTPOSITION", transform.GetPosition());
-		SETCGPARAM("LKLIGHTRANGE", light->GetRange());
-		SETCGPARAM("LKLIGHTCOLOR", light->GetColor());
-		SETCGPARAM("LKLIGHTINTENSITY", light->GetIntensity());
-		SETCGPARAM("LKLIGHTTYPE", light->GetLightType());
-
-		bool CameraInsideVolume = false;
-		switch (light->GetLightType())
-		{
-		case components::Light::LIGHT_POINT:
-			{
-				CameraInsideVolume = math::length(_EyePosition - transform.GetPosition()) < light->GetRange();
-				break;
-			}
-		case components::Light::LIGHT_SPOT:
-			{
-				f32 SpotAngle = light->GetSpotAngle();
-				vec3 LightVec = transform.GetOrientationVector();
-				SETCGPARAM("LKIGHTSPOTANGLE", SpotAngle);
-				SETCGPARAM("LKLIGHTVECTOR", LightVec);
-
-				// Calculate if the camera is inside the cone shape.
-				// NOTE: A special case is when the camera is actually at the very tip of the cone shape.
-				// To handle this, an epsilon value (0.0001f) is used which is the margin of error that
-				// has been observed when calculating the distance from the camera to the actual light.
-				// If the distance from the camera to the light is less than this epsilon value, we 
-				// handle that case as if the camera is actually inside the cone volume.
-				// Otherwise, we calculate the angle between the camera and the light direction. If this
-				// angle is less than the cone angle, we're inside. Else we're outside. Works like a charm.
-				// NOTE: This could also be 'fixed' by always having the cone volume translated slightly so that
-				// the tip is not at the actual position of the transform. This would still cause an issue when the two
-				// positions align, but that should be very, very, very rare (Most likely never). That would save us
-				// from handling a special case here.
-				vec3 LightToEye = _EyePosition - transform.GetPosition();
-				float LightToEyeLength = math::length(LightToEye);
-				f32 d = (LightToEyeLength > 0.0001f) ?	// If the distance from the light to the camera is greater than our error margin...
-						(math::degrees(math::acos(math::dot(LightToEye / LightToEyeLength, LightVec)))) :	// Calculate the actual angle.
-						(0.0f);	// Assume we're inside.
-				CameraInsideVolume =	(LightToEyeLength < light->GetRange()) && 
-											(d <= SpotAngle * 0.5f);
-				break;
-			}
-		default:
-			{
-				break;
-			}
-		}
-
-		m_LightEffect->SetActiveTechnique( CameraInsideVolume ? m_LightEffectTechnique_CameraInside : m_LightEffectTechnique_CameraOutside );
-		while (m_LightEffect->HasNextPass())
-		{
-			light->GetGeometry()->Draw();
-		}
-#ifdef DBG_VISUALIZATIONS
-		if (m_DBG_VisualizeLightVolumes)
-		{
-			m_LightEffect->SetActiveTechnique("DebugDraw");
-			while (m_LightEffect->HasNextPass())
-			{
-				light->GetGeometry()->Draw();
-			}
-		}
-#endif
-
-		//glClear(GL_STENCIL_BUFFER_BIT);
-	}
-}
-
-void LkRenderer::_RenderLightingDirectionalLights()
-{
-	/*
-	glColorMask(true, true, true, true);
-	glDepthMask(false);
-	glDisable(GL_STENCIL_TEST);
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f);
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-
-	
-	glUseProgramObjectARB(m_DirectionalLightShader.GetProgramHandle());
-
-	glUniform2fARB(m_DirectionalLightShaderScreenDimensionsID, (f32)m_WindowWidth, (f32)m_WindowHeight);
-	// Set the input textures for the shader.
-	glActiveTextureARB(GL_TEXTURE0_ARB);
-	glBindTexture(GL_TEXTURE_2D, m_MRTObject->GetRT0());
-	glActiveTextureARB(GL_TEXTURE1_ARB);
-	glBindTexture(GL_TEXTURE_2D, m_MRTObject->GetRT1());
-	glActiveTextureARB(GL_TEXTURE2_ARB);
-	glBindTexture(GL_TEXTURE_2D, m_MRTObject->GetRT2());
-	glActiveTextureARB(GL_TEXTURE3_ARB);
-	glBindTexture(GL_TEXTURE_2D, m_MRTObject->GetRTDepthStencil());
-	glUniform1iARB(m_DirectionalLightShaderRT0ID, 0);
-	glUniform1iARB(m_DirectionalLightShaderRT1ID, 1);
-	glUniform1iARB(m_DirectionalLightShaderRT2ID, 2);
-	glUniform1iARB(m_DirectionalLightShaderRTDepthID, 3);
-
-	for (game::LkLevel::DirectionalLights::const_iterator it = m_CurrentLevelToRender->GetDirectionalLights()->begin(); it != m_CurrentLevelToRender->GetDirectionalLights()->end(); ++it)
-	{
-		const LkDirectionalLight* directionallight1 = (*it).second;
-
-		if (!directionallight1->IsEnabled())
-		{
-			continue;
-		}
-
-		// Pass the light color to the shader.
-		Color color = directionallight1->GetColor();
-		glUniform3fARB(m_DirectionalLightShaderColorID, color.r, color.g, color.b);
-
-		// Pass the light direction to the shader.
-		vec3 direction = directionallight1->GetDirection();
-		glUniform3fARB(m_DirectionalLightShaderDirectionID, direction.x, direction.y, direction.z);
-
-		// Render a full-screen quad.
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex3f(0.0f, 1.0f, 0.0f);
-
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(1.0f, 1.0f, 0.0f);
-
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(1.0f, 0.0f, 0.0f);
-
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(0.0f, 0.0f, 0.0f);
-		glEnd();
-	}
-
-	// Unbind all bound shader textures.
-	glActiveTextureARB(GL_TEXTURE0_ARB);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTextureARB(GL_TEXTURE1_ARB);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTextureARB(GL_TEXTURE2_ARB);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTextureARB(GL_TEXTURE3_ARB);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glUseProgramObjectARB(0);
-
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_DONT_CARE);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glPopMatrix ();
-	glMatrixMode (GL_MODELVIEW);
-	glPopMatrix ();
-	*/
-}
-
-void LkRenderer::_RenderLightingSpotLights()
-{
-
 }
 
 void LkRenderer::_RenderLightAccumulationToBackBuffer()
