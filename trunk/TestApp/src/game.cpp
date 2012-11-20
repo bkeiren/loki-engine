@@ -18,7 +18,8 @@
 #include "util/json/json.h"
 
 #include "core/entitysystem/component/default/PhysicsComponent.h"
-#include "core/entitysystem/component/default/RenderComponent.h"
+#include "core/entitysystem/component/default/MeshRenderer.h"
+#include "core/graphics/Mesh.h"
 #include "core/entitysystem/component/default/CameraComponent.h"
 #include "core/graphics/Model.h"
 
@@ -36,6 +37,8 @@
 #include "core/window/Window.h"
 
 #include "core/audio/audio.h"
+
+#include "core/rect/Rect.h"
 
 using namespace loki;
 
@@ -75,7 +78,7 @@ bool MyGame::Init()
 // 
 // 	LkParticleSystem* ps = m_Level->SpawnParticleSystem(descr);
 
-	loki::components::RenderComponent* rc = 0;
+	loki::components::MeshRenderer* rc = 0;
 	loki::components::PhysicsComponent* pc = 0;
 	loki::components::Light* lc = 0;
 
@@ -85,9 +88,11 @@ bool MyGame::Init()
 	lc->SetSpotAngle(50.0f);
 	lc->SetLightType(components::Light::LIGHT_SPOT);
 	pc = entity0->InstantiateComponent<loki::components::PhysicsComponent>();
-	rc = entity0->InstantiateComponent<loki::components::RenderComponent>();
+	rc = entity0->InstantiateComponent<loki::components::MeshRenderer>();
 
-	rc->SetModel(graphics::Model::Load("resources//lmo//test.lmo"));
+	rc->SetMesh("resources//models//sphere_small.obj");
+	rc->SetMaterial("resources//lma//test.lma", 0);
+	//rc->SetModel(graphics::Model::Load("resources//lmo//test.lmo"));
 
 	//entity0->GetTransform().Translate(vec3(10.0f, 0.0f, 10.0f));
 	entity0->GetTransform().position += vec3(10.0f, 0.0f, 10.0f);	// Ooooh, nice property.
@@ -95,15 +100,17 @@ bool MyGame::Init()
 
 	physics::RigidBodyInfo info;
 	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-	info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetModel()->GetMesh(0));
+	info.m_MeshData.m_Mesh = const_cast<graphics::SubMesh*>(rc->GetMesh()->GetSubMesh(0));
 	info.m_Restitution = 0.1f;
 	info.m_Mass = 0.001f;
 	pc->CreateBodyFromInfo(info);
 
 	Entity* entity1 = g_EntitySystem->SpawnEntity("BoxEntity");
-	entity1->InstantiateComponent<loki::components::RenderComponent>();
-	rc = entity1->GetComponent<loki::components::RenderComponent>();
-	rc->SetModel(graphics::Model::Load("resources//lmo//cube.lmo"));
+	entity1->InstantiateComponent<loki::components::MeshRenderer>();
+	rc = entity1->GetComponent<loki::components::MeshRenderer>();
+	//rc->SetModel(graphics::Model::Load("resources//lmo//cube.lmo"));
+	rc->SetMesh("resources//models//cube.dae");
+	rc->SetMaterial("resources//lma//cube.lma");
 
 	Entity* camEntity = g_EntitySystem->SpawnEntity("Main Camera");
 	camEntity->InstantiateComponent<loki::components::CameraComponent>()->Activate();
@@ -154,12 +161,14 @@ bool MyGame::Init()
 		str << i;
 		
 		Entity* TorusEntity = g_EntitySystem->SpawnEntity(str.str().c_str());
-		rc = TorusEntity->InstantiateComponent<loki::components::RenderComponent>();
-		rc->SetModel(graphics::Model::Load("resources//lmo//torus.lmo"));
+		rc = TorusEntity->InstantiateComponent<loki::components::MeshRenderer>();
+		//rc->SetModel(graphics::Model::Load("resources//lmo//torus.lmo"));
+		rc->SetMesh("resources//models//torus.dae");
+		rc->SetMaterial("resources//lma//torus.lma");
 		
 		pc = TorusEntity->InstantiateComponent<loki::components::PhysicsComponent>();
 		info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-		info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetModel()->GetMesh(0));
+		info.m_MeshData.m_Mesh = const_cast<graphics::SubMesh*>(rc->GetMesh()->GetSubMesh(0));
 		info.m_Restitution = 0.1f;
 		info.m_Mass = 0.001f;
 		pc->CreateBodyFromInfo(info);
@@ -185,6 +194,10 @@ bool MyGame::Init()
 // 
 // 		doc->Close();
 // 	}
+
+	loki::Rect r(10.0f, 12.0f, 200.0f, 8.0f);
+	r.position = vec2(20.0f, 0.0f);
+	r.dimensions = vec2(100.0f, 100.0f);
 
 	return true;
 }

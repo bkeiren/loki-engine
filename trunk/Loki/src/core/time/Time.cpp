@@ -58,7 +58,7 @@ void Time::_CalculateFrameTime()
 {
 	m_FrameTime = m_FrameClock.Lap();
 	m_ScaledFrameTime = m_FrameTime * m_TimeScale;
-	++m_FrameClock;
+	++m_FrameCount;
 }
 
 void Time::_SetFrameTime( f32 _FrameTime )

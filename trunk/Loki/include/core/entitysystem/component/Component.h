@@ -73,7 +73,7 @@ class Entity;
 //		public:
 //			DECLARE_COMPONENT
 //		};
-//		Note that you should not use this macro in any custom 'base' component
+//		Note that you should NOT use this macro in any custom 'base' component
 //		classes. For instance, say you want to have a base component class
 //		to provide functionality that a number of additional child components
 //		would use. In that case you would only use this macro on the child classes
@@ -87,7 +87,7 @@ class Component	: public LkEventListener
 public:
 	inline Entity* GetEntity();
 	inline const Entity* GetEntity() const;
-
+	
 	bool IsEnabled() const;
 	void Enable();
 	void Disable();

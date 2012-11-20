@@ -45,6 +45,7 @@ Entity::Entity()	:
 	m_Transform(0)
 	,m_Camera(0)
 	,m_Light(0)
+	,m_Renderer(0)
 {
 	// An entity always has a transform component.
 	InstantiateComponent<Transform>();
@@ -97,6 +98,16 @@ const components::Light* Entity::GetLight() const
 components::Light* Entity::GetLight()
 {
 	return m_Light;
+}
+
+const components::MeshRenderer* Entity::GetRenderer() const
+{
+	return m_Renderer;
+}
+
+components::MeshRenderer* Entity::GetRenderer()
+{
+	return m_Renderer;
 }
 
 void Entity::SetName( const char* _Name )

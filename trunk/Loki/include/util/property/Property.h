@@ -17,7 +17,7 @@ namespace util
 											static T const &_Get_ ## name (Class /*const*/& self) get						\
 											static void _Set_ ## name (Class& self, T const& value) set						\
 											public:																			\
-											::Property<Class, T, _Get_ ## name, _Set_ ## name, _Offset_ ## name> name
+											loki::util::Property<Class, T, _Get_ ## name, _Set_ ## name, _Offset_ ## name> name
 
 // Custom property scope (Public, private, protected).
 #define PROPERTY_SCOPED(T, Class, name, accessscope, get, set)	private:																		\
@@ -25,7 +25,7 @@ namespace util
 																static T const &_Get_ ## name (Class /*const*/& self) get						\
 																static void _Set_ ## name (Class& self, T const& value) set						\
 																accessscope:																	\
-																::Property<Class, T, _Get_ ## name, _Set_ ## name, _Offset_ ## name> name
+																loki::util::Property<Class, T, _Get_ ## name, _Set_ ## name, _Offset_ ## name> name
 
 //////////////////////////////////////////////////////////////////////////
 // Implemented using http://xinutec.org/~pippijn/home/programming/cpp/properties

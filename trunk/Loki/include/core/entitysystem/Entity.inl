@@ -179,6 +179,14 @@ ONINSTANTIATESPEC(components::Light)
 	}
 }
 
+ONINSTANTIATESPEC(components::MeshRenderer)
+{
+	if (m_Renderer == 0)
+	{
+		m_Renderer = _Component;
+	}
+}
+
 template< typename _ComponentType >
 void Entity::_OnComponentRemoved( _ComponentType* _Component )
 {
@@ -206,6 +214,14 @@ ONREMOVESPEC(components::Light)
 	if (m_Light == _Component)
 	{
 		m_Light = 0;
+	}
+}
+
+ONREMOVESPEC(components::MeshRenderer)
+{
+	if (m_Renderer == _Component)
+	{
+		m_Renderer = 0;
 	}
 }
 
