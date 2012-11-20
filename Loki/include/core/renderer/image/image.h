@@ -14,6 +14,7 @@ namespace loki
 namespace graphics
 {
 	class Texture2D;
+	class Effect;
 
 #ifdef USE_PBO
 	class PixelBuffer;
@@ -37,10 +38,6 @@ enum EAnchorPoint
 	AP_BOTTOMMIDDLE,
 	AP_BOTTOMRIGHT
 };
-
-//class Texture;
-class LkEffect;
-
 
 class LkImage
 {
@@ -156,7 +153,7 @@ private:
 	graphics::PixelBuffer* m_PBO;
 #endif
 
-	static LkEffect* m_CgEffect;
+	static graphics::Effect* m_CgEffect;
 };
 
 }

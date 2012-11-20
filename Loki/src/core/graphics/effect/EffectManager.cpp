@@ -1,5 +1,5 @@
-#include "core/renderer/effect/effectmanager.h"
-#include "core/renderer/effect/effect.h"
+#include "core/graphics/effect/EffectManager.h"
+#include "core/graphics/effect/Effect.h"
 
 #include <Windows.h>
 
@@ -12,10 +12,10 @@
 namespace loki
 {
 
-namespace renderer
+namespace graphics
 {
 
-LkEffectManager* g_EffectManager = NULL;
+EffectManager* g_EffectManager = NULL;
 
 namespace
 {
@@ -47,17 +47,17 @@ namespace
 	}
 }
 
-LkEffectManager::LkEffectManager()
+EffectManager::EffectManager()
 {
 	_Init();
 }
 
-LkEffectManager::~LkEffectManager()
+EffectManager::~EffectManager()
 {
 	_Shutdown();
 }
 
-void LkEffectManager::_Init()
+void EffectManager::_Init()
 {
 	cgSetErrorHandler(&CgErrorHandler, NULL);
 	m_CGContext = cgCreateContext();
@@ -68,9 +68,9 @@ void LkEffectManager::_Init()
 	LOG(VL_ALWAYS, "EffectManager::Init: Effectmanager initialized");
 }
 
-void LkEffectManager::_Shutdown()
+void EffectManager::_Shutdown()
 {
-	for (EffectsConstItr it = m_Effects.begin(); it != m_Effects.end(); ++it)
+	for (EffectsConstIter it = m_Effects.begin(); it != m_Effects.end(); ++it)
 	{
 		delete (*it).second;
 	}
@@ -85,7 +85,7 @@ void LkEffectManager::_Shutdown()
 	LOG(VL_ALWAYS, "EffectManager::Shutdown: Effectmanager terminated");
 }
 
-LkEffect* LkEffectManager::CreateEffectFromFile( const std::string& _File, const std::string& _EffectName )
+Effect* EffectManager::CreateEffectFromFile( const std::string& _File, const std::string& _EffectName )
 {
 	if (GetEffect(_EffectName))
 	{
@@ -102,12 +102,12 @@ LkEffect* LkEffectManager::CreateEffectFromFile( const std::string& _File, const
 		return 0;
 	}
 
-	LkEffect* effect = new LkEffect((void*)cgeffect, _EffectName);
+	Effect* effect = new Effect((void*)cgeffect, _EffectName);
 	m_Effects.insert(EffectsPair(_EffectName, effect));
 	return effect;
 }
 
-LkEffect* LkEffectManager::CreateEffectFromMemory( const std::string& _Source, const std::string& _EffectName )
+Effect* EffectManager::CreateEffectFromMemory( const std::string& _Source, const std::string& _EffectName )
 {
 	if (GetEffect(_EffectName))
 	{
@@ -124,14 +124,14 @@ LkEffect* LkEffectManager::CreateEffectFromMemory( const std::string& _Source, c
 		return 0;
 	}
 
-	LkEffect* effect = new LkEffect((void*)cgeffect, _EffectName);
+	Effect* effect = new Effect((void*)cgeffect, _EffectName);
 	m_Effects.insert(EffectsPair(_EffectName, effect));
 	return effect;
 }
 
-LkEffect* LkEffectManager::GetEffect( const std::string& _EffectName ) const
+Effect* EffectManager::GetEffect( const std::string& _EffectName ) const
 {
-	EffectsConstItr it = m_Effects.find(_EffectName);
+	EffectsConstIter it = m_Effects.find(_EffectName);
 	if (it != m_Effects.end())
 	{
 		return (*it).second;

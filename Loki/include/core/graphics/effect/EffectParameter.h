@@ -10,12 +10,12 @@
 namespace loki
 {
 
-namespace renderer
+namespace graphics
 {
 
-class LkEffectParameter
+class EffectParameter
 {
-	friend class LkEffect;
+	friend class Effect;
 public:
 	//////////////////////////////////////////////////////////////////////////
 	// Get this parameter's name.
@@ -45,9 +45,9 @@ public:
 	void Get( mat4* _P );
 	void Get( GLuint* _P );
 private:
-	LkEffectParameter( void* _Parameter, const std::string& _ParameterName );
-	LkEffectParameter();
-	~LkEffectParameter();
+	EffectParameter( void* _Parameter, const std::string& _ParameterName );
+	EffectParameter();
+	~EffectParameter();
 
 	std::string m_Name;
 	void* m_CGParameter;

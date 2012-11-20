@@ -9,19 +9,18 @@
 namespace loki
 {
 
-namespace renderer
+namespace graphics
 {
 
-class LkEffectParameter;
+class EffectParameter;
+class EffectTechnique;
 
-class LkEffect
+class Effect
 {
-	friend class LkEffectManager;
+	friend class EffectManager;
 
-	typedef stdext::hash_map<std::string, LkEffectParameter*>	Parameters;
-	typedef Parameters::iterator								ParametersItr;
-	typedef Parameters::const_iterator							ParametersConstItr;
-	typedef std::pair<std::string, LkEffectParameter*>			ParametersPair;
+	CONTAINER_MACRO_HASH_MAP(std::string, EffectParameter*, Parameters)
+	CONTAINER_MACRO_HASH_MAP(std::string, EffectTechnique*, Techniques)
 public:
 	//////////////////////////////////////////////////////////////////////////
 	// Get this effect's name.
@@ -29,8 +28,8 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 	// Find a shader parameter.
-	LkEffectParameter* GetParameter( const std::string& _ParameterName );
-	LkEffectParameter* GetParameterBySemantic( const std::string& _Semantic );
+	EffectParameter* GetParameter( const std::string& _ParameterName );
+	EffectParameter* GetParameterBySemantic( const std::string& _Semantic );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Used to activate the effect and iterate over all passes.
@@ -41,9 +40,9 @@ public:
 	// }
 	bool HasNextPass();
 private:
-	LkEffect( void* _Effect, const std::string& _EffectName );
-	LkEffect();
-	~LkEffect();
+	Effect( void* _Effect, const std::string& _EffectName );
+	Effect();
+	~Effect();
 
 	void _LoadNamedParameters();
 
@@ -54,6 +53,7 @@ private:
 	Parameters m_Parameters;
 	Parameters m_ParametersBySemantic;
 	bool m_HasValidTechnique;
+	Techniques m_Techniques;
 };
 
 }

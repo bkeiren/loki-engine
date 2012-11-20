@@ -30,13 +30,13 @@ class Window;
 namespace graphics
 {
 	class FrameBuffer;
+	class Effect;
 }
 
 namespace renderer
 {
 
 class LkScene;
-class LkEffect;
 
 /*
 	The Renderer class is responsible for keeping track of the renderable scene
@@ -121,13 +121,13 @@ private:
 
 	aiLogStream m_AssImpLogStream;
 
-	LkEffect* m_LightEffect;
-	LkEffect* m_LightAccumulationToBackBufferEffect;
+	graphics::Effect* m_LightEffect;
+	graphics::Effect* m_LightAccumulationToBackBufferEffect;
 
 	// Visualization of Gbuffer targets for debug purposes.
-	LkEffect* m_GBufferTargets_General;
-	LkEffect* m_GBufferTargets_Normals;
-	LkEffect* m_GBufferTargets_Depth;
+	graphics::Effect* m_GBufferTargets_General;
+	graphics::Effect* m_GBufferTargets_Normals;
+	graphics::Effect* m_GBufferTargets_Depth;
 
 	graphics::FrameBuffer* m_GBuffer;
 

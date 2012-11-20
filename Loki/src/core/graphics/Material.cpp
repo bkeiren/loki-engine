@@ -1,10 +1,10 @@
 #include "core/graphics/Material.h"
 #include "core/graphics/Texture2D.h"
-#include "core/renderer/effect/effectmanager.h"
+#include "core/graphics/effect/EffectManager.h"
 
 #include "util/json/json.h"
 
-#include "core/renderer/effect/effectmanager.h"
+#include "core/graphics/effect/EffectManager.h"
 
 namespace loki
 {
@@ -12,7 +12,7 @@ namespace loki
 namespace graphics
 {
 
-renderer::LkEffect* Material::m_DefaultEffect = 0;
+graphics::Effect* Material::m_DefaultEffect = 0;
 Material::Materials Material::m_Materials;
 
 Material::Material()	:
@@ -28,7 +28,7 @@ Material::Material()	:
 
 	if (!m_DefaultEffect)
 	{
-		m_DefaultEffect = renderer::g_EffectManager->CreateEffectFromFile(DEFAULT_RESOURCE("shaders//gbuffer_default.cgfx"), "DefaultMaterialEffect");
+		m_DefaultEffect = graphics::g_EffectManager->CreateEffectFromFile(DEFAULT_RESOURCE("shaders//gbuffer_default.cgfx"), "DefaultMaterialEffect");
 	}
 }
 
@@ -64,12 +64,12 @@ void Material::SetTexture( uint32 _Index, Texture2D* _Texture, bool _DeleteOldTe
 	m_Textures[_Index] = _Texture;
 }
 
-renderer::LkEffect* Material::GetEffect() const
+graphics::Effect* Material::GetEffect() const
 {
 	return m_Effect == 0 ? m_DefaultEffect : m_Effect;
 }
 
-void Material::SetEffect( renderer::LkEffect* _Effect )
+void Material::SetEffect( graphics::Effect* _Effect )
 {
 	m_Effect = _Effect;
 }
@@ -173,7 +173,7 @@ Material* Material::_CreateMaterialFromLMAFile( const std::string& _MaterialFile
 		std::stringstream ss;
 		ss << _MaterialFile << (rand()%1024);
 
-		mtl->SetEffect(renderer::g_EffectManager->CreateEffectFromFile(effectString.AsString(), ss.str()));
+		mtl->SetEffect(graphics::g_EffectManager->CreateEffectFromFile(effectString.AsString(), ss.str()));
 	}
 	if (shininessString.IsDouble())
 	{
