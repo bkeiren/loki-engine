@@ -1,5 +1,6 @@
 #include "core/graphics/effect/Effect.h"
 #include "core/graphics/effect/EffectParameter.h"
+#include "core/graphics/effect/EffectTechnique.h"
 
 #include <iostream>
 
@@ -18,23 +19,7 @@ Effect::Effect( void* _Effect, const std::string& _EffectName )	:
 	m_CGCurrentPass(0),
 	m_HasValidTechnique(false)
 {
-	m_CGTechnique = cgGetFirstTechnique((CGeffect)m_CGEffect);
-	while (m_CGTechnique != NULL && cgValidateTechnique((CGtechnique)m_CGTechnique) == CG_FALSE)
-	{
-		LOG(VL_ERROR, "Cg: Technique '%s' did not pass validation (Effect: %s)", cgGetTechniqueName((CGtechnique)m_CGTechnique), m_Name.c_str());
-		m_CGTechnique = cgGetNextTechnique((CGtechnique)m_CGTechnique);
-	}
-
-	if (m_CGTechnique == NULL || cgIsTechniqueValidated((CGtechnique)m_CGTechnique) == CG_FALSE)
-	{
-		LOG(VL_ERROR, "Cg: Could not find any valid techniques for effect %s", m_Name.c_str());
-		m_HasValidTechnique = false;
-	}
-	else
-	{
-		m_HasValidTechnique = true;
-	}
-
+	_LoadTechniques();
 	_LoadNamedParameters();
 
 	LOG(VL_NORMAL, "Effect::Effect: Created effect '%s'", _EffectName.c_str());
@@ -48,6 +33,18 @@ Effect::Effect()
 
 Effect::~Effect()
 {
+	for (ParametersIter it = m_Parameters.begin(); it != m_Parameters.end(); ++it)
+	{
+		delete (*it).second;
+	}
+	m_Parameters.clear();
+
+	for (TechniquesIter it = m_Techniques.begin(); it != m_Techniques.end(); ++it)
+	{
+		delete (*it).second;
+	}
+	m_Techniques.clear();
+
 	if (m_CGEffect != NULL)
 	{
 		cgDestroyEffect((CGeffect)m_CGEffect);
@@ -67,7 +64,7 @@ EffectParameter* Effect::GetParameter( const std::string& _ParameterName )
 	{
 		return (*it).second;
 	}
-	LOG(VL_ERROR, "Effect::GetParameter: Parameter '%s' does not exist", _ParameterName);
+	LOG(VL_ERROR, "Effect::GetParameter: Parameter '%s' does not exist", _ParameterName.c_str());
 	return 0;
 }
 
@@ -94,6 +91,66 @@ EffectParameter* Effect::GetParameterBySemantic( const std::string& _Semantic )
 	return 0;
 }
 
+EffectTechnique* Effect::GetTechnique( const std::string& _TechniqueName )
+{
+	TechniquesConstIter it = m_Techniques.find(_TechniqueName);
+	if (it != m_Techniques.end())
+	{
+		return (*it).second;
+	}
+	LOG(VL_ERROR, "Effect::GetTechnique: Technique '%s' does not exist (Did it fail validation?)", _TechniqueName.c_str());
+	return 0;
+}
+
+void Effect::SetActiveTechnique( const std::string& _TechniqueName )
+{
+	EffectTechnique* technique = GetTechnique(_TechniqueName);
+	if (!technique)
+	{
+		LOG(VL_ERROR, "Effect::SetActiveTechnique: Technique '%s' does not exist (Dit it fail validation?)", _TechniqueName.c_str());
+		return;
+	}
+	SetActiveTechnique(technique);
+}
+
+void Effect::SetActiveTechnique( EffectTechnique* _Technique )
+{
+	assert(_Technique != 0);
+	m_ActiveTechnique = _Technique;
+}
+
+void Effect::_LoadTechniques()
+{
+	CGtechnique technique = cgGetFirstTechnique((CGeffect)m_CGEffect);
+	while (technique)
+	{
+		std::string techniquename = std::string(cgGetTechniqueName(technique));
+		
+		if (cgValidateTechnique(technique))
+		{
+			EffectTechnique* tech = new EffectTechnique((void*)technique, techniquename);
+			m_Techniques.insert(TechniquesPair(techniquename, tech));
+		}
+		else
+		{
+			LOG(VL_ERROR, "Effect::_LoadTechniques: Technique '%s' failed to validate.", techniquename.c_str());
+		}
+
+		technique = cgGetNextTechnique(technique);
+	}
+
+	if (m_Techniques.size() <= 0)
+	{
+		LOG(VL_ERROR, "Effect: Could not find any valid techniques for effect '%s'", m_Name.c_str());
+		m_HasValidTechnique = false;
+	}
+	else
+	{
+		m_ActiveTechnique = (*m_Techniques.begin()).second;
+		m_HasValidTechnique = true;
+	}
+}
+
 void Effect::_LoadNamedParameters()
 {
 	CGparameter param = cgGetFirstEffectParameter((CGeffect)m_CGEffect);
@@ -110,7 +167,7 @@ bool Effect::HasNextPass()
 {
 	if (m_CGCurrentPass == 0)
 	{
-		m_CGCurrentPass = cgGetFirstPass((CGtechnique)m_CGTechnique);
+		m_CGCurrentPass = cgGetFirstPass((CGtechnique)m_ActiveTechnique->m_CGTechnique);
 
 		// TODO: Ask effect manager to update shared variables or global semantics?
 	}

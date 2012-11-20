@@ -6,6 +6,7 @@
 #include <hash_map>
 #include "core/graphics/effect/Effect.h"
 #include "core/graphics/effect/EffectParameter.h"
+#include "core/graphics/effect/EffectTechnique.h"
 
 namespace loki
 {

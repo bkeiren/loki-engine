@@ -1,5 +1,5 @@
 #include "core/graphics/effect/EffectManager.h"
-#include "core/graphics/effect/Effect.h"
+//#include "core/graphics/effect/Effect.h"
 
 #include <Windows.h>
 
