@@ -24,13 +24,15 @@ namespace components
 
 class MeshRenderer	: public Component
 {
-	friend class ::loki::Entity;
 	friend class renderer::LkRenderer;
 	
 	CONTAINER_MACRO_LIST(MeshRenderer*, RenderComponents);
 	
 	CONTAINER_MACRO_VECTOR(graphics::Material*, Materials);
 public:
+	MeshRenderer();
+	~MeshRenderer();
+
 	void SetCastShadows( bool _CastShadows );
 	bool CastsShadows() const;
 
@@ -43,9 +45,6 @@ public:
 	void SetMaterial( const std::string& _MaterialFile, int32 _Index = 0 );
 	const graphics::Material* GetMaterial( int32 _Index = 0 );
 private:
-	MeshRenderer();
-	~MeshRenderer();
-
 	void _HandleEvent( const LkEvent& _Event );
 	void _Init();
 	void _Terminate();

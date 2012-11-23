@@ -18,17 +18,16 @@ namespace scripts
 
 class OrbitCam	: public components::CppScript
 {
-	friend class ::loki::Entity;
 public:
+	OrbitCam();
+	~OrbitCam();
+
 	float GetDistance() const;
 	void SetDistance( float _Distance );
 
 	const vec3& GetCenter() const;
 	void SetCenter( const vec3& _Center );
 private:
-	OrbitCam();
-	~OrbitCam();
-
 	void Awake();
 	void Update();
 	void Stop();
@@ -37,8 +36,6 @@ private:
 
 	vec3 m_Center;
 	float m_Distance;
-
-	loki::components::CameraComponent* m_Camera;
 };
 
 }

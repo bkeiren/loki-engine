@@ -20,8 +20,10 @@ namespace components
 
 class Light	: public Component
 {
-	friend class ::loki::Entity;
 public:
+	Light();
+	~Light();
+
 	CONTAINER_MACRO_LIST(Light*, Lights);
 
 	enum ELightType
@@ -72,9 +74,6 @@ public:
 	// Spot and point lights.
 	graphics::DisplayList* GetGeometry();
 private:
-	Light();
-	~Light();
-
 	void _HandleEvent( const LkEvent& _Event );
 	void _Init();
 	void _Terminate();

@@ -13,8 +13,10 @@ namespace components
 
 class CameraComponent	: public Component
 {
-	friend class ::loki::Entity;
 public:
+	CameraComponent();
+	~CameraComponent();
+
 	enum EProjectionType
 	{
 		PROJECTION_PERSPECTIVE = 0,
@@ -55,9 +57,6 @@ public:
 
 	static CameraComponent* GetActiveCamera();
 private:
-	CameraComponent();
-	~CameraComponent();
-
 	void _HandleEvent( const LkEvent& _Event );
 	void _Init();
 	void _Terminate();

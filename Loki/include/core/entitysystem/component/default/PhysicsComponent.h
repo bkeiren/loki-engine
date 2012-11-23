@@ -19,15 +19,14 @@ namespace components
 
 class PhysicsComponent	: public Component
 {
-	friend class ::loki::Entity;
 public:
+	PhysicsComponent();
+	~PhysicsComponent();
+
 	bool CreateBodyFromInfo( physics::RigidBodyInfo& _Info );
 	
 	physics::LkRigidBody* GetBody() const;
 private:
-	PhysicsComponent();
-	~PhysicsComponent();
-
 	void _HandleEvent( const LkEvent& _Event );
 	void _Init();
 	void _Terminate();

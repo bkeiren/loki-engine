@@ -5,6 +5,7 @@
 
 #include "core/eventsystem/eventlistener/eventlistener.h"
 #include "util/typeinfo/typeinfo.h"
+#include "core/entitysystem/component/Detail.h"
 
 namespace loki
 {
@@ -34,29 +35,43 @@ namespace components
 	inline bool ComponentAllowsMultipleInstancesOnEntity();
 }
 
-#define REGISTER_COMPONENT_NAMED(componentclass, name)																					\
+#define REGISTER_COMPONENT_NAMED(TYPE, NAME)																							\
 	namespace loki {																													\
 		namespace components {																											\
 			template<>																													\
-			inline const std::string& GetComponentTypeName<componentclass>()															\
+			inline const std::string& GetComponentTypeName<TYPE>()																		\
 			{																															\
-				static const std::string _Name = std::string(name); return _Name;														\
+				static const std::string _Name = std::string(NAME); return _Name;														\
 			}																															\
 			template<>																													\
-			inline const ::loki::util::general::TypeInfo& GetComponentTypeInfo<componentclass>()										\
+			inline const ::loki::util::general::TypeInfo& GetComponentTypeInfo<TYPE>()													\
 			{																															\
-				static const ::loki::util::general::TypeInfo _TI = ::loki::util::general::TypeInfo(typeid(componentclass)); return _TI; \
+				static const ::loki::util::general::TypeInfo _TI = ::loki::util::general::TypeInfo(typeid(TYPE)); return _TI;			\
+			}																															\
+			namespace detail {																											\
+				namespace {																												\
+					template< class _T >																								\
+					class ComponentRegistration;																						\
+					template<>																											\
+					class ComponentRegistration<TYPE>																					\
+					{																													\
+						static const ::loki::components::detail::RegistryEntry<TYPE>& _Reg;												\
+					};																													\
+					const ::loki::components::detail::RegistryEntry<TYPE>&																\
+						ComponentRegistration<TYPE>::_Reg =																				\
+							::loki::components::detail::RegistryEntry<TYPE>::Instance(NAME);											\
+				}																														\
 			}																															\
 		}																																\
 	}
 
-#define REGISTER_COMPONENT(componentclass)	REGISTER_COMPONENT_NAMED(componentclass, #componentclass)
+#define REGISTER_COMPONENT(TYPE)	REGISTER_COMPONENT_NAMED(TYPE, #TYPE)
 
-#define COMPONENT_SINGLE_INSTANCE(componentclass)												\
+#define COMPONENT_SINGLE_INSTANCE(TYPE)															\
 	namespace loki {																			\
 		namespace components {																	\
 			template<>																			\
-			inline bool ComponentAllowsMultipleInstancesOnEntity<componentclass>()				\
+			inline bool ComponentAllowsMultipleInstancesOnEntity<TYPE>()						\
 			{																					\
 				return false;																	\
 			}																					\
