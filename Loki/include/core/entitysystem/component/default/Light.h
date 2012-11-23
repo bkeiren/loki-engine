@@ -20,9 +20,8 @@ namespace components
 
 class Light	: public Component
 {
+	friend class ::loki::Entity;
 public:
-	DECLARE_COMPONENT_SINGLE_INSTANCE(Light)
-
 	CONTAINER_MACRO_LIST(Light*, Lights);
 
 	enum ELightType
@@ -119,5 +118,8 @@ private:
 }
 
 }
+
+REGISTER_COMPONENT(Light)
+COMPONENT_SINGLE_INSTANCE(Light)
 
 #endif

@@ -13,9 +13,8 @@ namespace components
 
 class AudioSource	: public Component
 {
+	friend class ::loki::Entity;
 public:
-	DECLARE_COMPONENT(AudioSource)
-
 	AudioSource();
 	~AudioSource();
 
@@ -28,5 +27,7 @@ private:
 }
 
 }
+
+REGISTER_COMPONENT(AudioSource)
 
 #endif

@@ -11,8 +11,6 @@ using namespace loki;
 class SimpleRotationController	: public components::CppScript
 {
 public:
-	DECLARE_COMPONENT(SimpleRotationController);
-
 	SimpleRotationController()
 	{
 
@@ -55,5 +53,7 @@ private:
 	vec3 m_Vector;
 	vec3 m_RotationVector;
 };
+
+REGISTER_COMPONENT(SimpleRotationController)
 
 #endif

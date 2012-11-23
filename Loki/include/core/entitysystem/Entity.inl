@@ -10,14 +10,15 @@ template< typename _ComponentType >
 _ComponentType* Entity::InstantiateComponent()
 {
 	Component* comp = (Component*)new _ComponentType();
+	//Component* comp = (Component*)malloc(sizeof(_ComponentType));
 
-	ComponentsIter it = m_Components.find(_ComponentType::GetTypeInfo());
-	if (!_ComponentType::AllowMultipleInstancesOnEntity() && it != m_Components.end() && (*it).second.size() >= 1)
+	ComponentsIter it = m_Components.find(::loki::components::GetComponentTypeInfo<_ComponentType>());
+	if (!::loki::components::ComponentAllowsMultipleInstancesOnEntity<_ComponentType>() && it != m_Components.end() && (*it).second.size() >= 1)
 	{
-		LOG(VL_ERROR, "Entity::InstantiateComponent: Entities can not have more than one instance of the '%s' component. Use macro DECLARE_COMPONENT instead of DECLARE_COMPONENT_SINGLE_INSTANCE to change.", _ComponentType::GetComponentTypeName().c_str());
+		LOG(VL_ERROR, "Entity::InstantiateComponent: Entities can not have more than one instance of the '%s' component. Use macro COMPONENT_SINGLE_INSTANCE to change.", ::loki::components::GetComponentTypeName<_ComponentType>().c_str());
 		return 0;
 	}
-	m_Components[_ComponentType::GetTypeInfo()].push_back(comp);
+	m_Components[::loki::components::GetComponentTypeInfo<_ComponentType>()].push_back(comp);
 	_OnComponentInstantiated<_ComponentType>((_ComponentType*)comp);
 	comp->SetEntity(this);
 	comp->_BaseInit();
@@ -28,7 +29,7 @@ template< typename _ComponentType >
 void Entity::RemoveComponent()
 {
 	_ComponentType* comp = 0;
-	util::general::TypeInfo typeinfo = _ComponentType::GetTypeInfo();
+	util::general::TypeInfo typeinfo = ::loki::components::GetComponentTypeInfo<_ComponentType>();
 	ComponentsIter it = m_Components.find(typeinfo);
 	if (it == m_Components.end())
 	{
@@ -41,6 +42,7 @@ void Entity::RemoveComponent()
 	comp->_BaseTerminate();
 	_OnComponentRemoved<_ComponentType>(comp);
 	delete comp;
+	//free(comp);
 
 	if ((*it).second.size() <= 0)
 	{
@@ -52,7 +54,7 @@ template< typename _ComponentType >
 void Entity::RemoveComponent( _ComponentType* _Instance )
 {
 	_ComponentType* comp = 0;
-	util::general::TypeInfo typeinfo = _ComponentType::GetTypeInfo();
+	util::general::TypeInfo typeinfo = ::loki::components::GetComponentTypeInfo<_ComponentType>();
 	ComponentsIter it = m_Components.find(typeinfo);
 	if (it == m_Components.end())
 	{
@@ -69,6 +71,8 @@ void Entity::RemoveComponent( _ComponentType* _Instance )
 			comp->_BaseTerminate();
 			_OnComponentRemoved<_ComponentType>(comp);
 			delete comp;
+			//free(comp);
+
 			if ((*it).second.size() <= 0)
 			{
 				m_Components.erase(it);
@@ -83,7 +87,7 @@ template< typename _ComponentType >
 void Entity::RemoveComponents()
 {
 	_ComponentType* comp = 0;
-	util::general::TypeInfo typeinfo = _ComponentType::GetTypeInfo();
+	util::general::TypeInfo typeinfo = ::loki::components::GetComponentTypeInfo<_ComponentType>();
 	ComponentsIter it = m_Components.find(typeinfo);
 	if (it == m_Components.end())
 	{
@@ -97,6 +101,7 @@ void Entity::RemoveComponents()
 		comp->_BaseTerminate();
 		_OnComponentRemoved<_ComponentType>(comp);
 		delete comp;
+		//free(comp);
 	}
 	(*it).second.clear();
 	m_Components.erase(it);
@@ -111,14 +116,14 @@ void Entity::RemoveComponent<Transform>()
 template< typename _ComponentType >
 bool Entity::HasComponent() const
 {
-	ComponentsConstIter it = m_Components.find(_ComponentType::GetTypeInfo());
+	ComponentsConstIter it = m_Components.find(::loki::components::GetComponentTypeInfo<_ComponentType>());
 	return (it != m_Components.end()) && ((*it).size() > 0);
 }
 
 template< typename _ComponentType >
 _ComponentType* Entity::GetComponent() const
 {
-	util::general::TypeInfo typeinfo = _ComponentType::GetTypeInfo();
+	util::general::TypeInfo typeinfo = ::loki::components::GetComponentTypeInfo<_ComponentType>();
 	ComponentsConstIter it = m_Components.find(typeinfo);
 	if (it != m_Components.end())
 	{
@@ -132,7 +137,7 @@ _ComponentType* Entity::GetComponent() const
 template< typename _ComponentType >
 const std::vector<_ComponentType*>* Entity::GetComponents() const
 {
-	util::general::TypeInfo typeinfo = _ComponentType::GetTypeInfo();
+	util::general::TypeInfo typeinfo = ::loki::components::GetComponentTypeInfo<_ComponentType>();
 	ComponentsConstIter it = m_Components.find(typeinfo);
 	if (it != m_Components.end())
 	{
