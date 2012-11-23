@@ -48,8 +48,6 @@ VertexOutput mainVP( VertexInput IN )
 {
 	VertexOutput OUT;
 	
-	float4x4 ModelView = mul(ViewMatrix, ModelMatrix);
-	
 	// Vertex position in clip space.
 	OUT.PosH = mul(ModelViewProjection, float4(IN.Position, 1.0));
 	

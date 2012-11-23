@@ -17,10 +17,9 @@ namespace loki
 
 class Transform	: public Component
 {
+	friend class ::loki::Entity;
 	CONTAINER_MACRO_LIST(Transform*, Children);
 public:
-	DECLARE_COMPONENT_SINGLE_INSTANCE(Transform)
-
 	const quat& GetOrientation();
 	const vec3& GetPosition();
 	const vec3& GetScale();
@@ -145,5 +144,8 @@ private:
 };
 
 }
+
+REGISTER_COMPONENT(Transform)
+COMPONENT_SINGLE_INSTANCE(Transform)
 
 #endif

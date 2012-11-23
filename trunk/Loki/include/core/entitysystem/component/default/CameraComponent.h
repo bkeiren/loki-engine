@@ -13,9 +13,8 @@ namespace components
 
 class CameraComponent	: public Component
 {
+	friend class ::loki::Entity;
 public:
-	DECLARE_COMPONENT_SINGLE_INSTANCE(CameraComponent)	// Required!
-
 	enum EProjectionType
 	{
 		PROJECTION_PERSPECTIVE = 0,
@@ -79,5 +78,8 @@ private:
 }
 
 }
+
+REGISTER_COMPONENT(CameraComponent)
+COMPONENT_SINGLE_INSTANCE(CameraComponent)
 
 #endif

@@ -18,13 +18,12 @@ namespace scripts
 
 class FreeCam	: public components::CppScript
 {
+	friend class ::loki::Entity;
 public:
-	DECLARE_COMPONENT(FreeCam);
-
+private:
 	FreeCam();
 	~FreeCam();
 
-private:
 	void Awake();
 	void Update();
 	void Stop();
@@ -39,5 +38,7 @@ private:
 }
 
 }
+
+REGISTER_COMPONENT_NAMED(::loki::components::scripts::FreeCam, "FreeCam")
 
 #endif

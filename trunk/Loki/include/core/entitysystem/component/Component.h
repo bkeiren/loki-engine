@@ -15,42 +15,67 @@ namespace components
 {
 	class CameraComponent;
 	class Light;
+
+	//////////////////////////////////////////////////////////////////////////
+	// These following functions are specialized for components registered
+	// using the REGISTER_COMPONENT() macro.
+	//////////////////////////////////////////////////////////////////////////
+	template< class _T >
+	inline const std::string& GetComponentTypeName();
+
+	template< class _T >
+	inline const ::loki::util::general::TypeInfo& GetComponentTypeInfo();
+
+	//////////////////////////////////////////////////////////////////////////
+	// This functions is specialized for components using the 
+	// COMPONENT_SINGLE_INSTANCE() macro.
+	//////////////////////////////////////////////////////////////////////////
+	template< class _T >
+	inline bool ComponentAllowsMultipleInstancesOnEntity();
 }
 
-// Use this macro in your component class definition in order to be able
-// to instantiate it on Entities. If you want your class to only be instantiable once
-// per entity, use the DECLARE_COMPONENT_SINGLE_INSTANCE macro instead.
-#define DECLARE_COMPONENT(componentclass)		friend class Entity;											\
-												static const std::string& GetComponentTypeName()				\
-												{																\
-													static std::string Name = std::string(#componentclass);		\
-													return Name;												\
-												}																\
-												static util::general::TypeInfo& GetTypeInfo()					\
-												{																\
-													static util::general::TypeInfo ti = util::general::TypeInfo(typeid(componentclass));	\
-													return ti;													\
-												}																\
-												static bool AllowMultipleInstancesOnEntity()					\
-												{																\
-													return true;												\
-												}
+#define REGISTER_COMPONENT(componentclass)																								\
+	namespace loki {																													\
+		namespace components {																											\
+			template<>																													\
+			inline const std::string& GetComponentTypeName<componentclass>()															\
+			{																															\
+				static const std::string _Name = std::string(#componentclass); return _Name;											\
+			}																															\
+			template<>																													\
+			inline const ::loki::util::general::TypeInfo& GetComponentTypeInfo<componentclass>()										\
+			{																															\
+				static const ::loki::util::general::TypeInfo _TI = ::loki::util::general::TypeInfo(typeid(componentclass)); return _TI; \
+			}																															\
+		}																																\
+	}
 
-#define DECLARE_COMPONENT_SINGLE_INSTANCE(componentclass)	friend class Entity;											\
-															static const std::string& GetComponentTypeName()				\
-															{																\
-																static std::string Name = std::string(#componentclass);		\
-																return Name;												\
-															}																\
-															static util::general::TypeInfo& GetTypeInfo()					\
-															{																\
-																static util::general::TypeInfo ti = util::general::TypeInfo(typeid(componentclass));	\
-																return ti;													\
-															}																\
-															static bool AllowMultipleInstancesOnEntity()					\
-															{																\
-																return false;												\
-															}
+#define REGISTER_COMPONENT_NAMED(componentclass, name)																					\
+	namespace loki {																													\
+		namespace components {																											\
+			template<>																													\
+			inline const std::string& GetComponentTypeName<componentclass>()															\
+			{																															\
+				static const std::string _Name = std::string(name); return _Name;														\
+			}																															\
+			template<>																													\
+			inline const ::loki::util::general::TypeInfo& GetComponentTypeInfo<componentclass>()										\
+			{																															\
+				static const ::loki::util::general::TypeInfo _TI = ::loki::util::general::TypeInfo(typeid(componentclass)); return _TI; \
+			}																															\
+		}																																\
+	}
+
+#define COMPONENT_SINGLE_INSTANCE(componentclass)												\
+	namespace loki {																			\
+		namespace components {																	\
+			template<>																			\
+			inline bool ComponentAllowsMultipleInstancesOnEntity<componentclass>()				\
+			{																					\
+				return false;																	\
+			}																					\
+		}																						\
+	}
 
 class Entity;
 

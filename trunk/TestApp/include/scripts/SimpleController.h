@@ -11,8 +11,6 @@ using namespace loki;
 class SimpleController	: public components::CppScript
 {
 public:
-	DECLARE_COMPONENT(SimpleController);
-
 	SimpleController()
 	{
 
@@ -106,5 +104,7 @@ private:
 	bool m_AutoRotate;
 	math::bool3 m_RotateAxes;
 };
+
+REGISTER_COMPONENT(SimpleController)
 
 #endif

@@ -24,14 +24,13 @@ namespace components
 
 class MeshRenderer	: public Component
 {
+	friend class ::loki::Entity;
 	friend class renderer::LkRenderer;
 	
 	CONTAINER_MACRO_LIST(MeshRenderer*, RenderComponents);
 	
 	CONTAINER_MACRO_VECTOR(graphics::Material*, Materials);
 public:
-	DECLARE_COMPONENT_SINGLE_INSTANCE(MeshRenderer)		// Required!
-
 	void SetCastShadows( bool _CastShadows );
 	bool CastsShadows() const;
 
@@ -62,5 +61,8 @@ private:
 }
 
 }
+
+REGISTER_COMPONENT(MeshRenderer)
+COMPONENT_SINGLE_INSTANCE(MeshRenderer)
 
 #endif

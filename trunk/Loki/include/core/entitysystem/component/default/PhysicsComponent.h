@@ -19,9 +19,8 @@ namespace components
 
 class PhysicsComponent	: public Component
 {
+	friend class ::loki::Entity;
 public:
-	DECLARE_COMPONENT_SINGLE_INSTANCE(PhysicsComponent)	// Required!
-
 	bool CreateBodyFromInfo( physics::RigidBodyInfo& _Info );
 	
 	physics::LkRigidBody* GetBody() const;
@@ -39,5 +38,8 @@ private:
 }
 
 }
+
+REGISTER_COMPONENT(PhysicsComponent)
+COMPONENT_SINGLE_INSTANCE(PhysicsComponent)
 
 #endif
