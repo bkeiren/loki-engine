@@ -34,22 +34,6 @@ namespace components
 	inline bool ComponentAllowsMultipleInstancesOnEntity();
 }
 
-#define REGISTER_COMPONENT(componentclass)																								\
-	namespace loki {																													\
-		namespace components {																											\
-			template<>																													\
-			inline const std::string& GetComponentTypeName<componentclass>()															\
-			{																															\
-				static const std::string _Name = std::string(#componentclass); return _Name;											\
-			}																															\
-			template<>																													\
-			inline const ::loki::util::general::TypeInfo& GetComponentTypeInfo<componentclass>()										\
-			{																															\
-				static const ::loki::util::general::TypeInfo _TI = ::loki::util::general::TypeInfo(typeid(componentclass)); return _TI; \
-			}																															\
-		}																																\
-	}
-
 #define REGISTER_COMPONENT_NAMED(componentclass, name)																					\
 	namespace loki {																													\
 		namespace components {																											\
@@ -65,6 +49,8 @@ namespace components
 			}																															\
 		}																																\
 	}
+
+#define REGISTER_COMPONENT(componentclass)	REGISTER_COMPONENT_NAMED(componentclass, #componentclass)
 
 #define COMPONENT_SINGLE_INSTANCE(componentclass)												\
 	namespace loki {																			\
