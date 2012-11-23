@@ -26,8 +26,7 @@ FreeCam::~FreeCam()
 
 void FreeCam::Awake()
 {
-	m_Camera = GetEntity()->GetComponent<loki::components::CameraComponent>();
-	if (!m_Camera)
+	if (!GetEntity()->GetCamera())
 	{
 		LOG(VL_WARN, "FreeCam::Awake: Entity does not have a camera component attached!");
 	}
@@ -39,7 +38,7 @@ void FreeCam::Update()
 	{
 		if (g_Input->Get('T') == KEYSTATE_DOWN)
 		{
-			m_Camera->LookAt(vec3(0.0f, 0.0f, 0.0f));
+			GetEntity()->GetCamera()->LookAt(vec3(0.0f, 0.0f, 0.0f));
 		}
 
 		// 			LkHTMLView* tab = g_HTMLCore->GetWebTabInFocus();

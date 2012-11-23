@@ -18,19 +18,16 @@ namespace scripts
 
 class FreeCam	: public components::CppScript
 {
-	friend class ::loki::Entity;
 public:
-private:
 	FreeCam();
 	~FreeCam();
 
+private:
 	void Awake();
 	void Update();
 	void Stop();
 	void Enabled();
 	void Disabled();
-	
-	loki::components::CameraComponent* m_Camera;
 };
 
 }

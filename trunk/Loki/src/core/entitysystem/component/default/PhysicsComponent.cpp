@@ -13,14 +13,12 @@ namespace components
 PhysicsComponent::PhysicsComponent()	:
 	m_RigidBody(0)
 {
-	SubscribeToEvent(EVENT_PREPHYSICSUPDATE);
-	SubscribeToEvent(EVENT_POSTPHYSICSUPDATE);
+
 }
 
 PhysicsComponent::~PhysicsComponent()
 {
-	UnsubscribeFromEvent(EVENT_PREPHYSICSUPDATE);
-	UnsubscribeFromEvent(EVENT_POSTPHYSICSUPDATE);
+
 }
 
 bool PhysicsComponent::CreateBodyFromInfo( physics::RigidBodyInfo& _Info )
@@ -65,6 +63,9 @@ void PhysicsComponent::_HandleEvent( const LkEvent& _Event )
 
 void PhysicsComponent::_Init()
 {
+	SubscribeToEvent(EVENT_PREPHYSICSUPDATE);
+	SubscribeToEvent(EVENT_POSTPHYSICSUPDATE);
+
 	// By default, the physics component will check for a MeshRenderer and sync with its mesh.
 	// Alterations can be made afterwards.
 	// if there is no render component, the shape of the physicsshape is a simple box of unit size.
@@ -99,6 +100,9 @@ void PhysicsComponent::_Terminate()
 	{
 		physics::g_Physics->RemoveRigidBody(m_RigidBody);
 	}
+
+	UnsubscribeFromEvent(EVENT_PREPHYSICSUPDATE);
+	UnsubscribeFromEvent(EVENT_POSTPHYSICSUPDATE);
 }
 
 }

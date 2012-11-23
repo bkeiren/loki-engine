@@ -58,6 +58,8 @@ void MyGame::PreInit()
 
 bool MyGame::Init()
 {
+	Component* comp = loki::Entity::_CreateComponentByTypeName("FreeCam");
+
 	// Load a localization table.
 	if (!game::g_Localization->LoadLocalizationTable("resources//localization//strings.loc"))
 	{

@@ -17,9 +17,11 @@ namespace loki
 
 class Transform	: public Component
 {
-	friend class ::loki::Entity;
 	CONTAINER_MACRO_LIST(Transform*, Children);
 public:
+	Transform();
+	~Transform();
+
 	const quat& GetOrientation();
 	const vec3& GetPosition();
 	const vec3& GetScale();
@@ -97,9 +99,6 @@ public:
 
 #endif
 private:
-	Transform();
-	~Transform();
-
 	enum EDirtyFlags
 	{
 		DIRTY_FLAG_MATRIX = (1 << 0),

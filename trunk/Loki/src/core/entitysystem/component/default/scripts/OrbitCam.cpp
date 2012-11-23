@@ -46,8 +46,7 @@ void OrbitCam::SetCenter( const vec3& _Center )
 
 void OrbitCam::Awake()
 {
-	m_Camera = GetEntity()->GetComponent<loki::components::CameraComponent>();
-	if (!m_Camera)
+	if (!GetEntity()->GetCamera())
 	{
 		LOG(VL_WARN, "OrbitCam::Awake: Entity does not have a camera component attached!");
 	}
