@@ -11,8 +11,6 @@ EntityID::EntityID()	:
 
 }
 
-
-
 bool EntityID::operator == ( const EntityID& _ID ) const
 {
 	return (m_ID == _ID.m_ID);
@@ -132,7 +130,7 @@ Component* Entity::_CreateComponentByTypeName( const std::string& _Name )
 		return 0;
 	}
 
-	::loki::components::detail::CreateComponentFunction _Function = it->second;
+	::loki::components::detail::CreateComponentFunction _Function = it->second.m_Function;
 	return _Function();
 }
 

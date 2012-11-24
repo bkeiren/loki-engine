@@ -344,11 +344,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\console\console.h"
+			RelativePath=".\include\core\console\console.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\console\console.h"
+			RelativePath=".\include\console\console.h"
 			>
 		</File>
 		<File
@@ -384,19 +384,27 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\entitysystem\component\Detail.cpp"
+			>
+		</File>
+		<File
 			RelativePath=".\include\core\entitysystem\component\Detail.h"
 			>
 		</File>
 		<File
+			RelativePath=".\include\core\entitysystem\component\Detail.inl"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\dev_notes.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\dev_notes.txt"
+			>
+		</File>
+		<File
 			RelativePath=".\src\dev_notes.txt"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\dev_notes.txt"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -456,11 +464,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\engine.h"
+			RelativePath=".\include\engine.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\engine.h"
+			RelativePath=".\include\core\engine.h"
 			>
 		</File>
 		<File
@@ -932,11 +940,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\baseclass\istate.h"
+			RelativePath=".\include\states\baseclass\istate.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\baseclass\istate.h"
+			RelativePath=".\include\core\states\baseclass\istate.h"
 			>
 		</File>
 		<File
@@ -1540,11 +1548,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\SplashState.h"
+			RelativePath=".\include\states\SplashState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\SplashState.h"
+			RelativePath=".\include\core\states\SplashState.h"
 			>
 		</File>
 		<File
@@ -1656,11 +1664,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\TestState.h"
+			RelativePath=".\include\states\TestState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\TestState.h"
+			RelativePath=".\include\core\states\TestState.h"
 			>
 		</File>
 		<File
@@ -1964,19 +1972,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\util\util.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.inline.h"
+			RelativePath=".\include\util.h"
 			>
 		</File>
 		<File
 			RelativePath=".\include\util.inline.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\util\util.inline.h"
 			>
 		</File>
 		<File

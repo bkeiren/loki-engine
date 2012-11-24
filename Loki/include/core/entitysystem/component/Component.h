@@ -27,6 +27,9 @@ namespace components
 	template< class _T >
 	inline const ::loki::util::general::TypeInfo& GetComponentTypeInfo();
 
+	template< class _T >
+	inline bool IsComponentRegistered();
+
 	//////////////////////////////////////////////////////////////////////////
 	// This functions is specialized for components using the 
 	// COMPONENT_SINGLE_INSTANCE() macro.
@@ -48,6 +51,11 @@ namespace components
 			{																															\
 				static const ::loki::util::general::TypeInfo _TI = ::loki::util::general::TypeInfo(typeid(TYPE)); return _TI;			\
 			}																															\
+			template<>																													\
+			inline bool IsComponentRegistered<TYPE>()																					\
+			{																															\
+				return true;																											\
+			}																															\
 			namespace detail {																											\
 				namespace {																												\
 					template< class _T >																								\
@@ -55,11 +63,11 @@ namespace components
 					template<>																											\
 					class ComponentRegistration<TYPE>																					\
 					{																													\
-						static const ::loki::components::detail::RegistryEntry<TYPE>& _Reg;												\
+						static const ::loki::components::detail::RegistryEntryHelper<TYPE>& _Reg;										\
 					};																													\
-					const ::loki::components::detail::RegistryEntry<TYPE>&																\
+					const ::loki::components::detail::RegistryEntryHelper<TYPE>&														\
 						ComponentRegistration<TYPE>::_Reg =																				\
-							::loki::components::detail::RegistryEntry<TYPE>::Instance(NAME);											\
+							::loki::components::detail::RegistryEntryHelper<TYPE>::Instance(NAME);										\
 				}																														\
 			}																															\
 		}																																\
@@ -83,29 +91,7 @@ class Entity;
 //////////////////////////////////////////////////////////////////////////
 // The Component class is the base class for any components that 
 // an entity could be composed of.
-// Examples for component types are: PhysicsComponent, RenderComponent,
-// MoveableComponent.
-// !!!	IMPLEMENTATION NOTE:
-//		In order to speed up type-info generation, some awesome stuff
-//		is done using a macro and static member functions and such.
-//		When making your own component, be sure to put the 
-//		DECLARE_COMPONENT macro in the public field of the class,
-//		passing your component class type as argument.
-//		Without this macro, the class will yield compiler errors telling you
-//		that 'GetTypeInfo' is not a member of your class!
-//		Example:
-//		class MyComponent : public Component
-//		{
-//		public:
-//			DECLARE_COMPONENT
-//		};
-//		Note that you should NOT use this macro in any custom 'base' component
-//		classes. For instance, say you want to have a base component class
-//		to provide functionality that a number of additional child components
-//		would use. In that case you would only use this macro on the child classes
-//		because it's of no use to do so on the base class (Although it should not
-//		provide errors just be safe and try to avoid it ;) ).
-// !!!
+// Examples for component types are: PhysicsComponent, MeshRenderer.
 //////////////////////////////////////////////////////////////////////////
 class Component	: public LkEventListener
 {
