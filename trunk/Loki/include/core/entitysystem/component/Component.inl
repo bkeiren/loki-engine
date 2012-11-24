@@ -16,6 +16,12 @@ namespace components
 	}
 
 	template< class _T >
+	inline bool IsComponentRegistered()
+	{
+		return false;
+	}
+
+	template< class _T >
 	inline bool ComponentAllowsMultipleInstancesOnEntity()	
 	{ 
 		return true; 

@@ -3,6 +3,17 @@
 #ifndef COMPONENT_DETAIL_H
 #define COMPONENT_DETAIL_H
 
+#include "util/typeinfo/typeinfo.h"
+
+//////////////////////////////////////////////////////////////////////////
+//
+// The implementation of automatically registering components has been
+// implemented using:
+// http://gamedev.stackexchange.com/questions/17746/entity-component-systems-in-c-how-do-i-discover-types-and-construct-component/17759#17759
+// (Accessed 24-11-2012)
+//
+//////////////////////////////////////////////////////////////////////////
+
 namespace loki
 {
 
@@ -14,50 +25,42 @@ namespace components
 namespace detail
 {
 
+class RegistryEntry;
+
+//////////////////////////////////////////////////////////////////////////
+// Typedefs.
+//////////////////////////////////////////////////////////////////////////
 typedef Component*(*CreateComponentFunction)();
-CONTAINER_MACRO_MAP(std::string, CreateComponentFunction, ComponentRegistry)
+CONTAINER_MACRO_MAP(std::string, RegistryEntry, ComponentRegistry)
 
-inline ComponentRegistry& GetComponentRegistry()
-{
-	static ComponentRegistry _Registry;
-	return _Registry;
-}
+//////////////////////////////////////////////////////////////////////////
+// Functions.
+//////////////////////////////////////////////////////////////////////////
+inline ComponentRegistry& GetComponentRegistry();
 
-template< class _T >
-Component* CreateComponent()
-{
-	return new _T;
-}
-
-template< class _T >
-class RegistryEntry
+//////////////////////////////////////////////////////////////////////////
+// Classes.
+//////////////////////////////////////////////////////////////////////////
+class RegistryEntry 
 {
 public:
-	static RegistryEntry<_T>& Instance( const std::string& _Name )
-	{
-		static RegistryEntry<_T> _Instance(_Name);
-		return _Instance;
-	}
+	RegistryEntry( CreateComponentFunction _Function, const util::general::TypeInfo& _TypeInfo );
+
+	CreateComponentFunction m_Function;
+	const util::general::TypeInfo& m_TypeInfo;
+};
+
+template< class _T >
+class RegistryEntryHelper
+{
+public:
+	static RegistryEntryHelper<_T>& Instance( const std::string& _Name );
 
 private:
-	RegistryEntry( const std::string& _Name )
-	{
-		ComponentRegistry& _Registry = GetComponentRegistry();
-		CreateComponentFunction _Function = CreateComponent<_T>;
+	RegistryEntryHelper( const std::string& _Name );
 
-		std::pair<ComponentRegistryIter, bool> _Ret = 
-			_Registry.insert(ComponentRegistryPair(_Name, _Function));
-
-		if (_Ret.second == false)
-		{
-			// A component was already registered with this name.
-			LOG(VL_ERROR, "A component type with name '%s' is already registered", _Name.c_str());
-			assert("Check log" && 0);
-		}
-	}
-
-// 	RegistryEntry(const RegistryEntry<T>&) = delete; // C++11 feature
-// 	RegistryEntry& operator=(const RegistryEntry<T>&) = delete;
+// 	RegistryEntryHelper(const RegistryEntryHelper<T>&) = delete; // C++11 feature
+// 	RegistryEntryHelper& operator=(const RegistryEntryHelper<T>&) = delete;
 };
 
 }
@@ -65,5 +68,7 @@ private:
 }
 
 }
+
+#include "core/entitysystem/component/Detail.inl"
 
 #endif

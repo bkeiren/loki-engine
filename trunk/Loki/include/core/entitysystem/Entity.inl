@@ -3,12 +3,25 @@
 #ifndef ENTITY_INL
 #define ENTITY_INL
 
+#ifdef _DEBUG
+	#define CHECK_IF_REGISTERED_AND_LOG(TYPE)					\
+		if (!::loki::components::IsComponentRegistered<TYPE>())				\
+		{												\
+			LOG(VL_ERROR, "Entity::"__FUNCTION__": Component type has not been registered. Register a component with macro REGISTER_COMPONENT.");	\
+			return 0;									\
+		}
+#else
+	#define CHECK_IF_REGISTERED_AND_LOG()
+#endif
+
 namespace loki
 {
 
 template< typename _ComponentType >
 _ComponentType* Entity::InstantiateComponent()
 {
+	CHECK_IF_REGISTERED_AND_LOG(_ComponentType)
+
 	Component* comp = (Component*)new _ComponentType();
 	//Component* comp = (Component*)malloc(sizeof(_ComponentType));
 
@@ -28,6 +41,8 @@ _ComponentType* Entity::InstantiateComponent()
 template< typename _ComponentType >
 void Entity::RemoveComponent()
 {
+	CHECK_IF_REGISTERED_AND_LOG(_ComponentType)
+
 	_ComponentType* comp = 0;
 	util::general::TypeInfo typeinfo = ::loki::components::GetComponentTypeInfo<_ComponentType>();
 	ComponentsIter it = m_Components.find(typeinfo);
@@ -53,6 +68,8 @@ void Entity::RemoveComponent()
 template< typename _ComponentType >
 void Entity::RemoveComponent( _ComponentType* _Instance )
 {
+	CHECK_IF_REGISTERED_AND_LOG(_ComponentType)
+
 	_ComponentType* comp = 0;
 	util::general::TypeInfo typeinfo = ::loki::components::GetComponentTypeInfo<_ComponentType>();
 	ComponentsIter it = m_Components.find(typeinfo);
@@ -86,6 +103,8 @@ void Entity::RemoveComponent( _ComponentType* _Instance )
 template< typename _ComponentType >
 void Entity::RemoveComponents()
 {
+	CHECK_IF_REGISTERED_AND_LOG(_ComponentType)
+
 	_ComponentType* comp = 0;
 	util::general::TypeInfo typeinfo = ::loki::components::GetComponentTypeInfo<_ComponentType>();
 	ComponentsIter it = m_Components.find(typeinfo);
@@ -116,6 +135,8 @@ void Entity::RemoveComponent<Transform>()
 template< typename _ComponentType >
 bool Entity::HasComponent() const
 {
+	CHECK_IF_REGISTERED_AND_LOG(_ComponentType)
+
 	ComponentsConstIter it = m_Components.find(::loki::components::GetComponentTypeInfo<_ComponentType>());
 	return (it != m_Components.end()) && ((*it).size() > 0);
 }
@@ -123,6 +144,8 @@ bool Entity::HasComponent() const
 template< typename _ComponentType >
 _ComponentType* Entity::GetComponent() const
 {
+	CHECK_IF_REGISTERED_AND_LOG(_ComponentType)
+
 	util::general::TypeInfo typeinfo = ::loki::components::GetComponentTypeInfo<_ComponentType>();
 	ComponentsConstIter it = m_Components.find(typeinfo);
 	if (it != m_Components.end())
@@ -137,6 +160,8 @@ _ComponentType* Entity::GetComponent() const
 template< typename _ComponentType >
 const std::vector<_ComponentType*>* Entity::GetComponents() const
 {
+	CHECK_IF_REGISTERED_AND_LOG(_ComponentType)
+
 	util::general::TypeInfo typeinfo = ::loki::components::GetComponentTypeInfo<_ComponentType>();
 	ComponentsConstIter it = m_Components.find(typeinfo);
 	if (it != m_Components.end())

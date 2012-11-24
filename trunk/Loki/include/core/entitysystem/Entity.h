@@ -10,10 +10,6 @@
 
 #ifdef USE_HASH_MAP
 #include <hash_map>
-#define MAP_TYPE	stdext::hash_map
-#else
-#include <map>
-#define MAP_TYPE	std::map
 #endif
 
 namespace loki
@@ -50,12 +46,11 @@ class Entity
 
 	CONTAINER_MACRO_VECTOR(Component*, ComponentsVector)
 	
-	typedef MAP_TYPE<util::general::TypeInfo, ComponentsVector>		Components;	// Pointers to std::type_info are safe because they are valid throughout the entire application lifetime.
-	typedef std::pair<util::general::TypeInfo, ComponentsVector>	ComponentsPair;	// ^
-	typedef Components::iterator									ComponentsIter;
-	typedef Components::const_iterator								ComponentsConstIter;
-	typedef Components::reverse_iterator							ComponentsRIter;
-	typedef Components::const_reverse_iterator						ComponentsConstRIter;
+#ifdef USE_HASH_MAP
+	CONTAINER_MACRO_HASH_MAP(util::general::TypeInfo, ComponentsVector, Components)
+#else
+	CONTAINER_MACRO_MAP(util::general::TypeInfo, ComponentsVector, Components)
+#endif	
 public:
 	EntityID GetID() const;
 
