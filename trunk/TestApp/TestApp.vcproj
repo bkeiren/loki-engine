@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(ProjectDir)\\include;$(LOKI_HOME)\\include;$(LOKI_HOME)\\include_external;$(LOKI_HOME)\\include_external\\Bullet\"
+				AdditionalIncludeDirectories="$(ProjectDir)\\include;$(LOKI_HOME)\\include;$(LOKI_HOME)\\include_external;$(LOKI_HOME)\\include_external\\LibRocket;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Loki_d.lib opengl32.lib glew32.lib glu32.lib squirrel_d.lib sqstdlib_d.lib lua52.lib fmodex_vc.lib SOIL.lib assimp_d.lib BulletCollision_debug.lib BulletDynamics_debug.lib BulletSoftBody_debug.lib ConvexDecomposition_debug.lib LinearMath_debug.lib cg.lib cgGL.lib Awesomium_d.lib json_vc71_libmtd.lib"
+				AdditionalDependencies="Loki_d.lib opengl32.lib glew32.lib glu32.lib squirrel_d.lib sqstdlib_d.lib lua52.lib fmodex_vc.lib SOIL.lib assimp_d.lib BulletCollision_debug.lib BulletDynamics_debug.lib BulletSoftBody_debug.lib ConvexDecomposition_debug.lib LinearMath_debug.lib cg.lib cgGL.lib Awesomium_d.lib json_vc71_libmtd.lib RocketControls_d.lib RocketCore_d.lib RocketDebugger_d.lib"
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(LOKI_HOME);$(LOKI_HOME)\lib"
@@ -120,7 +120,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(ProjectDir)\\include;$(LOKI_HOME)\\include;$(LOKI_HOME)\\include_external;$(LOKI_HOME)\\include_external\\Bullet\"
+				AdditionalIncludeDirectories="$(ProjectDir)\\include;$(LOKI_HOME)\\include;$(LOKI_HOME)\\include_external;$(LOKI_HOME)\\include_external\\LibRocket;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_SECURE_SCL=0;_HAS_ITERATOR_DEBUGGING=0;"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Loki.lib opengl32.lib glew32.lib glu32.lib squirrel.lib sqstdlib.lib lua52.lib fmodex_vc.lib SOIL.lib assimp.lib BulletCollision.lib BulletDynamics.lib BulletSoftBody.lib ConvexDecomposition.lib LinearMath.lib cg.lib cgGL.lib Awesomium.lib json_vc71_libmt.lib"
+				AdditionalDependencies="Loki.lib opengl32.lib glew32.lib glu32.lib squirrel.lib sqstdlib.lib lua52.lib fmodex_vc.lib SOIL.lib assimp.lib BulletCollision.lib BulletDynamics.lib BulletSoftBody.lib ConvexDecomposition.lib LinearMath.lib cg.lib cgGL.lib Awesomium.lib json_vc71_libmt.lib RocketControls.lib RocketCore.lib RocketDebugger.lib"
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(LOKI_HOME);$(LOKI_HOME)\lib"

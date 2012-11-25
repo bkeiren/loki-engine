@@ -44,6 +44,8 @@
 
 #include "util/dragdrophandler/DragDropHandler.h"
 
+#include "core/gui/GUI.h"
+
 #include "core/window/Win32SubMenu.h"
 #include "core/window/Win32MenuItem.h"
 
@@ -256,7 +258,7 @@ bool LokiEngine::Init()
 
 	// Initialize overlay manager.
 	ui::g_OverlayManager = new ui::LkOverlayManager();
-
+	
 	// TODO: Implement config loader
 
 	// Initialize the renderer.
@@ -284,6 +286,8 @@ bool LokiEngine::Init()
 	renderer::g_Renderer = new renderer::LkRenderer(m_Window);
 
 	g_HTMLCore = IsInEditorMode() ? new NullHTMLCore() : new LkHTMLCore();
+
+	gui::g_GUI = new gui::GUI();
 
 	// Finalize console UI.
 	g_Console->FinalizeInitialization();
@@ -403,6 +407,9 @@ void LokiEngine::Shutdown()
 
 	// Same kind of story as with LkConsole::FinalizeInitialization.
 	g_Console->Deinitialize();
+
+	delete gui::g_GUI;
+	gui::g_GUI = NULL;
 
 	g_HTMLCore->DestroyView(&webtab);
 	delete g_HTMLCore;
@@ -545,6 +552,8 @@ void LokiEngine::HandleEvents()
 //////////////////////////////////////////////////////////////////////////
 void LokiEngine::Update()
 {
+	gui::g_GUI->_UpdateContexts();
+
 	m_Window->UpdateCursorImage();
 
 	// Update audio.
@@ -584,6 +593,8 @@ void LokiEngine::Render()
 // 	{
 // 		g_HTMLCore->SetFocus(webtab);
 // 	}
+
+	gui::g_GUI->_RenderContexts();
 
 	static renderer::LkImage* img = new renderer::LkImage("resources//textures//default.bmp", vec2(0.0f, 0.0f), vec2(0.1f, 0.1f));
 	int2 m = g_Input->GetMousePosition();
