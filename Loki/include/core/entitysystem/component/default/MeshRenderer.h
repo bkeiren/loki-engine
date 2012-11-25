@@ -26,7 +26,7 @@ class MeshRenderer	: public Component
 {
 	friend class renderer::LkRenderer;
 	
-	CONTAINER_MACRO_LIST(MeshRenderer*, RenderComponents);
+	CONTAINER_MACRO_LIST(MeshRenderer*, MeshRenderers);
 	
 	CONTAINER_MACRO_VECTOR(graphics::Material*, Materials);
 public:
@@ -54,7 +54,7 @@ private:
 	bool m_ReceiveShadows;
 	graphics::Mesh* m_Mesh;
 
-	static RenderComponents m_RenderComponents;
+	static MeshRenderers m_MeshRenderers;
 };
 
 }

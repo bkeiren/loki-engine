@@ -300,11 +300,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\commandlineparsing.h"
+			RelativePath=".\include\commandlineparsing.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\commandlineparsing.h"
+			RelativePath=".\include\core\commandlineparsing.h"
 			>
 		</File>
 		<File
@@ -333,6 +333,18 @@
 		</File>
 		<File
 			RelativePath=".\include\math\glm\gtx\component_wise.inl"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\entitysystem\component\ComponentSystem.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\entitysystem\component\ComponentSystem.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\entitysystem\component\ComponentSystem.inl"
 			>
 		</File>
 		<File
@@ -396,15 +408,15 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\dev_notes.txt"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\dev_notes.txt"
-			>
-		</File>
-		<File
 			RelativePath=".\src\dev_notes.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\dev_notes.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -940,11 +952,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\baseclass\istate.h"
+			RelativePath=".\include\core\states\baseclass\istate.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\baseclass\istate.h"
+			RelativePath=".\include\states\baseclass\istate.h"
 			>
 		</File>
 		<File
@@ -1028,11 +1040,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\logger.h"
+			RelativePath=".\include\logger.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\logger.h"
+			RelativePath=".\include\core\logger.h"
 			>
 		</File>
 		<File
@@ -1516,11 +1528,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
+			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\singleton.h"
+			RelativePath=".\include\core\singleton.h"
 			>
 		</File>
 		<File
@@ -1584,11 +1596,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\statemanager.h"
+			RelativePath=".\include\statemanager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\statemanager.h"
+			RelativePath=".\include\core\statemanager.h"
 			>
 		</File>
 		<File
@@ -1664,11 +1676,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\TestState.h"
+			RelativePath=".\include\core\states\TestState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\TestState.h"
+			RelativePath=".\include\states\TestState.h"
 			>
 		</File>
 		<File
@@ -1972,19 +1984,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\util.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.inline.h"
+			RelativePath=".\include\util\util.h"
 			>
 		</File>
 		<File
 			RelativePath=".\include\util\util.inline.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\util.inline.h"
 			>
 		</File>
 		<File

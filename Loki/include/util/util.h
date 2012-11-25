@@ -8,16 +8,15 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <queue>
+#include <stack>
+#include <deque>
 #include "Types.h"
 
 #define BYTE_TO_KB(b)	(b / 1024)
 #define BYTE_TO_MB(b)	(b / 1048576)
 #define BYTE_TO_GB(b)	(b / 1073741824)
 #define BYTE_TO_TB(b)	(b / 1099511627776)
-
-//#define min(a, b)		((a > b) ? (b) : (a))
-//#define max(a, b)		((a < b) ? (b) : (a))
-//#define clamp(a, b, c)	((b < a) ? (a) : ((b > c) ? (c) : (b)))
 
 //////////////////////////////////////////////////////////////////////////
 // To be used within c-tor that shouldn't be called ever. For example, a class that has a default c-tor
@@ -50,31 +49,98 @@
 #define CONSOLETEXTCOLOR_YELLOW		14
 #define CONSOLETEXTCOLOR_WHITE		15
 
-#define CONTAINER_MACRO_HASH_MAP( _KeyType, _ValueType, name )		 typedef stdext::hash_map<_KeyType, _ValueType>		name;				\
-																	 typedef std::pair<_KeyType, _ValueType>			name ## Pair;		\
-																	 typedef name::iterator								name ## Iter;		\
-																	 typedef name::const_iterator						name ## ConstIter;	\
-																	 typedef name::reverse_iterator						name ## RIter;		\
-																	 typedef name::const_reverse_iterator				name ## ConstRIter;
+//////////////////////////////////////////////////////////////////////////
+// Helper macros for the CONTAINER_MACRO_* macros.
+//////////////////////////////////////////////////////////////////////////
+#define _CONTAINER_MACRO_HELPER_ITERATOR_DECLARATIONS_HELPER( TYPEDEFNAME, TYPENAME )	\
+	typedef TYPENAME TYPEDEFNAME::iterator					TYPEDEFNAME ## Iter;		\
+	typedef TYPENAME TYPEDEFNAME::const_iterator			TYPEDEFNAME ## ConstIter;	\
+	typedef TYPENAME TYPEDEFNAME::reverse_iterator			TYPEDEFNAME ## RIter;		\
+	typedef TYPENAME TYPEDEFNAME::const_reverse_iterator	TYPEDEFNAME ## ConstRIter;
 
-#define CONTAINER_MACRO_MAP( _KeyType, _ValueType, name )			 typedef std::map<_KeyType, _ValueType>		name;				\
-																	 typedef std::pair<_KeyType, _ValueType>			name ## Pair;		\
-																	 typedef name::iterator								name ## Iter;		\
-																	 typedef name::const_iterator						name ## ConstIter;	\
-																	 typedef name::reverse_iterator						name ## RIter;		\
-																	 typedef name::const_reverse_iterator				name ## ConstRIter;
+#define _CONTAINER_MACRO_HELPER_ITERATOR_DECLARATIONS( TYPEDEFNAME )			_CONTAINER_MACRO_HELPER_ITERATOR_DECLARATIONS_HELPER(TYPEDEFNAME, )	// Empty second parameter.
+#define _CONTAINER_MACRO_TEMPLATE_HELPER_ITERATOR_DECLARATIONS( TYPEDEFNAME )	_CONTAINER_MACRO_HELPER_ITERATOR_DECLARATIONS_HELPER(TYPEDEFNAME, typename)
 
-#define CONTAINER_MACRO_LIST( _ValueType, name )					 typedef std::list<_ValueType>						name;				\
-																	 typedef name::iterator								name ## Iter;		\
-																	 typedef name::const_iterator						name ## ConstIter;	\
-																	 typedef name::reverse_iterator						name ## RIter;		\
-																	 typedef name::const_reverse_iterator				name ## ConstRIter;
+//////////////////////////////////////////////////////////////////////////
+// Container macros for untemplated classes. If you want to use these macros
+// in a template class, use the CONTAINER_MACRO_TEMPLATE_* version.
+//
+// These macros define typedefs for STL containers (Maps, Hash maps, Lists,
+// Vectors, Queues, Stacks, Deques) and their iterators. Each macro has a 
+// NAME parameter which resolves to the typedef'ed name. 
+//
+// Example:
+// CONTAINER_MACRO_LIST(int, MyIntList)
+//
+// The above macro resolves to:
+// std::list<int>							: MyIntList
+// std::list<int>::iterator					: MyIntListIter
+// std::list<int>::const_iterator			: MyIntListConstIter
+// std::list<int>::reverse_iterator			: MyIntListRIter
+// std::list<int>::const_reverse_iterator	: MyIntListConstRIter
+//////////////////////////////////////////////////////////////////////////
+#define CONTAINER_MACRO_HASH_MAP( KEYTYPE, VALUETYPE, NAME )			\
+	typedef stdext::hash_map<KEYTYPE, VALUETYPE>		NAME;			\
+	typedef std::pair<KEYTYPE, VALUETYPE>				NAME ## Pair;	\
+	_CONTAINER_MACRO_HELPER_ITERATOR_DECLARATIONS(NAME)
 
-#define CONTAINER_MACRO_VECTOR( _ValueType, name )					 typedef std::vector<_ValueType>					name;				\
-																	 typedef name::iterator								name ## Iter;		\
-																	 typedef name::const_iterator						name ## ConstIter;	\
-																	 typedef name::reverse_iterator						name ## RIter;		\
-																	 typedef name::const_reverse_iterator				name ## ConstRIter;
+#define CONTAINER_MACRO_MAP( KEYTYPE, VALUETYPE, NAME )					\
+	typedef std::map<KEYTYPE, VALUETYPE>				NAME;			\
+	typedef std::pair<KEYTYPE, VALUETYPE>			NAME ## Pair;		\
+	_CONTAINER_MACRO_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+#define CONTAINER_MACRO_LIST( VALUETYPE, NAME )							\
+	typedef std::list<VALUETYPE>						NAME;			\
+	_CONTAINER_MACRO_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+#define CONTAINER_MACRO_VECTOR( VALUETYPE, NAME )						\
+	typedef std::vector<VALUETYPE>					NAME;				\
+	_CONTAINER_MACRO_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+#define CONTAINER_MACRO_QUEUE( VALUETYPE, NAME )						\
+	typedef std::queue<VALUETYPE>					NAME;				\
+	_CONTAINER_MACRO_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+#define CONTAINER_MACRO_STACK( VALUETYPE, NAME )						\
+	typedef std::stack<VALUETYPE>										\
+	_CONTAINER_MACRO_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+#define CONTAINER_MACRO_DEQUE( VALUETYPE, NAME )						\
+	typedef std::deque<VALUETYPE>										\
+	_CONTAINER_MACRO_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+//////////////////////////////////////////////////////////////////////////
+// Container macros for template classes.
+//////////////////////////////////////////////////////////////////////////
+#define CONTAINER_MACRO_TEMPLATE_HASH_MAP( KEYTYPE, VALUETYPE, NAME )	\
+	typedef stdext::hash_map<KEYTYPE, VALUETYPE>		NAME;			\
+	typedef std::pair<KEYTYPE, VALUETYPE>				NAME ## Pair;	\
+	_CONTAINER_MACRO_TEMPLATE_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+#define CONTAINER_MACRO_TEMPLATE_MAP( KEYTYPE, VALUETYPE, NAME )		\
+	typedef std::map<KEYTYPE, VALUETYPE>				NAME;			\
+	typedef std::pair<KEYTYPE, VALUETYPE>				NAME ## Pair;	\
+	_CONTAINER_MACRO_TEMPLATE_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+#define CONTAINER_MACRO_TEMPLATE_LIST( VALUETYPE, NAME )				\
+	typedef std::list<VALUETYPE>						NAME;			\
+	_CONTAINER_MACRO_TEMPLATE_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+#define CONTAINER_MACRO_TEMPLATE_VECTOR( VALUETYPE, NAME )				\
+	typedef std::vector<VALUETYPE>					NAME;				\
+	_CONTAINER_MACRO_TEMPLATE_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+#define CONTAINER_MACRO_TEMPLATE_QUEUE( VALUETYPE, NAME )				\
+	typedef std::queue<VALUETYPE>					NAME;				\
+	_CONTAINER_MACRO_TEMPLATE_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+#define CONTAINER_MACRO_TEMPLATE_STACK( VALUETYPE, NAME )				\
+	typedef std::stack<VALUETYPE>										\
+	_CONTAINER_MACRO_TEMPLATE_HELPER_ITERATOR_DECLARATIONS(NAME)
+
+#define CONTAINER_MACRO_TEMPLATE_DEQUE( VALUETYPE, NAME )				\
+	typedef std::deque<VALUETYPE>										\
+	_CONTAINER_MACRO_TEMPLATE_HELPER_ITERATOR_DECLARATIONS(NAME)
 
 namespace loki
 {
