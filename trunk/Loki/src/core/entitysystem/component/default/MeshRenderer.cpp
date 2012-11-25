@@ -8,18 +8,19 @@ namespace loki
 namespace components
 {
 
-MeshRenderer::RenderComponents MeshRenderer::m_RenderComponents;
+MeshRenderer::MeshRenderers MeshRenderer::m_MeshRenderers;
 
 MeshRenderer::MeshRenderer()	:
 	m_CastShadows(false),
-	m_ReceiveShadows(false)
+	m_ReceiveShadows(false),
+	m_Mesh(0)
 {
-	m_RenderComponents.push_back(this);
+	m_MeshRenderers.push_back(this);
 }
 
 MeshRenderer::~MeshRenderer()
 {
-	m_RenderComponents.remove(this);
+	m_MeshRenderers.remove(this);
 }
 
 void MeshRenderer::SetCastShadows( bool _CastShadows )

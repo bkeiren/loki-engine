@@ -482,8 +482,8 @@ void LkRenderer::_RenderOpaqueGeometry()
 	f32 zfar = camera->GetFarPlane();
 	f32 znear = camera->GetNearPlane();
 
-	for (components::MeshRenderer::RenderComponentsConstIter it = components::MeshRenderer::m_RenderComponents.begin();
-		 it != components::MeshRenderer::m_RenderComponents.end();
+	for (components::MeshRenderer::MeshRenderersConstIter it = components::MeshRenderer::m_MeshRenderers.begin();
+		 it != components::MeshRenderer::m_MeshRenderers.end();
 		 ++it)
 	{
 		components::MeshRenderer* rc = (*it);	// Must have MeshFilter too.

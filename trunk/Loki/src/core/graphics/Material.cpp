@@ -186,11 +186,11 @@ Material* Material::_CreateMaterialFromLMAFile( const std::string& _MaterialFile
 	vec2 uvscale = vec2(1.0f, 1.0f);
 	if (uscaleString.IsDouble())
 	{
-		uvscale.x = uscaleString.AsDouble();
+		uvscale.x = (float)uscaleString.AsDouble();
 	}
 	if (vscaleString.IsDouble())
 	{
-		uvscale.y = vscaleString.AsDouble();
+		uvscale.y = (float)vscaleString.AsDouble();
 	}
 	mtl->SetUVScale(uvscale);
 
