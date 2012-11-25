@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(ProjectDir)\include;$(ProjectDir)\include_external;$(ProjectDir)\include_external\Bullet;$(ProjectDir)\include_external\Cg\include"
+				AdditionalIncludeDirectories="$(ProjectDir)\include;$(ProjectDir)\include_external;$(ProjectDir)\include_external\Bullet;$(ProjectDir)\include_external\Cg\include;$(LOKI_HOME)\\include_external\\LibRocket;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -110,7 +110,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(ProjectDir)\include;$(ProjectDir)\include_external;$(ProjectDir)\include_external\Bullet;$(ProjectDir)\include_external\Cg\include"
+				AdditionalIncludeDirectories="$(ProjectDir)\include;$(ProjectDir)\include_external;$(ProjectDir)\include_external\Bullet;$(ProjectDir)\include_external\Cg\include;$(LOKI_HOME)\\include_external\\LibRocket;"
 				PreprocessorDefinitions="_SECURE_SCL=0;_HAS_ITERATOR_DEBUGGING=0;"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -356,11 +356,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\console\console.h"
+			RelativePath=".\include\console\console.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\console\console.h"
+			RelativePath=".\include\core\console\console.h"
 			>
 		</File>
 		<File
@@ -369,6 +369,14 @@
 		</File>
 		<File
 			RelativePath=".\include\core\console\consolecommands.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\gui\Context.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\gui\Context.h"
 			>
 		</File>
 		<File
@@ -428,6 +436,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\gui\Document.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\gui\Document.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\util\dragdrophandler\DragDropHandler.cpp"
 			>
 		</File>
@@ -476,11 +492,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\engine.h"
+			RelativePath=".\include\core\engine.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\engine.h"
+			RelativePath=".\include\engine.h"
 			>
 		</File>
 		<File
@@ -752,6 +768,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\gui\GUI.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\gui\GUI.h"
+			>
+		</File>
+		<File
 			RelativePath=".\include\math\glm\gtc\half_float.hpp"
 			>
 		</File>
@@ -952,11 +976,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\baseclass\istate.h"
+			RelativePath=".\include\states\baseclass\istate.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\baseclass\istate.h"
+			RelativePath=".\include\core\states\baseclass\istate.h"
 			>
 		</File>
 		<File
@@ -1392,11 +1416,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtx\quaternion.inl"
+			RelativePath=".\include\math\glm\gtc\quaternion.inl"
 			>
 		</File>
 		<File
-			RelativePath=".\include\math\glm\gtc\quaternion.inl"
+			RelativePath=".\include\math\glm\gtx\quaternion.inl"
 			>
 		</File>
 		<File
@@ -1445,6 +1469,14 @@
 		</File>
 		<File
 			RelativePath=".\include\core\renderer\renderer.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\gui\RenderInterface.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\gui\RenderInterface.h"
 			>
 		</File>
 		<File
@@ -1596,11 +1628,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\statemanager.h"
+			RelativePath=".\include\core\statemanager.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\statemanager.h"
+			RelativePath=".\include\statemanager.h"
 			>
 		</File>
 		<File
@@ -1665,6 +1697,14 @@
 		</File>
 		<File
 			RelativePath=".\include\util\systeminfo\systeminfo.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\gui\SystemInterface.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\gui\SystemInterface.h"
 			>
 		</File>
 		<File
@@ -1984,19 +2024,19 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.h"
-			>
-		</File>
-		<File
 			RelativePath=".\include\util\util.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.inline.h"
+			RelativePath=".\include\util.h"
 			>
 		</File>
 		<File
 			RelativePath=".\include\util.inline.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\util\util.inline.h"
 			>
 		</File>
 		<File

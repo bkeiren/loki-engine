@@ -39,6 +39,8 @@
 
 #include "core/rect/Rect.h"
 
+#include "core/gui/GUI.h"
+
 using namespace loki;
 
 MyGame::MyGame()
@@ -197,6 +199,10 @@ bool MyGame::Init()
 	loki::Rect r(10.0f, 12.0f, 200.0f, 8.0f);
 	r.position = vec2(20.0f, 0.0f);
 	r.dimensions = vec2(100.0f, 100.0f);
+
+	
+	gui::Context* context = gui::g_GUI->GetMainContext();
+	gui::Document* doc = context->LoadDocument("resources//gui//demo.rml");
 
 	return true;
 }
