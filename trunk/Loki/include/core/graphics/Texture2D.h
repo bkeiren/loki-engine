@@ -16,7 +16,7 @@ class Texture2D	: public Texture
 public:
 	~Texture2D();
 
-	static Texture2D* Load( const std::string& _File );
+	static Texture2D* Load( const std::string& _File, bool _InvertY = true );
 	static Texture2D* Create();
 
 	//////////////////////////////////////////////////////////////////////////

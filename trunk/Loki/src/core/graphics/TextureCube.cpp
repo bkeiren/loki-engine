@@ -22,19 +22,19 @@ TextureCube::~TextureCube()
 
 }
 
-TextureCube* TextureCube::Load( const std::string& _File )
+TextureCube* TextureCube::Load( const std::string& _File, bool _InvertY /*= false*/ )
 {
 	TextureCube* tex = TextureCube::Create();
 
 	static const char FaceOrder[6] = { 'N', 'E', 'S', 'W', 'U', 'D' };
-	uint32 res = SOIL_load_OGL_single_cubemap(_File.c_str(), FaceOrder, SOIL_LOAD_AUTO, tex->GetTextureHandle(), 0);
+	uint32 res = SOIL_load_OGL_single_cubemap(_File.c_str(), FaceOrder, SOIL_LOAD_AUTO, tex->GetTextureHandle(), _InvertY ? SOIL_FLAG_INVERT_Y : 0);
 
 	tex->m_File = _File;
 
 	return _LoadHelper(res, tex);
 }
 
-TextureCube* TextureCube::Load( const std::string& _FileNorth, const std::string& _FileEast, const std::string& _FileSouth, const std::string& _FileWest, const std::string& _FileUp, const std::string& _FileDown )
+TextureCube* TextureCube::Load( const std::string& _FileNorth, const std::string& _FileEast, const std::string& _FileSouth, const std::string& _FileWest, const std::string& _FileUp, const std::string& _FileDown, bool _InvertY /*= false*/ )
 {
 	TextureCube* tex = TextureCube::Create();
 
@@ -44,7 +44,7 @@ TextureCube* TextureCube::Load( const std::string& _FileNorth, const std::string
 										_FileDown.c_str(), 
 										_FileNorth.c_str(), 
 										_FileSouth.c_str(), 
-										SOIL_LOAD_AUTO, tex->GetTextureHandle(), 0);
+										SOIL_LOAD_AUTO, tex->GetTextureHandle(), _InvertY ? SOIL_FLAG_INVERT_Y : 0);
 
 	tex->m_File = _FileNorth;
 	tex->m_File += _FileEast;

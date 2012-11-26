@@ -86,7 +86,7 @@ void LkImage::_Init( const char* _Texture, const vec3& _Position, const vec2& _S
 	static bool CgEffectLoaded = false;
 	if (!CgEffectLoaded)
 	{
-		m_CgEffect = graphics::g_EffectManager->CreateEffectFromFile("resources//shaders//ui.cgfx", "ImageEffect");
+		m_CgEffect = graphics::g_EffectManager->CreateEffectFromFile(DEFAULT_RESOURCE("shaders//ui.cgfx"), "ImageEffect");
 		if (m_CgEffect)
 		{
 			CgEffectLoaded = true;

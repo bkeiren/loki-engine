@@ -19,13 +19,13 @@ public:
 	// Load a cubemap from a single image. The cubemap's faces are expected to be layed out consecutively in the image
 	// in the width. This means that the total image width equals 6 * FaceWidth.
 	// The order of the faces is: North, East, South, West, Up, Down (+Z, +X, -Z, -X, +Y, -Y).
-	static TextureCube* Load( const std::string& _File );
+	static TextureCube* Load( const std::string& _File, bool _InvertY = false );
 	static TextureCube* Load( const std::string& _FileNorth,
 							  const std::string& _FileEast,
 							  const std::string& _FileSouth,
 							  const std::string& _FileWest,
 							  const std::string& _FileUp,
-							  const std::string& _FileDown );
+							  const std::string& _FileDown, bool _InvertY = false );
 	static TextureCube* Create();
 
 	//////////////////////////////////////////////////////////////////////////

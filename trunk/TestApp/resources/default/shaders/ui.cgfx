@@ -9,7 +9,7 @@ struct VertexInput
 struct VertexOutput
 {
 	float4 PosH		: HPOS;
-	float2 Tex		: TEXCOORD2;
+	float2 Tex		: TEXCOORD0;
 };
 
 // Additional input data that we don't want to have in the VertexInput struct.
@@ -29,7 +29,8 @@ VertexOutput mainVP( VertexInput IN )
 
 float4 mainFP( VertexOutput IN )	: COLOR0
 {
-	return tex2D(DiffuseSampler, IN.Tex);
+	float4 c = tex2D(DiffuseSampler, IN.Tex);
+	return c;
 }
 
 technique t0
@@ -42,6 +43,7 @@ technique t0
 		BlendEnable = true;
 		BlendFunc = int2(SrcAlpha, OneMinusSrcAlpha);	// This is what enabled correct alpha support.
 		ColorMask = bool4(true, true, true, true);
+		//PolygonMode = int2(FrontAndBack, Wireframe);
 
 		VertexProgram = compile latest mainVP();
 		FragmentProgram = compile latest mainFP();
