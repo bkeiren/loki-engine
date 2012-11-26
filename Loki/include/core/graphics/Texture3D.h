@@ -16,7 +16,7 @@ class Texture3D	: public Texture
 public:
 	~Texture3D();
 
-	static Texture3D* Load( const std::string& _File );
+	static Texture3D* Load( const std::string& _File, bool _InvertY = true );
 	static Texture3D* Create();
 
 	//////////////////////////////////////////////////////////////////////////

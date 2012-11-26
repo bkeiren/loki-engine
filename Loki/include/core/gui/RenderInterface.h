@@ -15,6 +15,7 @@ namespace graphics
 
 class DisplayList;
 class Texture2D;
+class Effect;
 
 }
 
@@ -51,6 +52,9 @@ private:
 		graphics::DisplayList* m_DisplayList;
 		graphics::Texture2D* m_Texture;
 	};
+
+	graphics::Effect* m_Effect;
+	mat4 m_ProjectionMatrix;
 };
 
 }

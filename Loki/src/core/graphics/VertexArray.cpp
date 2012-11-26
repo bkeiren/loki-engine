@@ -27,7 +27,11 @@ VertexArray::VertexArray( IndexBuffer* _IndexBuffer, VertexBuffer* _VertexBuffer
 	//////////////////////////////////////////////////////////////////////////
 	// IMPORTANT LIFE LESSON: glVertexAttribPointer must be called each time
 	// glBindBuffer is called because it is only then that it maps
-	// vertex attributes to the currently bound buffer.
+	// vertex attributes to the currently bound buffer. Fortunately, 
+	// since the index and vertex buffers are attached to this vertex array
+	// buffer, we only need to bind the attributes once, when we're linking
+	// them together. From that point forward, whenever the vertex array is
+	// bound, the attributes will be set correctly.
 	//////////////////////////////////////////////////////////////////////////
 	glEnableVertexAttribArray(	ATTR0);
 	glVertexAttribPointer(		ATTR0,	3, GL_FLOAT, false, sizeof(Vertex), MEMBER_OFFSET(Vertex, pos));

@@ -596,7 +596,7 @@ void LokiEngine::Render()
 
 	gui::g_GUI->_RenderContexts();
 
-	static renderer::LkImage* img = new renderer::LkImage("resources//textures//default.bmp", vec2(0.0f, 0.0f), vec2(0.1f, 0.1f));
+	static renderer::LkImage* img = new renderer::LkImage(DEFAULT_RESOURCE("textures//default.bmp"), vec2(0.0f, 0.0f), vec2(0.1f, 0.1f));
 	int2 m = g_Input->GetMousePosition();
 	img->SetAbsolutePosition(vec2(m.x, m.y));
 	img->Render();

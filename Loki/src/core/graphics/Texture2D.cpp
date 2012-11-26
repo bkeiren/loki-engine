@@ -22,11 +22,11 @@ Texture2D::~Texture2D()
 
 }
 
-Texture2D* Texture2D::Load( const std::string& _File )
+Texture2D* Texture2D::Load( const std::string& _File, bool _InvertY /*= true*/ )
 {
 	Texture2D* tex = Texture2D::Create();
 
-	uint32 res = SOIL_load_OGL_texture(_File.c_str(), SOIL_LOAD_AUTO, tex->GetTextureHandle(), SOIL_FLAG_INVERT_Y);
+	uint32 res = SOIL_load_OGL_texture(_File.c_str(), SOIL_LOAD_AUTO, tex->GetTextureHandle(), _InvertY ? SOIL_FLAG_INVERT_Y : 0);
 
 	tex->m_File = _File;
 
