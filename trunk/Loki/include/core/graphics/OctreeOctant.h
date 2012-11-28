@@ -4,6 +4,7 @@
 #define OCTREE_OCTANT_H
 
 #include "core/boundingbox/BoundingBox.h"
+#include "core/entitysystem/component/default/MeshRenderer.h"
 
 namespace loki
 {
@@ -13,8 +14,32 @@ class BoundingBox;
 namespace graphics
 {
 
+//////////////////////////////////////////////////////////////////////////
+// These three functions are to be specialized for Octree types.
+// They are used by the OctreeOctant class to obtain data that is required
+// to properly position members in the octree.
+//////////////////////////////////////////////////////////////////////////
+template< class _T >
+void GetOctantMemberPosition( _T _Member, vec3& _Output );
+
+template< class _T >
+void GetOctantMemberBoundingBox( _T _Member, BoundingBox& _Output );
+
+template< class _T >
+f32 GetOctantMemberBoundingRadius( _T _member );
+
+template< class _T >
+bool GetOctantMemberIsDirty( _T _Member );
+//////////////////////////////////////////////////////////////////////////
+
+
+template< class _T >
+class Octree;
+
+template< class _T >
 class OctreeOctant
 {
+	CONTAINER_MACRO_TEMPLATE_VECTOR(_T, Members)
 public:
 	enum EOctant 
 	{
@@ -30,43 +55,69 @@ public:
 		_OCTANT_ROOT
 	};
 
-	OctreeOctant* GetParent() const;
-	OctreeOctant* GetOctant( EOctant _Octant ) const;
+	OctreeOctant<_T>* GetParent() const;
+	OctreeOctant<_T>* GetOctant( EOctant _Octant ) const;
 	const BoundingBox& GetBoundingBox() const;
 
 	bool IsRoot() const;
 	bool IsLeaf() const;
 protected:
-	OctreeOctant( OctreeOctant* _Parent, EOctant _PlaceInParent, const BoundingBox& _BoundingBox );
+	OctreeOctant( Octree<_T>* _Octree, OctreeOctant<_T>* _Parent, EOctant _PlaceInParent, const BoundingBox& _BoundingBox );
 	~OctreeOctant();
 
+	//////////////////////////////////////////////////////////////////////////
+	// This function is called by other OctreeOctants in order to insert a member.
+	// If the octant has already reached it's capacity, it will call 
+	// this function recursively on the appropriate child octant. This process
+	// will repeat until an octant accepts the member because it has not reached it's capacity yet.
+	// NOTE: Only leaf octants will accept members. Other octants will NOT
+	// contain any members. If an octant is a leaf and at capacity, 
+	// it will create child octants and transfer all of it's members
+	// to the appropriate child octants. This results in 8 new leafs, the old one
+	// 'downgrading' to a regular node without any members but with 8 child octants.
+	//////////////////////////////////////////////////////////////////////////
+	void _InsertMember( _T _Member );
+	void _RemoveMember( _T _Member );
 private:
 	OctreeOctant();
 
 	void _CreateOctants();
-	void _CopyContentsFromOctant( OctreeOctant* _Octant );
+	void _CopyContentsFromOctant( OctreeOctant<_T>* _Octant );
+
+	//////////////////////////////////////////////////////////////////////////
+	// Finds in which octant a point _P lies. Does not check outer bounds.
+	// This means that if a point lies outside of the octant's entire space,
+	// it still counts as being in that octant.
+	//////////////////////////////////////////////////////////////////////////
+	EOctant _FindLocalOctant( const vec3& _P ) const;
 
 	union
 	{
-		struct { OctreeOctant* m_Octants[8]; };
-		struct { OctreeOctant* m_Octant_TopFrontRight;
-				 OctreeOctant* m_Octant_TopBackRight;
-				 OctreeOctant* m_Octant_TopBackLeft;
-				 OctreeOctant* m_Octant_TopFrontLeft;
-				 OctreeOctant* m_Octant_BottomFrontRight;
-				 OctreeOctant* m_Octant_BottomBackRight;
-				 OctreeOctant* m_Octant_BottomBackLeft;
-				 OctreeOctant* m_Octant_BottomFrontLeft; };
+		struct { OctreeOctant<_T>* m_Octants[9]; };
+		struct { OctreeOctant<_T>* m_Octant_TopFrontRight;
+				 OctreeOctant<_T>* m_Octant_TopBackRight;
+				 OctreeOctant<_T>* m_Octant_TopBackLeft;
+				 OctreeOctant<_T>* m_Octant_TopFrontLeft;
+				 OctreeOctant<_T>* m_Octant_BottomFrontRight;
+				 OctreeOctant<_T>* m_Octant_BottomBackRight;
+				 OctreeOctant<_T>* m_Octant_BottomBackLeft;
+				 OctreeOctant<_T>* m_Octant_BottomFrontLeft;
+				 OctreeOctant<_T>* m_Octant_Root; };
 	};
 
-	OctreeOctant* m_Parent;
+	Octree<_T>* m_Octree;
+	OctreeOctant<_T>* m_Parent;
 	EOctant m_PlaceInParent;
 
 	BoundingBox m_BoundingBox;
+
+	Members m_Members;
 };
 
 }
 
 }
+
+#include "core/graphics/OctreeOctant.inl"
 
 #endif

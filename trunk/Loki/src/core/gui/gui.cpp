@@ -119,14 +119,15 @@ void GUI::_RenderContexts()
 	}
 }
 
-bool GUI::ProcessKeyDown( char _Key )
+bool GUI::_ProcessKeyDown( char _Key )
 {
-	m_MainContext->m_RocketContext->ProcessKeyDown(Rocket::Core::Input::KeyIdentifier)
+	//m_MainContext->m_RocketContext->ProcessKeyDown(Rocket::Core::Input::KeyIdentifier)
+	return true;
 }
 
-bool GUI::ProcessKeyUp( char _Key )
+bool GUI::_ProcessKeyUp( char _Key )
 {
-
+	return true;
 }
 
 }

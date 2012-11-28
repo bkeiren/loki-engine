@@ -522,7 +522,7 @@ void LokiEngine::HandleEvents()
 			}
 		case WM_KEYDOWN:
 			{
-				gui::g_GUI->ProcessKeyDown();
+				//gui::g_GUI->ProcessKeyDown();
 			}
 		case WM_KEYUP:
 		case WM_SYSKEYDOWN:
