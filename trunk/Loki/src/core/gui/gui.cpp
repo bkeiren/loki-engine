@@ -119,6 +119,16 @@ void GUI::_RenderContexts()
 	}
 }
 
+bool GUI::ProcessKeyDown( char _Key )
+{
+	m_MainContext->m_RocketContext->ProcessKeyDown(Rocket::Core::Input::KeyIdentifier)
+}
+
+bool GUI::ProcessKeyUp( char _Key )
+{
+
+}
+
 }
 
 }

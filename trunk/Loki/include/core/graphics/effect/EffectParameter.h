@@ -16,6 +16,7 @@ namespace graphics
 class EffectParameter
 {
 	friend class Effect;
+	friend class EffectManager;
 public:
 	//////////////////////////////////////////////////////////////////////////
 	// Get this parameter's name.

@@ -521,6 +521,9 @@ void LokiEngine::HandleEvents()
 				break;
 			}
 		case WM_KEYDOWN:
+			{
+				gui::g_GUI->ProcessKeyDown();
+			}
 		case WM_KEYUP:
 		case WM_SYSKEYDOWN:
 		case WM_SYSKEYUP:

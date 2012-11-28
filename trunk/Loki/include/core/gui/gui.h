@@ -40,6 +40,9 @@ private:
 	void _UpdateContexts();
 	void _RenderContexts();
 
+	bool _ProcessKeyDown( char _Key );
+	bool _ProcessKeyUp( char _Key );
+
 	SystemInterface* m_SystemInterface;
 	RenderInterface* m_RenderInterface;
 

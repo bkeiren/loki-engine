@@ -24,5 +24,6 @@
 	</head>
 	<body template="window">
 		This is a sample.
+		<div id="button">T</div>
 	</body>
 </rml>
