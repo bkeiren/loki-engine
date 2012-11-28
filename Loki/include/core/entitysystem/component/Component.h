@@ -104,6 +104,9 @@ public:
 	void Enable();
 	void Disable();
 	void SetEnabled( bool _Enabled );
+
+	const Transform& GetTransform() const;
+	Transform& GetTransform();
 protected:
 	Component();
 	virtual ~Component() = 0;
@@ -114,9 +117,6 @@ protected:
 	//////////////////////////////////////////////////////////////////////////
 	template< typename _ComponentType >
 	_ComponentType* GetComponent() const;
-
-	const Transform& GetTransform() const;
-	Transform& GetTransform();
 private:
 	void SetEntity( Entity* _Entity );
 

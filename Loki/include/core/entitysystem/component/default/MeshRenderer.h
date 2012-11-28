@@ -62,6 +62,6 @@ private:
 }
 
 REGISTER_COMPONENT(MeshRenderer)
-COMPONENT_SINGLE_INSTANCE(MeshRenderer)
+//COMPONENT_SINGLE_INSTANCE(MeshRenderer)
 
 #endif
