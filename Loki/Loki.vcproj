@@ -208,6 +208,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\boundingbox\BoundingBox.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\boundingbox\BoundingBox.h"
+			>
+		</File>
+		<File
 			RelativePath=".\src\core\graphics\Buffer.cpp"
 			>
 		</File>
@@ -300,11 +308,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\commandlineparsing.h"
+			RelativePath=".\include\core\commandlineparsing.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\commandlineparsing.h"
+			RelativePath=".\include\commandlineparsing.h"
 			>
 		</File>
 		<File
@@ -356,11 +364,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\console\console.h"
+			RelativePath=".\include\core\console\console.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\console\console.h"
+			RelativePath=".\include\console\console.h"
 			>
 		</File>
 		<File
@@ -492,11 +500,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\engine.h"
+			RelativePath=".\include\engine.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\engine.h"
+			RelativePath=".\include\core\engine.h"
 			>
 		</File>
 		<File
@@ -920,6 +928,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\include\core\intersection\IntersectionResult.h"
+			>
+		</File>
+		<File
 			RelativePath=".\include\math\glm\core\intrinsic_common.hpp"
 			>
 		</File>
@@ -1276,6 +1288,22 @@
 			>
 		</File>
 		<File
+			RelativePath=".\src\core\graphics\Octree.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\Octree.h"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\graphics\OctreeOctant.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\graphics\OctreeOctant.h"
+			>
+		</File>
+		<File
 			RelativePath=".\include\math\glm\gtx\optimum_pow.hpp"
 			>
 		</File>
@@ -1560,11 +1588,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\singleton.h"
+			RelativePath=".\include\core\singleton.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\singleton.h"
+			RelativePath=".\include\singleton.h"
 			>
 		</File>
 		<File
@@ -1584,7 +1612,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\states\SplashState.cpp"
+			RelativePath=".\src\core\sphere\Sphere.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\sphere\Sphere.h"
 			>
 		</File>
 		<File
@@ -1592,11 +1624,15 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\SplashState.h"
+			RelativePath=".\src\core\states\SplashState.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\include\core\states\SplashState.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\states\SplashState.h"
 			>
 		</File>
 		<File
@@ -2032,11 +2068,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\util.inline.h"
+			RelativePath=".\include\util\util.inline.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\util\util.inline.h"
+			RelativePath=".\include\util.inline.h"
 			>
 		</File>
 		<File

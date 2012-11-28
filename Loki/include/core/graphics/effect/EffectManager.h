@@ -27,6 +27,8 @@ class EffectManager
 
 	friend class renderer::LkRenderer;
 public:
+	CONTAINER_MACRO_HASH_MAP(std::string, EffectParameter*, SharedParameters)
+
 	//////////////////////////////////////////////////////////////////////////
 	// Create an effect from a .cgfx file.
 	Effect* CreateEffectFromFile( const std::string& _File, const std::string& _EffectName );
@@ -42,16 +44,22 @@ public:
 // 	void SetViewMatrix( const mat4& _M );
 // 	void SetModelMatrix( const mat4& _M );
 // 	void SetProjectionMatrix( const mat4& _M );
+
+
 private:
 	EffectManager();
 	~EffectManager();
 
 	void _Init();
 	void _Shutdown();
+	void _RegisterDefaultSharedParameters();
+	void _UnregisterSharedParameters();
 
 	Effects m_Effects;
 	//CGcontext m_CGContext;
 	void* m_CGContext;
+
+	SharedParameters m_SharedParameters;
 };
 
 extern EffectManager* g_EffectManager;
