@@ -635,6 +635,14 @@ void LkRenderer::_RenderLighting()
 		{
 		case components::Light::LIGHT_POINT:
 			{
+				graphics::Texture* Cookie = light->GetCookie();
+				bool HasCookie = (Cookie && Cookie->IsCubeMapTexture());
+				if (HasCookie)
+				{
+					SETCGPARAM("LKCOOKIEPOINT", Cookie->GetTextureHandle());
+				}
+				SETCGPARAM("LKCOOKIEENABLED", HasCookie ? 1 : 0);
+
 				CameraInsideVolume = math::length(_EyePosition - transform.GetPosition()) < light->GetRange();
 				break;
 			}
@@ -642,8 +650,20 @@ void LkRenderer::_RenderLighting()
 			{
 				f32 SpotAngle = light->GetSpotAngle();
 				vec3 LightVec = transform.GetOrientationVector();
+				graphics::Texture* Cookie = light->GetCookie();
 				SETCGPARAM("LKIGHTSPOTANGLE", SpotAngle);
 				SETCGPARAM("LKLIGHTVECTOR", LightVec);
+				bool HasCookie = Cookie && Cookie->Is2DTexture();
+				if (HasCookie)
+				{
+					SETCGPARAM("LKCOOKIESPOT", Cookie->GetTextureHandle());
+					SETCGPARAM("LKLIGHTMATRIX", math::mat4(0.5f, 0.0f, 0.0f, 0.0f,
+														   0.0f, 0.5f, 0.0f, 0.0f,
+														   0.0f, 0.0f, 1.0f, 0.0f,
+														   0.5f, 0.5f, 0.0f, 1.0f) * 
+												math::perspective(light->GetSpotAngle(), 1.0f, 0.1f, 1.0f));
+				}
+				SETCGPARAM("LKCOOKIEENABLED", HasCookie ? 1 : 0);
 
 				// Calculate if the camera is inside the cone shape.
 				// NOTE: A special case is when the camera is actually at the very tip of the cone shape.

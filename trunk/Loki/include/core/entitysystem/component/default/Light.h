@@ -11,6 +11,7 @@ namespace loki
 
 namespace graphics
 {
+	class Texture;
 	class Texture2D;
 	class DisplayList;
 }
@@ -73,6 +74,10 @@ public:
 
 	// Spot and point lights.
 	graphics::DisplayList* GetGeometry();
+
+	graphics::Texture* GetCookie() const;
+	// For point lights: TextureCube, for spot lights: Texture2D.
+	void SetCookie( graphics::Texture* _Texture );
 private:
 	void _HandleEvent( const LkEvent& _Event );
 	void _Init();
@@ -101,7 +106,7 @@ private:
 	ColorRGB m_Color;
 	f32 m_Intensity;	// Default 1.0. Min 0.0, max 8.0.
 	EShadowType m_ShadowType;
-	graphics::Texture2D* m_Cookie;	// 2D for spot and directional lights, cubemap for point lights.
+	graphics::Texture* m_Cookie;	// Texture2D for spot and directional lights, TextureCube for point lights.
 
 	// All lights in one convenient list.
 	static Lights m_Lights;

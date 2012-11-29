@@ -63,17 +63,17 @@ void MyGame::PreInit()
 
 bool MyGame::Init()
 {
-	{
-		Entity* entity0 = g_EntitySystem->SpawnEntity("TestEntity2374896");
-
-		Octree<components::MeshRenderer*>* octree = new Octree<components::MeshRenderer*>(2048.0f, 10);	
-		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
-		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
-		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
-		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
-		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
-		int dbg = 0;
-	}
+// 	{
+// 		Entity* entity0 = g_EntitySystem->SpawnEntity("TestEntity2374896");
+// 
+// 		Octree<components::MeshRenderer*>* octree = new Octree<components::MeshRenderer*>(2048.0f, 10);	
+// 		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
+// 		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
+// 		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
+// 		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
+// 		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
+// 		int dbg = 0;
+// 	}
 
 	// Load a localization table.
 	if (!game::g_Localization->LoadLocalizationTable("resources//localization//strings.loc"))
@@ -103,6 +103,7 @@ bool MyGame::Init()
 	lc->SetRange(100.0f);
 	lc->SetSpotAngle(50.0f);
 	lc->SetLightType(components::Light::LIGHT_SPOT);
+	lc->SetCookie(graphics::Texture2D::Load("resources//textures//stainedglass.bmp", false));
 	pc = entity0->InstantiateComponent<loki::components::PhysicsComponent>();
 	rc = entity0->InstantiateComponent<loki::components::MeshRenderer>();
 
@@ -146,26 +147,27 @@ bool MyGame::Init()
 	rcntrl->SetRotationVector(UP);
 	rcntrl->SetVector(vec3(4.0f, 0.0f, 0.0f));
 	lc->SetRange(40.0f);
-	lc->SetColor(ColorRGB(1.0f, 0.2f, 0.0f));
+	//lc->SetColor(ColorRGB(1.0f, 0.2f, 0.0f));
+	lc->SetCookie(graphics::TextureCube::Load("resources//textures//cubemap3.bmp"));
 	entity12->GetTransform().Translate(vec3(-10.0f, -5.0f, 0.0f));
 
-	Entity* entity13 = g_EntitySystem->SpawnEntity("Light1");
-	lc = entity13->InstantiateComponent<loki::components::Light>();
-	rcntrl = entity13->InstantiateComponent<SimpleRotationController>();
-	rcntrl->SetRotationVector(FORWARD);
-	rcntrl->SetVector(vec3(-8.0f, 0.0f, 0.0f));
-	lc->SetRange(40.0f);
-	lc->SetColor(ColorRGB(0.0f, 0.2f, 1.0f));
-	entity13->GetTransform().Translate(vec3(-2.0f, -8.0f, 3.0f));
-
-	Entity* entity14 = g_EntitySystem->SpawnEntity("Light2");
-	lc = entity14->InstantiateComponent<loki::components::Light>();
-	rcntrl = entity14->InstantiateComponent<SimpleRotationController>();
-	rcntrl->SetRotationVector(SIDE);
-	rcntrl->SetVector(vec3(0.0f, 5.0f, 0.0f));
-	lc->SetRange(40.0f);
-	lc->SetColor(ColorRGB(0.4f, 0.4f, 0.4f));
-	entity14->GetTransform().Translate(vec3(-10.0f, -15.0f, 10.0f));
+// 	Entity* entity13 = g_EntitySystem->SpawnEntity("Light1");
+// 	lc = entity13->InstantiateComponent<loki::components::Light>();
+// 	rcntrl = entity13->InstantiateComponent<SimpleRotationController>();
+// 	rcntrl->SetRotationVector(FORWARD);
+// 	rcntrl->SetVector(vec3(-8.0f, 0.0f, 0.0f));
+// 	lc->SetRange(40.0f);
+// 	lc->SetColor(ColorRGB(0.0f, 0.2f, 1.0f));
+// 	entity13->GetTransform().Translate(vec3(-2.0f, -8.0f, 3.0f));
+// 
+// 	Entity* entity14 = g_EntitySystem->SpawnEntity("Light2");
+// 	lc = entity14->InstantiateComponent<loki::components::Light>();
+// 	rcntrl = entity14->InstantiateComponent<SimpleRotationController>();
+// 	rcntrl->SetRotationVector(SIDE);
+// 	rcntrl->SetVector(vec3(0.0f, 5.0f, 0.0f));
+// 	lc->SetRange(40.0f);
+// 	lc->SetColor(ColorRGB(0.4f, 0.4f, 0.4f));
+// 	entity14->GetTransform().Translate(vec3(-10.0f, -15.0f, 10.0f));
 
 	
 	game::Sky::SetCubeMap(graphics::TextureCube::Load("resources//textures//cubemap2.bmp"));
@@ -216,8 +218,8 @@ bool MyGame::Init()
 	r.dimensions = vec2(100.0f, 100.0f);
 
 	
-	gui::Context* context = gui::g_GUI->GetMainContext();
-	gui::Document* doc = context->LoadDocument("resources//gui//demo.rml");
+// 	gui::Context* context = gui::g_GUI->GetMainContext();
+// 	gui::Document* doc = context->LoadDocument("resources//gui//demo.rml");
 
 	return true;
 }
