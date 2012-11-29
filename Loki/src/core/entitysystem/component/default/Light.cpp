@@ -178,6 +178,16 @@ graphics::DisplayList* Light::GetGeometry()
 	return m_Geometry;
 }
 
+graphics::Texture* Light::GetCookie() const
+{
+	return m_Cookie;
+}
+
+void Light::SetCookie( graphics::Texture* _Texture )
+{
+	m_Cookie = _Texture;
+}
+
 void Light::_HandleEvent( const LkEvent& _Event )
 {
 	
