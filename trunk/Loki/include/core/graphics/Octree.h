@@ -14,7 +14,8 @@ namespace graphics
 template< class _T >
 class Octree	: public OctreeOctant<_T>
 {
-
+	CONTAINER_MACRO_TEMPLATE_LIST(_T, DirtyMembers)
+	friend void OctreeOctant<_T>::_Update();
 public:
 	// The size is the half-length of the root-quadrant in world-units.
 	// Take a sufficiently large amount for this so that the entire scene fits 
@@ -28,12 +29,17 @@ public:
 	void Remove( _T _Member );
 
 	void Update();
+
+	void DebugDraw() const;
 private:
 	Octree();
-	
-	void _UpdateOctant( OctreeOctant<_T>* _Octant );
+
+	void _DebugDrawOctant( OctreeOctant<_T>* _Octant ) const;
+	void _ReinsertDirtyMembers();
+	void _RegisterDirtyMember( _T _Member );
 	
 	uint32 m_MaxMembersPerOctant;
+	DirtyMembers m_DirtyMembers;
 };
 
 }

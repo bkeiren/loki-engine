@@ -16,25 +16,25 @@ namespace graphics
 // MeshRenderer component specializations.
 //////////////////////////////////////////////////////////////////////////
 template<>
-void GetOctantMemberPosition<components::MeshRenderer*>( components::MeshRenderer* _Member, vec3& _Output )
+inline void GetOctantMemberPosition<components::MeshRenderer*>( components::MeshRenderer* _Member, vec3& _Output )
 {
 	_Output = _Member->GetTransform().GetPosition();
 }
 
 // template<>
-// void GetOctantMemberBoundingBox<components::MeshRenderer*>( components::MeshRenderer* _Member, BoundingBox& _Output )
+// inline void GetOctantMemberBoundingBox<components::MeshRenderer*>( components::MeshRenderer* _Member, BoundingBox& _Output )
 // {
 // TODO
 // }
 // 
 // template<>
-// f32 GetOctantMemberBoundingRadius<components::MeshRenderer*>( components::MeshRenderer* _member )
+// inline f32 GetOctantMemberBoundingRadius<components::MeshRenderer*>( components::MeshRenderer* _member )
 // {
 // TODO
 // }
 
 template<>
-bool GetOctantMemberIsDirty<components::MeshRenderer*>( components::MeshRenderer* _Member )
+inline bool GetOctantMemberIsDirty<components::MeshRenderer*>( components::MeshRenderer* _Member )
 {
 	return true;	// NOTE: Implement some way to check here if a transformation is dirty (It has translated
 					// or one of it's parents has done that OR rotated).

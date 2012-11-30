@@ -6,6 +6,8 @@
 #include "core/boundingbox/BoundingBox.h"
 #include "core/entitysystem/component/default/MeshRenderer.h"
 
+#define OCTREE_OPERATION_LOGGING
+
 namespace loki
 {
 
@@ -20,16 +22,16 @@ namespace graphics
 // to properly position members in the octree.
 //////////////////////////////////////////////////////////////////////////
 template< class _T >
-void GetOctantMemberPosition( _T _Member, vec3& _Output );
+inline void GetOctantMemberPosition( _T _Member, vec3& _Output );
 
 template< class _T >
-void GetOctantMemberBoundingBox( _T _Member, BoundingBox& _Output );
+inline void GetOctantMemberBoundingBox( _T _Member, BoundingBox& _Output );
 
 template< class _T >
-f32 GetOctantMemberBoundingRadius( _T _member );
+inline f32 GetOctantMemberBoundingRadius( _T _member );
 
 template< class _T >
-bool GetOctantMemberIsDirty( _T _Member );
+inline bool GetOctantMemberIsDirty( _T _Member );
 //////////////////////////////////////////////////////////////////////////
 
 
@@ -39,7 +41,7 @@ class Octree;
 template< class _T >
 class OctreeOctant
 {
-	CONTAINER_MACRO_TEMPLATE_VECTOR(_T, Members)
+	CONTAINER_MACRO_TEMPLATE_LIST(_T, Members)
 public:
 	enum EOctant 
 	{
@@ -61,6 +63,8 @@ public:
 
 	bool IsRoot() const;
 	bool IsLeaf() const;
+
+	uint32 GetMemberCount() const;
 protected:
 	OctreeOctant( Octree<_T>* _Octree, OctreeOctant<_T>* _Parent, EOctant _PlaceInParent, const BoundingBox& _BoundingBox );
 	~OctreeOctant();
@@ -78,11 +82,22 @@ protected:
 	//////////////////////////////////////////////////////////////////////////
 	void _InsertMember( _T _Member );
 	void _RemoveMember( _T _Member );
+
+	void _Update();
+
+	//////////////////////////////////////////////////////////////////////////
+	// This function checks the number of members in the current octant
+	// in order to clean up and merge octanst if required. The algorithm
+	// works as follows:
+	// 
+	//////////////////////////////////////////////////////////////////////////
+	void _CheckAndMergeOctants();
 private:
 	OctreeOctant();
 
 	void _CreateOctants();
-	void _CopyContentsFromOctant( OctreeOctant<_T>* _Octant );
+	void _RemoveOctants();	// This also merges the members of the child octants with our own.
+	void _StealMembersFromOctant( OctreeOctant<_T>* _Octant );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Finds in which octant a point _P lies. Does not check outer bounds.
@@ -90,6 +105,8 @@ private:
 	// it still counts as being in that octant.
 	//////////////////////////////////////////////////////////////////////////
 	EOctant _FindLocalOctant( const vec3& _P ) const;
+
+	bool _HasChanged() const;
 
 	union
 	{
@@ -112,6 +129,7 @@ private:
 	BoundingBox m_BoundingBox;
 
 	Members m_Members;
+	bool m_HasChanged;
 };
 
 }

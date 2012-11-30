@@ -2,6 +2,16 @@
 #include "core/graphics/Mesh.h"
 #include "core/graphics/Material.h"
 
+#include "core/graphics/Octree.h"
+#include "core/graphics/OctreeSpecializations.h"
+namespace loki
+{
+	namespace graphics
+	{
+		Octree<components::MeshRenderer*>* g_Octree = new Octree<components::MeshRenderer*>(2048.0f, 2);
+	}
+}
+
 namespace loki
 {
 
@@ -72,12 +82,12 @@ void MeshRenderer::_HandleEvent( const LkEvent& _Event )
 
 void MeshRenderer::_Init()
 {
-
+	graphics::g_Octree->Insert(this);
 }
 
 void MeshRenderer::_Terminate()
 {
-
+	graphics::g_Octree->Remove(this);
 }
 
 }
