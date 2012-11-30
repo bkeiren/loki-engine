@@ -63,18 +63,6 @@ void MyGame::PreInit()
 
 bool MyGame::Init()
 {
-// 	{
-// 		Entity* entity0 = g_EntitySystem->SpawnEntity("TestEntity2374896");
-// 
-// 		Octree<components::MeshRenderer*>* octree = new Octree<components::MeshRenderer*>(2048.0f, 10);	
-// 		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
-// 		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
-// 		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
-// 		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
-// 		octree->Insert(entity0->InstantiateComponent<loki::components::MeshRenderer>());
-// 		int dbg = 0;
-// 	}
-
 	// Load a localization table.
 	if (!game::g_Localization->LoadLocalizationTable("resources//localization//strings.loc"))
 	{
@@ -335,11 +323,14 @@ void MyGame::Update()
 	{
 		g_Engine->RequestExit();
 	}
+
+	loki::graphics::g_Octree->Update();
+	loki::graphics::g_Octree->DebugDraw();
 }
 
 void MyGame::PostUpdate()
 {
-	
+
 }
 
 void MyGame::PreShutdown()

@@ -54,34 +54,51 @@ void Octree<_T>::Remove( _T _Member )
 template< class _T >
 void Octree<_T>::Update()
 {
+	OctreeOctant<_T>::_Update();
+	_ReinsertDirtyMembers();
 
+	// Clean up any unused octants.
+	_CheckAndMergeOctants();
 }
 
 template< class _T >
-void Octree<_T>::_UpdateOctant( OctreeOctant<_T>* _Octant )
+void Octree<_T>::DebugDraw() const
+{
+	_DebugDrawOctant((OctreeOctant<_T>*)this);
+}
+
+template< class _T >
+void Octree<_T>::_DebugDrawOctant( OctreeOctant<_T>* _Octant ) const
 {
 	if (_Octant->IsLeaf())
 	{
-		// Iterate over all members and check if they are dirty.
-		for (OctreeOctant<_T>::Members it = _Octant->m_Members.begin(); it != _Octant->m_Members.end(); ++it)
-		{
-			_T& m = (*it);
-
-			if (GetOctantMemberIsDirty<_T>(m))
-			{
-				// Remove and re-insert.
-				_Octant->_RemoveMember(m);
-				Insert(m);
-			}
-		}
+		const BoundingBox& bb = _Octant->GetBoundingBox();
+		renderer::debug::DrawCube(bb.GetCenter(), bb.GetMax().x - bb.GetMin().x, true, vec3(1.0f, 1.0f, 1.0f), true);
+		LOG(VL_NORMAL, "Octree::_DebugDrawOctant: Octant has %i members", _Octant->GetMemberCount());
 	}
 	else
 	{
 		for (uint32 i = 0; i < 8; ++i)
 		{
-			_UpdateOctant(_Octant->GetOctant((OctreeOctant<_T>::EOctant)i));
+			_DebugDrawOctant(_Octant->GetOctant((OctreeOctant<_T>::EOctant)i));
 		}
 	}
+}
+
+template< class _T >
+void Octree<_T>::_ReinsertDirtyMembers()
+{
+	for (DirtyMembersIter it = m_DirtyMembers.begin(); it != m_DirtyMembers.end(); ++it)
+	{
+		Insert((*it));
+	}
+	m_DirtyMembers.clear();
+}
+
+template< class _T >
+void Octree<_T>::_RegisterDirtyMember( _T _Member )
+{
+	m_DirtyMembers.push_back(_Member);
 }
 
 }

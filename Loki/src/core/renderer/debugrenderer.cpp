@@ -79,9 +79,11 @@ void DrawItems( const mat4& _ProjectionMatrix, const mat4& _ViewMatrix )
 	glPushMatrix();
 	glLoadMatrixf(math::value_ptr(_ViewMatrix));
 	glPushMatrix();
-	for (DbgDrawItemsIter it = DbgDrawItems3D.begin(); it != DbgDrawItems3D.end(); ++it)
+	//for (DbgDrawItemsIter it = DbgDrawItems3D.begin(); it != DbgDrawItems3D.end(); ++it)
+	for (uint32 i = 0; i < DbgDrawItems3DCounter; ++i)
 	{
-		DbgDrawItem* item = &(*it);
+		//DbgDrawItem* item = &(*it);
+		DbgDrawItem* item = &DbgDrawItems3D[i];
 
 		if (item->m_DepthTest)
 		{
@@ -206,9 +208,11 @@ void DrawItems( const mat4& _ProjectionMatrix, const mat4& _ViewMatrix )
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	for (DbgDrawItemsIter it = DbgDrawItems2D.begin(); it != DbgDrawItems2D.end(); ++it)
+	//for (DbgDrawItemsIter it = DbgDrawItems2D.begin(); it != DbgDrawItems2D.end(); ++it)
+	for (uint32 i = 0; i < DbgDrawItems2DCounter; ++i)
 	{
-		DbgDrawItem* item = &(*it);
+		//DbgDrawItem* item = &(*it);
+		DbgDrawItem* item = &DbgDrawItems2D[i];
 
 		if (item->m_DepthTest)
 		{

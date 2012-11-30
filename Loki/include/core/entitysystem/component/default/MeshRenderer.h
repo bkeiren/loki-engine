@@ -62,6 +62,17 @@ private:
 }
 
 REGISTER_COMPONENT(MeshRenderer)
-//COMPONENT_SINGLE_INSTANCE(MeshRenderer)
+COMPONENT_SINGLE_INSTANCE(MeshRenderer)
+
+namespace loki
+{
+	namespace graphics
+	{
+		template< class _T >
+		class Octree;
+
+		extern Octree<components::MeshRenderer*>* g_Octree;
+	}
+}
 
 #endif
