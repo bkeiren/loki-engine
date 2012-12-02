@@ -6,7 +6,7 @@
 #include "core/boundingbox/BoundingBox.h"
 #include "core/entitysystem/component/default/MeshRenderer.h"
 
-#define OCTREE_OPERATION_LOGGING
+//#define OCTREE_OPERATION_LOGGING
 
 namespace loki
 {

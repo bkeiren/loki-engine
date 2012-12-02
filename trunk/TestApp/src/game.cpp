@@ -160,7 +160,7 @@ bool MyGame::Init()
 	
 	game::Sky::SetCubeMap(graphics::TextureCube::Load("resources//textures//cubemap2.bmp"));
 
-	for (int i = 0; i < 0/*10*/; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
 		std::stringstream str;
 		str << "TorusEntity";
