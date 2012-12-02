@@ -74,7 +74,6 @@ void Octree<_T>::_DebugDrawOctant( OctreeOctant<_T>* _Octant ) const
 	{
 		const BoundingBox& bb = _Octant->GetBoundingBox();
 		renderer::debug::DrawCube(bb.GetCenter(), bb.GetMax().x - bb.GetMin().x, true, vec3(1.0f, 1.0f, 1.0f), true);
-		LOG(VL_NORMAL, "Octree::_DebugDrawOctant: Octant has %i members", _Octant->GetMemberCount());
 	}
 	else
 	{
