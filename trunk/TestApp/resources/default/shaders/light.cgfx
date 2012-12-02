@@ -153,8 +153,10 @@ FragmentOutput mainFP( VertexOutput IN )
 		Att = AttenuationSpot(LightDir, IN.LightVectorViewSpace);
 		if (HasCookie == 1)
 		{
-			vec3 LightDirModelSpace = mul(ModelMatrixIT, mul(inverse(float3x3(ViewMatrix)), float3(LightDir)));
-			vec4 LightDirProjected = mul(LightMatrix, float4(LightDirModelSpace, 1.0));
+		// DEBUG NOTE: LightDirModelSpace is incorrect. These values should always be the same no matter how the
+		// model is oriented, but this is not the case. Rotating the model changes them currently.
+			vec3 LightDirModelSpace = mul(inverse(float3x3(ModelMatrix)), mul(inverse(float3x3(ViewMatrix)), LightDir));
+			vec4 LightDirProjected = mul(LightMatrix, float4(LightDirModelSpace, 0.0));
 			Cookie = tex2Dproj(SpotLightCookie, LightDirProjected.xyw);
 		}
 	}
