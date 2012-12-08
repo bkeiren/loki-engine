@@ -46,6 +46,7 @@ sampler2D SpotLightAttenuationTexture	: LKSPOTATTTEXTURE;
 
 samplerCUBE PointLightCookie			: LKCOOKIEPOINT;
 sampler2D SpotLightCookie				: LKCOOKIESPOT;
+sampler2D DirectionalLightCookie		: LKCOOKIEDIRECTIONAL;
 
 float4x4 LightMatrix				: LKLIGHTMATRIX;	// Projection matrix AND texture bias matrix for cookies on spot lights.
 
@@ -66,6 +67,14 @@ VertexOutput mainVP( VertexInput IN )
 	// Light vector (Direction) in view-space.
 	OUT.LightVectorViewSpace = normalize(mul(ViewMatrix, float4(LightVector, 0.0)).xyz);
 
+	return OUT;
+}
+
+VertexOutput DirectionalVP( VertexInput IN )
+{
+	VertexOutput OUT;
+	OUT.PosH = float4(IN.Position, 1.0);	
+	OUT.PosHCustom = OUT.PosH;
 	return OUT;
 }
 
@@ -153,8 +162,6 @@ FragmentOutput mainFP( VertexOutput IN )
 		Att = AttenuationSpot(LightDir, IN.LightVectorViewSpace);
 		if (HasCookie == 1)
 		{
-		// DEBUG NOTE: LightDirModelSpace is incorrect. These values should always be the same no matter how the
-		// model is oriented, but this is not the case. Rotating the model changes them currently.
 			vec3 LightDirModelSpace = mul(inverse(float3x3(ModelMatrix)), mul(inverse(float3x3(ViewMatrix)), LightDir));
 			vec4 LightDirProjected = mul(LightMatrix, float4(LightDirModelSpace, 0.0));
 			Cookie = tex2Dproj(SpotLightCookie, LightDirProjected.xyw);
@@ -182,6 +189,55 @@ FragmentOutput mainFP( VertexOutput IN )
 	}
 
 	OUT.Color0 = final_color * Cookie * Att;
+
+	return OUT;
+}
+
+FragmentOutput DirectionalFP( VertexOutput IN )
+{
+	FragmentOutput OUT;
+
+	// Window coordinates ([0 .. 1] on both axes). Used to be able to sample from the normal and diffuse textures and such.
+	// This calculation transforms the coordinates to window space, and puts [0, 0] at the top left and [1, 1] at the bottom right.
+	float2 TexCoord = ((IN.PosHCustom.xy / IN.PosHCustom.w) + 1.0) * 0.5;
+
+	// Sample from the first buffer.
+	float4 RT1SampleValue = tex2D(RT1Sampler, TexCoord);
+	float Shininess = RT1SampleValue.a;
+	
+	// Sample surface position at fragment.
+	float3 SurfacePositionViewSpace = ReconstructViewSpacePosition(RT1SampleValue, tex2D(RT3Sampler, TexCoord).r);
+	//float3 SurfacePositionViewSpace = RT1SampleValue.xyz;
+	
+	// Sample surface normal at fragment.
+	float3 SurfaceNormalViewSpace = UnpackNormal(tex2D(RT2Sampler, TexCoord).xyz);
+	
+	// Calculate direction vector from light origin to fragment position.
+	float3 LightDir = mul(float3x3(ViewMatrix), LightVector);
+	
+	vec4 Cookie = vec4(1.0, 1.0, 1.0, 1.0);
+	
+	// Variable to hold the final fragment color.
+	float4 final_color = vec4(0.0, 0.0, 0.0, 1.0);
+	
+	SurfaceNormalViewSpace = normalize(SurfaceNormalViewSpace);	// TODO: Is this normalization actually necessary?
+	LightDir = normalize(LightDir);
+	
+	float LambertTerm = dot(SurfaceNormalViewSpace, -LightDir);
+	
+	if(LambertTerm > 0.0)
+	{
+		float4 diffCol = tex2D(RT0Sampler, TexCoord);		
+		final_color += float4(diffCol.rgb, 1.0) * float4(LightColor.rgb, 1.0) * LambertTerm;
+		
+		float4 matSpecular = vec4(diffCol.a, diffCol.a, diffCol.a, 1.0);
+		float3 EyeVec = normalize(SurfacePositionViewSpace);	// Doesn't this need to be negated? Or atleast the z-component...?
+		float3 R = reflect(-LightDir, SurfaceNormalViewSpace);
+		float specular = pow( max(dot(R, EyeVec), 0.0), Shininess );
+		final_color += float4(LightColor, 1.0) * matSpecular * specular;
+	}
+
+	OUT.Color0 = final_color * Cookie;
 
 	return OUT;
 }
@@ -233,6 +289,22 @@ technique MainTechnique
 
 		VertexProgram = compile latest mainVP();
 		FragmentProgram = compile latest mainFP();
+	}
+}
+
+technique DirectionalTechnique
+{
+	pass p0
+	{
+		CullFaceEnable = false;
+		ColorMask = bool4(true);
+		DepthMask = false;
+		StencilMask = false;
+		BlendEnable = true;
+		BlendFunc = int2(One, One);
+
+		VertexProgram = compile latest DirectionalVP();
+		FragmentProgram = compile latest DirectionalFP();
 	}
 }
 

@@ -220,6 +220,11 @@ void Light::_GenerateGeometry()
 			graphics::DrawCone(GetSpotBaseRadius(), GetRange(), 20);
 			break;
 		}
+	case LIGHT_DIRECTIONAL:
+		{
+			graphics::DrawQuad(math::vec2(2.0f));
+			break;
+		}
 	default:
 		{
 			static const char* LightTypesStrings[4] = {"LIGHT_POINT", "LIGHT_SPOT", "LIGHT_DIRECTIONAL", "LIGHT_AREA"};

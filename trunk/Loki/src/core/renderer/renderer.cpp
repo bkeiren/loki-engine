@@ -621,7 +621,6 @@ void LkRenderer::_RenderLighting()
 
 		Transform& transform = light->GetEntity()->GetTransform();
 		mat4 _ModelMatrix = transform.GetMatrix();
-		//_ModelMatrix = math::gtc::matrix_transform::rotate(_ModelMatrix, 90.0f, vec3(1.0f, 0.0f, 0.0f));
 		SETCGPARAM("LKMODELVIEWPROJ", _ViewProjectionMatrix * _ModelMatrix);		// Set the model view projection matrix.
 		SETCGPARAM("LKMODELMATRIX", _ModelMatrix);			// Set the model matrix.
 		SETCGPARAM("LKMODELMATRIXIT", mat3(math::inverseTranspose(_ModelMatrix)));		// Set the inverse transpose of the model matrix.	
@@ -636,6 +635,7 @@ void LkRenderer::_RenderLighting()
 		{
 		case components::Light::LIGHT_POINT:
 			{
+				m_LightEffect->SetActiveTechnique("MainTechnique");
 				graphics::Texture* Cookie = light->GetCookie();
 				bool HasCookie = (Cookie && Cookie->IsCubeMapTexture());
 				if (HasCookie)
@@ -649,6 +649,7 @@ void LkRenderer::_RenderLighting()
 			}
 		case components::Light::LIGHT_SPOT:
 			{
+				m_LightEffect->SetActiveTechnique("MainTechnique");
 				f32 SpotAngle = light->GetSpotAngle();
 				vec3 LightVec = transform.GetOrientationVector();
 				graphics::Texture* Cookie = light->GetCookie();
@@ -686,6 +687,20 @@ void LkRenderer::_RenderLighting()
 // 				CameraInsideVolume =	(LightToEyeLength < light->GetRange()) && 
 // 										(d <= SpotAngle * 0.5f);
 
+				break;
+			}
+		case components::Light::LIGHT_DIRECTIONAL:
+			{
+				vec3 LightVec = transform.GetOrientationVector();
+				SETCGPARAM("LKLIGHTVECTOR", LightVec);
+				graphics::Texture* Cookie = light->GetCookie();
+				bool HasCookie = (Cookie && Cookie->Is2DTexture());
+				if (HasCookie)
+				{
+					SETCGPARAM("LKCOOKIEDIRECTIONAL", Cookie->GetTextureHandle());
+				}
+				SETCGPARAM("LKCOOKIEENABLED", HasCookie ? 1 : 0);
+				m_LightEffect->SetActiveTechnique("DirectionalTechnique");
 				break;
 			}
 		default:
