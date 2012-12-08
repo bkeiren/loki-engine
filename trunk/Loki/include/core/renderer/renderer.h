@@ -119,8 +119,8 @@ private:
 	aiLogStream m_AssImpLogStream;
 
 	graphics::Effect* m_LightEffect;
-	graphics::EffectTechnique* m_LightEffectTechnique_CameraInside;
-	graphics::EffectTechnique* m_LightEffectTechnique_CameraOutside;
+// 	graphics::EffectTechnique* m_LightEffectTechnique_CameraInside;
+// 	graphics::EffectTechnique* m_LightEffectTechnique_CameraOutside;
 
 	graphics::Effect* m_LightAccumulationToBackBufferEffect;
 

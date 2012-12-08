@@ -83,8 +83,9 @@ LkRenderer::LkRenderer( Window* _Window )	:
 	{
 		LOG(VL_ERROR, "Renderer::Init: Failed to load light effect");
 	}
-	m_LightEffectTechnique_CameraInside = m_LightEffect->GetTechnique("CameraInside");
-	m_LightEffectTechnique_CameraOutside = m_LightEffect->GetTechnique("CameraOutside");
+	m_LightEffect->SetActiveTechnique("MainTechnique");
+// 	m_LightEffectTechnique_CameraInside = m_LightEffect->GetTechnique("CameraInside");
+// 	m_LightEffectTechnique_CameraOutside = m_LightEffect->GetTechnique("CameraOutside");
 
 	m_LightAccumulationToBackBufferEffect = graphics::g_EffectManager->CreateEffectFromMemory(
 #include "core/renderer/lightaccumtobackbuffer_cgeffect.inl"
@@ -630,7 +631,7 @@ void LkRenderer::_RenderLighting()
 		SETCGPARAM("LKLIGHTINTENSITY", light->GetIntensity());
 		SETCGPARAM("LKLIGHTTYPE", light->GetLightType());
 
-		bool CameraInsideVolume = false;
+		//bool CameraInsideVolume = false;
 		switch (light->GetLightType())
 		{
 		case components::Light::LIGHT_POINT:
@@ -643,7 +644,7 @@ void LkRenderer::_RenderLighting()
 				}
 				SETCGPARAM("LKCOOKIEENABLED", HasCookie ? 1 : 0);
 
-				CameraInsideVolume = math::length(_EyePosition - transform.GetPosition()) < light->GetRange();
+//				CameraInsideVolume = math::length(_EyePosition - transform.GetPosition()) < light->GetRange();
 				break;
 			}
 		case components::Light::LIGHT_SPOT:
@@ -677,13 +678,14 @@ void LkRenderer::_RenderLighting()
 				// the tip is not at the actual position of the transform. This would still cause an issue when the two
 				// positions align, but that should be very, very, very rare (Most likely never). That would save us
 				// from handling a special case here.
-				vec3 LightToEye = _EyePosition - transform.GetPosition();
-				float LightToEyeLength = math::length(LightToEye);
-				f32 d = (LightToEyeLength > 0.0001f) ?	// If the distance from the light to the camera is greater than our error margin...
-					(math::degrees(math::acos(math::dot(LightToEye / LightToEyeLength, LightVec)))) :	// Calculate the actual angle.
-				(0.0f);	// Assume we're inside.
-				CameraInsideVolume =	(LightToEyeLength < light->GetRange()) && 
-					(d <= SpotAngle * 0.5f);
+// 				vec3 LightToEye = _EyePosition - transform.GetPosition();
+// 				float LightToEyeLength = math::length(LightToEye);
+// 				f32 d = (LightToEyeLength > 0.0001f) ?	// If the distance from the light to the camera is greater than our error margin...
+// 							(math::degrees(math::acos(math::dot(LightToEye / LightToEyeLength, LightVec)))) :	// Calculate the actual angle.
+// 							(0.0f);	// Assume we're inside.
+// 				CameraInsideVolume =	(LightToEyeLength < light->GetRange()) && 
+// 										(d <= SpotAngle * 0.5f);
+
 				break;
 			}
 		default:
@@ -692,7 +694,6 @@ void LkRenderer::_RenderLighting()
 			}
 		}
 
-		m_LightEffect->SetActiveTechnique( CameraInsideVolume ? m_LightEffectTechnique_CameraInside : m_LightEffectTechnique_CameraOutside );
 		while (m_LightEffect->HasNextPass())
 		{
 			light->GetGeometry()->Draw();

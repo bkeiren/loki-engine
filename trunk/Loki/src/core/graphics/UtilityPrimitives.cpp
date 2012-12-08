@@ -72,7 +72,7 @@ void DrawCone( f32 _Base, f32 _Height, int32 _Slices )
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex3f(0.0f, 0.0f, 0.0f);	// Top of the cone.
 	float a = math::radians(360.0f / _Slices);
-	for (int32 i = 0; i <= _Slices; ++i)
+	for (int32 i = _Slices; i >= 0; --i)
 	{
 		X[i] = cos(a * i) * _Base;
 		Y[i] = sin(a * i) * _Base;
@@ -83,7 +83,7 @@ void DrawCone( f32 _Base, f32 _Height, int32 _Slices )
 
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex3f(0.0f, 0.0f, _Height);
-	for (int32 i = _Slices; i >= 0; --i)	// Reversed order.
+	for (int32 i = 0; i <= _Slices; ++i)	// Reversed order.
 	{
 		glVertex3f(X[i], Y[i], _Height);
 	}
