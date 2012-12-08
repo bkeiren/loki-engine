@@ -11,7 +11,7 @@
 			return 0;									\
 		}
 #else
-	#define CHECK_IF_REGISTERED_AND_LOG()
+	#define CHECK_IF_REGISTERED_AND_LOG(TYPE)
 #endif
 
 namespace loki

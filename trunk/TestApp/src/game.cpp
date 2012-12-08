@@ -187,6 +187,11 @@ bool MyGame::Init()
 		info.m_Restitution = 0.1f;
 		info.m_Mass = 0.001f;
 		pc->CreateBodyFromInfo(info);
+
+		lc = TorusEntity->InstantiateComponent<loki::components::Light>();
+		lc->SetLightType(loki::components::Light::LIGHT_POINT);
+		lc->SetRange(30.0f);
+		lc->SetColor(math::vec3(float(rand()%100) / 100.0f, float(rand()%100) / 100.0f, float(rand()%100) / 100.0f));
 		
 		
 		TorusEntity->GetTransform().Translate(vec3(0.0f, i * 10.0f, 0.0f));
