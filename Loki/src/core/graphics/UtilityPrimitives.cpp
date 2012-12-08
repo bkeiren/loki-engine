@@ -147,6 +147,18 @@ void DrawIcoSphere( f32 _Radius, int32 _Subdivisions /*= 1*/ )
 	glEnd();
 }
 
+void DrawQuad( const math::vec2& _Dimensions )
+{
+	f32 HalfX = _Dimensions.x * 0.5f;
+	f32 HalfY = _Dimensions.y * 0.5f;
+	glBegin(GL_QUADS);
+		glVertex3f(-HalfX, HalfY, 0.0f);
+		glVertex3f(-HalfX, -HalfY, 0.0f);
+		glVertex3f(HalfX, -HalfY, 0.0f);
+		glVertex3f(HalfX, HalfY, 0.0f);
+	glEnd();
+}
+
 }
 
 }

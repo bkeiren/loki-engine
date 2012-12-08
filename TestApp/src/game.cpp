@@ -127,6 +127,15 @@ bool MyGame::Init()
 	lc->SetSpotAngle(50.0f);
 
 
+	Entity* DirectionalLightEntity = g_EntitySystem->SpawnEntity("DirectionalLightEntity");
+	lc = DirectionalLightEntity->InstantiateComponent<loki::components::Light>();
+	lc->SetLightType(loki::components::Light::LIGHT_DIRECTIONAL);
+	lc->SetColor(ColorRGB(0.2f, 0.2f, 0.2f));
+	math::vec3 DirectionalLightDirection = math::vec3(-1.0f, -1.0f, 1.0f);
+	DirectionalLightEntity->GetTransform().SetPosition(-DirectionalLightDirection);
+	DirectionalLightEntity->GetTransform().LookAt(math::vec3(0.0f, 0.0f, 0.0f));
+
+
 	SimpleRotationController* rcntrl = 0;
 
 	Entity* entity12 = g_EntitySystem->SpawnEntity("Light0");
