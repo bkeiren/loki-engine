@@ -3,7 +3,7 @@
 #include <GLEW\\glew.h>
 #include <GL\\glut.h>
 
-#define DBG_DRAW_ENABLED
+//#define DBG_DRAW_ENABLED
 
 namespace loki
 {

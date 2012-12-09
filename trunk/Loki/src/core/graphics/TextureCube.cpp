@@ -67,7 +67,9 @@ void TextureCube::SetTextureParameter( ETextureParameterName _Parameter, ETextur
 	glActiveTexture(GL_TEXTURE0);
 	Bind();
 
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GLTextureParameterNames[_Parameter], GLTextureParameterValues[_Value]);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, 
+					GLTextureParameterNames[_Parameter], 
+					GLTextureParameterValues[_Value]);
 	
 	Unbind();
 }
@@ -75,19 +77,44 @@ void TextureCube::SetTextureParameter( ETextureParameterName _Parameter, ETextur
 void TextureCube::UpdateGLInformation()
 {
 	// Obtain texture information from OpenGL.
-
-	int32 InternalFormat = 0;
-
 	glActiveTexture(GL_TEXTURE0);
 	Bind();
 
-	glGetTexLevelParameteriv(GL_TEXTURE_CUBE_MAP, 0, GL_TEXTURE_WIDTH, &m_Width);
-	glGetTexLevelParameteriv(GL_TEXTURE_CUBE_MAP, 0, GL_TEXTURE_HEIGHT, &m_Height);
-	glGetTexLevelParameteriv(GL_TEXTURE_CUBE_MAP, 0, GL_TEXTURE_INTERNAL_FORMAT, &InternalFormat);
-	
+	int32 Widths[6];
+	int32 Heights[6];
+	int32 InternalFormats[6];
+
+	for (int32 i = 0; i < 6; ++i)
+	{
+		glGetTexLevelParameteriv(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 
+			0, 
+			GL_TEXTURE_WIDTH, 
+			&Widths[i]);
+		glGetTexLevelParameteriv(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_TEXTURE_HEIGHT, &Heights[i]);
+		glGetTexLevelParameteriv(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_TEXTURE_INTERNAL_FORMAT, &InternalFormats[i]);
+	}
+
+	for (int32 i = 1; i < 6; ++i)
+	{
+		if (Widths[i] != Widths[0])
+		{
+			LOG(VL_WARN, "TextureCube::UpdateGLInformation: Not all sides have the same width.");
+		}
+		if (Heights[i] != Heights[0])
+		{
+			LOG(VL_WARN, "TextureCube::UpdateGLInformation: Not all sides have the same height.");
+		}
+		if (InternalFormats[i] != InternalFormats[0])
+		{
+			LOG(VL_WARN, "TextureCube::UpdateGLInformation: Not all sides have the same internal format.");
+		}
+	}
+		
 	Unbind();
 
-	m_InternalFormat = GetEnumInternalFormat(InternalFormat);
+	m_Width = Widths[0];
+	m_Height = Heights[0];
+	m_InternalFormat = GetEnumInternalFormat(InternalFormats[0]);
 }
 
 int32 TextureCube::GetWidth() const

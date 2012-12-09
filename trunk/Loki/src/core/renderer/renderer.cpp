@@ -57,7 +57,8 @@ LkRenderer::LkRenderer( Window* _Window )	:
 	m_DBG_VisualizeGBufferTargets(true),
 	m_DBG_VisualizeLightVolumes(false),
 #endif
-	m_Window(_Window)
+	m_Window(_Window),
+	m_ScreenQuadDisplayList(0)
 {
 	assert(_Window != 0);
 
@@ -121,6 +122,39 @@ LkRenderer::LkRenderer( Window* _Window )	:
 	m_AssImpLogStream = aiGetPredefinedLogStream(aiDefaultLogStream_FILE, ASSIMP_LOGFILE);
 	aiAttachLogStream(&m_AssImpLogStream);
 
+	m_ScreenQuadDisplayList = graphics::DisplayList::Create();
+	m_ScreenQuadDisplayList->BeginList();
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex2f(-1.0f, -1.0f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex2f(-1.0f, 1.0f);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex2f(1.0f, 1.0f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex2f(1.0f, -1.0f);
+		glEnd();
+	m_ScreenQuadDisplayList->EndList();
+
+#ifdef DBG_VISUALIZATIONS
+	for (int32 i = 0; i < 4; ++i)
+	{
+		f32 x = -1.0f + (0.5f * i);
+		m_GBufferQuadDisplayLists[i] = graphics::DisplayList::Create();
+		m_GBufferQuadDisplayLists[i]->BeginList();
+			glBegin(GL_QUADS);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex2f(x, -1.0f);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex2f(x, -0.5f);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex2f(x + 0.5f, -0.5f);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex2f(x + 0.5f, -1.0f);
+			glEnd();
+		m_GBufferQuadDisplayLists[i]->EndList();
+	}
+#endif
 
 	LOG(VL_ALWAYS, "Renderer:: Renderer initialized");
 }
@@ -132,6 +166,12 @@ LkRenderer::LkRenderer()
 
 LkRenderer::~LkRenderer()
 {
+	delete m_ScreenQuadDisplayList;
+	for (int32 i = 0; i < 4; ++i)
+	{
+		delete m_GBufferQuadDisplayLists[i];
+	}
+
 	// Shutdown AssImp.
 	aiDetachAllLogStreams();
 
@@ -845,16 +885,7 @@ void LkRenderer::_RenderLightAccumulationToBackBuffer()
 	while (m_LightAccumulationToBackBufferEffect->HasNextPass())
 	{
 		// TODO: Remove immediate mode. Make a displaylist or something?
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex2f(-1.0f, -1.0f);
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex2f(-1.0f, 1.0f);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex2f(1.0f, 1.0f);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex2f(1.0f, -1.0f);
-		glEnd();
+		m_ScreenQuadDisplayList->Draw();
 	}
 
 #undef SETCGPARAM
@@ -862,6 +893,8 @@ void LkRenderer::_RenderLightAccumulationToBackBuffer()
 
 void LkRenderer::_RenderGBufferTargets()
 {
+#ifdef DBG_VISUALIZATIONS
+
 #ifdef SETCGPARAM
 #undef SETCGPARAM
 #endif
@@ -870,8 +903,6 @@ void LkRenderer::_RenderGBufferTargets()
 
 	for (int32 i = 0; i < 4; ++i)
 	{
-		f32 x = -1.0f + (0.5f * i);
-
 		static graphics::EFrameBufferAttachment Attachments[4] = { GBUFFER_DIFFUSE_SPEC, GBUFFER_POSITIONS, GBUFFER_NORMALS, GBUFFER_DEPTH_STENCIL };
 
 		graphics::Effect* effect = 0;
@@ -900,20 +931,13 @@ void LkRenderer::_RenderGBufferTargets()
 		while (effect->HasNextPass())
 		{
 			// TODO: Remove immediate mode. Make a displaylist or something?
-			glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex2f(x, -1.0f);
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex2f(x, -0.5f);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex2f(x + 0.5f, -0.5f);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex2f(x + 0.5f, -1.0f);
-			glEnd();
+			m_GBufferQuadDisplayLists[i]->Draw();
 		}
 	}
 
 #undef SETCGPARAM
+
+#endif
 }
 
 bool LkRenderer::_ConstructGBuffer()

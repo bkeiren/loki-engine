@@ -32,6 +32,7 @@ namespace graphics
 	class FrameBuffer;
 	class Effect;
 	class EffectTechnique;
+	class DisplayList;
 }
 
 namespace renderer
@@ -134,12 +135,15 @@ private:
 #ifdef DBG_VISUALIZATIONS
 	bool m_DBG_VisualizeGBufferTargets;
 	bool m_DBG_VisualizeLightVolumes;
+	graphics::DisplayList* m_GBufferQuadDisplayLists[4];
 #endif
 
 	std::string m_OpenGL_Vendor;
 	std::string m_OpenGL_Renderer;
 	std::string m_OpenGL_Version;
 	std::vector<std::string> m_OpenGL_Extensions;
+
+	graphics::DisplayList* m_ScreenQuadDisplayList;
 };
 
 extern LkRenderer* g_Renderer;
