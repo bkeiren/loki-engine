@@ -217,7 +217,7 @@ void Light::_GenerateGeometry()
 		}
 	case LIGHT_SPOT:
 		{
-			graphics::DrawCone(GetSpotBaseRadius(), GetRange(), 20);
+			graphics::DrawCone(GetSpotBaseRadius(), GetRange(), 10);
 			break;
 		}
 	case LIGHT_DIRECTIONAL:

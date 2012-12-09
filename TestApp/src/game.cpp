@@ -125,6 +125,7 @@ bool MyGame::Init()
 	lc->SetLightType(loki::components::Light::LIGHT_SPOT);
 	lc->SetRange(30.0f);
 	lc->SetSpotAngle(50.0f);
+	lc->SetCookie(loki::graphics::Texture2D::Load("resources//textures//FlashLightTexture.bmp"));
 
 
 	Entity* DirectionalLightEntity = g_EntitySystem->SpawnEntity("DirectionalLightEntity");
@@ -177,7 +178,6 @@ bool MyGame::Init()
 		
 		Entity* TorusEntity = g_EntitySystem->SpawnEntity(str.str().c_str());
 		rc = TorusEntity->InstantiateComponent<loki::components::MeshRenderer>();
-		//rc->SetModel(graphics::Model::Load("resources//lmo//torus.lmo"));
 		rc->SetMesh("resources//models//torus.dae");
 		rc->SetMaterial("resources//lma//torus.lma");
 		
@@ -214,11 +214,6 @@ bool MyGame::Init()
 // 
 // 		doc->Close();
 // 	}
-
-	loki::Rect r(10.0f, 12.0f, 200.0f, 8.0f);
-	r.position = vec2(20.0f, 0.0f);
-	r.dimensions = vec2(100.0f, 100.0f);
-
 	
 // 	gui::Context* context = gui::g_GUI->GetMainContext();
 // 	gui::Document* doc = context->LoadDocument("resources//gui//demo.rml");

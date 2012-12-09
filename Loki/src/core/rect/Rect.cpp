@@ -3,33 +3,124 @@
 namespace loki
 {
 
-Rect::Rect( const vec2& _Position, const vec2& _Dimensions )	:
-	m_Position(_Position),
-	m_Dimensions(_Dimensions),
-	m_Center(m_Position + (m_Dimensions * 0.5f))
+Rect::Rect( const vec2& _Min, const vec2& _Max )	:
+	m_Min(_Min)
+	,m_Max(_Max)
 {
-	_ComputeDataFromPosition();
+	_ComputeDataFromMinMax();
 }
 
-Rect::Rect( float _X, float _Y, float _Width, float _Height )	:
-	m_Position(vec2(_X, _Y)),
-	m_Dimensions(vec2(_Width, _Height)),
-	m_Center(m_Position + (m_Dimensions * 0.5f))
+Rect::Rect( f32 _MinX, f32 _MinY, f32 _MaxX, f32 _MaxY )	:
+	m_Min(vec2(_MinX, _MinY))
+	,m_Max(vec2(_MaxX, _MaxY))
 {
-	_ComputeDataFromPosition();
+	_ComputeDataFromMinMax();
 }
 
 Rect::~Rect()
 {
+	
+}
 
+f32 Rect::GetMinX() const
+{
+	return m_Min.x;
+}
+
+f32 Rect::GetMinY() const
+{
+	return m_Min.y;
+}
+
+f32 Rect::GetMaxX() const
+{
+	return m_Max.x;
+}
+
+f32 Rect::GetMaxY() const
+{
+	return m_Max.y;
+}
+
+f32 Rect::GetWidth() const
+{
+	return m_Dimensions.x;
+}
+
+f32 Rect::GetHeight() const
+{
+	return m_Dimensions.y;
+}
+
+const vec2& Rect::GetDimensions() const
+{
+	return m_Dimensions;
+}
+
+const vec2& Rect::GetCenter() const
+{
+	return m_Center;
+}
+
+const vec2& Rect::GetMin() const
+{
+	return m_Min;
+}
+
+const vec2& Rect::GetMax() const
+{
+	return m_Max;
+}
+
+f32 Rect::GetArea() const
+{
+	return m_Dimensions.x * m_Dimensions.y;
+}
+
+void Rect::Set( const vec2& _Min, const vec2& _Max )
+{
+	m_Min = _Min;
+	m_Max = _Max;
+	_ComputeDataFromMinMax();
+}
+
+void Rect::Set( f32 _MinX, f32 _MinY, f32 _MaxX, f32 _MaxY )
+{
+	m_Min = vec2(_MinX, _MinY);
+	m_Max = vec2(_MaxX, _MaxY);
+	_ComputeDataFromMinMax();
+}
+
+void Rect::SetMin( const vec2& _Min )
+{
+	m_Min = _Min;
+	_ComputeDataFromMinMax();
+}
+
+void Rect::SetMin( f32 _MinX, f32 _MinY )
+{
+	m_Min = vec2(_MinX, _MinY);
+	_ComputeDataFromMinMax();
+}
+
+void Rect::SetMax( const vec2& _Max )
+{
+	m_Max = _Max;
+	_ComputeDataFromMinMax();
+}
+
+void Rect::SetMax( f32 _MaxX, f32 _MaxY )
+{
+	m_Max = vec2(_MaxX, _MaxY);
+	_ComputeDataFromMinMax();
 }
 
 bool Rect::operator == ( const Rect& _RHS ) const
 {
-	return ( (m_Position.x == _RHS.m_Position.x) && 
-			 (m_Position.y == _RHS.m_Position.y) &&
-			 (m_Dimensions.x == _RHS.m_Dimensions.x) && 
-			 (m_Dimensions.y == _RHS.m_Dimensions.y) );
+	return ( (m_Min.x == _RHS.m_Min.x) && 
+			 (m_Min.y == _RHS.m_Min.y) &&
+			 (m_Max.x == _RHS.m_Max.x) && 
+			 (m_Max.y == _RHS.m_Max.y) );
 }
 
 bool Rect::operator != ( const Rect& _RHS ) const
@@ -37,30 +128,10 @@ bool Rect::operator != ( const Rect& _RHS ) const
 	return !(this->operator == (_RHS));
 }
 
-void Rect::_ComputeDataFromPosition()
+void Rect::_ComputeDataFromMinMax()
 {
-	m_TopLeft = m_Position;
-	m_TopRight = m_Position + vec2(m_Dimensions.x, 0.0f);
-	m_BottomLeft = m_Position + vec2(0.0f, m_Dimensions.y);
-	m_BottomRight = m_Position + m_Dimensions;
-	m_Center = m_Position + (m_Dimensions * 0.5f);
-}
-
-void Rect::_ComputeDataFromCenter()
-{
-	m_Position = m_Center - vec2(m_Dimensions * 0.5f);
-	m_TopLeft = m_Position;
-	m_TopRight = m_Position + vec2(m_Dimensions.x, 0.0f);
-	m_BottomLeft = m_Position + vec2(0.0f, m_Dimensions.y);
-	m_BottomRight = m_Position + m_Dimensions;
-}
-
-void Rect::_ComputeDataFromDimensions()
-{
-	m_TopRight = m_Position + vec2(m_Dimensions.x, 0.0f);
-	m_BottomLeft = m_Position + vec2(0.0f, m_Dimensions.y);
-	m_BottomRight = m_Position + m_Dimensions;
-	m_Center = m_Position + (m_Dimensions * 0.5f);
+	m_Dimensions = vec2(m_Max - m_Min);
+	m_Center = m_Min + (m_Dimensions * 0.5f);
 }
 
 }
