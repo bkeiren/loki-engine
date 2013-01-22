@@ -344,18 +344,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\entitysystem\component\ComponentSystem.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\entitysystem\component\ComponentSystem.h"
-			>
-		</File>
-		<File
-			RelativePath=".\include\core\entitysystem\component\ComponentSystem.inl"
-			>
-		</File>
-		<File
 			RelativePath=".\src\core\console\console.cpp"
 			>
 		</File>
@@ -424,15 +412,15 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\core\dev_notes.txt"
-			>
-		</File>
-		<File
-			RelativePath=".\src\core\dev_notes.txt"
-			>
-		</File>
-		<File
 			RelativePath=".\src\dev_notes.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\dev_notes.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\src\core\dev_notes.txt"
 			>
 		</File>
 		<File
@@ -1740,6 +1728,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\include\core\entitysystem\component\system\System.h"
+			>
+		</File>
+		<File
+			RelativePath=".\include\core\entitysystem\component\system\System.inl"
+			>
+		</File>
+		<File
 			RelativePath=".\src\util\systeminfo\systeminfo.cpp"
 			>
 		</File>
@@ -1764,11 +1760,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\include\states\TestState.h"
+			RelativePath=".\include\core\states\TestState.h"
 			>
 		</File>
 		<File
-			RelativePath=".\include\core\states\TestState.h"
+			RelativePath=".\include\states\TestState.h"
 			>
 		</File>
 		<File

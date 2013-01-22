@@ -44,6 +44,8 @@
 #include "core/graphics/Octree.h"
 #include "core/graphics/OctreeSpecializations.h"
 
+#include "core/entitysystem/component/system/System.h"
+
 using namespace loki;
 
 MyGame::MyGame()
