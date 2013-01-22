@@ -3,6 +3,8 @@
 #ifndef ENTITY_INL
 #define ENTITY_INL
 
+#include "core/entitysystem/component/system/System.h"
+
 #ifdef _DEBUG
 	#define CHECK_IF_REGISTERED_AND_LOG(TYPE)					\
 		if (!::loki::components::IsComponentRegistered<TYPE>())				\
@@ -33,6 +35,8 @@ _ComponentType* Entity::InstantiateComponent()
 	}
 	m_Components[::loki::components::GetComponentTypeInfo<_ComponentType>()].push_back(comp);
 	_OnComponentInstantiated<_ComponentType>((_ComponentType*)comp);
+	components::System<_ComponentType>::_AddComponent((_ComponentType*)comp);	// Register component with system.
+	components::System<Component>::_AddComponent(comp);			// Register component with generic system.
 	comp->SetEntity(this);
 	comp->_BaseInit();
 	return (_ComponentType*)comp;
@@ -55,6 +59,8 @@ void Entity::RemoveComponent()
 	comp = (_ComponentType*)&(*((*it).second.back()));
 	(*it).second.pop_back();
 	comp->_BaseTerminate();
+	components::System<Component>::_RemoveComponent(comp);		// Unregister component with generic system.
+	components::System<_ComponentType>::_RemoveComponent((_ComponentType*)comp);	// Unregister component with system.
 	_OnComponentRemoved<_ComponentType>(comp);
 	delete comp;
 	//free(comp);
@@ -86,6 +92,8 @@ void Entity::RemoveComponent( _ComponentType* _Instance )
 			comp = (*it2);
 			(*it).second.remove(it2);
 			comp->_BaseTerminate();
+			components::System<Component>::_RemoveComponent(comp);		// Unregister component with generic system.
+			components::System<_ComponentType>::_RemoveComponent((_ComponentType*)comp);	// Unregister component with system.
 			_OnComponentRemoved<_ComponentType>(comp);
 			delete comp;
 			//free(comp);
@@ -118,6 +126,8 @@ void Entity::RemoveComponents()
 	{
 		comp = (*it2);
 		comp->_BaseTerminate();
+		components::System<Component>::_RemoveComponent(comp);		// Unregister component with generic system.
+		components::System<_ComponentType>::_RemoveComponent((_ComponentType*)comp);	// Unregister component with system.
 		_OnComponentRemoved<_ComponentType>(comp);
 		delete comp;
 		//free(comp);

@@ -117,6 +117,7 @@ protected:
 	//////////////////////////////////////////////////////////////////////////
 	template< typename _ComponentType >
 	_ComponentType* GetComponent() const;
+
 private:
 	void SetEntity( Entity* _Entity );
 
