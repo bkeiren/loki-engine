@@ -2,7 +2,7 @@
 #include "core/graphics/SubMesh.h"
 #include "core/graphics/Vertex.h"
 #include "core/graphics/IndexBuffer.h"
-#include "core/graphics/VertexBuffer.h"
+#include "core/graphics/VertexBufferObject.h"
 
 #include "AssImp/assimp.hpp"
 #include "AssImp/aiPostProcess.h"
@@ -82,7 +82,7 @@ Mesh* Mesh::_CreateMeshFromGeometryFile( const std::string& _GeometryFile )
 	for (uint32 i = 0; i < NumMeshes; ++i)
 	{
 		graphics::IndexBuffer* ibo = 0;
-		graphics::VertexBuffer* vbo = 0;
+		graphics::VertexBufferObject* vbo = 0;
 
 		int32 NumFaces = m_tempMeshArray[i]->mNumFaces;
 		int32 NumVerts = m_tempMeshArray[i]->mNumVertices;
@@ -118,11 +118,11 @@ Mesh* Mesh::_CreateMeshFromGeometryFile( const std::string& _GeometryFile )
 			// 				Vertices[i].tangent *= -1.0f;
 			// 			}
 		}
-		vbo = graphics::VertexBuffer::Create(Vertices, NumVerts);
-		if(!vbo/*m_SubMeshes[i]->_CreateVertexBuffer(Vertices, NumVerts)*/)
+		vbo = graphics::VertexBufferObject::Create(Vertices, NumVerts);
+		if(!vbo/*m_SubMeshes[i]->_CreateVertexBufferObject(Vertices, NumVerts)*/)
 		{
-			LOG(VL_ERROR, "Mesh::_CreateMeshesFromGeometryFile: Failed to instantiate VertexBuffer class");
-			assert("Mesh::_CreateMeshesFromGeometryFile: Failed to instantiate VertexBuffer class" && 0);
+			LOG(VL_ERROR, "Mesh::_CreateMeshesFromGeometryFile: Failed to instantiate VertexBufferObject class");
+			assert("Mesh::_CreateMeshesFromGeometryFile: Failed to instantiate VertexBufferObject class" && 0);
 		}
 
 		graphics::SubMesh* submesh = graphics::SubMesh::Create(ibo, vbo);

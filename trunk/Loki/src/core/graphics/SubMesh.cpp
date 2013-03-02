@@ -1,10 +1,10 @@
 #include "core/graphics/SubMesh.h"
 #include "glew/glew.h"
 #include "core/graphics/IndexBuffer.h"
-#include "core/graphics/VertexBuffer.h"
+#include "core/graphics/VertexBufferObject.h"
 #include "core/graphics/Vertex.h"
 #include "core/graphics/Enums.h"
-#include "core/graphics/VertexArray.h"
+#include "core/graphics/VertexArrayObject.h"
 
 namespace loki
 {
@@ -27,7 +27,7 @@ SubMesh::~SubMesh()
 	delete m_VAO;
 }
 
-SubMesh* SubMesh::Create( IndexBuffer* _IBO, VertexBuffer* _VBO )
+SubMesh* SubMesh::Create( IndexBuffer* _IBO, VertexBufferObject* _VBO )
 {
 	assert(_IBO != 0);
 	assert(_VBO != 0);
@@ -36,7 +36,7 @@ SubMesh* SubMesh::Create( IndexBuffer* _IBO, VertexBuffer* _VBO )
 
 	mesh->m_IBO = _IBO;	// We take ownership of the index buffer and 
 	mesh->m_VBO = _VBO;	// the vertex buffer.
-	mesh->m_VAO = VertexArray::Create(_IBO, _VBO);
+	mesh->m_VAO = VertexArrayObject::Create(_IBO, _VBO);
 
 	return mesh;
 }
@@ -61,12 +61,12 @@ const IndexBuffer* SubMesh::GetIBO() const
 	return m_IBO;
 }
 
-const VertexBuffer* SubMesh::GetVBO() const
+const VertexBufferObject* SubMesh::GetVBO() const
 {
 	return m_VBO;
 }
 
-const VertexArray* SubMesh::GetVAO() const
+const VertexArrayObject* SubMesh::GetVAO() const
 {
 	return m_VAO;
 }

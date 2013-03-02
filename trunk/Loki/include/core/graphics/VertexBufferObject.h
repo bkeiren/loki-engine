@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef VERTEXBUFFEROBJECT_H
-#define VERTEXBUFFEROBJECT_H
+#ifndef VertexBufferObjectOBJECT_H
+#define VertexBufferObjectOBJECT_H
 
 #include "core/graphics/Buffer.h"
 
@@ -13,18 +13,18 @@ namespace graphics
 
 struct Vertex;
 
-class VertexBuffer	: public Buffer
+class VertexBufferObject	: public Buffer
 {
 public:
-	~VertexBuffer();
+	~VertexBufferObject();
 
-	static VertexBuffer* Create( Vertex* _Vertices, uint32 _NumVertices );
+	static VertexBufferObject* Create( Vertex* _Vertices, uint32 _NumVertices );
 
 	uint32 GetNumVertices() const;
 	const Vertex* GetVerticesRAM() const;
 
 private:
-	VertexBuffer();
+	VertexBufferObject();
 
 	uint32 m_NumVertices;
 	Vertex* m_VerticesRAM;

@@ -10,15 +10,15 @@ namespace graphics
 {
 
 class IndexBuffer;
-class VertexBuffer;
-class VertexArray;
+class VertexBufferObject;
+class VertexArrayObject;
 
 class SubMesh
 {
 public:
 	~SubMesh();
 
-	static SubMesh* Create( IndexBuffer* _IBO, VertexBuffer* _VBO );
+	static SubMesh* Create( IndexBuffer* _IBO, VertexBufferObject* _VBO );
 
 	//////////////////////////////////////////////////////////////////////////
 	// Makes the draw calls required to draw the mesh. Shaders and materials
@@ -27,14 +27,14 @@ public:
 	void Draw() const;
 
 	const IndexBuffer* GetIBO() const;
-	const VertexBuffer* GetVBO() const;
-	const VertexArray* GetVAO() const;
+	const VertexBufferObject* GetVBO() const;
+	const VertexArrayObject* GetVAO() const;
 private:
 	SubMesh();
 
 	IndexBuffer* m_IBO;
-	VertexBuffer* m_VBO;
-	VertexArray* m_VAO;
+	VertexBufferObject* m_VBO;
+	VertexArrayObject* m_VAO;
 };
 
 }

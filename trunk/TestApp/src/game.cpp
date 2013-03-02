@@ -220,6 +220,9 @@ bool MyGame::Init()
 // 	gui::Context* context = gui::g_GUI->GetMainContext();
 // 	gui::Document* doc = context->LoadDocument("resources//gui//demo.rml");
 
+	loki::components::detail::ComponentRegistry rgstry = loki::components::detail::GetComponentRegistry();
+	
+
 	return true;
 }
 
