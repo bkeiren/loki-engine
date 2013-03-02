@@ -24,7 +24,7 @@
 #include "Bullet/LinearMath/btDefaultMotionState.h"
 
 #include "core/graphics/IndexBuffer.h"
-#include "core/graphics/VertexBuffer.h"
+#include "core/graphics/VertexBufferObject.h"
 #include "core/graphics/Mesh.h"
 #include "core/graphics/SubMesh.h"
 #include "core/graphics/Vertex.h"

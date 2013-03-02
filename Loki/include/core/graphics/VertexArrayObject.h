@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef VERTEXARRAY_H
-#define VERTEXARRAY_H
+#ifndef VertexArrayObject_H
+#define VertexArrayObject_H
 
 namespace loki
 {
@@ -10,31 +10,31 @@ namespace graphics
 {
 
 class IndexBuffer;
-class VertexBuffer;
+class VertexBufferObject;
 
 //////////////////////////////////////////////////////////////////////////
 // Vertex Array Objects (VAO) are objects that speed up the use of
-// index- and vertexbuffers. Just like index and vertexbuffers speed up
+// index- and VertexBufferObjects. Just like index and VertexBufferObjects speed up
 // passing vertex data to be rendered, a VAO 'binds' to these two buffers
 // and allows us to simply bind the VAO once before each render call
 // without having to rebind attribute locations etc.
-// NOTE: This VertexArray class expects the vertex buffer contents
+// NOTE: This VertexArrayObject class expects the vertex buffer contents
 // to contain data as loki::graphics::Vertex objects.
 //////////////////////////////////////////////////////////////////////////
-class VertexArray
+class VertexArrayObject
 {
 public:
-	~VertexArray();
+	~VertexArrayObject();
 
-	static VertexArray* Create( IndexBuffer* _IndexBuffer, VertexBuffer* _VertexBuffer );
+	static VertexArrayObject* Create( IndexBuffer* _IndexBuffer, VertexBufferObject* _VertexBufferObject );
 
 	uint32 GetArrayHandle() const;
 
 	void Bind() const;
 	void Unbind() const;
 private:
-	VertexArray( IndexBuffer* _IndexBuffer, VertexBuffer* _VertexBuffer );
-	VertexArray();
+	VertexArrayObject( IndexBuffer* _IndexBuffer, VertexBufferObject* _VertexBufferObject );
+	VertexArrayObject();
 
 	uint32 m_GLArrayHandle;
 };

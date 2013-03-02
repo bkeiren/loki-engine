@@ -1,8 +1,8 @@
-#include "core/graphics/VertexArray.h"
+#include "core/graphics/VertexArrayObject.h"
 #include <cassert>
 #include "core/graphics/Enums.h"
 #include "core/graphics/IndexBuffer.h"
-#include "core/graphics/VertexBuffer.h"
+#include "core/graphics/VertexBufferObject.h"
 #include "core/graphics/Vertex.h"
 #include "glew/glew.h"
 
@@ -12,7 +12,7 @@ namespace loki
 namespace graphics
 {
 
-VertexArray::VertexArray( IndexBuffer* _IndexBuffer, VertexBuffer* _VertexBuffer )
+VertexArrayObject::VertexArrayObject( IndexBuffer* _IndexBuffer, VertexBufferObject* _VertexBufferObject )
 {
 	glGenVertexArrays(1, &m_GLArrayHandle);
 
@@ -22,7 +22,7 @@ VertexArray::VertexArray( IndexBuffer* _IndexBuffer, VertexBuffer* _VertexBuffer
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 	// Bind the VBO.
-	_VertexBuffer->Bind();
+	_VertexBufferObject->Bind();
 
 	//////////////////////////////////////////////////////////////////////////
 	// IMPORTANT LIFE LESSON: glVertexAttribPointer must be called each time
@@ -58,31 +58,31 @@ VertexArray::VertexArray( IndexBuffer* _IndexBuffer, VertexBuffer* _VertexBuffer
 	Unbind();
 }
 
-VertexArray::~VertexArray()
+VertexArrayObject::~VertexArrayObject()
 {
 	glDeleteVertexArrays(1, &m_GLArrayHandle);
 }
 
-VertexArray* VertexArray::Create( IndexBuffer* _IndexBuffer, VertexBuffer* _VertexBuffer )
+VertexArrayObject* VertexArrayObject::Create( IndexBuffer* _IndexBuffer, VertexBufferObject* _VertexBufferObject )
 {
 	assert(_IndexBuffer != 0);
-	assert(_VertexBuffer != 0);
+	assert(_VertexBufferObject != 0);
 
-	VertexArray* va = new VertexArray(_IndexBuffer, _VertexBuffer);
+	VertexArrayObject* va = new VertexArrayObject(_IndexBuffer, _VertexBufferObject);
 	return va;
 }
 
-uint32 VertexArray::GetArrayHandle() const
+uint32 VertexArrayObject::GetArrayHandle() const
 {
 	return m_GLArrayHandle;
 }
 
-void VertexArray::Bind() const
+void VertexArrayObject::Bind() const
 {
 	glBindVertexArray(m_GLArrayHandle);
 }
 
-void VertexArray::Unbind() const
+void VertexArrayObject::Unbind() const
 {
 	glBindVertexArray(0);
 }
