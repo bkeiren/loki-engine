@@ -94,10 +94,11 @@ bool MyGame::Init()
 	lc->SetSpotAngle(50.0f);
 	lc->SetLightType(components::Light::LIGHT_SPOT);
 	lc->SetCookie(graphics::Texture2D::Load("resources//textures//stainedglass.bmp", false));
-	pc = entity0->InstantiateComponent<loki::components::PhysicsComponent>();
+	//pc = entity0->InstantiateComponent<loki::components::PhysicsComponent>();
 	rc = entity0->InstantiateComponent<loki::components::MeshRenderer>();
 
-	rc->SetMesh("resources//models//sphere_small.obj");
+//	rc->SetMesh("resources//models//sphere_small.obj");
+	rc->SetMesh("resources//models//stanford_dragon.dae");
 	rc->SetMaterial("resources//lma//test.lma", 0);
 	//rc->SetModel(graphics::Model::Load("resources//lmo//test.lmo"));
 
@@ -105,12 +106,12 @@ bool MyGame::Init()
 	entity0->GetTransform().position += vec3(10.0f, 0.0f, 10.0f);	// Ooooh, nice property.
 	SimpleController* simplecntrl = entity0->InstantiateComponent<SimpleController>();
 
-	physics::RigidBodyInfo info;
-	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
-	info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetMesh());
-	info.m_Restitution = 0.1f;
-	info.m_Mass = 0.001f;
-	pc->CreateBodyFromInfo(info);
+// 	physics::RigidBodyInfo info;
+// 	info.m_Shape = physics::CS_MESH_CONVEXTRIANGLEMESH;
+// 	info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetMesh());
+// 	info.m_Restitution = 0.1f;
+// 	info.m_Mass = 0.001f;
+// 	pc->CreateBodyFromInfo(info);
 
 	Entity* entity1 = g_EntitySystem->SpawnEntity("BoxEntity");
 	entity1->InstantiateComponent<loki::components::MeshRenderer>();
@@ -172,32 +173,32 @@ bool MyGame::Init()
 	
 	game::Sky::SetCubeMap(graphics::TextureCube::Load("resources//textures//cubemap2.bmp"));
 
-	for (int i = 0; i < 10; ++i)
-	{
-		std::stringstream str;
-		str << "TorusEntity";
-		str << i;
-		
-		Entity* TorusEntity = g_EntitySystem->SpawnEntity(str.str().c_str());
-		rc = TorusEntity->InstantiateComponent<loki::components::MeshRenderer>();
-		rc->SetMesh("resources//models//torus.dae");
-		rc->SetMaterial("resources//lma//torus.lma");
-		
-		pc = TorusEntity->InstantiateComponent<loki::components::PhysicsComponent>();
-		info.m_Shape = physics::CS_MESH_CONVEXHULL;
-		info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetMesh());
-		info.m_Restitution = 0.1f;
-		info.m_Mass = 0.001f;
-		pc->CreateBodyFromInfo(info);
-
-		lc = TorusEntity->InstantiateComponent<loki::components::Light>();
-		lc->SetLightType(loki::components::Light::LIGHT_POINT);
-		lc->SetRange(30.0f);
-		lc->SetColor(math::vec3(float(rand()%100) / 100.0f, float(rand()%100) / 100.0f, float(rand()%100) / 100.0f));
-		
-		
-		TorusEntity->GetTransform().Translate(vec3(0.0f, i * 10.0f, 0.0f));
-	}
+// 	for (int i = 0; i < 10; ++i)
+// 	{
+// 		std::stringstream str;
+// 		str << "TorusEntity";
+// 		str << i;
+// 		
+// 		Entity* TorusEntity = g_EntitySystem->SpawnEntity(str.str().c_str());
+// 		rc = TorusEntity->InstantiateComponent<loki::components::MeshRenderer>();
+// 		rc->SetMesh("resources//models//torus.dae");
+// 		rc->SetMaterial("resources//lma//torus.lma");
+// 		
+// 		pc = TorusEntity->InstantiateComponent<loki::components::PhysicsComponent>();
+// 		info.m_Shape = physics::CS_MESH_CONVEXHULL;
+// 		info.m_MeshData.m_Mesh = const_cast<graphics::Mesh*>(rc->GetMesh());
+// 		info.m_Restitution = 0.1f;
+// 		info.m_Mass = 0.001f;
+// 		pc->CreateBodyFromInfo(info);
+// 
+// 		lc = TorusEntity->InstantiateComponent<loki::components::Light>();
+// 		lc->SetLightType(loki::components::Light::LIGHT_POINT);
+// 		lc->SetRange(30.0f);
+// 		lc->SetColor(math::vec3(float(rand()%100) / 100.0f, float(rand()%100) / 100.0f, float(rand()%100) / 100.0f));
+// 		
+// 		
+// 		TorusEntity->GetTransform().Translate(vec3(0.0f, i * 10.0f, 0.0f));
+// 	}
 
 // 	loki::util::general::JSONDocument* doc = loki::util::general::JSONDocument::Open("resources//test.json");
 // 	if (doc)
