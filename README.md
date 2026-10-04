@@ -2,6 +2,8 @@
 
 *A custom deferred renderer and game engine*
 
+![Logo](/Logos//loki_logo_small.png)
+
 Loki started out as a personal research project with the goal of implementing an OpenGL-based deferred renderer. Over time it grew in scope and features to include:
 
 - Data-oriented material-definition system
